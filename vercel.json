@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/am-prive-office/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

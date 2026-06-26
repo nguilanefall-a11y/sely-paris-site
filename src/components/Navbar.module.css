@@ -1,0 +1,316 @@
+.header {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1rem 0.7rem 1.5rem;
+  z-index: 100;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 100px;
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 1rem;
+}
+
+.header.transparent {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+}
+
+.header.transparent .logoLink,
+.header.transparent .nav a,
+.header.transparent .mobileMenuToggle {
+  color: #ffffff;
+}
+
+.header.transparent .logoMark {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.header.transparent .logoText span {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.header.transparent .langToggle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.header.transparent .ctaButtonSolid {
+  background-color: #ffffff;
+  color: #000000 !important;
+}
+
+.header.transparent .ctaButtonSolid:hover {
+  background-color: #e8e8e8;
+}
+
+.header.solid {
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  top: 0.75rem;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.logoText {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.logoText span {
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+}
+
+/* Phone badge — centered, framed, prominent */
+.phoneBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 1rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 100px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.phoneBadge:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav a:hover {
+  opacity: 0.6;
+}
+
+.nav a.active {
+  opacity: 1;
+}
+
+.nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: currentColor;
+  border-radius: 16px;
+}
+
+.ctaButtonSolid {
+  background-color: #ffffff;
+  padding: 0.55rem 1.6rem;
+  border-radius: 100px;
+  color: #000000 !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ctaButtonSolid:hover {
+  background-color: #e8e8e8;
+  transform: scale(1.03);
+}
+
+.langToggle {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.4rem;
+  transition: opacity 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.langToggle:hover {
+  opacity: 0.6;
+}
+
+.mobileMenuToggle {
+  display: none;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 101;
+}
+
+.mobileNav {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    top: max(0.75rem, env(safe-area-inset-top, 0.75rem));
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    width: auto;
+    max-width: none;
+    padding: 0.6rem 1rem 0.6rem 1.2rem;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .header.solid {
+    top: 0.5rem;
+  }
+
+  .nav {
+    display: none;
+  }
+  
+  .mobileMenuToggle {
+    display: block;
+  }
+
+  .phoneBadge {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.8rem;
+    margin-left: auto;
+    margin-right: 0.8rem;
+  }
+
+  .phoneBadge span {
+    display: inline;
+  }
+
+  .mobileNav {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 99;
+    padding: 6rem 2rem 2rem;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .mobileNav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .mobileNav a.active {
+    opacity: 0.5;
+  }
+
+  .mobileCta {
+    background: #ffffff;
+    color: #000000 !important;
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .mobileLangToggle {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .phoneBadge span {
+    display: none;
+  }
+
+  .phoneBadge {
+    padding: 0.35rem 0.5rem;
+    border-radius: 50%;
+    min-width: 32px;
+    min-height: 32px;
+    justify-content: center;
+  }
+}

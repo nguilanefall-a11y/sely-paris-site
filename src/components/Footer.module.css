@@ -1,0 +1,254 @@
+.footer {
+  background-color: #000000;
+  padding: 6rem 2rem 2rem;
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.brandCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.brandName {
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.brandSlogan {
+  color: #999999;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.socials {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #999999;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.socialLink:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.linksCol h4, .contactCol h4 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.linksCol ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.linksCol a {
+  color: #999999;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.linksCol a:hover {
+  color: #ffffff;
+}
+
+.contactCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contactIcon {
+  color: #ffffff;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.contactItem a, .contactItem span {
+  color: #999999;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contactItem a:hover {
+  color: #ffffff;
+}
+
+.bottomBar {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.copyright {
+  color: #666666;
+  font-size: 0.85rem;
+}
+
+.privacyLink {
+  color: #666666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.privacyLink:hover {
+  color: #ffffff;
+}
+
+.separator {
+  margin: 0 10px;
+  color: #444444;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .brandCol {
+    align-items: center;
+    text-align: center;
+  }
+
+  .logoContainer {
+    justify-content: center;
+  }
+
+  .brandSlogan {
+    text-align: center;
+  }
+
+  .socials {
+    justify-content: center;
+  }
+
+  .linksCol h4,
+  .contactCol h4 {
+    text-align: center;
+  }
+
+  .linksCol ul {
+    align-items: center;
+  }
+
+  .contactCol {
+    align-items: center;
+  }
+
+  .contactItem {
+    justify-content: center;
+  }
+
+  .bottomBar {
+    text-align: center;
+  }
+
+  .copyright {
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 3rem 1rem 1.5rem;
+  }
+
+  .brandName {
+    font-size: 1.3rem;
+  }
+
+  .brandSlogan {
+    font-size: 0.88rem;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .copyright {
+    font-size: 0.78rem;
+    line-height: 1.8;
+  }
+
+  .privacyLink {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}

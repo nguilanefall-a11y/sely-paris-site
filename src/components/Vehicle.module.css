@@ -1,0 +1,253 @@
+.vehicleSection {
+  padding: 8rem 2rem;
+  background-color: var(--bg-surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.header {
+  text-align: left;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+
+.header h2 {
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  z-index: 1;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06), transparent 70%);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.mainImage {
+  width: 100%;
+  object-fit: contain;
+  z-index: 5;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+}
+
+.gallery {
+  width: 100%;
+  margin-top: 5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.galleryScroll {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding: 1rem 0 3rem;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.galleryScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.galleryScroll img {
+  width: 400px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  scroll-snap-align: center;
+  transition: transform 0.4s ease;
+}
+
+.galleryScroll img:hover {
+  transform: scale(1.02);
+}
+
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton {
+  position: absolute;
+  top: 35%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.navButton:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+.navButton:first-child {
+  left: -4rem;
+}
+
+.navButton:last-child {
+  right: -4rem;
+}
+
+.carouselContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vehicleInfo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.vehicleTitle {
+  font-size: 2.4rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.vehicleSubtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+@media (max-width: 1024px) {
+  .navButton:first-child { left: -1rem; }
+  .navButton:last-child { right: -1rem; }
+}
+
+@media (max-width: 768px) {
+  .vehicleSection {
+    padding: 4rem 1rem;
+  }
+
+  .container {
+    align-items: center;
+  }
+
+  .header {
+    text-align: center;
+  }
+  
+  .header h2 {
+    font-size: 2.2rem;
+  }
+
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  .vehicleTitle {
+    font-size: 1.8rem;
+  }
+
+  .gallery {
+    margin-top: 3rem;
+  }
+
+  .navButton {
+    width: 40px;
+    height: 40px;
+    top: 25%;
+  }
+
+  .navButton:first-child { left: 0.5rem; }
+  .navButton:last-child { right: 0.5rem; }
+
+  .galleryScroll {
+    gap: 1rem;
+    padding: 1rem 0 2rem;
+  }
+
+  .galleryScroll img {
+    width: 260px;
+    height: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicleSection {
+    padding: 3rem 0.75rem;
+  }
+
+  .header h2 {
+    font-size: 1.8rem;
+  }
+
+  .vehicleTitle {
+    font-size: 1.5rem;
+  }
+
+  .navButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .galleryScroll img {
+    width: 220px;
+    height: 145px;
+  }
+}

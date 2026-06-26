@@ -1,0 +1,570 @@
+.heroSection {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.videoBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.videoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.15) 40%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.heroCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  padding: 0 2rem;
+}
+
+.heroTitle {
+  font-size: 4.5rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.bookingBar {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tab {
+  padding: 0.65rem 1.6rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+  border-radius: 100px;
+}
+
+.tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tabActive {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.tabActive:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fields {
+  display: flex;
+  align-items: stretch;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.field {
+  flex: 1;
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  position: relative;
+}
+
+.fieldClickable {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.fieldClickable:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.field label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.field input[type="text"] {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #ffffff;
+  width: 100%;
+  padding: 0;
+  cursor: text;
+}
+
+.field input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Date/Time Display ── */
+.dateTimeDisplay {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.valueSet {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.valuePlaceholder {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.hiddenNativeInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Custom Duration Select ── */
+.customSelect {
+  position: relative;
+  width: 100%;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #ffffff;
+  padding: 0;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.selectTrigger:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.selectChevron {
+  color: rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.chevronRotated {
+  transform: rotate(180deg);
+}
+
+.selectDropdown {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: -1.4rem;
+  min-width: calc(100% + 2.8rem);
+  background: rgba(22, 22, 22, 0.97);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 100;
+  box-shadow:
+    0 -8px 48px rgba(0, 0, 0, 0.5),
+    0 -2px 12px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.selectOption:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.selectOptionActive {
+  color: #ffffff;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.checkMark {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.selectOption + .selectOption {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Divider ── */
+.fieldDivider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  align-self: stretch;
+  margin: 0.8rem 0;
+}
+
+/* ── CTA Button ── */
+.bookingCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem 2.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 160px;
+  border-radius: 0 20px 20px 0;
+}
+
+.bookingCta:hover {
+  background: #e8e8e8;
+}
+
+/* ── Special Request Bar ── */
+.specialBar {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.specialText {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.specialCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.55rem 1.2rem;
+  font-size: 0.72rem;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.specialCta:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.specialCta svg {
+  transition: transform 0.3s ease;
+}
+
+.specialCta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── GSAP Word Animation ── */
+.heroWord {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+/* ── Luminous Line ── */
+.heroLine {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 60%;
+  max-width: 700px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  z-index: 30;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* ── Enhanced Vignette ── */
+.heroSection::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .heroTitle {
+    font-size: 3.2rem;
+  }
+
+  .fields {
+    flex-wrap: wrap;
+    border-radius: 20px;
+    overflow: visible;
+  }
+
+  .field {
+    flex: 1 1 45%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .fieldDivider {
+    display: none;
+  }
+
+  .bookingCta {
+    width: 100%;
+    padding: 1.2rem;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .selectDropdown {
+    left: 0;
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .videoBackground {
+    object-position: 20% center;
+  }
+
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+
+  .heroCenter {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    padding: 7rem 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .bookingBar {
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .fields {
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: visible;
+  }
+
+  .field {
+    flex: none;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.9rem 1.2rem;
+  }
+
+  .field:last-of-type {
+    border-bottom: none;
+  }
+
+  .bookingCta {
+    border-radius: 0 0 16px 16px;
+    padding: 1rem;
+  }
+
+  .selectDropdown {
+    left: 0;
+    min-width: 100%;
+  }
+
+  .specialFields {
+    flex-direction: column;
+    border-radius: 14px;
+  }
+
+  .specialCta {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+
+  .heroCenter {
+    padding: 6rem 1rem 1.5rem;
+  }
+
+  .bookingBar {
+    padding: 0 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .tab {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.72rem;
+  }
+
+  .field {
+    padding: 0.8rem 1rem;
+  }
+
+  .field label {
+    font-size: 0.6rem;
+  }
+
+  .bookingCta {
+    padding: 0.9rem;
+    font-size: 0.75rem;
+    min-width: unset;
+  }
+
+  .specialLabel {
+    font-size: 0.65rem;
+  }
+
+  .specialInput {
+    font-size: 0.82rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .specialCta {
+    font-size: 0.72rem;
+    padding: 0.8rem;
+  }
+}

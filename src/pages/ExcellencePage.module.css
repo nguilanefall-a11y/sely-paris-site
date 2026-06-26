@@ -1,0 +1,209 @@
+.page {
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  padding-bottom: 5rem;
+  color: var(--text-primary);
+}
+
+.introSection {
+  padding: 6rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.introText {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.cardGrid {
+  max-width: 1100px;
+  margin: 0 auto 6rem;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
+.cardTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.cardDesc {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.whySection {
+  padding: 4rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  background: var(--bg-surface);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.whyTitle {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.whyDesc {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.ctaWrapper {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.cta {
+  display: inline-block;
+  background: #ffffff;
+  color: #000000;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border-radius: 100px;
+  transition: opacity 0.2s ease;
+}
+
+.cta:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-bottom: 3rem;
+  }
+
+  .introSection {
+    padding: 4rem 1.5rem;
+  }
+
+  .introText {
+    font-size: 1.1rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .card {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .cardTitle {
+    font-size: 1.3rem;
+  }
+
+  .cardDesc {
+    font-size: 1rem;
+  }
+
+  .whySection {
+    padding: 3rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .whyTitle {
+    font-size: 2rem;
+  }
+
+  .whyDesc {
+    font-size: 1rem;
+  }
+
+  .ctaWrapper {
+    margin-top: 3rem;
+  }
+
+  .cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1.1rem 2rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .introSection {
+    padding: 3rem 1.2rem;
+  }
+
+  .introText {
+    font-size: 1rem;
+  }
+
+  .cardGrid {
+    padding: 0 1.2rem;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .cardTitle {
+    font-size: 1.2rem;
+  }
+
+  .cardDesc {
+    font-size: 0.95rem;
+  }
+
+  .whySection {
+    padding: 2.5rem 1.2rem;
+  }
+
+  .whyTitle {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .whyDesc {
+    font-size: 0.95rem;
+  }
+
+  .cta {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
