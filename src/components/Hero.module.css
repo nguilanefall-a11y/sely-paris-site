@@ -435,8 +435,7 @@
 @media (max-width: 768px) {
   .heroSection {
     min-height: 100vh;
-    min-height: 100dvh;
-    height: 100dvh;
+    height: 100vh;
     overflow: hidden;
     padding-bottom: 0;
   }
@@ -567,4 +566,64 @@
     font-size: 0.72rem;
     padding: 0.8rem;
   }
+}
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0.75rem;
+  right: 0.75rem;
+  background: rgba(18, 18, 18, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  z-index: 100;
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.chip {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.35rem 0.7rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.suggestionItem {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-radius: 8px;
+  text-align: left;
+  line-height: 1.4;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.suggestionItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }

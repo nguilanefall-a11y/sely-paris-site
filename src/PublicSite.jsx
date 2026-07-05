@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+import FloatingActions from './components/FloatingActions';
 import SmoothScroll from './components/SmoothScroll';
 
 import HomePage from './pages/HomePage';
@@ -48,7 +48,7 @@ function PublicSite() {
           </Routes>
         </main>
         <Footer />
-        <WhatsAppButton />
+        <FloatingActions />
       </div>
     </SmoothScroll>
   );

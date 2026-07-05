@@ -71,15 +71,18 @@ export default function HowItWorks() {
           }
         );
 
-        // Subtle parallax on the image
-        gsap.to(imageRef.current.querySelector('img'), {
-          y: -30,
-          scrollTrigger: {
-            trigger: imageRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.5,
-          },
+        // Subtle parallax on the image (desktop/tablet only, disabled on mobile to prevent scroll jump bug)
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 768px)", () => {
+          gsap.to(imageRef.current.querySelector('img'), {
+            y: -30,
+            scrollTrigger: {
+              trigger: imageRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
         });
       }
 

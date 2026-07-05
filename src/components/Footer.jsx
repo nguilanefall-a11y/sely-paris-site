@@ -37,7 +37,7 @@ export default function Footer() {
             </div>
             <div className={styles.contactItem}>
               <Mail size={16} className={styles.contactIcon} />
-              <a href="mailto:contact@sely.com">{t('footer.email', 'contact@sely.com')}</a>
+              <a href="mailto:direction@sely.pro">{t('footer.email', 'direction@sely.pro')}</a>
             </div>
             <div className={styles.contactItem}>
               <MapPin size={16} className={styles.contactIcon} />

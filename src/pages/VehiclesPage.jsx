@@ -15,24 +15,9 @@ export default function VehiclesPage() {
       image: "/vclass-main.png"
     },
     {
-      title: t('page_vehicules.v1_title', 'Tesla Model Y'),
-      desc: t('page_vehicules.v1_desc', "Confort, espace et écologie pour tous vos déplacements. Idéal pour 1 à 4 passagers avec bagages."),
-      image: "/tesla-model-y.png"
-    },
-    {
-      title: t('page_vehicules.v5_title', 'Tesla Model 3'),
-      desc: t('page_vehicules.v5_desc', 'La berline 100% électrique par excellence. Un design épuré et un silence absolu pour un voyage apaisant.'),
-      image: "/model3-main.png"
-    },
-    {
       title: t('page_vehicules.v3_title', 'Mercedes Classe S'),
       desc: t('page_vehicules.v3_desc', 'Le summum du luxe automobile. Confort absolu, raffinement et prestige pour vos déplacements les plus exigeants.'),
       image: "/sclass-main.png"
-    },
-    {
-      title: t('page_vehicules.v8_title', 'Mercedes-Maybach'),
-      desc: t('page_vehicules.v8_desc', "L'ultime expression du luxe. Un salon privé sur roues pour une expérience de voyage incomparable."),
-      image: "/maybach-main.png"
     },
     {
       title: t('page_vehicules.v7_title', 'Mercedes Classe E'),
@@ -40,9 +25,19 @@ export default function VehiclesPage() {
       image: "/eclass-main.png"
     },
     {
-      title: t('page_vehicules.v6_title', 'Minibus Mercedes Sprinter'),
-      desc: t('page_vehicules.v6_desc', "L'espace et le confort ultimes pour vos groupes et circuits œnologiques. Un salon roulant pouvant accueillir jusqu'à 19 passagers."),
-      image: "/mercedes_sprinter_vip.png"
+      title: t('page_vehicules.v8_title', 'Mercedes-Maybach'),
+      desc: t('page_vehicules.v8_desc', "L'ultime expression du luxe. Un salon privé sur roues pour une expérience de voyage incomparable."),
+      image: "/maybach-main.png"
+    },
+    {
+      title: t('page_vehicules.v6_title', 'Mercedes Sprinter VIP (7, 12 ou 19 places)'),
+      desc: t('page_vehicules.v6_desc', "Disponible en configurations de 7, 12 ou 19 places. Un salon privé roulant haut de gamme s'adaptant parfaitement aux exigences de votre groupe et circuits de prestige."),
+      image: "/sprinter-12-ext.png"
+    },
+    {
+      title: t('page_vehicules.v1_title', 'Tesla Model Y'),
+      desc: t('page_vehicules.v1_desc', "Confort, espace et écologie pour tous vos déplacements. Idéal pour 1 à 4 passagers avec bagages."),
+      image: "/tesla-model-y.png"
     },
     {
       title: t('page_vehicules.v4_title', 'Limousine Chrysler 300'),

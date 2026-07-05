@@ -32,7 +32,7 @@ export default function Booking() {
                 <Mail size={20} className={styles.contactIcon} />
                 <div className={styles.contactText}>
                   <strong>EMAIL</strong>
-                  <a href="mailto:contact@sely.com" className={styles.contactLink}>contact@sely.com</a>
+                  <a href="mailto:direction@sely.pro" className={styles.contactLink}>direction@sely.pro</a>
                 </div>
               </div>
               

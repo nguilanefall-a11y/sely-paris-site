@@ -1,0 +1,31 @@
+# Tasks - Floating Actions & Simplified Booking Form
+
+- [x] Create FloatingActions component
+  - [x] Create `FloatingActions.jsx`
+  - [x] Create `FloatingActions.module.css`
+- [x] Integrate FloatingActions in `PublicSite.jsx`
+- [x] Simplify Hero Booking form
+  - [x] Implement Date/Time pre-filling in `Hero.jsx`
+  - [x] Implement suggestion chips inside `Hero.jsx` for Pickup & Destination
+  - [x] Update `Hero.module.css` to style chips and animations
+- [x] Implement Address Autocomplete integration
+  - [x] Create `useAddressAutocomplete.js` hook
+  - [x] Integrate autocomplete in `Hero.jsx`
+  - [x] Integrate autocomplete in `ReservationPage.jsx`
+- [x] Fix mobile touch scroll jump bug
+  - [x] Wrap Hero scroll zoom parallax in `gsap.matchMedia`
+  - [x] Wrap HowItWorks scroll image parallax in `gsap.matchMedia`
+  - [x] Change dvh to vh on mobile hero section container
+- [x] Add mobile touch swipe gestures to main vehicle carousel
+  - [x] Capture touch coords and calculate left/right swipes in `Vehicle.jsx`
+  - [x] Bind gestures to `.carouselWrapper` container
+- [x] Group Mercedes Sprinters into an interactive tab-switching slide
+  - [x] Copy newly downloaded 12-seat and 19-seat images to `public/` directory
+  - [x] Restructure `Vehicle.jsx` to group all Sprinters under a single item with `isSprinterGroup` flag
+  - [x] Render capacity selector tabs ("7 places", "12 places", "19 places") inside the slide
+  - [x] Style tab selector dynamically inside `Vehicle.module.css`
+  - [x] Unify fleet card description in `VehiclesPage.jsx`
+  - [x] Include all three capacities (7, 12, 19 places) inside `ReservationPage.jsx` choices
+- [x] Verify build and deploy changes
+  - [x] Run local build test
+  - [x] Deploy to Vercel production

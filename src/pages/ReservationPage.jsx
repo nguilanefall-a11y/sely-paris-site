@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
 import {
   MapPin,
   Calendar,
@@ -32,6 +33,15 @@ import styles from './ReservationPage.module.css';
 /* ─── vehicle catalogue ─── */
 const VEHICLES = [
   {
+    id: 'classe-v',
+    nameKey: 'reservation.vehicles.classeV',
+    nameFallback: 'Mercedes Classe V',
+    passengers: '7 passagers',
+    descKey: 'reservation.vehicles.classeVDesc',
+    descFallback: 'Espace et confort premium pour vos déplacements en groupe.',
+    image: '/vclass-main.png',
+  },
+  {
     id: 'classe-s',
     nameKey: 'reservation.vehicles.classeS',
     nameFallback: 'Mercedes Classe S',
@@ -39,15 +49,6 @@ const VEHICLES = [
     descKey: 'reservation.vehicles.classeSDesc',
     descFallback: 'Berline de prestige, confort absolu et élégance intemporelle.',
     image: '/sclass-main.png',
-  },
-  {
-    id: 'maybach',
-    nameKey: 'reservation.vehicles.maybach',
-    nameFallback: 'Mercedes-Maybach',
-    passengers: '3 passagers',
-    descKey: 'reservation.vehicles.maybachDesc',
-    descFallback: 'L\'excellence automobile, le summum du luxe et du raffinement.',
-    image: '/maybach-main.png',
   },
   {
     id: 'classe-e',
@@ -59,13 +60,40 @@ const VEHICLES = [
     image: '/eclass-main.png',
   },
   {
-    id: 'classe-v',
-    nameKey: 'reservation.vehicles.classeV',
-    nameFallback: 'Mercedes Classe V',
+    id: 'maybach',
+    nameKey: 'reservation.vehicles.maybach',
+    nameFallback: 'Mercedes-Maybach',
+    passengers: '3 passagers',
+    descKey: 'reservation.vehicles.maybachDesc',
+    descFallback: 'L\'excellence automobile, le summum du luxe et du raffinement.',
+    image: '/maybach-main.png',
+  },
+  {
+    id: 'sprinter-vip',
+    nameKey: 'reservation.vehicles.sprinterVip',
+    nameFallback: 'Mercedes Sprinter VIP (7 places)',
     passengers: '7 passagers',
-    descKey: 'reservation.vehicles.classeVDesc',
-    descFallback: 'Espace et confort premium pour vos déplacements en groupe.',
-    image: '/vclass-main.png',
+    descKey: 'reservation.vehicles.sprinterVipDesc',
+    descFallback: 'Le grand luxe en salon privé mobile. Confort et intimité exceptionnels.',
+    image: '/sprinter-7-ext.png',
+  },
+  {
+    id: 'sprinter-12',
+    nameKey: 'reservation.vehicles.sprinter12',
+    nameFallback: 'Mercedes Sprinter VIP (12 places)',
+    passengers: '12 passagers',
+    descKey: 'reservation.vehicles.sprinter12Desc',
+    descFallback: 'Grand salon VIP spacieux, confort et convivialité pour 12 passagers.',
+    image: '/sprinter-12-ext.png',
+  },
+  {
+    id: 'sprinter-minibus',
+    nameKey: 'reservation.vehicles.sprinterMinibus',
+    nameFallback: 'Minibus Mercedes Sprinter (16-19 places)',
+    passengers: '16-19 passagers',
+    descKey: 'reservation.vehicles.sprinterMinibusDesc',
+    descFallback: 'Transport VIP grand groupe, espace et capacité exceptionnels.',
+    image: '/sprinter-19-ext.png',
   },
   {
     id: 'tesla-y',
@@ -75,24 +103,6 @@ const VEHICLES = [
     descKey: 'reservation.vehicles.teslaYDesc',
     descFallback: 'Mobilité électrique haut de gamme, silence et modernité.',
     image: '/tesla-model-y.png',
-  },
-  {
-    id: 'tesla-3',
-    nameKey: 'reservation.vehicles.tesla3',
-    nameFallback: 'Tesla Model 3',
-    passengers: '3 passagers',
-    descKey: 'reservation.vehicles.tesla3Desc',
-    descFallback: 'Berline électrique élégante, technologie de pointe.',
-    image: '/model3-main.png',
-  },
-  {
-    id: 'sprinter',
-    nameKey: 'reservation.vehicles.sprinter',
-    nameFallback: 'Mercedes Sprinter',
-    passengers: '19 passagers',
-    descKey: 'reservation.vehicles.sprinterDesc',
-    descFallback: 'Transport VIP grand groupe, confort et capacité exceptionnels.',
-    image: '/mercedes_sprinter_vip.png',
   },
   {
     id: 'limousine',
@@ -156,10 +166,17 @@ export default function ReservationPage() {
   const [serviceType, setServiceType] = useState(
     searchParams.get('service') || 'transfer'
   );
-  const [pickup, setPickup] = useState(searchParams.get('pickup') || '');
-  const [destination, setDestination] = useState(
-    searchParams.get('destination') || ''
-  );
+  // Hook up address autocomplete
+  const pickupAutocomplete = useAddressAutocomplete(searchParams.get('pickup') || '');
+  const destAutocomplete = useAddressAutocomplete(searchParams.get('destination') || '');
+  
+  const pickup = pickupAutocomplete.query;
+  const setPickup = pickupAutocomplete.setQuery;
+  const destination = destAutocomplete.query;
+  const setDestination = destAutocomplete.setQuery;
+  
+  const [pickupFocused, setPickupFocused] = useState(false);
+  const [destFocused, setDestFocused] = useState(false);
   const [duration, setDuration] = useState(searchParams.get('duration') || '');
   const [date, setDate] = useState(searchParams.get('date') || '');
   const [time, setTime] = useState(searchParams.get('time') || '');
@@ -342,8 +359,7 @@ export default function ReservationPage() {
           </div>
 
           <div className={styles.tripGrid}>
-            {/* pickup */}
-            <div className={styles.inputGroup}>
+            <div className={styles.inputGroup} style={{ position: 'relative' }}>
               <label className={styles.inputLabel}>
                 <MapPin size={13} />
                 {t('reservation.tripSummary.pickup', 'Prise en charge')}
@@ -353,14 +369,58 @@ export default function ReservationPage() {
                 className={styles.input}
                 value={pickup}
                 onChange={(e) => setPickup(e.target.value)}
+                onFocus={() => setPickupFocused(true)}
+                onBlur={() => setPickupFocused(false)}
                 placeholder={t('reservation.tripSummary.pickupPlaceholder', 'Adresse de départ')}
                 required
               />
+              <AnimatePresence>
+                {pickupFocused && (
+                  <motion.div 
+                    className={styles.suggestions}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {pickupAutocomplete.suggestions.length > 0 ? (
+                      pickupAutocomplete.suggestions.map((s) => (
+                        <div 
+                          key={s.id} 
+                          className={styles.suggestionItem}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setPickup(s.label);
+                            pickupAutocomplete.setSuggestions([]);
+                            setPickupFocused(false);
+                          }}
+                        >
+                          {s.label}
+                        </div>
+                      ))
+                    ) : (
+                      ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
+                        <span 
+                          key={s} 
+                          className={styles.chip}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setPickup(s);
+                            setPickupFocused(false);
+                          }}
+                        >
+                          {s}
+                        </span>
+                      ))
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* destination or duration */}
             {serviceType === 'transfer' ? (
-              <div className={styles.inputGroup}>
+              <div className={styles.inputGroup} style={{ position: 'relative' }}>
                 <label className={styles.inputLabel}>
                   <MapPin size={13} />
                   {t('reservation.tripSummary.destination', 'Destination')}
@@ -370,9 +430,53 @@ export default function ReservationPage() {
                   className={styles.input}
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
+                  onFocus={() => setDestFocused(true)}
+                  onBlur={() => setDestFocused(false)}
                   placeholder={t('reservation.tripSummary.destinationPlaceholder', 'Adresse d\'arrivée')}
                   required
                 />
+                <AnimatePresence>
+                  {destFocused && (
+                    <motion.div 
+                      className={styles.suggestions}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {destAutocomplete.suggestions.length > 0 ? (
+                        destAutocomplete.suggestions.map((s) => (
+                          <div 
+                            key={s.id} 
+                            className={styles.suggestionItem}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setDestination(s.label);
+                              destAutocomplete.setSuggestions([]);
+                              setDestFocused(false);
+                            }}
+                          >
+                            {s.label}
+                          </div>
+                        ))
+                      ) : (
+                        ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
+                          <span 
+                            key={s} 
+                            className={styles.chip}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setDestination(s);
+                              setDestFocused(false);
+                            }}
+                          >
+                            {s}
+                          </span>
+                        ))
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
               <div className={styles.inputGroup}>

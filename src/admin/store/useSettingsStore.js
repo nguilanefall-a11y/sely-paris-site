@@ -10,12 +10,12 @@ const defaultSettings = {
   rcs: '',
   vat: 'FR63 944023514',
   phone: '',
-  email: 'contact@sely.com',
+  email: 'direction@sely.pro',
   iban: '',
   bic: '',
   cancellationPolicy: 'Toute annulation à moins de 24h sera facturée à 100%.',
   exploitePar: 'AM AUTO',
-  website: 'www.sely.com'
+  website: 'www.selyprive.com'
 };
 
 export const useSettingsStore = create((set, get) => ({

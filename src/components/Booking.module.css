@@ -683,6 +683,31 @@
     border-radius: 14px;
   }
 
+  .actionBtn {
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+  }
+
+  .btnIconWrapper {
+    width: 38px;
+    height: 38px;
+    margin-right: 1rem;
+    border-radius: 8px;
+  }
+
+  .btnIconWrapper svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .btnTitle {
+    font-size: 0.95rem;
+  }
+
+  .btnDesc {
+    font-size: 0.76rem;
+  }
+
   .submitBtn, .submitBtnOutline {
     padding: 1.2rem;
     font-size: 0.85rem;

@@ -6,6 +6,7 @@ import { ChevronDown } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Hero.module.css';
+import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,13 +73,42 @@ export default function Hero() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('transfer');
-  const [pickupValue, setPickupValue] = useState('');
-  const [destinationValue, setDestinationValue] = useState('');
+  
+  // Hook up address autocomplete
+  const pickupAutocomplete = useAddressAutocomplete();
+  const destAutocomplete = useAddressAutocomplete();
+  
+  const pickupValue = pickupAutocomplete.query;
+  const setPickupValue = pickupAutocomplete.setQuery;
+  const destinationValue = destAutocomplete.query;
+  const setDestinationValue = destAutocomplete.setQuery;
+  
   const [dateValue, setDateValue] = useState('');
   const [timeValue, setTimeValue] = useState('');
   const [durationValue, setDurationValue] = useState('');
+
+  // Suggestion focused states
+  const [pickupFocused, setPickupFocused] = useState(false);
+  const [destFocused, setDestFocused] = useState(false);
+
   const dateInputRef = useRef(null);
   const timeInputRef = useRef(null);
+
+  // Pre-fill date and time by default
+  useEffect(() => {
+    const now = new Date();
+    
+    // Date: YYYY-MM-DD
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    setDateValue(`${y}-${m}-${d}`);
+    
+    // Time: next rounded hour
+    let h = now.getHours() + 1;
+    if (h >= 24) h = 0;
+    setTimeValue(`${String(h).padStart(2, '0')}:00`);
+  }, []);
 
   // GSAP refs
   const sectionRef = useRef(null);
@@ -164,19 +194,22 @@ export default function Hero() {
         );
       }
 
-      // Image parallax on scroll
-      if (videoRef.current) {
-        gsap.to(videoRef.current, {
-          y: 80,
-          scale: 1.08,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 0.5,
-          },
-        });
-      }
+      // Image parallax on scroll (desktop/tablet only, disabled on mobile to prevent scroll jump bug)
+      let mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        if (videoRef.current) {
+          gsap.to(videoRef.current, {
+            y: 80,
+            scale: 1.08,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
+        }
+      });
 
       // Hero luminous line animation
       if (heroLineRef.current) {
@@ -244,7 +277,51 @@ export default function Hero() {
               placeholder={t('hero.pickup_placeholder', 'Adresse, aéroport, hôtel...')}
               value={pickupValue}
               onChange={(e) => setPickupValue(e.target.value)}
+              onFocus={() => setPickupFocused(true)}
+              onBlur={() => setPickupFocused(false)}
             />
+            <AnimatePresence>
+              {pickupFocused && (
+                <motion.div 
+                  className={styles.suggestions}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {pickupAutocomplete.suggestions.length > 0 ? (
+                    pickupAutocomplete.suggestions.map((s) => (
+                      <div 
+                        key={s.id} 
+                        className={styles.suggestionItem}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setPickupValue(s.label);
+                          pickupAutocomplete.setSuggestions([]);
+                          setPickupFocused(false);
+                        }}
+                      >
+                        {s.label}
+                      </div>
+                    ))
+                  ) : (
+                    ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
+                      <span 
+                        key={s} 
+                        className={styles.chip}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setPickupValue(s);
+                          setPickupFocused(false);
+                        }}
+                      >
+                        {s}
+                      </span>
+                    ))
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className={styles.fieldDivider}></div>
@@ -265,7 +342,51 @@ export default function Hero() {
                   placeholder={t('hero.destination_placeholder', 'Adresse, aéroport, hôtel...')}
                   value={destinationValue}
                   onChange={(e) => setDestinationValue(e.target.value)}
+                  onFocus={() => setDestFocused(true)}
+                  onBlur={() => setDestFocused(false)}
                 />
+                <AnimatePresence>
+                  {destFocused && (
+                    <motion.div 
+                      className={styles.suggestions}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {destAutocomplete.suggestions.length > 0 ? (
+                        destAutocomplete.suggestions.map((s) => (
+                          <div 
+                            key={s.id} 
+                            className={styles.suggestionItem}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setDestinationValue(s.label);
+                              destAutocomplete.setSuggestions([]);
+                              setDestFocused(false);
+                            }}
+                          >
+                            {s.label}
+                          </div>
+                        ))
+                      ) : (
+                        ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
+                          <span 
+                            key={s} 
+                            className={styles.chip}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setDestinationValue(s);
+                              setDestFocused(false);
+                            }}
+                          >
+                            {s}
+                          </span>
+                        ))
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ) : (
               <motion.div
