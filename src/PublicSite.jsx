@@ -33,7 +33,7 @@ function PublicSite() {
   const validCities = ['paris', 'bordeaux', 'french-riviera', 'london'];
 
   if (!validCities.includes(city)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/paris" replace />;
   }
 
   const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/`;
