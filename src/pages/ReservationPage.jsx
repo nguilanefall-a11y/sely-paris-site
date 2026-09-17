@@ -166,7 +166,7 @@ function containsAirport(value) {
 
 /* ─── component ─── */
 export default function ReservationPage() {
-  const { t, cityName, currentCity } = useCity();
+  const { t, cityName, currentCity, i18n } = useCity();
   const [searchParams] = useSearchParams();
 
   /* --- pre-filled trip info from URL --- */
@@ -324,6 +324,7 @@ export default function ReservationPage() {
       destination,
       time,
       options: { babySeat, childSeat, nameBoard },
+      lang: i18n?.language === 'en' ? 'en' : 'fr',
     });
   }, [
     currentCity,
@@ -347,11 +348,7 @@ export default function ReservationPage() {
       
       // Blacklane check: must have pickup and destination
       if (!isTripDefined) {
-        setErrorMessage(
-          serviceType === 'transfer'
-            ? 'Veuillez renseigner une adresse exacte de départ et de destination.'
-            : 'Veuillez renseigner une adresse de prise en charge.'
-        );
+        setErrorMessage(serviceType === 'transfer' ? 'error_transfer' : 'error_hourly');
         setStatus('error');
         if (!pickup) setPickupFocused(true);
         else setDestFocused(true);
@@ -440,7 +437,7 @@ export default function ReservationPage() {
 
         if (isPayment) {
           if (!calculatedPrice || !calculatedPrice.total || calculatedPrice.total <= 0) {
-            setErrorMessage("Le montant de la course n'a pas pu être calculé. Veuillez vérifier les adresses saisies.");
+            setErrorMessage('error_price_calc');
             setStatus('error');
             return;
           }
@@ -477,7 +474,7 @@ export default function ReservationPage() {
         setStatus('success');
       } catch (err) {
         console.error('Reservation submission error:', err);
-        setErrorMessage(err.message || 'Une erreur est survenue lors de la redirection vers le paiement sécurisé Whop.');
+        setErrorMessage(err.message || 'error_whop_redirect');
         setStatus('error');
       }
     },
@@ -762,8 +759,8 @@ export default function ReservationPage() {
             <div className={styles.tripNotice}>
               <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
               <div>
-                <strong>Indiquez votre lieu de départ et de destination ci-dessus</strong>
-                <p>Les tarifs exacts garantis par véhicule s'afficheront dès la saisie de votre trajet.</p>
+                <strong>{t('reservation.notice_vehicle_title', 'Indiquez votre lieu de départ et de destination ci-dessus')}</strong>
+                <p>{t('reservation.notice_vehicle_desc', "Les tarifs exacts garantis par véhicule s'afficheront dès la saisie de votre trajet.")}</p>
               </div>
             </div>
           )}
@@ -815,7 +812,7 @@ export default function ReservationPage() {
                       <span className={styles.vehiclePrice}>
                         {(() => {
                           if (!isTripDefined) {
-                            return 'Adresse requise';
+                            return t('reservation.address_required', 'Adresse requise');
                           }
                           const vPrice = calculateTripPrice({
                             city: currentCity || 'paris',
@@ -826,6 +823,7 @@ export default function ReservationPage() {
                             pickup,
                             destination,
                             time,
+                            lang: i18n?.language === 'en' ? 'en' : 'fr',
                           });
                           return `${vPrice.total} €`;
                         })()}
@@ -1116,7 +1114,7 @@ export default function ReservationPage() {
                 <div className={styles.pricingTitleBox}>
                   <span className={styles.pricingBadge}>
                     <Sparkles size={12} />
-                    Tarif Garanti & Tout Inclus
+                    {t('reservation.pricing_guaranteed', 'Tarif Garanti & Tout Inclus')}
                   </span>
                 </div>
                 <div className={styles.pricingAmountBox}>
@@ -1129,33 +1127,33 @@ export default function ReservationPage() {
 
               <div className={styles.pricingBreakdown}>
                 <div className={styles.pricingItem}>
-                  <span className={styles.pricingItemLabel}>Prestation :</span>
+                  <span className={styles.pricingItemLabel}>{t('reservation.pricing_service', 'Prestation :')}</span>
                   <span className={styles.pricingItemValue}>{calculatedPrice.details}</span>
                 </div>
                 {calculatedPrice.optionsPrice > 0 && (
                   <div className={styles.pricingItem}>
-                    <span className={styles.pricingItemLabel}>Options à bord :</span>
+                    <span className={styles.pricingItemLabel}>{t('reservation.pricing_options', 'Options à bord :')}</span>
                     <span className={styles.pricingItemValue}>+{calculatedPrice.optionsPrice} €</span>
                   </div>
                 )}
                 <div className={styles.pricingItem}>
-                  <span className={styles.pricingItemLabel}>Service inclus :</span>
-                  <span className={styles.pricingItemValue}>Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements</span>
+                  <span className={styles.pricingItemLabel}>{t('reservation.pricing_included', 'Service inclus :')}</span>
+                  <span className={styles.pricingItemValue}>{t('reservation.pricing_amenities', 'Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements')}</span>
                 </div>
               </div>
 
               <div className={styles.pricingBadgesRow}>
                 <div className={styles.pricingBadgeItem}>
                   <Shield size={13} color="#e5c158" />
-                  <span>Paiement 100% sécurisé</span>
+                  <span>{t('reservation.badge_secure', 'Paiement 100% sécurisé')}</span>
                 </div>
                 <div className={styles.pricingBadgeItem}>
                   <CreditCard size={13} color="#e5c158" />
-                  <span>Apple Pay • Google Pay • CB</span>
+                  <span>{t('reservation.badge_payment_methods', 'Apple Pay • Google Pay • CB')}</span>
                 </div>
                 <div className={styles.pricingBadgeItem}>
                   <Sparkles size={13} color="#e5c158" />
-                  <span>Confirmation instantanée</span>
+                  <span>{t('reservation.badge_instant_confirmation', 'Confirmation instantanée')}</span>
                 </div>
               </div>
             </motion.div>
@@ -1165,8 +1163,8 @@ export default function ReservationPage() {
             <div className={styles.tripNotice} style={{ marginBottom: '1.5rem', background: 'rgba(229, 193, 88, 0.08)', border: '1px solid rgba(229, 193, 88, 0.25)' }}>
               <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
               <div>
-                <strong>Adresses précises requises pour calculer le tarif garanti</strong>
-                <p>Veuillez renseigner votre lieu de prise en charge et votre destination exacte en haut de page pour calculer l'itinéraire et activer le paiement sécurisé en ligne.</p>
+                <strong>{t('reservation.notice_checkout_title', 'Adresses précises requises pour calculer le tarif garanti')}</strong>
+                <p>{t('reservation.notice_checkout_desc', "Veuillez renseigner votre lieu de prise en charge et votre destination exacte en haut de page pour calculer l'itinéraire et activer le paiement sécurisé en ligne.")}</p>
               </div>
             </div>
           )}
@@ -1179,10 +1177,9 @@ export default function ReservationPage() {
             >
               <AlertCircle size={16} />
               <span>
-                {errorMessage || t(
-                  'reservation.error',
-                  'Une erreur est survenue lors du traitement. Veuillez réessayer.'
-                )}
+                {errorMessage?.startsWith('error_')
+                  ? t(`reservation.${errorMessage}`)
+                  : (errorMessage || t('reservation.error', 'Une erreur est survenue lors du traitement. Veuillez réessayer.'))}
               </span>
             </motion.div>
           )}
@@ -1199,13 +1196,13 @@ export default function ReservationPage() {
               {status === 'loading' && submissionAction === 'pay' ? (
                 <>
                   <Loader2 size={18} className={styles.spinner} />
-                  <span>Génération sécurisée du paiement...</span>
+                  <span>{t('reservation.generating_payment', 'Génération sécurisée du paiement...')}</span>
                 </>
               ) : (
                 <>
                   <CreditCard size={18} />
                   <span>
-                    Réserver & Payer en ligne ({calculatedPrice ? `${calculatedPrice.total} €` : '—'})
+                    {t('reservation.pay_btn', 'Réserver & Payer en ligne')} ({calculatedPrice ? `${calculatedPrice.total} €` : '—'})
                   </span>
                   <ArrowRight size={16} />
                 </>
@@ -1219,13 +1216,13 @@ export default function ReservationPage() {
               disabled={status === 'loading'}
             >
               {status === 'loading' && submissionAction === 'quote'
-                ? 'Traitement en cours...'
-                : 'Demander un devis sans paiement immédiat'}
+                ? t('reservation.processing', 'Traitement en cours...')
+                : t('reservation.quote_btn', 'Demander un devis sans paiement immédiat')}
             </button>
           </div>
 
           <p className={styles.submitNote}>
-            Transaction sécurisée par Whop Inc. Chauffeur privé professionnel garanti.
+            {t('reservation.secure_note', 'Transaction sécurisée par Whop Inc. Chauffeur privé professionnel garanti.')}
           </p>
         </motion.div>
       </form>

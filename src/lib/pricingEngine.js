@@ -185,6 +185,7 @@ export function calculateTripPrice({
   destination = '',
   time = '',
   options = {}, // { babySeat, childSeat, nameBoard }
+  lang = 'fr',
 }) {
   const cityConfig = CITY_CONFIGS[city] || CITY_CONFIGS.paris;
   const vehicle = VEHICLE_RATES[vehicleId] || VEHICLE_RATES['classe-s'];
@@ -201,7 +202,9 @@ export function calculateTripPrice({
     billedHours = Math.max(parsedDuration, vehicle.minHours);
     const hourlyRate = Math.round(vehicle.hourlyRate * multiplier);
     basePrice = billedHours * hourlyRate;
-    calculationDetails = `Mise à disposition ${billedHours}h en ${vehicle.name} (${hourlyRate} €/h)`;
+    calculationDetails = lang === 'en'
+      ? `Hourly service ${billedHours}h in ${vehicle.name} (${hourlyRate} €/h)`
+      : `Mise à disposition ${billedHours}h en ${vehicle.name} (${hourlyRate} €/h)`;
   } else {
     // Mode transfert
     // Si distance non connue, on utilise la distance typique aéroport/ville de la région
@@ -211,7 +214,9 @@ export function calculateTripPrice({
     const computedPrice = transferBase + (billedDistance * perKm);
     const transferMin = Math.round(vehicle.transferMin * multiplier);
     basePrice = Math.max(computedPrice, transferMin);
-    calculationDetails = `Transfert ~${Math.round(billedDistance)} km en ${vehicle.name}`;
+    calculationDetails = lang === 'en'
+      ? `Transfer ~${Math.round(billedDistance)} km in ${vehicle.name}`
+      : `Transfert ~${Math.round(billedDistance)} km en ${vehicle.name}`;
   }
 
   // Majoration nuit (21h00 - 06h00) : +15%
@@ -221,7 +226,7 @@ export function calculateTripPrice({
     if (!isNaN(hour) && (hour >= 21 || hour < 6)) {
       nightSurcharge = Math.round(basePrice * 0.15);
       basePrice += nightSurcharge;
-      calculationDetails += ' (incl. tarif nuit +15%)';
+      calculationDetails += lang === 'en' ? ' (incl. night rate +15%)' : ' (incl. tarif nuit +15%)';
     }
   }
 

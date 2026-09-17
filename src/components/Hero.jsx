@@ -70,7 +70,7 @@ const CustomDurationSelect = ({ options, t, onSelect, selectedIndex: controlledI
 };
 
 export default function Hero() {
-  const { t, getCityPath, currentCity } = useCity();
+  const { t, getCityPath, currentCity, i18n } = useCity();
   const bgMedia = t('hero.video', '/hero-video-nb.mp4');
   const isVideo = !bgMedia.endsWith('.jpg') && !bgMedia.endsWith('.png') && !bgMedia.endsWith('.webp') && !bgMedia.endsWith('.jpeg');
   const navigate = useNavigate();
@@ -121,28 +121,28 @@ export default function Hero() {
   const videoRef = useRef(null);
   const bookingBarRef = useRef(null);
   const heroLineRef = useRef(null);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorKey, setErrorKey] = useState('');
 
   const durationOptions = [
-    '3h (60 km inclus)',
-    '4h (80 km inclus)',
-    '5h (100 km inclus)',
-    '6h (120 km inclus)',
-    '7h (140 km inclus)',
-    '8h (160 km inclus - Journée)',
-    '9h (180 km inclus)',
-    '10h (200 km inclus)',
-    '11h (220 km inclus)',
-    '12h (240 km inclus)',
-    '13h (260 km inclus)',
-    '14h (280 km inclus)',
-    'Plusieurs journées (Sur devis)'
+    t('hero.duration_3h', '3h (60 km inclus)'),
+    t('hero.duration_4h', '4h (80 km inclus)'),
+    t('hero.duration_5h', '5h (100 km inclus)'),
+    t('hero.duration_6h', '6h (120 km inclus)'),
+    t('hero.duration_7h', '7h (140 km inclus)'),
+    t('hero.duration_8h', '8h (160 km inclus - Journée)'),
+    t('hero.duration_9h', '9h (180 km inclus)'),
+    t('hero.duration_10h', '10h (200 km inclus)'),
+    t('hero.duration_11h', '11h (220 km inclus)'),
+    t('hero.duration_12h', '12h (240 km inclus)'),
+    t('hero.duration_13h', '13h (260 km inclus)'),
+    t('hero.duration_14h', '14h (280 km inclus)'),
+    t('hero.duration_multi', 'Plusieurs journées (Sur devis)')
   ];
 
   const formatDate = (val) => {
     if (!val) return '';
     const d = new Date(val + 'T00:00:00');
-    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return d.toLocaleDateString(i18n?.language === 'en' ? 'en-US' : 'fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   const formatTime = (val) => {
@@ -152,18 +152,18 @@ export default function Hero() {
 
   const handleBookingClick = (e) => {
     e.preventDefault();
-    setErrorMsg('');
+    setErrorKey('');
 
     // Blacklane-style mandatory check: pickup must be provided
     if (!pickupValue || pickupValue.trim().length < 3) {
-      setErrorMsg(t('hero.error_pickup', 'Veuillez renseigner une adresse exacte de prise en charge pour continuer.'));
+      setErrorKey('error_pickup');
       setPickupFocused(true);
       return;
     }
 
     // If transfer, destination must also be provided
     if (activeTab === 'transfer' && (!destinationValue || destinationValue.trim().length < 3)) {
-      setErrorMsg(t('hero.error_destination', 'Veuillez renseigner une adresse exacte de destination.'));
+      setErrorKey('error_destination');
       setDestFocused(true);
       return;
     }
@@ -496,13 +496,13 @@ export default function Hero() {
           </button>
         </div>
 
-        {errorMsg && (
+        {errorKey && (
           <motion.div 
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             className={styles.heroError}
           >
-            ⚠️ {errorMsg}
+            ⚠️ {t(`hero.${errorKey}`, errorKey === 'error_pickup' ? 'Veuillez renseigner une adresse exacte de prise en charge pour continuer.' : 'Veuillez renseigner une adresse exacte de destination.')}
           </motion.div>
         )}
 
