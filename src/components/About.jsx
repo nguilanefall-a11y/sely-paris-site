@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { UserCheck, Shield, Clock } from 'lucide-react';
@@ -8,7 +8,7 @@ import styles from './About.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
-  const { t } = useTranslation();
+  const { t } = useCity();
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const contentRef = useRef(null);
@@ -79,7 +79,7 @@ export default function About() {
       <div className={styles.container}>
         <div className={styles.imageContainer} ref={imageRef}>
           <div className={styles.imageWrapper}>
-            <img src="/sclass_paris.png" alt="Chauffeur Privé SELY Paris" />
+            <img src={t('about.image', '/sclass_paris.png')} alt={t('about.image_alt', 'Chauffeur Privé SELY Privé')} />
             <div className={styles.overlay}></div>
           </div>
         </div>

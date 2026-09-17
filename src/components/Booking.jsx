@@ -1,12 +1,12 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { MapPin, Navigation, Clock, Phone, Mail } from 'lucide-react';
 import styles from './Booking.module.css';
 
 export default function Booking() {
-  const { t } = useTranslation();
+  const { t, getCityPath } = useCity();
   const navigate = useNavigate();
 
   return (
@@ -66,7 +66,7 @@ export default function Booking() {
               
               <div className={styles.buttonsContainer}>
                 <button 
-                  onClick={() => navigate('/reserver?service=transfer')}
+                  onClick={() => navigate(getCityPath('/reserver?service=transfer'))}
                   className={styles.actionBtn}
                 >
                   <div className={styles.btnIconWrapper}>
@@ -83,7 +83,7 @@ export default function Booking() {
                 </button>
 
                 <button 
-                  onClick={() => navigate('/reserver?service=hourly')}
+                  onClick={() => navigate(getCityPath('/reserver?service=hourly'))}
                   className={styles.actionBtn}
                 >
                   <div className={styles.btnIconWrapper}>
@@ -105,7 +105,7 @@ export default function Booking() {
                   {t('hero.special_text', 'Vous avez une question ou une demande spécifique ?')}
                 </span>
                 <button 
-                  onClick={() => navigate('/demande-specifique')} 
+                  onClick={() => navigate(getCityPath('/demande-specifique'))} 
                   className={styles.specialLink}
                 >
                   {t('hero.special_cta_full', 'Demande sur-mesure')}

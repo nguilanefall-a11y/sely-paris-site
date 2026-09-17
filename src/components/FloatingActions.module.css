@@ -5,6 +5,7 @@
   transform: translateX(-50%);
   z-index: 1000;
   pointer-events: none;
+  display: none; /* Hidden on desktop */
 }
 
 .bar {
@@ -38,11 +39,11 @@
   white-space: nowrap;
 }
 
-/* WhatsApp Button — premium glass green */
+/* WhatsApp Button — premium silver */
 .whatsappBtn {
   color: #ffffff;
-  background: rgba(37, 211, 102, 0.12);
-  border: 1px solid rgba(37, 211, 102, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .whatsappIcon {
@@ -53,10 +54,10 @@
 }
 
 .whatsappBtn:hover {
-  background: #25D366;
-  border-color: #25D366;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
   color: #ffffff;
-  box-shadow: 0 0 24px rgba(37, 211, 102, 0.4);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
 
@@ -102,6 +103,7 @@
     left: 0;
     transform: none;
     width: 100%;
+    display: block; /* Show on mobile */
   }
 
   .bar {

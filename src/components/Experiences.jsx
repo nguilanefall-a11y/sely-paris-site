@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Experiences.module.css';
@@ -7,28 +7,28 @@ import styles from './Experiences.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Experiences() {
-  const { t } = useTranslation();
+  const { t } = useCity();
   const sectionRef = useRef(null);
   const cardRefs = useRef([]);
 
   const experiences = [
     {
-      img: '/versailles_chateau.png',
+      img: t('experiences.e1_image', '/versailles_chateau.png'),
       title: t('experiences.e1_title'),
       desc: t('experiences.e1_desc')
     },
     {
-      img: '/experience_chauffeur_no_watch.png',
+      img: t('experiences.e2_image', '/experience_chauffeur_no_watch.png'),
       title: t('experiences.e2_title'),
       desc: t('experiences.e2_desc')
     },
     {
-      img: '/luxury_event_gala.png',
+      img: t('experiences.e3_image', '/luxury_event_gala.png'),
       title: t('experiences.e3_title'),
       desc: t('experiences.e3_desc')
     },
     {
-      img: '/experience_concierge.png',
+      img: t('experiences.e4_image', '/experience_concierge.png'),
       title: t('experiences.e4_title'),
       desc: t('experiences.e4_desc')
     }

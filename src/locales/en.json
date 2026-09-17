@@ -1,4 +1,10 @@
 {
+  "cities": {
+    "paris": "Paris",
+    "bordeaux": "Bordeaux",
+    "french-riviera": "French Riviera",
+    "london": "London"
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
@@ -37,7 +43,7 @@
     "date_label": "Date",
     "date_placeholder": "dd/mm/yyyy",
     "time_label": "Pick-up time",
-    "cta_options": "Request a quote",
+    "cta_options": "Book now",
     "special_label": "Special request",
     "special_placeholder": "Event, multiple days, bespoke itinerary...",
     "special_cta": "Contact us",
@@ -248,13 +254,13 @@
     "location": "Paris & Île-de-France",
     "legal": "Legal Notice",
     "faq": "FAQ",
-    "rights": "SELY Paris. All rights reserved.",
+    "rights": "SELY Privé. All rights reserved.",
     "privacy_policy": "Privacy Policy"
   },
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",
-    "intro": "From the moment you step into our vehicles, the outside world fades away. We designed <strong>SELY Paris</strong> not as a simple transport service, but as a creator of space and time. A cocoon of elegance where every detail is tailored to awaken your senses and offer you what is most precious: the present moment.",
+    "intro": "From the moment you step into our vehicles, the outside world fades away. We designed <strong>SELY Privé</strong> not as a simple transport service, but as a creator of space and time. A cocoon of elegance where every detail is tailored to awaken your senses and offer you what is most precious: the present moment.",
     "b1_title": "Sense of Freedom",
     "b1_desc": "Let yourself be carried away without constraints. Your time is yours, we take care of every logistical detail to offer you a total escape.",
     "b2_title": "Peace of Mind",
@@ -308,9 +314,9 @@
     "cta": "Start the process"
   },
   "page_excellence": {
-    "title": "SELY Paris Excellence",
+    "title": "SELY Privé Excellence",
     "subtitle": "The art of hosting, in motion.",
-    "intro": "What makes us unique is not only found under the hood of our prestigious vehicles, but in the mindset that drives every member of our team. At SELY Paris, true luxury lies in <strong>anticipation, discreet refinement, and soft skills</strong>.",
+    "intro": "What makes us unique is not only found under the hood of our prestigious vehicles, but in the mindset that drives every member of our team. At SELY Privé, true luxury lies in <strong>anticipation, discreet refinement, and soft skills</strong>.",
     "c1_title": "Absolute Discretion",
     "c1_desc": "We understand the value of your private sphere. Our chauffeurs demonstrate total confidentiality during all your private and professional travels.",
     "c2_title": "Total Flexibility",
@@ -320,13 +326,36 @@
     "c4_title": "Service Excellence",
     "c4_desc": "Every detail matters. From the impeccable attire of our fleet to anticipating your needs, we aim for perfection with every mile.",
     "why_title": "Why they return",
-    "why_desc": "The best proof of our excellence lies in the loyalty of our clients. Over the years, SELY Paris has become the exclusive trusted partner of dozens of companies, prestigious hotels, and demanding individuals who rely solely on us for their stays in the region.",
-    "cta": "Experience the difference"
+    "why_desc": "The best proof of our excellence lies in the loyalty of our clients. Over the years, SELY Privé has become the exclusive trusted partner of dozens of companies, prestigious hotels, and demanding individuals who rely solely on us for their stays in the region.",
+    "quote": "Excellence is not an option, it is a requirement. Our mission is to transform every journey in Paris into a moment of absolute tranquility.",
+    "stats": {
+      "rides": "15,000+ rides",
+      "satisfaction": "98% satisfaction",
+      "availability": "24/7 available",
+      "experience": "8+ years experience"
+    },
+    "immersive_title": "French Elegance",
+    "immersive_desc": "Cross the City of Light in the absolute comfort of a moving palace.",
+    "onboard_title": "The Onboard Experience",
+    "onboard_1_title": "First-Class Comfort",
+    "onboard_1_desc": "Climate-controlled Nappa leather seats designed to offer you optimal support and relaxation.",
+    "onboard_2_title": "Tailor-Made Ambiance",
+    "onboard_2_desc": "Control ambient lighting, temperature, and sound environment at your fingertips.",
+    "onboard_3_title": "Oasis of Serenity",
+    "onboard_3_desc": "Perfect soundproofing isolates you from the Parisian hustle so you can focus on what matters.",
+    "testimonials_title": "What Our Clients Say",
+    "test_1_quote": "SELY Privé is the exclusive partner of our establishment. Our most demanding clients always praise the punctuality and professionalism of their chauffeurs.",
+    "test_1_name": "Marc D., 5* Hotel Director",
+    "test_2_quote": "As a CEO, my schedule is timed to the minute. Knowing I can count on a comfortable vehicle and a discreet chauffeur to prepare for my meetings is invaluable.",
+    "test_2_name": "Sophie L., CEO",
+    "test_3_quote": "For the organization of our VIP events, the SELY Privé fleet adds the final touch of prestige. Always an impeccable service.",
+    "test_3_name": "Julien M., Event Planner",
+    "cta_final": "Book now"
   },
   "page_testimonials": {
     "title": "Testimonials",
     "subtitle": "Those who speak best of our service are those who have experienced it.",
-    "t4_quote": "The SELY Paris team took care of our guests for our wedding. The organization was flawless and the standing perfectly met our expectations.",
+    "t4_quote": "The SELY Privé team took care of our guests for our wedding. The organization was flawless and the standing perfectly met our expectations.",
     "t4_name": "Claire & David",
     "t5_quote": "An incredible mobile concierge service. We had specific requests for hard-to-find wines and everything was ready upon our arrival.",
     "t5_name": "Laurent H.",
@@ -469,5 +498,177 @@
     "step3_title": "3. Travel in comfort",
     "step3_desc": "Greeting at the vehicle door, luggage handling, and a comfortable ride with chilled water and chargers onboard.",
     "cta": "Request a quote"
+  },
+  "floating": {
+    "whatsapp": "WhatsApp Quote",
+    "whatsapp_aria": "Contact us on WhatsApp",
+    "phone": "Call us",
+    "phone_aria": "Call us directly"
+  },
+  "paris": {
+    "hero": {
+      "video": "/paris-hero-video.mp4",
+      "video_position": "center",
+      "video_filter": "none"
+    }
+  },
+  "bordeaux": {
+    "hero": {
+      "video": "/bordeaux_hero_bg.jpg",
+      "title": "Private Chauffeur Service <br /> <span class=\"heroHighlight\">Bordeaux & Vineyards</span>",
+      "subtitle": "A premium high-end private vehicle service with experienced chauffeurs. <br/> Absolute comfort, discretion, and professionalism for your transfers, stays, and exceptional wine tours.",
+      "location": "Bordeaux & Aquitaine",
+      "pickup_placeholder": "Address, Mérignac airport, hotel...",
+      "destination_placeholder": "Address, airport, wine château..."
+    },
+    "about": {
+      "subtitle": "The art of private chauffeuring in Bordeaux.",
+      "desc_p1": "SELY Privé is more than a simple transport service. It is the embodiment of courtesy and distinction in the heart of the South-West, accompanying your professional or personal journeys with strict standards.",
+      "desc_p2": "Whether you are heading to a Médoc château or Bordeaux city center, your bilingual chauffeur anticipates your every need for absolute comfort.",
+      "image": "/chateau_bordeaux.png",
+      "image_alt": "SELY Privé Luxury Chauffeur in Bordeaux"
+    },
+    "services": {
+      "srv1_desc": "Direct transfers and personalized meet & greet at Bordeaux-Mérignac Airport (BOD) or Saint-Jean Station."
+    },
+    "experiences": {
+      "e1_image": "/chateau_saint_emilion.png",
+      "e1_title": "Grands Crus of Saint-Émilion",
+      "e1_desc": "Explore the historic vineyards and prestigious châteaux of Saint-Émilion aboard our quiet luxury sedans.",
+      "e2_image": "/chateau_medoc.png",
+      "e2_title": "The Médoc Château Route",
+      "e2_desc": "An exclusive journey along the famous Médoc wine route, enhanced by privileged tastings at grand estates.",
+      "e3_image": "/arcachon_van.png",
+      "e3_title": "Arcachon Bay Escape",
+      "e3_desc": "Travel to Cap Ferret, the Dune of Pilat, or Arcachon with a dedicated chauffeur at your disposal for the day."
+    },
+    "wine_tours": {
+      "badge": "Bespoke Excursions",
+      "title": "Wine Tours & Bordeaux Wine Route",
+      "subtitle": "Discover the world's most prestigious wine regions (Médoc, Saint-Émilion, Graves, Sauternes) with a fully customized itinerary.",
+      "bg_image": "/chateau_sauternes.png",
+      "bg_alt": "Bordeaux vineyards and château at sunset",
+      "f1_title": "Bespoke Wine Itineraries",
+      "f1_desc": "Our chauffeurs know partner estates perfectly and organize your tasting schedules.",
+      "f2_title": "Prestigious Châteaux",
+      "f2_desc": "Access the most exclusive properties and enjoy your day without any transport worries."
+    },
+    "contact": {
+      "location": "Bordeaux & South-West"
+    },
+    "page_excellence": {
+      "immersive_image": "/bordeaux_excellence.jpg",
+      "title": "SELY Bordeaux Excellence",
+      "subtitle": "Refinement and art de vivre in the heart of the vineyards.",
+      "intro": "SELY Privé standards extend to the Bordeaux region. We combine the elegance of our luxury fleet with local expertise to make every journey an unforgettable experience.",
+      "c3_title": "The Bordeaux Art of Living",
+      "c3_desc": "From exploring renowned wine estates to discovering confidential local gems, we open the gates to Aquitaine prestige."
+    }
+  },
+  "french-riviera": {
+    "hero": {
+      "video": "/riviera_hero_bg.jpg",
+      "title": "Private Chauffeur Service <br /> <span class=\"heroHighlight\">Nice, Cannes & Monaco</span>",
+      "subtitle": "Travel the Côte d'Azur with elegance. Luxury vehicles and professional chauffeurs for your stays, congresses, and exclusive transfers.",
+      "location": "French Riviera & Monaco",
+      "pickup_placeholder": "Address, Nice airport, hotel...",
+      "destination_placeholder": "Address, Monaco, heliport, villa..."
+    },
+    "about": {
+      "subtitle": "Excellence on the French Riviera.",
+      "desc_p1": "SELY Privé offers an exceptional chauffeur service adapted to the rhythm and high demands of the French Riviera. From Croisette palaces to Monaco heights, travel in complete peace.",
+      "desc_p2": "Chauffeurs trained in VIP protocol, discreet and highly responsive to adapt instantly to your busiest schedules.",
+      "image": "/riviera_about.jpg",
+      "image_alt": "SELY Privé Chauffeur on the French Riviera"
+    },
+    "services": {
+      "srv1_desc": "Bespoke transfers from Nice Côte d'Azur Airport (NCE), Monaco Heliport, Cannes, or Saint-Tropez."
+    },
+    "experiences": {
+      "e1_image": "/luxury_event_gala.png",
+      "e1_title": "Congresses & Events in Cannes",
+      "e1_desc": "MIPIM, Cannes Film Festival, Lions. Our chauffeurs manage your rotations and transport logistics for VIPs.",
+      "e2_image": "/experience_chauffeur_no_watch.png",
+      "e2_title": "Monaco Getaways",
+      "e2_desc": "Reach the Principality in the quiet comfort of a Class S or Maybach. Perfect for your business meetings.",
+      "e3_image": "/riviera_yacht_villa.jpg",
+      "e3_title": "Yacht & Villa Transfers",
+      "e3_desc": "Direct connection to your yachts in Antibes or private villas in Cap Ferrat and Saint-Tropez."
+    },
+    "wine_tours": {
+      "badge": "Land & Sea Prestige",
+      "title": "French Riviera Hourly Service",
+      "subtitle": "Book a premium vehicle with a chauffeur to explore the coastal roads, dine in Saint-Tropez, or attend the Monaco Grand Prix.",
+      "bg_image": "/riviera_yacht_bg.jpg",
+      "bg_alt": "Luxury yacht and sedan on the Riviera coast",
+      "f1_title": "Event Logistics",
+      "f1_desc": "Coordination of dedicated fleets for congresses, weddings, or private galas across the Riviera.",
+      "f2_title": "Scenic Coastal Drives",
+      "f2_desc": "Enjoy the most beautiful panoramic coastal roads (Moyenne and Grande Corniche) in complete serenity."
+    },
+    "contact": {
+      "location": "Monaco, Cannes & Nice"
+    },
+    "page_excellence": {
+      "immersive_image": "/riviera_excellence.jpg",
+      "title": "SELY Riviera Excellence",
+      "subtitle": "Prestige under the sun of the Riviera.",
+      "intro": "On the Côte d'Azur, SELY Privé delivers absolute flexibility. From Nice to Monaco, our private chauffeurs guarantee bespoke service for business and leisure travel.",
+      "c3_title": "The Riviera Art of Living",
+      "c3_desc": "From the Croisette to the private beach clubs of Saint-Tropez, we ensure seamless journeys and discreet support."
+    }
+  },
+  "london": {
+    "hero": {
+      "video": "/london-hero-video.mp4",
+      "title": "Private Chauffeur Service <br /> <span class=\"heroHighlight\">London & Heathrow</span>",
+      "subtitle": "Experience London at its finest with our professional chauffeur service. Luxury vehicles, local expertise, and absolute reliability for corporate travel and airport transfers.",
+      "location": "London & Greater London",
+      "pickup_placeholder": "Address, Heathrow, hotel...",
+      "destination_placeholder": "Address, airport, Mayfair..."
+    },
+    "about": {
+      "subtitle": "Executive Chauffeur Service in London.",
+      "desc_p1": "SELY Privé brings its signature high-end chauffeur experience to the capital of the United Kingdom. Tailored for corporate clients, VIP delegations, and refined travelers.",
+      "desc_p2": "Our chauffeurs possess perfect local knowledge, navigating London's busiest districts seamlessly while offering you a quiet, connected workspace on board.",
+      "image": "/london_about.jpg",
+      "image_alt": "SELY Privé Luxury Chauffeur in London"
+    },
+    "services": {
+      "srv1_desc": "Private transfers to Heathrow (LHR), Gatwick (LGW), London City (LCY), and private jet terminals (Farnborough, Luton)."
+    },
+    "experiences": {
+      "e1_image": "/experience_chauffeur_no_watch.png",
+      "e1_title": "Corporate Roadshows",
+      "e1_desc": "Perfectly timed multi-stop transfers in the City of London and Canary Wharf. Stay productive between meetings.",
+      "e2_image": "/london_shopping.jpg",
+      "e2_title": "Luxury Shopping in Mayfair",
+      "e2_desc": "Enjoy a dedicated chauffeur on standby for your shopping excursions in Bond Street, Harrods, and Knightsbridge.",
+      "e3_image": "/london_windsor.jpg",
+      "e3_title": "Windsor Castle Excursions",
+      "e3_desc": "Escape the bustle of London with a premium day trip to Windsor Castle, Oxford, or Stonehenge in total comfort."
+    },
+    "wine_tours": {
+      "badge": "Hourly & Roadshow Service",
+      "title": "Hourly Service & Financial Roadshows",
+      "subtitle": "A dedicated premium chauffeur at your disposal for business meetings, diplomatic agendas, or bespoke sightseeing in London.",
+      "bg_image": "/london_hourly_bg.jpg",
+      "bg_alt": "Mercedes S-Class driving through London streets at night",
+      "f1_title": "Financial District Expertise",
+      "f1_desc": "Chauffeurs trained to handle tight corporate schedules with direct coordination with executive assistants.",
+      "f2_title": "Airport Transfers & Jet Connection",
+      "f2_desc": "Seamless meet & greet service with real-time flight tracking at Heathrow, Gatwick, and private jet hubs."
+    },
+    "contact": {
+      "location": "London & Greater London"
+    },
+    "page_excellence": {
+      "immersive_image": "/london_excellence.jpg",
+      "title": "SELY London Excellence",
+      "subtitle": "Bespoke executive transport in the British capital.",
+      "intro": "In London, SELY Privé delivers a flawless executive service tailored to international standards. Whether attending corporate roadshows or exploring Mayfair, our luxury fleet is at your service.",
+      "c3_title": "The London Art of Living",
+      "c3_desc": "From central London finance hubs to historic royal estates, we provide ultimate comfort and absolute discretion."
+    }
   }
 }

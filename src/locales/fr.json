@@ -1,4 +1,10 @@
 {
+  "cities": {
+    "paris": "Paris",
+    "bordeaux": "Bordeaux",
+    "french-riviera": "Côte d'Azur",
+    "london": "Londres"
+  },
   "nav": {
     "home": "Accueil",
     "services": "Services",
@@ -37,7 +43,7 @@
     "date_label": "Date",
     "date_placeholder": "jj/mm/aaaa",
     "time_label": "Heure de prise en charge",
-    "cta_options": "Demander un devis",
+    "cta_options": "Réservez",
     "special_label": "Demande spécifique",
     "special_placeholder": "Événement, plusieurs journées, sur-mesure...",
     "special_cta": "Nous contacter",
@@ -248,13 +254,13 @@
     "location": "Paris & Île-de-France",
     "legal": "Mentions Légales",
     "faq": "FAQ",
-    "rights": "SELY Paris. Tous droits réservés.",
+    "rights": "SELY Privé. Tous droits réservés.",
     "privacy_policy": "Politique de confidentialité"
   },
   "page_experience": {
     "title": "L'Expérience",
     "subtitle": "Plus qu'un simple trajet, un moment de grâce hors du temps.",
-    "intro": "Dès l'instant où vous prenez place à bord de nos véhicules, le monde extérieur s'apaise. Nous avons conçu <strong>SELY Paris</strong> non pas comme un simple service de transport, mais comme un créateur d'espace et de temps. Un cocon d'élégance où chaque détail est pensé pour éveiller vos sens et vous offrir ce qu'il y a de plus précieux : l'instant présent.",
+    "intro": "Dès l'instant où vous prenez place à bord de nos véhicules, le monde extérieur s'apaise. Nous avons conçu <strong>SELY Privé</strong> non pas comme un simple service de transport, mais comme un créateur d'espace et de temps. Un cocon d'élégance où chaque détail est pensé pour éveiller vos sens et vous offrir ce qu'il y a de plus précieux : l'instant présent.",
     "b1_title": "Sentiment de Liberté",
     "b1_desc": "Laissez-vous porter sans contraintes. Votre temps vous appartient, nous nous occupons de chaque détail logistique pour vous offrir une évasion totale.",
     "b2_title": "Tranquillité d'Esprit",
@@ -308,9 +314,9 @@
     "cta": "Démarrer le processus"
   },
   "page_excellence": {
-    "title": "L'Excellence SELY Paris",
+    "title": "L'Excellence SELY Privé",
     "subtitle": "L'art de recevoir, en mouvement.",
-    "intro": "Ce qui nous rend unique ne se trouve pas uniquement sous le capot de nos véhicules de prestige, mais dans l'état d'esprit qui anime chaque membre de notre équipe. Chez SELY Paris, le luxe véritable réside dans <strong>l'anticipation, le raffinement discret et le savoir-être</strong>.",
+    "intro": "Ce qui nous rend unique ne se trouve pas uniquement sous le capot de nos véhicules de prestige, mais dans l'état d'esprit qui anime chaque membre de notre équipe. Chez SELY Privé, le luxe véritable réside dans <strong>l'anticipation, le raffinement discret et le savoir-être</strong>.",
     "c1_title": "Discrétion Absolue",
     "c1_desc": "Nous comprenons la valeur de votre sphère privée. Nos chauffeurs font preuve d'une confidentialité totale lors de tous vos déplacements privés et professionnels.",
     "c2_title": "Flexibilité Totale",
@@ -320,13 +326,36 @@
     "c4_title": "Excellence du Service",
     "c4_desc": "Chaque détail compte. De la tenue irréprochable de notre flotte à l'anticipation de vos besoins, nous visons la perfection à chaque kilomètre.",
     "why_title": "Pourquoi ils reviennent",
-    "why_desc": "La plus belle preuve de notre excellence réside dans la fidélité de nos clients. Au fil des années, SELY Paris est devenu le partenaire de confiance exclusif de dizaines d'entreprises, d'hôtels prestigieux et de particuliers exigeants qui ne s'en remettent plus qu'à nous pour leurs séjours dans la région.",
-    "cta": "Vivre la différence"
+    "why_desc": "La plus belle preuve de notre excellence réside dans la fidélité de nos clients. Au fil des années, SELY Privé est devenu le partenaire de confiance exclusif de dizaines d'entreprises, d'hôtels prestigieux et de particuliers exigeants qui ne s'en remettent plus qu'à nous pour leurs séjours dans la région.",
+    "quote": "L'excellence n'est pas une option, c'est une exigence. Notre mission est de transformer chacun de vos trajets à Paris en un moment de quiétude absolue.",
+    "stats": {
+      "rides": "15 000+ trajets",
+      "satisfaction": "98% satisfaction",
+      "availability": "24/7 disponible",
+      "experience": "8+ ans d'expérience"
+    },
+    "immersive_title": "L'élégance à la française",
+    "immersive_desc": "Traversez la Ville Lumière dans le confort absolu d'un palace en mouvement.",
+    "onboard_title": "L'expérience à bord",
+    "onboard_1_title": "Confort de Première Classe",
+    "onboard_1_desc": "Des assises en cuir Nappa climatisées, conçues pour vous offrir un maintien et une relaxation optimale.",
+    "onboard_2_title": "Ambiance Sur-Mesure",
+    "onboard_2_desc": "Contrôlez l'éclairage d'ambiance, la température et l'environnement sonore du bout des doigts.",
+    "onboard_3_title": "Oasis de Sérénité",
+    "onboard_3_desc": "Une insonorisation parfaite vous isole de l'agitation parisienne pour vous concentrer sur l'essentiel.",
+    "testimonials_title": "Nos Clients Témoignent",
+    "test_1_quote": "SELY Privé est le partenaire exclusif de notre établissement. Nos clients les plus exigeants saluent toujours la ponctualité et le professionnalisme de leurs chauffeurs.",
+    "test_1_name": "Marc D., Directeur d'Hôtel 5*",
+    "test_2_quote": "En tant que CEO, mon emploi du temps est millimétré. Savoir que je peux compter sur un véhicule confortable et un chauffeur discret pour préparer mes réunions est inestimable.",
+    "test_2_name": "Sophie L., CEO",
+    "test_3_quote": "Pour l'organisation de nos événements VIP, la flotte de SELY Privé apporte la touche de prestige finale. Un service toujours impeccable.",
+    "test_3_name": "Julien M., Organisateur d'Événements",
+    "cta_final": "Réserver maintenant"
   },
   "page_testimonials": {
     "title": "Témoignages",
     "subtitle": "Ceux qui parlent le mieux de notre service sont ceux qui l'ont vécu.",
-    "t4_quote": "L'équipe de SELY Paris a pris en charge nos invités pour notre mariage. L'organisation était sans faille et le standing parfaitement au rendez-vous.",
+    "t4_quote": "L'équipe de SELY Privé a pris en charge nos invités pour notre mariage. L'organisation était sans faille et le standing parfaitement au rendez-vous.",
     "t4_name": "Claire & David",
     "t5_quote": "Un service de conciergerie mobile incroyable. Nous avions des demandes spécifiques pour des vins introuvables et tout était prêt à notre arrivée.",
     "t5_name": "Laurent H.",
@@ -469,5 +498,177 @@
     "step3_title": "3. Voyagez confortablement",
     "step3_desc": "Accueil personnalisé, prise en charge de vos bagages et trajet serein avec bouteille d'eau et chargeurs à bord.",
     "cta": "Demander un devis"
+  },
+  "floating": {
+    "whatsapp": "Devis WhatsApp",
+    "whatsapp_aria": "Contactez-nous sur WhatsApp",
+    "phone": "Nous appeler",
+    "phone_aria": "Appelez-nous directement"
+  },
+  "paris": {
+    "hero": {
+      "video": "/paris-hero-video.mp4",
+      "video_position": "center",
+      "video_filter": "none"
+    }
+  },
+  "bordeaux": {
+    "hero": {
+      "video": "/bordeaux_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Bordeaux & Vignobles</span>",
+      "subtitle": "Un service haut de gamme de véhicules privés premium avec chauffeur expérimenté. <br/> Confort absolu, discrétion et professionnalisme pour vos transferts, séjours et excursions œnologiques d'exception.",
+      "location": "Bordeaux & Aquitaine",
+      "pickup_placeholder": "Adresse, aéroport Mérignac, hôtel...",
+      "destination_placeholder": "Adresse, aéroport, château viticole..."
+    },
+    "about": {
+      "subtitle": "L'art de la grande remise à Bordeaux.",
+      "desc_p1": "SELY Privé n'est pas qu'un simple service de chauffeur. C'est l'incarnation de la courtoisie et de la distinction au cœur du Sud-Ouest, accompagnant vos trajets professionnels ou personnels avec rigueur.",
+      "desc_p2": "Que vous rejoigniez un château du Médoc ou le centre-ville de Bordeaux, votre chauffeur bilingue anticipe vos moindres exigences pour un confort absolu.",
+      "image": "/chateau_bordeaux.png",
+      "image_alt": "Chauffeur Privé SELY Privé à Bordeaux"
+    },
+    "services": {
+      "srv1_desc": "Trajets directs et accueil sur-mesure vers l'Aéroport de Bordeaux-Mérignac (BOD) ou la Gare Saint-Jean."
+    },
+    "experiences": {
+      "e1_image": "/chateau_saint_emilion.png",
+      "e1_title": "Grands Crus de Saint-Émilion",
+      "e1_desc": "Explorez les vignobles historiques et châteaux prestigieux de Saint-Émilion à bord de nos berlines silencieuses.",
+      "e2_image": "/chateau_medoc.png",
+      "e2_title": "La Route des Châteaux du Médoc",
+      "e2_desc": "Une immersion exclusive au fil de la célèbre route des vins du Médoc, rythmée par des dégustations privilégiées.",
+      "e3_image": "/arcachon_van.png",
+      "e3_title": "Évasion sur le Bassin d'Arcachon",
+      "e3_desc": "Rejoignez le Cap Ferret, la Dune du Pilat ou Arcachon avec un service de chauffeur à disposition pour la journée."
+    },
+    "wine_tours": {
+      "badge": "Excursions sur-mesure",
+      "title": "Wine Tours & Route des Vins de Bordeaux",
+      "subtitle": "Parcourez les plus grands vignobles du monde (Médoc, Saint-Émilion, Graves, Sauternes) avec un itinéraire entièrement personnalisé.",
+      "bg_image": "/chateau_sauternes.png",
+      "bg_alt": "Vignobles de Bordeaux sous le soleil couchant",
+      "f1_title": "Itinéraires Œnologiques",
+      "f1_desc": "Nos chauffeurs connaissent parfaitement les châteaux partenaires et organisent votre planning de dégustations.",
+      "f2_title": "Châteaux de Prestige",
+      "f2_desc": "Accédez aux propriétés les plus prestigieuses et profitez pleinement de votre journée sans contrainte de transport."
+    },
+    "contact": {
+      "location": "Bordeaux & Sud-Ouest"
+    },
+    "page_excellence": {
+      "immersive_image": "/bordeaux_excellence.jpg",
+      "title": "L'Excellence SELY Bordeaux",
+      "subtitle": "Raffinement et art de vivre au cœur du vignoble.",
+      "intro": "L'exigence SELY Privé s'étend à la région bordelaise. Nous allions l'élégance de nos berlines haut de gamme à une connaissance pointue du terroir girondin pour faire de chaque déplacement une expérience inoubliable.",
+      "c3_title": "L'Art de Vivre Bordelais",
+      "c3_desc": "De la découverte des châteaux de renom aux adresses confidentielles de la région, nous vous ouvrons les portes du prestige aquitain."
+    }
+  },
+  "french-riviera": {
+    "hero": {
+      "video": "/riviera_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Nice, Cannes & Monaco</span>",
+      "subtitle": "Déplacez-vous sur la Côte d'Azur avec élégance. Véhicules de prestige et chauffeurs professionnels pour vos séjours, congrès et transferts exclusifs.",
+      "location": "Côte d'Azur & Monaco",
+      "pickup_placeholder": "Adresse, aéroport Nice, hôtel...",
+      "destination_placeholder": "Adresse, Monaco, héliport, villa..."
+    },
+    "about": {
+      "subtitle": "L'excellence sur la Côte d'Azur.",
+      "desc_p1": "SELY Privé offre un service de chauffeur d'exception adapté au rythme et à l'exigence de la French Riviera. Des palaces de la Croisette aux hauteurs de Monaco, voyagez sereinement.",
+      "desc_p2": "Chauffeurs formés au protocole VIP, discrets et réactifs pour s'adapter instantanément à vos agendas les plus denses.",
+      "image": "/riviera_about.jpg",
+      "image_alt": "Chauffeur Privé SELY Privé sur la French Riviera"
+    },
+    "services": {
+      "srv1_desc": "Trajets sur-mesure depuis l'Aéroport de Nice Côte d'Azur (NCE), l'Héliport de Monaco, Cannes ou Saint-Tropez."
+    },
+    "experiences": {
+      "e1_image": "/luxury_event_gala.png",
+      "e1_title": "Congrès & Événements à Cannes",
+      "e1_desc": "MIPIM, Festival de Cannes, Lions. Nos chauffeurs assurent vos rotations et la logistique de transport de vos VIP.",
+      "e2_image": "/experience_chauffeur_no_watch.png",
+      "e2_title": "Escapades à Monaco",
+      "e2_desc": "Rejoignez la Principauté dans le confort feutré d'une Classe S ou d'une Maybach. Idéal pour vos rendez-vous d'affaires.",
+      "e3_image": "/riviera_yacht_villa.jpg",
+      "e3_title": "Transferts Yacht & Villas",
+      "e3_desc": "Connexion directe avec vos yachts à Antibes ou vos villas privées sur le Cap Ferrat et Saint-Tropez."
+    },
+    "wine_tours": {
+      "badge": "Prestige maritime & terrestre",
+      "title": "Mise à Disposition Côte d'Azur",
+      "subtitle": "Réservez un véhicule avec chauffeur pour parcourir la route côtière, dîner à Saint-Tropez ou assister au Grand Prix de Monaco.",
+      "bg_image": "/riviera_yacht_bg.jpg",
+      "bg_alt": "Yacht et berline de luxe sur la côte azuréenne",
+      "f1_title": "Rotations Événementielles",
+      "f1_desc": "Planification de flottes dédiées pour congrès, mariages ou soirées privées sur toute la French Riviera.",
+      "f2_title": "Conduite Côtière & Panoramique",
+      "f2_desc": "Profitez des plus belles routes panoramiques de la côte d'Azur (Moyenne et Grande Corniche) en toute sérénité."
+    },
+    "contact": {
+      "location": "Monaco, Cannes & Nice"
+    },
+    "page_excellence": {
+      "immersive_image": "/riviera_excellence.jpg",
+      "title": "L'Excellence SELY Riviera",
+      "subtitle": "Le prestige sous le soleil de la Riviera.",
+      "intro": "Sur la Côte d'Azur, SELY Privé propose un service d'une flexibilité absolue. De Nice à Monaco, nos chauffeurs privés garantissent une prise en charge sur-mesure pour vos déplacements professionnels et de villégiature.",
+      "c3_title": "L'Art de Vivre Azuréen",
+      "c3_desc": "De la Croisette aux clubs privés de Saint-Tropez, nous assurons des liaisons fluides et un accompagnement discret de chaque instant."
+    }
+  },
+  "london": {
+    "hero": {
+      "video": "/london-hero-video.mp4",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Londres & Heathrow</span>",
+      "subtitle": "Découvrez Londres sous son meilleur jour avec notre service de chauffeur professionnel. Véhicules de luxe, expertise locale et fiabilité absolue pour vos voyages d'affaires et transferts aéroports.",
+      "location": "Londres & Grand Londres",
+      "pickup_placeholder": "Adresse, aéroport Heathrow, hôtel...",
+      "destination_placeholder": "Adresse, aéroport, Mayfair..."
+    },
+    "about": {
+      "subtitle": "Service de Chauffeur Exécutif à Londres.",
+      "desc_p1": "SELY Privé apporte sa signature de transport haut de gamme dans la capitale du Royaume-Uni. Conçu pour les clients corporate, les délégations et les voyageurs exigeants.",
+      "desc_p2": "Nos chauffeurs possèdent une connaissance approfondie de Londres, naviguant aisément d'un quartier à l'autre tout en vous offrant un espace de travail connecté à bord.",
+      "image": "/london_about.jpg",
+      "image_alt": "Chauffeur Privé SELY Privé à Londres"
+    },
+    "services": {
+      "srv1_desc": "Transferts privés vers Heathrow (LHR), Gatwick (LGW), London City (LCY) et les terminaux de jets privés (Farnborough, Luton)."
+    },
+    "experiences": {
+      "e1_image": "/experience_chauffeur_no_watch.png",
+      "e1_title": "Roadshows Financiers",
+      "e1_desc": "Déplacements minutés pour vos réunions professionnelles à la City de Londres et Canary Wharf. Restez productif entre deux rendez-vous.",
+      "e2_image": "/london_shopping.jpg",
+      "e2_title": "Shopping de Luxe à Mayfair",
+      "e2_desc": "Profitez d'un chauffeur dédié en attente lors de vos virées shopping à Bond Street, Harrods et Knightsbridge.",
+      "e3_image": "/london_windsor.jpg",
+      "e3_title": "Excursions à Windsor",
+      "e3_desc": "Échappez à l'agitation londonienne le temps d'une escapade premium vers le Château de Windsor, Oxford ou Stonehenge."
+    },
+    "wine_tours": {
+      "badge": "Service à l'Heure & Roadshows",
+      "title": "Mise à Disposition & Roadshows à Londres",
+      "subtitle": "Un chauffeur haut de gamme dédié pour vos réunions d'affaires, vos déplacements officiels ou vos excursions sur-mesure à Londres.",
+      "bg_image": "/london_hourly_bg.jpg",
+      "bg_alt": "Mercedes Classe S circulant dans les rues de Londres la nuit",
+      "f1_title": "Expertise Corporate",
+      "f1_desc": "Chauffeurs rompus aux exigences des plannings d'affaires, en coordination directe avec vos assistants.",
+      "f2_title": "Liaison Jets Privés",
+      "f2_desc": "Accueil personnalisé et suivi des vols en temps réel dans tous les aéroports et terminaux d'affaires."
+    },
+    "contact": {
+      "location": "Londres & Grand Londres"
+    },
+    "page_excellence": {
+      "immersive_image": "/london_excellence.jpg",
+      "title": "Excellence SELY Londres",
+      "subtitle": "Transport de direction sur-mesure dans la capitale britannique.",
+      "intro": "À Londres, SELY Privé offre un service exécutif d'exception répondant aux standards internationaux. Qu'il s'agisse de roadshows corporate ou d'escapades à Mayfair, notre flotte de prestige est à votre entière disposition.",
+      "c3_title": "L'Art de Vivre Londonien",
+      "c3_desc": "Des hubs financiers du centre de Londres aux domaines royaux historiques, profitez d'une sérénité absolue et d'une confidentialité totale."
+    }
   }
 }

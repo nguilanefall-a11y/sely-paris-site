@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useParams, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -12,12 +12,12 @@ import ContactPage from './pages/ContactPage';
 import VehiclesPage from './pages/VehiclesPage';
 import ReservationPage from './pages/ReservationPage';
 import SpecialRequestPage from './pages/SpecialRequestPage';
+import ReservationSuccessPage from './pages/ReservationSuccessPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    // Use Lenis if available, otherwise fallback
     if (window.__lenis) {
       window.__lenis.scrollTo(0, { immediate: true });
     } else {
@@ -28,8 +28,15 @@ function ScrollToTop() {
 }
 
 function PublicSite() {
+  const { city } = useParams();
   const location = useLocation();
-  const isHome = location.pathname === '/';
+  const validCities = ['paris', 'bordeaux', 'french-riviera', 'london'];
+
+  if (!validCities.includes(city)) {
+    return <Navigate to="/" replace />;
+  }
+
+  const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/`;
 
   return (
     <SmoothScroll>
@@ -44,6 +51,7 @@ function PublicSite() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/reserver" element={<ReservationPage />} />
             <Route path="/demande-specifique" element={<SpecialRequestPage />} />
+            <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
             <Route path="/politique-de-confidentialite" element={<PrivacyPolicyPage />} />
           </Routes>
         </main>

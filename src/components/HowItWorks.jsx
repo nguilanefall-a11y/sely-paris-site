@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useCity } from '../hooks/useCity';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
@@ -9,7 +9,7 @@ import styles from './HowItWorks.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HowItWorks() {
-  const { t } = useTranslation();
+  const { t, getCityPath } = useCity();
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const stepsRef = useRef([]);
@@ -175,7 +175,7 @@ export default function HowItWorks() {
         </div>
 
         <div className={styles.ctaWrapper} ref={ctaRef}>
-          <Link to="/reserver" className={styles.ctaButton}>
+          <Link to={getCityPath('/reserver')} className={styles.ctaButton}>
             {t('howItWorks.cta')}
             <ArrowRight size={18} />
           </Link>

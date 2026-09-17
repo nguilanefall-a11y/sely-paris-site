@@ -1,209 +1,407 @@
 .page {
   background-color: var(--bg-color);
   min-height: 100vh;
-  padding-bottom: 5rem;
   color: var(--text-primary);
 }
 
-.introSection {
-  padding: 6rem 2rem;
+/* ── Overline ── */
+.overline {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Philosophy Section ── */
+.philosophySection {
+  padding: 8rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.philosophyInner {
   max-width: 800px;
-  margin: 0 auto;
   text-align: center;
 }
 
-.introText {
-  font-size: 1.25rem;
+.philosophyQuote {
+  font-family: 'Inter', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: 0 0 2.5rem;
+}
+
+.philosophyDesc {
+  font-size: 1.1rem;
   color: var(--text-secondary);
-  line-height: 1.8;
-  margin-bottom: 2rem;
+  line-height: 1.9;
   font-weight: 300;
 }
 
-.cardGrid {
-  max-width: 1100px;
-  margin: 0 auto 6rem;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+.philosophyDesc strong {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
-.card {
+/* ── Pillars Section ── */
+.pillarsSection {
+  padding: 0 2rem 8rem;
+}
+
+.pillarsGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.pillarCard {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 2.5rem 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.cardTitle {
-  font-size: 1.4rem;
+.pillarCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pillarCard:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px);
+}
+
+.pillarCard:hover::before {
+  opacity: 1;
+}
+
+.pillarIndex {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.pillarTitle {
+  font-size: 1.3rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
   letter-spacing: -0.02em;
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+  color: var(--text-primary);
 }
 
-.cardDesc {
+.pillarDesc {
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  font-size: 1.05rem;
   line-height: 1.7;
   font-weight: 300;
 }
 
-.whySection {
-  padding: 4rem 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  background: var(--bg-surface);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+/* ── Immersive Section ── */
+.immersiveSection {
+  position: relative;
+  height: 70vh;
+  min-height: 500px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.whyTitle {
+.immersiveImageWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.immersiveImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.immersiveOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.4) 0%,
+    rgba(10, 10, 10, 0.7) 100%
+  );
+}
+
+.immersiveContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 700px;
+  padding: 2rem;
+}
+
+.immersiveTitle {
   font-size: 3rem;
   font-weight: 600;
+  letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
-.whyDesc {
+.immersiveDesc {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.75);
   line-height: 1.8;
   font-weight: 300;
 }
 
-.ctaWrapper {
+/* ── Onboard Section ── */
+.onboardSection {
+  padding: 8rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   text-align: center;
-  margin-top: 4rem;
 }
 
-.cta {
+.sectionTitle {
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  line-height: 1.15;
+}
+
+.onboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.onboardCard {
+  text-align: left;
+}
+
+.onboardImageWrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  aspect-ratio: 4/3;
+}
+
+.onboardImageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.onboardCard:hover .onboardImageWrapper img {
+  transform: scale(1.05);
+}
+
+.onboardCardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.onboardCardDesc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ── CTA Section ── */
+.ctaSection {
+  padding: 8rem 2rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ctaTitle {
+  font-size: 2.8rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  line-height: 1.15;
+}
+
+.ctaDesc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 3rem;
+}
+
+.ctaButton {
   display: inline-block;
   background: #ffffff;
   color: #000000;
-  padding: 1.2rem 3rem;
-  font-size: 1.1rem;
+  padding: 1.1rem 3rem;
+  font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-decoration: none;
   border-radius: 100px;
-  transition: opacity 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cta:hover {
+.ctaButton:hover {
   opacity: 0.85;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.12);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .pillarsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .page {
-    padding-bottom: 3rem;
+  .philosophySection {
+    padding: 5rem 1.5rem;
   }
 
-  .introSection {
-    padding: 4rem 1.5rem;
+  .philosophyQuote {
+    font-size: 1.8rem;
   }
 
-  .introText {
-    font-size: 1.1rem;
+  .philosophyQuote::before {
+    display: none;
   }
 
-  .cardGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 1.5rem;
-    margin-bottom: 4rem;
-  }
-
-  .card {
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .cardTitle {
-    font-size: 1.3rem;
-  }
-
-  .cardDesc {
+  .philosophyDesc {
     font-size: 1rem;
   }
 
-  .whySection {
-    padding: 3rem 1.5rem;
-    max-width: 100%;
+  .pillarsSection {
+    padding: 0 1.5rem 5rem;
   }
 
-  .whyTitle {
+  .pillarsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .pillarCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .immersiveSection {
+    height: 50vh;
+    min-height: 350px;
+  }
+
+  .immersiveTitle {
     font-size: 2rem;
   }
 
-  .whyDesc {
+  .immersiveDesc {
     font-size: 1rem;
   }
 
-  .ctaWrapper {
-    margin-top: 3rem;
+  .onboardSection {
+    padding: 5rem 1.5rem;
   }
 
-  .cta {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 1.1rem 2rem;
+  .sectionTitle {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .onboardGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .ctaSection {
+    padding: 5rem 1.5rem;
+  }
+
+  .ctaTitle {
+    font-size: 2rem;
+  }
+
+  .ctaDesc {
     font-size: 1rem;
-    box-sizing: border-box;
   }
 }
 
 @media (max-width: 480px) {
-  .introSection {
-    padding: 3rem 1.2rem;
+  .philosophySection {
+    padding: 4rem 1.2rem;
   }
 
-  .introText {
-    font-size: 1rem;
+  .philosophyQuote {
+    font-size: 1.5rem;
   }
 
-  .cardGrid {
-    padding: 0 1.2rem;
-    gap: 1.2rem;
-    margin-bottom: 3rem;
+  .pillarsSection {
+    padding: 0 1.2rem 4rem;
   }
 
-  .card {
-    padding: 1.5rem;
-    border-radius: 12px;
+  .immersiveSection {
+    height: 45vh;
+    min-height: 300px;
   }
 
-  .cardTitle {
-    font-size: 1.2rem;
-  }
-
-  .cardDesc {
-    font-size: 0.95rem;
-  }
-
-  .whySection {
-    padding: 2.5rem 1.2rem;
-  }
-
-  .whyTitle {
+  .immersiveTitle {
     font-size: 1.6rem;
-    margin-bottom: 1rem;
   }
 
-  .whyDesc {
-    font-size: 0.95rem;
+  .onboardSection {
+    padding: 4rem 1.2rem;
   }
 
-  .cta {
-    padding: 1rem 1.5rem;
-    font-size: 0.95rem;
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+
+  .ctaSection {
+    padding: 4rem 1.2rem;
+  }
+
+  .ctaTitle {
+    font-size: 1.6rem;
+  }
+
+  .ctaButton {
+    display: block;
+    text-align: center;
+    padding: 1rem 2rem;
   }
 }

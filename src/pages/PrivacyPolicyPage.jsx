@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import PageHeader from '../components/PageHeader';
 import styles from './PrivacyPolicyPage.module.css';
 
 export default function PrivacyPolicyPage() {
-  const { t } = useTranslation();
+  const { t } = useCity();
   
   return (
     <div className={styles.page}>

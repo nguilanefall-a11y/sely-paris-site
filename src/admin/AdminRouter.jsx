@@ -7,6 +7,7 @@ import Dashboard from './views/Dashboard';
 import ClientsManager from './views/ClientsManager';
 import QuotesManager from './views/QuotesManager';
 import InvoicesManager from './views/InvoicesManager';
+import BookingsManager from './views/BookingsManager';
 import ServicesManager from './views/ServicesManager';
 import FleetManager from './views/FleetManager';
 import Settings from './views/Settings';
@@ -19,6 +20,7 @@ const AdminRouter = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="reservations" element={<BookingsManager />} />
           <Route path="clients" element={<ClientsManager />} />
           <Route path="quotes" element={<QuotesManager />} />
           <Route path="invoices" element={<InvoicesManager />} />

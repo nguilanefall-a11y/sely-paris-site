@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send } from 'lucide-react';
+import { getFormAccessKey } from '../lib/formRouting';
 import styles from './SpecialRequestPage.module.css';
 
 export default function SpecialRequestPage() {
-  const { t } = useTranslation();
+  const { t, cityName, currentCity } = useCity();
   const [status, setStatus] = useState('idle');
   const [form, setForm] = useState({
     firstName: '',
@@ -29,9 +30,10 @@ export default function SpecialRequestPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: 'dee08b8f-5afc-44f3-a9d4-a80bd02bce90',
-          subject: 'Demande Spécifique - SELY',
+          access_key: getFormAccessKey(),
+          subject: `Demande Spécifique [${cityName || 'Paris'}] - SELY`,
           from_name: `${form.firstName} ${form.lastName}`,
+          Ville: cityName || currentCity || 'Paris',
           'Prénom': form.firstName,
           'Nom': form.lastName,
           'Email': form.email,

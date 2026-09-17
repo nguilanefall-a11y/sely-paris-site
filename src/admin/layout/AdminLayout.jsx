@@ -26,10 +26,11 @@ const AdminLayout = () => {
 
   const navItems = [
     { path: '/sely-office/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/sely-office/reservations', label: 'Réservations & Whop', icon: Calendar },
     { path: '/sely-office/clients', label: 'Clients', icon: Users },
     { path: '/sely-office/quotes', label: 'Devis', icon: FileText },
     { path: '/sely-office/invoices', label: 'Factures', icon: FileSpreadsheet },
-    { path: '/sely-office/services', label: 'Prestations', icon: Calendar },
+    { path: '/sely-office/services', label: 'Prestations', icon: Briefcase },
     { path: '/sely-office/fleet', label: 'Flotte & Chauffeurs', icon: Car },
     { path: '/sely-office/settings', label: 'Paramètres', icon: Settings },
   ];

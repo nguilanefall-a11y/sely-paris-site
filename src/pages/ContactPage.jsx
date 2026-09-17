@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import PageHeader from '../components/PageHeader';
 import Booking from '../components/Booking';
 
 export default function ContactPage() {
-  const { t } = useTranslation();
+  const { t } = useCity();
 
   return (
     <div style={{ backgroundColor: 'var(--bg-color)', minHeight: '100vh', color: 'var(--text-primary)' }}>

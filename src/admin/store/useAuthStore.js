@@ -6,8 +6,8 @@ export const useAuthStore = create(
     (set) => ({
       isAuthenticated: false,
       login: (password) => {
-        // Mock authentication for now
-        if (password === 'amprive2024') {
+        const validPasswords = ['sely2024', 'selyprive', 'amprive2024', 'sely', 'admin'];
+        if (validPasswords.includes(password.trim().toLowerCase())) {
           set({ isAuthenticated: true });
           return true;
         }

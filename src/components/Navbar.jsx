@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Phone } from 'lucide-react';
+import CitySelector from './CitySelector';
 import styles from './Navbar.module.css';
 
 export default function Navbar({ isHome }) {
-  const { t, i18n } = useTranslation();
+  const { city, getCityPath, t, i18n } = useCity();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -30,10 +31,15 @@ export default function Navbar({ isHome }) {
   const navClass = `${styles.header} ${scrolled || !isHome || mobileMenuOpen ? styles.solid : styles.transparent}`;
 
   const links = [
-    { to: '/vehicules', label: t('nav.vehicules', 'Flotte') },
-    { to: '/excellence', label: t('nav.excellence', 'Services') },
-    { to: '/contact', label: t('nav.contact', 'Contact') },
+    { to: getCityPath('/vehicules'), label: t('nav.vehicules', 'Flotte') },
+    { to: getCityPath('/excellence'), label: t('nav.excellence', 'Services') },
+    { to: getCityPath('/contact'), label: t('nav.contact', 'Contact') },
   ];
+
+  const getCityLogoLabel = (c) => {
+    if (c === 'french-riviera') return 'RIVIERA';
+    return c.toUpperCase();
+  };
 
   return (
     <>
@@ -44,17 +50,17 @@ export default function Navbar({ isHome }) {
           transition={{ duration: 1, delay: 0.1 }}
           className={styles.logoContainer}
         >
-          <Link to="/" className={styles.logoLink}>
+          <Link to={getCityPath('/')} className={styles.logoLink}>
             <span className={styles.logoMark}>S</span>
             <div className={styles.logoText}>
-              SELY<br/><span>PARIS</span>
+              SELY<br/><span>{getCityLogoLabel(city)}</span>
             </div>
           </Link>
         </motion.div>
 
-        <a href="tel:+33184160842" className={styles.phoneBadge}>
+        <a href={t('contact.phone_link', 'tel:+33184160842')} className={styles.phoneBadge}>
           <Phone size={14} />
-          <span>+33 1 84 16 08 42</span>
+          <span>{t('contact.phone', '+33 1 84 16 08 42')}</span>
         </a>
 
         <motion.nav 
@@ -68,7 +74,8 @@ export default function Navbar({ isHome }) {
               {link.label}
             </Link>
           ))}
-          <Link to="/reserver" className={styles.ctaButtonSolid}>{t('nav.book', 'Réserver')}</Link>
+          <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book', 'Réserver')}</Link>
+          <CitySelector />
           <button onClick={toggleLanguage} className={styles.langToggle}>
             {i18n.language.startsWith('en') ? 'EN' : 'FR'}
           </button>
@@ -92,10 +99,13 @@ export default function Navbar({ isHome }) {
                 {link.label}
               </Link>
             ))}
-            <Link to="/reserver" className={styles.mobileCta}>{t('nav.book', 'Réserver')}</Link>
-            <button onClick={toggleLanguage} className={styles.mobileLangToggle}>
-              {i18n.language.startsWith('en') ? 'English' : 'Français'}
-            </button>
+            <Link to={getCityPath('/reserver')} className={styles.mobileCta}>{t('nav.book', 'Réserver')}</Link>
+            <div className={styles.mobileActions}>
+              <CitySelector />
+              <button onClick={toggleLanguage} className={styles.mobileLangToggle}>
+                {i18n.language.startsWith('en') ? 'English' : 'Français'}
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, MapPin, Calendar, Clock, ArrowRight, Sparkles, Navigation } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Hero.module.css';
@@ -70,18 +70,23 @@ const CustomDurationSelect = ({ options, t, onSelect, selectedIndex: controlledI
 };
 
 export default function Hero() {
-  const { t } = useTranslation();
+  const { t, getCityPath, currentCity } = useCity();
+  const bgMedia = t('hero.video', '/hero-video-nb.mp4');
+  const isVideo = !bgMedia.endsWith('.jpg') && !bgMedia.endsWith('.png') && !bgMedia.endsWith('.webp') && !bgMedia.endsWith('.jpeg');
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('transfer');
   
-  // Hook up address autocomplete
-  const pickupAutocomplete = useAddressAutocomplete();
-  const destAutocomplete = useAddressAutocomplete();
+  // Hook up address autocomplete with active city bias
+  const pickupAutocomplete = useAddressAutocomplete('', currentCity || 'paris');
+  const destAutocomplete = useAddressAutocomplete('', currentCity || 'paris');
   
   const pickupValue = pickupAutocomplete.query;
   const setPickupValue = pickupAutocomplete.setQuery;
   const destinationValue = destAutocomplete.query;
   const setDestinationValue = destAutocomplete.setQuery;
+
+  const [pickupCoords, setPickupCoords] = useState(null);
+  const [destCoords, setDestCoords] = useState(null);
   
   const [dateValue, setDateValue] = useState('');
   const [timeValue, setTimeValue] = useState('');
@@ -116,14 +121,22 @@ export default function Hero() {
   const videoRef = useRef(null);
   const bookingBarRef = useRef(null);
   const heroLineRef = useRef(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const durationOptions = [
-    t('hero.duration_2h', '2h (80 km inclus)'),
-    t('hero.duration_4h', '4h (160 km inclus)'),
-    t('hero.duration_6h', '6h (240 km inclus)'),
-    t('hero.duration_8h', '8h (320 km inclus)'),
-    t('hero.duration_10h', '10h (400 km inclus)'),
-    t('hero.duration_multi', 'Plusieurs journées')
+    '3h (60 km inclus)',
+    '4h (80 km inclus)',
+    '5h (100 km inclus)',
+    '6h (120 km inclus)',
+    '7h (140 km inclus)',
+    '8h (160 km inclus - Journée)',
+    '9h (180 km inclus)',
+    '10h (200 km inclus)',
+    '11h (220 km inclus)',
+    '12h (240 km inclus)',
+    '13h (260 km inclus)',
+    '14h (280 km inclus)',
+    'Plusieurs journées (Sur devis)'
   ];
 
   const formatDate = (val) => {
@@ -139,14 +152,35 @@ export default function Hero() {
 
   const handleBookingClick = (e) => {
     e.preventDefault();
+    setErrorMsg('');
+
+    // Blacklane-style mandatory check: pickup must be provided
+    if (!pickupValue || pickupValue.trim().length < 3) {
+      setErrorMsg(t('hero.error_pickup', 'Veuillez renseigner une adresse exacte de prise en charge pour continuer.'));
+      setPickupFocused(true);
+      return;
+    }
+
+    // If transfer, destination must also be provided
+    if (activeTab === 'transfer' && (!destinationValue || destinationValue.trim().length < 3)) {
+      setErrorMsg(t('hero.error_destination', 'Veuillez renseigner une adresse exacte de destination.'));
+      setDestFocused(true);
+      return;
+    }
+
     const params = new URLSearchParams();
     params.set('service', activeTab);
-    if (pickupValue) params.set('pickup', pickupValue);
-    if (activeTab === 'transfer' && destinationValue) params.set('destination', destinationValue);
-    if (activeTab === 'hourly' && durationValue) params.set('duration', durationValue);
+    params.set('pickup', pickupValue.trim());
+    if (activeTab === 'transfer') {
+      params.set('destination', destinationValue.trim());
+      if (destCoords) params.set('destCoords', destCoords.join(','));
+    } else {
+      params.set('duration', durationValue || '3h (60 km inclus)');
+    }
+    if (pickupCoords) params.set('pickupCoords', pickupCoords.join(','));
     if (dateValue) params.set('date', dateValue);
     if (timeValue) params.set('time', timeValue);
-    navigate(`/reserver?${params.toString()}`);
+    navigate(getCityPath(`/reserver?${params.toString()}`));
   };
 
   // GSAP Animations
@@ -230,12 +264,34 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.heroSection}>
-      <img
-        ref={videoRef}
-        src="/hero-bg.jpg"
-        alt="Mercedes S-Class Paris"
-        className={styles.videoBackground}
-      />
+      {isVideo ? (
+        <video
+          ref={videoRef}
+          src={bgMedia}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={styles.videoBackground}
+          style={{ 
+            objectPosition: t('hero.video_position', 'center'),
+            filter: t('hero.video_filter', 'none')
+          }}
+        />
+      ) : (
+        <img
+          src={bgMedia}
+          alt={t('hero.media_alt', 'SELY Chauffeur Privé')}
+          className={styles.videoBackground}
+          style={{ 
+            objectFit: 'cover', 
+            width: '100%', 
+            height: '100%', 
+            objectPosition: t('hero.video_position', 'center'),
+            filter: t('hero.video_filter', 'none')
+          }}
+        />
+      )}
       <div className={styles.videoOverlay}></div>
 
       {/* Luminous line at bottom of hero */}
@@ -254,24 +310,31 @@ export default function Hero() {
         className={styles.bookingBar}
         style={{ opacity: 0 }}
       >
-        <div className={styles.tabs}>
-          <button
-            className={`${styles.tab} ${activeTab === 'transfer' ? styles.tabActive : ''}`}
-            onClick={() => setActiveTab('transfer')}
-          >
-            {t('hero.tab_transfer', 'Transfert')}
-          </button>
-          <button
-            className={`${styles.tab} ${activeTab === 'hourly' ? styles.tabActive : ''}`}
-            onClick={() => setActiveTab('hourly')}
-          >
-            {t('hero.tab_hourly', 'Mise à disposition')}
-          </button>
+        <div className={styles.tabsWrapper}>
+          <div className={styles.tabs}>
+            <button
+              className={`${styles.tab} ${activeTab === 'transfer' ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab('transfer')}
+            >
+              <Navigation size={13} className={styles.tabIcon} />
+              {t('hero.tab_transfer', 'Transfert')}
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === 'hourly' ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab('hourly')}
+            >
+              <Clock size={13} className={styles.tabIcon} />
+              {t('hero.tab_hourly', 'Mise à disposition')}
+            </button>
+          </div>
         </div>
 
         <div className={styles.fields}>
           <div className={styles.field}>
-            <label>{t('hero.pickup_label', 'Lieu de prise en charge')}</label>
+            <label>
+              <MapPin size={12} className={styles.labelIcon} />
+              {t('hero.pickup_label', 'Lieu de prise en charge')}
+            </label>
             <input
               type="text"
               placeholder={t('hero.pickup_placeholder', 'Adresse, aéroport, hôtel...')}
@@ -281,7 +344,7 @@ export default function Hero() {
               onBlur={() => setPickupFocused(false)}
             />
             <AnimatePresence>
-              {pickupFocused && (
+              {pickupFocused && pickupAutocomplete.suggestions.length > 0 && (
                 <motion.div 
                   className={styles.suggestions}
                   initial={{ opacity: 0, y: 5 }}
@@ -289,36 +352,22 @@ export default function Hero() {
                   exit={{ opacity: 0, y: 5 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {pickupAutocomplete.suggestions.length > 0 ? (
-                    pickupAutocomplete.suggestions.map((s) => (
-                      <div 
-                        key={s.id} 
-                        className={styles.suggestionItem}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setPickupValue(s.label);
-                          pickupAutocomplete.setSuggestions([]);
-                          setPickupFocused(false);
-                        }}
-                      >
-                        {s.label}
-                      </div>
-                    ))
-                  ) : (
-                    ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
-                      <span 
-                        key={s} 
-                        className={styles.chip}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setPickupValue(s);
-                          setPickupFocused(false);
-                        }}
-                      >
-                        {s}
-                      </span>
-                    ))
-                  )}
+                  {pickupAutocomplete.suggestions.map((s) => (
+                    <div 
+                      key={s.id} 
+                      className={styles.suggestionItem}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setPickupValue(s.label);
+                        if (s.coordinates) setPickupCoords(s.coordinates);
+                        pickupAutocomplete.setSuggestions([]);
+                        setPickupFocused(false);
+                      }}
+                    >
+                      <MapPin size={13} style={{ marginRight: 6, opacity: 0.7, flexShrink: 0 }} />
+                      <span>{s.label}</span>
+                    </div>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -331,22 +380,25 @@ export default function Hero() {
               <motion.div
                 key="destination"
                 className={styles.field}
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ duration: 0.25 }}
+                exit={{ opacity: 0, x: 6 }}
+                transition={{ duration: 0.2 }}
               >
-                <label>{t('hero.destination_label', 'Destination')}</label>
+                <label>
+                  <Navigation size={12} className={styles.labelIcon} />
+                  {t('hero.destination_label', 'Destination')}
+                </label>
                 <input
                   type="text"
-                  placeholder={t('hero.destination_placeholder', 'Adresse, aéroport, hôtel...')}
+                  placeholder={t('hero.destination_placeholder', 'Adresse exacte, aéroport, hôtel...')}
                   value={destinationValue}
                   onChange={(e) => setDestinationValue(e.target.value)}
                   onFocus={() => setDestFocused(true)}
                   onBlur={() => setDestFocused(false)}
                 />
                 <AnimatePresence>
-                  {destFocused && (
+                  {destFocused && destAutocomplete.suggestions.length > 0 && (
                     <motion.div 
                       className={styles.suggestions}
                       initial={{ opacity: 0, y: 5 }}
@@ -354,36 +406,22 @@ export default function Hero() {
                       exit={{ opacity: 0, y: 5 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {destAutocomplete.suggestions.length > 0 ? (
-                        destAutocomplete.suggestions.map((s) => (
-                          <div 
-                            key={s.id} 
-                            className={styles.suggestionItem}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setDestinationValue(s.label);
-                              destAutocomplete.setSuggestions([]);
-                              setDestFocused(false);
-                            }}
-                          >
-                            {s.label}
-                          </div>
-                        ))
-                      ) : (
-                        ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
-                          <span 
-                            key={s} 
-                            className={styles.chip}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setDestinationValue(s);
-                              setDestFocused(false);
-                            }}
-                          >
-                            {s}
-                          </span>
-                        ))
-                      )}
+                      {destAutocomplete.suggestions.map((s) => (
+                        <div 
+                          key={s.id} 
+                          className={styles.suggestionItem}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setDestinationValue(s.label);
+                            if (s.coordinates) setDestCoords(s.coordinates);
+                            destAutocomplete.setSuggestions([]);
+                            setDestFocused(false);
+                          }}
+                        >
+                          <Navigation size={13} style={{ marginRight: 6, opacity: 0.7, flexShrink: 0 }} />
+                          <span>{s.label}</span>
+                        </div>
+                      ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -392,12 +430,15 @@ export default function Hero() {
               <motion.div
                 key="duration"
                 className={styles.field}
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ duration: 0.25 }}
+                exit={{ opacity: 0, x: 6 }}
+                transition={{ duration: 0.2 }}
               >
-                <label>{t('hero.duration_label', 'Durée')}</label>
+                <label>
+                  <Sparkles size={12} className={styles.labelIcon} />
+                  {t('hero.duration_label', 'Durée')}
+                </label>
                 <CustomDurationSelect 
                   options={durationOptions} 
                   t={t} 
@@ -410,7 +451,10 @@ export default function Hero() {
           <div className={styles.fieldDivider}></div>
 
           <div className={`${styles.field} ${styles.fieldClickable}`} onClick={() => dateInputRef.current?.showPicker?.()}>
-            <label>{t('hero.date_label', 'Date')}</label>
+            <label>
+              <Calendar size={12} className={styles.labelIcon} />
+              {t('hero.date_label', 'Date')}
+            </label>
             <div className={styles.dateTimeDisplay}>
               <span className={dateValue ? styles.valueSet : styles.valuePlaceholder}>
                 {dateValue ? formatDate(dateValue) : t('hero.date_placeholder', 'jj/mm/aaaa')}
@@ -428,7 +472,10 @@ export default function Hero() {
           <div className={styles.fieldDivider}></div>
 
           <div className={`${styles.field} ${styles.fieldClickable}`} onClick={() => timeInputRef.current?.showPicker?.()}>
-            <label>{t('hero.time_label', 'Heure de prise en charge')}</label>
+            <label>
+              <Clock size={12} className={styles.labelIcon} />
+              {t('hero.time_label', 'Heure de prise en charge')}
+            </label>
             <div className={styles.dateTimeDisplay}>
               <span className={timeValue ? styles.valueSet : styles.valuePlaceholder}>
                 {timeValue ? formatTime(timeValue) : '--:--'}
@@ -444,21 +491,29 @@ export default function Hero() {
           </div>
 
           <button onClick={handleBookingClick} className={styles.bookingCta}>
-            {t('hero.cta_options', 'Voir les options')}
+            <span>{t('hero.cta_options', 'Réservez')}</span>
+            <ArrowRight size={15} className={styles.ctaArrow} />
           </button>
         </div>
+
+        {errorMsg && (
+          <motion.div 
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={styles.heroError}
+          >
+            ⚠️ {errorMsg}
+          </motion.div>
+        )}
 
         {/* ── Demande spécifique ── */}
         <div className={styles.specialBar}>
           <span className={styles.specialText}>
             {t('hero.special_text', 'Vous avez une question ou une demande spécifique ?')}
           </span>
-          <button onClick={() => navigate('/demande-specifique')} className={styles.specialCta}>
-            {t('hero.special_cta_full', 'Demande sur-mesure')}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
+          <button onClick={() => navigate(getCityPath('/demande-specifique'))} className={styles.specialCta}>
+            <span>{t('hero.special_cta_full', 'Demande sur-mesure')}</span>
+            <ArrowRight size={13} className={styles.specialArrow} />
           </button>
         </div>
       </div>

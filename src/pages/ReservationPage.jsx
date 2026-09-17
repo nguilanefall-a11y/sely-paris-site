@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
 import {
@@ -27,7 +27,14 @@ import {
   Building2,
   FileText,
   Luggage,
+  CreditCard,
+  Sparkles,
+  Shield,
 } from 'lucide-react';
+import { getFormAccessKey } from '../lib/formRouting';
+import { calculateTripPrice, getDrivingDistanceKm } from '../lib/pricingEngine';
+import { createWhopCheckout } from '../lib/whopCheckout';
+import { useBookingsStore } from '../admin/store/useBookingsStore';
 import styles from './ReservationPage.module.css';
 
 /* ─── vehicle catalogue ─── */
@@ -159,30 +166,59 @@ function containsAirport(value) {
 
 /* ─── component ─── */
 export default function ReservationPage() {
-  const { t } = useTranslation();
+  const { t, cityName, currentCity } = useCity();
   const [searchParams] = useSearchParams();
 
   /* --- pre-filled trip info from URL --- */
   const [serviceType, setServiceType] = useState(
     searchParams.get('service') || 'transfer'
   );
-  // Hook up address autocomplete
-  const pickupAutocomplete = useAddressAutocomplete(searchParams.get('pickup') || '');
-  const destAutocomplete = useAddressAutocomplete(searchParams.get('destination') || '');
+  // Hook up address autocomplete with active city bias
+  const pickupAutocomplete = useAddressAutocomplete(searchParams.get('pickup') || '', currentCity || 'paris');
+  const destAutocomplete = useAddressAutocomplete(searchParams.get('destination') || '', currentCity || 'paris');
   
   const pickup = pickupAutocomplete.query;
   const setPickup = pickupAutocomplete.setQuery;
   const destination = destAutocomplete.query;
   const setDestination = destAutocomplete.setQuery;
   
+  const [pickupCoords, setPickupCoords] = useState(() => {
+    const raw = searchParams.get('pickupCoords');
+    if (raw && raw.includes(',')) {
+      const parts = raw.split(',').map(Number);
+      if (!isNaN(parts[0]) && !isNaN(parts[1])) return parts;
+    }
+    return null;
+  });
+  const [destCoords, setDestCoords] = useState(() => {
+    const raw = searchParams.get('destCoords');
+    if (raw && raw.includes(',')) {
+      const parts = raw.split(',').map(Number);
+      if (!isNaN(parts[0]) && !isNaN(parts[1])) return parts;
+    }
+    return null;
+  });
+  const [distanceKm, setDistanceKm] = useState(null);
+
+  const formRef = useRef(null);
   const [pickupFocused, setPickupFocused] = useState(false);
   const [destFocused, setDestFocused] = useState(false);
-  const [duration, setDuration] = useState(searchParams.get('duration') || '');
-  const [date, setDate] = useState(searchParams.get('date') || '');
-  const [time, setTime] = useState(searchParams.get('time') || '');
+  const [duration, setDuration] = useState(searchParams.get('duration') || '3 heures');
+  const [date, setDate] = useState(() => {
+    if (searchParams.get('date')) return searchParams.get('date');
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  });
+  const [time, setTime] = useState(() => {
+    if (searchParams.get('time')) return searchParams.get('time');
+    const now = new Date();
+    let h = now.getHours() + 1;
+    if (h >= 24) h = 0;
+    return `${String(h).padStart(2, '0')}:00`;
+  });
 
   /* --- vehicle --- */
-  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState('classe-s'); // Select Classe S by default
 
   /* --- personal info --- */
   const [firstName, setFirstName] = useState('');
@@ -202,6 +238,59 @@ export default function ReservationPage() {
 
   /* --- form state --- */
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [errorMessage, setErrorMessage] = useState('');
+  const [submissionAction, setSubmissionAction] = useState('pay'); // 'pay' | 'quote'
+
+  // Geocode an address query into [lon, lat] automatically
+  const geocodeAddress = useCallback(async (text) => {
+    if (!text || text.trim().length < 3) return null;
+    try {
+      const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(text)}&limit=1`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.features && data.features.length > 0) {
+          return data.features[0].geometry.coordinates; // [lon, lat]
+        }
+      }
+    } catch (e) {}
+    return null;
+  }, []);
+
+  // Automatic geocoding if user typed an address without selecting from dropdown
+  useEffect(() => {
+    let active = true;
+    if (pickup && pickup.trim().length >= 4 && !pickupCoords) {
+      const timer = setTimeout(() => {
+        geocodeAddress(pickup).then((coords) => {
+          if (active && coords) setPickupCoords(coords);
+        });
+      }, 600);
+      return () => { active = false; clearTimeout(timer); };
+    }
+  }, [pickup, pickupCoords, geocodeAddress]);
+
+  useEffect(() => {
+    let active = true;
+    if (destination && destination.trim().length >= 4 && !destCoords) {
+      const timer = setTimeout(() => {
+        geocodeAddress(destination).then((coords) => {
+          if (active && coords) setDestCoords(coords);
+        });
+      }, 600);
+      return () => { active = false; clearTimeout(timer); };
+    }
+  }, [destination, destCoords, geocodeAddress]);
+
+  // Calcul automatique de la distance routière en temps réel
+  useEffect(() => {
+    let active = true;
+    if (serviceType === 'transfer' && pickupCoords && destCoords) {
+      getDrivingDistanceKm(pickupCoords, destCoords).then((dist) => {
+        if (active && dist) setDistanceKm(dist);
+      });
+    }
+    return () => { active = false; };
+  }, [serviceType, pickupCoords, destCoords]);
 
   const showFlightField = useMemo(
     () => containsAirport(pickup) || containsAirport(destination),
@@ -213,26 +302,118 @@ export default function ReservationPage() {
     [selectedVehicle]
   );
 
+  // Blacklane-style check: trip must be defined to compute exact prices and proceed
+  const isTripDefined = useMemo(() => {
+    if (!pickup || pickup.trim().length < 3) return false;
+    if (serviceType === 'transfer') {
+      return Boolean(destination && destination.trim().length >= 3);
+    }
+    return Boolean(duration);
+  }, [pickup, destination, serviceType, duration]);
+
+  // Moteur de calcul tarifaire intelligent en direct
+  const calculatedPrice = useMemo(() => {
+    if (!selectedVehicle || !isTripDefined) return null;
+    return calculateTripPrice({
+      city: currentCity || 'paris',
+      serviceType,
+      vehicleId: selectedVehicle,
+      duration: duration || '3',
+      distanceKm,
+      pickup,
+      destination,
+      time,
+      options: { babySeat, childSeat, nameBoard },
+    });
+  }, [
+    currentCity,
+    serviceType,
+    selectedVehicle,
+    duration,
+    distanceKm,
+    pickup,
+    destination,
+    time,
+    babySeat,
+    childSeat,
+    nameBoard,
+    isTripDefined,
+  ]);
+
   /* --- submit handler --- */
   const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
+    async (e, actionType = 'pay') => {
+      if (e && e.preventDefault) e.preventDefault();
+      
+      // Blacklane check: must have pickup and destination
+      if (!isTripDefined) {
+        setErrorMessage(
+          serviceType === 'transfer'
+            ? 'Veuillez renseigner une adresse exacte de départ et de destination.'
+            : 'Veuillez renseigner une adresse de prise en charge.'
+        );
+        setStatus('error');
+        if (!pickup) setPickupFocused(true);
+        else setDestFocused(true);
+        window.scrollTo({ top: 180, behavior: 'smooth' });
+        return;
+      }
+
+      // HTML5 form validation (check required fields: first name, last name, email, phone, pickup, etc.)
+      if (formRef.current && !formRef.current.reportValidity()) {
+        return;
+      }
+
       setStatus('loading');
 
+      const isPayment = actionType === 'pay';
+      const totalTTC = calculatedPrice ? `${calculatedPrice.total} € TTC` : 'Sur devis';
+
+      // 0. Enregistrer immédiatement dans l'Espace Admin SELY Office
+      try {
+        useBookingsStore.getState().addBooking({
+          clientName: `${firstName} ${lastName}`.trim(),
+          email,
+          phone,
+          company,
+          city: currentCity || 'paris',
+          serviceType,
+          pickup,
+          destination: serviceType === 'transfer' ? destination : `${duration || '3 heures'}`,
+          date,
+          time,
+          passengerCount,
+          luggageCount,
+          vehicle: selectedVehicleData?.nameFallback || 'Mercedes Classe S',
+          amount: calculatedPrice ? calculatedPrice.total : 0,
+          status: isPayment ? 'pending' : 'quote',
+          flightNumber,
+          specialRequests,
+        });
+      } catch (storeErr) {
+        console.warn('Booking store save warning:', storeErr);
+      }
+
       const payload = {
-        access_key: 'dee08b8f-5afc-44f3-a9d4-a80bd02bce90',
-        subject: 'Nouvelle Demande de Réservation - SELY',
+        access_key: getFormAccessKey(),
+        subject: isPayment
+          ? `[RÉSERVATION & PAIEMENT WHOP] [${cityName || 'Paris'}] - SELY (${totalTTC})`
+          : `[DEMANDE DE DEVIS] [${cityName || 'Paris'}] - SELY (${totalTTC})`,
         from_name: `${firstName} ${lastName}`,
+        Ville: cityName || currentCity || 'Paris',
+        'Montant calculé': totalTTC,
+        'Détail tarif': calculatedPrice?.details || '—',
+        ...(distanceKm ? { 'Distance estimée': `${distanceKm} km` } : {}),
         /* trip */
         'Type de service': serviceType === 'transfer' ? 'Transfert' : 'Mise à disposition',
         'Lieu de prise en charge': pickup,
         ...(serviceType === 'transfer'
           ? { Destination: destination }
-          : { Durée: duration }),
+          : { Durée: duration || '3 heures' }),
         Date: date,
         Heure: time,
         /* vehicle */
-        Véhicule: selectedVehicleData?.nameFallback || '—',
+        Véhicule: selectedVehicleData?.nameFallback || 'Mercedes Classe S',
         /* personal */
         Prénom: firstName,
         Nom: lastName,
@@ -241,30 +422,66 @@ export default function ReservationPage() {
         Société: company || '—',
         'Nombre de passagers': passengerCount,
         /* options */
-        'Siège bébé': babySeat ? 'Oui' : 'Non',
-        'Siège enfant': childSeat ? 'Oui' : 'Non',
-        'Accueil avec panneau': nameBoard ? 'Oui' : 'Non',
+        'Siège bébé': babySeat ? 'Oui (+15€)' : 'Non',
+        'Siège enfant': childSeat ? 'Oui (+15€)' : 'Non',
+        'Accueil avec panneau': nameBoard ? 'Oui (+20€)' : 'Non',
         ...(showFlightField ? { 'Numéro de vol': flightNumber || '—' } : {}),
         'Nombre de bagages': luggageCount,
         'Demandes particulières': specialRequests || '—',
       };
 
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
+        // 1. Sauvegarder la réservation et notifier la direction par email
+        await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-        });
-        if (res.ok) {
-          setStatus('success');
-        } else {
-          setStatus('error');
+        }).catch((err) => console.warn('Email notification warning:', err));
+
+        if (isPayment) {
+          if (!calculatedPrice || !calculatedPrice.total || calculatedPrice.total <= 0) {
+            setErrorMessage("Le montant de la course n'a pas pu être calculé. Veuillez vérifier les adresses saisies.");
+            setStatus('error');
+            return;
+          }
+
+          // 2. Générer le checkout Whop dynamique
+          const returnUrl = `${window.location.origin}/${currentCity ? currentCity + '/' : ''}reservation-succes`;
+          const checkoutUrl = await createWhopCheckout({
+            amount: calculatedPrice.total,
+            currency: 'eur',
+            title: `SELY Privé - ${selectedVehicleData?.nameFallback || 'Chauffeur Privé'} (${cityName || 'Paris'})`,
+            description: `${calculatedPrice.details} | Client: ${firstName} ${lastName} | Date: ${date} ${time}`,
+            metadata: {
+              client: `${firstName} ${lastName}`,
+              email,
+              phone,
+              city: currentCity || 'paris',
+              serviceType,
+              pickup,
+              destination: serviceType === 'transfer' ? destination : `${duration || 3}h`,
+            },
+            redirectUrl: returnUrl,
+          });
+
+          if (checkoutUrl) {
+            window.location.href = checkoutUrl;
+            return;
+          } else {
+            throw new Error("Impossible de générer l'URL de redirection Whop.");
+          }
         }
-      } catch {
+
+        // Si demande de devis simple expressément demandée
+        setStatus('success');
+      } catch (err) {
+        console.error('Reservation submission error:', err);
+        setErrorMessage(err.message || 'Une erreur est survenue lors de la redirection vers le paiement sécurisé Whop.');
         setStatus('error');
       }
     },
     [
+      isTripDefined, calculatedPrice, distanceKm, cityName, currentCity,
       serviceType, pickup, destination, duration, date, time,
       selectedVehicle, selectedVehicleData,
       firstName, lastName, email, phone, company, passengerCount,
@@ -323,7 +540,7 @@ export default function ReservationPage() {
 
   return (
     <div className={styles.page}>
-      <form onSubmit={handleSubmit} className={styles.formWrapper}>
+      <form ref={formRef} onSubmit={(e) => handleSubmit(e, submissionAction)} className={styles.formWrapper}>
         {/* ─────── SECTION 1 — Trip Summary Banner ─────── */}
         <motion.section
           className={styles.tripBanner}
@@ -375,7 +592,7 @@ export default function ReservationPage() {
                 required
               />
               <AnimatePresence>
-                {pickupFocused && (
+                {pickupFocused && pickupAutocomplete.suggestions.length > 0 && (
                   <motion.div 
                     className={styles.suggestions}
                     initial={{ opacity: 0, y: 5 }}
@@ -383,36 +600,22 @@ export default function ReservationPage() {
                     exit={{ opacity: 0, y: 5 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {pickupAutocomplete.suggestions.length > 0 ? (
-                      pickupAutocomplete.suggestions.map((s) => (
-                        <div 
-                          key={s.id} 
-                          className={styles.suggestionItem}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            setPickup(s.label);
-                            pickupAutocomplete.setSuggestions([]);
-                            setPickupFocused(false);
-                          }}
-                        >
-                          {s.label}
-                        </div>
-                      ))
-                    ) : (
-                      ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
-                        <span 
-                          key={s} 
-                          className={styles.chip}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            setPickup(s);
-                            setPickupFocused(false);
-                          }}
-                        >
-                          {s}
-                        </span>
-                      ))
-                    )}
+                    {pickupAutocomplete.suggestions.map((s) => (
+                      <div 
+                        key={s.id} 
+                        className={styles.suggestionItem}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setPickup(s.label);
+                          if (s.coordinates) setPickupCoords(s.coordinates);
+                          pickupAutocomplete.setSuggestions([]);
+                          setPickupFocused(false);
+                        }}
+                      >
+                        <MapPin size={13} style={{ marginRight: 6, opacity: 0.7, flexShrink: 0 }} />
+                        <span>{s.label}</span>
+                      </div>
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -423,7 +626,7 @@ export default function ReservationPage() {
               <div className={styles.inputGroup} style={{ position: 'relative' }}>
                 <label className={styles.inputLabel}>
                   <MapPin size={13} />
-                  {t('reservation.tripSummary.destination', 'Destination')}
+                  {t('reservation.tripSummary.destination', 'Destination')} *
                 </label>
                 <input
                   type="text"
@@ -432,11 +635,11 @@ export default function ReservationPage() {
                   onChange={(e) => setDestination(e.target.value)}
                   onFocus={() => setDestFocused(true)}
                   onBlur={() => setDestFocused(false)}
-                  placeholder={t('reservation.tripSummary.destinationPlaceholder', 'Adresse d\'arrivée')}
+                  placeholder={t('reservation.tripSummary.destinationPlaceholder', 'Adresse exacte d\'arrivée')}
                   required
                 />
                 <AnimatePresence>
-                  {destFocused && (
+                  {destFocused && destAutocomplete.suggestions.length > 0 && (
                     <motion.div 
                       className={styles.suggestions}
                       initial={{ opacity: 0, y: 5 }}
@@ -444,36 +647,22 @@ export default function ReservationPage() {
                       exit={{ opacity: 0, y: 5 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {destAutocomplete.suggestions.length > 0 ? (
-                        destAutocomplete.suggestions.map((s) => (
-                          <div 
-                            key={s.id} 
-                            className={styles.suggestionItem}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setDestination(s.label);
-                              destAutocomplete.setSuggestions([]);
-                              setDestFocused(false);
-                            }}
-                          >
-                            {s.label}
-                          </div>
-                        ))
-                      ) : (
-                        ['Paris Centre', 'Aéroport CDG', 'Aéroport Orly', 'Gare de Lyon'].map((s) => (
-                          <span 
-                            key={s} 
-                            className={styles.chip}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setDestination(s);
-                              setDestFocused(false);
-                            }}
-                          >
-                            {s}
-                          </span>
-                        ))
-                      )}
+                      {destAutocomplete.suggestions.map((s) => (
+                        <div 
+                          key={s.id} 
+                          className={styles.suggestionItem}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setDestination(s.label);
+                            if (s.coordinates) setDestCoords(s.coordinates);
+                            destAutocomplete.setSuggestions([]);
+                            setDestFocused(false);
+                          }}
+                        >
+                          <Navigation size={13} style={{ marginRight: 6, opacity: 0.7, flexShrink: 0 }} />
+                          <span>{s.label}</span>
+                        </div>
+                      ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -568,6 +757,16 @@ export default function ReservationPage() {
             </span>
           </div>
 
+          {!isTripDefined && (
+            <div className={styles.tripNotice}>
+              <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
+              <div>
+                <strong>Indiquez votre lieu de départ et de destination ci-dessus</strong>
+                <p>Les tarifs exacts garantis par véhicule s'afficheront dès la saisie de votre trajet.</p>
+              </div>
+            </div>
+          )}
+
           <div className={styles.vehicleGrid}>
             {VEHICLES.map((vehicle, i) => {
               const isSelected = selectedVehicle === vehicle.id;
@@ -613,7 +812,22 @@ export default function ReservationPage() {
                         {vehicle.passengers}
                       </span>
                       <span className={styles.vehiclePrice}>
-                        {t('reservation.vehicles.surDevis', 'Sur devis')}
+                        {(() => {
+                          if (!isTripDefined) {
+                            return 'Adresse requise';
+                          }
+                          const vPrice = calculateTripPrice({
+                            city: currentCity || 'paris',
+                            serviceType,
+                            vehicleId: vehicle.id,
+                            duration: duration || '3',
+                            distanceKm,
+                            pickup,
+                            destination,
+                            time,
+                          });
+                          return `${vPrice.total} €`;
+                        })()}
                       </span>
                     </div>
                     <p className={styles.vehicleDesc}>
@@ -882,7 +1096,7 @@ export default function ReservationPage() {
           </div>
         </motion.section>
 
-        {/* ─────── SUBMIT ─────── */}
+        {/* ─────── SUBMIT & PRICING CARD ─────── */}
         <motion.div
           className={styles.submitSection}
           variants={sectionVariants}
@@ -890,6 +1104,72 @@ export default function ReservationPage() {
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
         >
+          {calculatedPrice && (
+            <motion.div 
+              className={styles.pricingCard}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className={styles.pricingHeader}>
+                <div className={styles.pricingTitleBox}>
+                  <span className={styles.pricingBadge}>
+                    <Sparkles size={12} />
+                    Tarif Garanti & Tout Inclus
+                  </span>
+                </div>
+                <div className={styles.pricingAmountBox}>
+                  <span className={styles.pricingAmount}>
+                    {calculatedPrice.total} {calculatedPrice.symbol}
+                  </span>
+                  <span className={styles.pricingTax}>TTC</span>
+                </div>
+              </div>
+
+              <div className={styles.pricingBreakdown}>
+                <div className={styles.pricingItem}>
+                  <span className={styles.pricingItemLabel}>Prestation :</span>
+                  <span className={styles.pricingItemValue}>{calculatedPrice.details}</span>
+                </div>
+                {calculatedPrice.optionsPrice > 0 && (
+                  <div className={styles.pricingItem}>
+                    <span className={styles.pricingItemLabel}>Options à bord :</span>
+                    <span className={styles.pricingItemValue}>+{calculatedPrice.optionsPrice} €</span>
+                  </div>
+                )}
+                <div className={styles.pricingItem}>
+                  <span className={styles.pricingItemLabel}>Service inclus :</span>
+                  <span className={styles.pricingItemValue}>Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements</span>
+                </div>
+              </div>
+
+              <div className={styles.pricingBadgesRow}>
+                <div className={styles.pricingBadgeItem}>
+                  <Shield size={13} color="#e5c158" />
+                  <span>Paiement 100% sécurisé</span>
+                </div>
+                <div className={styles.pricingBadgeItem}>
+                  <CreditCard size={13} color="#e5c158" />
+                  <span>Apple Pay • Google Pay • CB</span>
+                </div>
+                <div className={styles.pricingBadgeItem}>
+                  <Sparkles size={13} color="#e5c158" />
+                  <span>Confirmation instantanée</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {!isTripDefined && (
+            <div className={styles.tripNotice} style={{ marginBottom: '1.5rem', background: 'rgba(229, 193, 88, 0.08)', border: '1px solid rgba(229, 193, 88, 0.25)' }}>
+              <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
+              <div>
+                <strong>Adresses précises requises pour calculer le tarif garanti</strong>
+                <p>Veuillez renseigner votre lieu de prise en charge et votre destination exacte en haut de page pour calculer l'itinéraire et activer le paiement sécurisé en ligne.</p>
+              </div>
+            </div>
+          )}
+
           {status === 'error' && (
             <motion.div
               className={styles.errorBanner}
@@ -897,38 +1177,54 @@ export default function ReservationPage() {
               animate={{ opacity: 1, y: 0 }}
             >
               <AlertCircle size={16} />
-              {t(
-                'reservation.error',
-                'Une erreur est survenue. Veuillez réessayer.'
-              )}
+              <span>
+                {errorMessage || t(
+                  'reservation.error',
+                  'Une erreur est survenue lors du traitement. Veuillez réessayer.'
+                )}
+              </span>
             </motion.div>
           )}
 
-          <motion.button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={status === 'loading'}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {status === 'loading' ? (
-              <>
-                <Loader2 size={18} className={styles.spinner} />
-                {t('reservation.submitting', 'Envoi en cours...')}
-              </>
-            ) : (
-              <>
-                {t('reservation.submit', 'Demander un devis')}
-                <ArrowRight size={16} />
-              </>
-            )}
-          </motion.button>
+          <div className={styles.paymentActionsRow}>
+            <motion.button
+              type="submit"
+              onClick={() => setSubmissionAction('pay')}
+              className={styles.submitBtnWhop}
+              disabled={status === 'loading'}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
+              {status === 'loading' && submissionAction === 'pay' ? (
+                <>
+                  <Loader2 size={18} className={styles.spinner} />
+                  <span>Génération sécurisée du paiement...</span>
+                </>
+              ) : (
+                <>
+                  <CreditCard size={18} />
+                  <span>
+                    Réserver & Payer en ligne ({calculatedPrice ? `${calculatedPrice.total} €` : '—'})
+                  </span>
+                  <ArrowRight size={16} />
+                </>
+              )}
+            </motion.button>
+
+            <button
+              type="submit"
+              className={styles.quoteOnlyBtn}
+              onClick={() => setSubmissionAction('quote')}
+              disabled={status === 'loading'}
+            >
+              {status === 'loading' && submissionAction === 'quote'
+                ? 'Traitement en cours...'
+                : 'Demander un devis sans paiement immédiat'}
+            </button>
+          </div>
 
           <p className={styles.submitNote}>
-            {t(
-              'reservation.submitNote',
-              'Notre équipe vous recontactera sous 2h avec un devis personnalisé.'
-            )}
+            Transaction sécurisée par Whop Inc. Chauffeur privé professionnel garanti.
           </p>
         </motion.div>
       </form>

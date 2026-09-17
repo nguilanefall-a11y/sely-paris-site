@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ShieldCheck, MapPin, Briefcase, Zap } from 'lucide-react';
@@ -8,7 +8,7 @@ import styles from './Services.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
-  const { t } = useTranslation();
+  const { t } = useCity();
   const sectionRef = useRef(null);
   const cardRefs = useRef([]);
 

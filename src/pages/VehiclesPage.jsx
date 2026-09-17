@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import PageHeader from '../components/PageHeader';
 import { Link } from 'react-router-dom';
 import styles from './VehiclesPage.module.css';
 
 export default function VehiclesPage() {
-  const { t } = useTranslation();
+  const { t, getCityPath } = useCity();
 
   const vehicles = [
     {
@@ -87,7 +87,7 @@ export default function VehiclesPage() {
       </div>
 
       <div className={styles.ctaWrapper}>
-        <Link to="/contact" className={styles.cta}>
+        <Link to={getCityPath('/contact')} className={styles.cta}>
           {t('page_vehicules.cta', 'Réserver un véhicule')}
         </Link>
       </div>

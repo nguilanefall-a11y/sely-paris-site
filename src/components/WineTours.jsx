@@ -1,15 +1,16 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { Briefcase, Map, Navigation } from 'lucide-react';
 import styles from './WineTours.module.css';
 
 export default function WineTours() {
-  const { t } = useTranslation();
+  const { t, getCityPath } = useCity();
   return (
     <section id="wine-tours" className={styles.wineSection}>
       <div className={styles.bgWrapper}>
-        <img src="/paris-bg.png" alt="Vignobles de Paris" className={styles.bgMedia} />
+        <img src={t('wine_tours.bg_image', '/paris-bg.png')} alt={t('wine_tours.bg_alt', 'Vignobles de Paris')} className={styles.bgMedia} />
         <div className={styles.bgOverlay}></div>
       </div>
 
@@ -46,9 +47,9 @@ export default function WineTours() {
             </div>
           </div>
 
-          <a href="/reserver" className={styles.ctaButton}>
+          <Link to={getCityPath('/reserver')} className={styles.ctaButton}>
             {t('wine_tours.cta')}
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
