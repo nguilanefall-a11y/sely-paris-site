@@ -447,11 +447,12 @@ export default function ReservationPage() {
 
           // 2. Générer le checkout Whop dynamique
           const returnUrl = `${window.location.origin}/${currentCity ? currentCity + '/' : ''}reservation-succes`;
+          const vehicleNameShort = selectedVehicleData?.nameFallback ? selectedVehicleData.nameFallback.replace('Mercedes ', '') : 'Chauffeur';
           const checkoutUrl = await createWhopCheckout({
             amount: calculatedPrice.total,
             currency: 'eur',
-            title: `SELY Privé - ${selectedVehicleData?.nameFallback || 'Chauffeur Privé'} (${cityName || 'Paris'})`,
-            description: `${calculatedPrice.details} | Client: ${firstName} ${lastName} | Date: ${date} ${time}`,
+            title: `SELY - ${vehicleNameShort}`.slice(0, 30),
+            description: `${calculatedPrice.details} | Client: ${firstName} ${lastName} | Trajet: ${pickup} → ${serviceType === 'transfer' ? destination : duration} | Date: ${date} ${time}`,
             metadata: {
               client: `${firstName} ${lastName}`,
               email,

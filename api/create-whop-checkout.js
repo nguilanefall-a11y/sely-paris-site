@@ -26,6 +26,8 @@ export default async function handler(req, res) {
   const accountId = process.env.WHOP_ACCOUNT_ID || 'biz_5oY1Qe4By05YTu';
 
   try {
+    const safeTitle = (title ? String(title) : 'SELY Privé - Réservation').slice(0, 30);
+
     const whopRes = await fetch('https://api.whop.com/api/v1/checkout_configurations', {
       method: 'POST',
       headers: {
@@ -37,7 +39,7 @@ export default async function handler(req, res) {
         redirect_url: redirectUrl || 'https://www.selyprive.com/reservation-succes',
         metadata: metadata || {},
         plan: {
-          title: title || 'SELY Privé - Réservation',
+          title: safeTitle,
           description: description || 'Prestation de chauffeur privé de luxe SELY',
           plan_type: 'one_time',
           initial_price: Math.round(Number(amount)),

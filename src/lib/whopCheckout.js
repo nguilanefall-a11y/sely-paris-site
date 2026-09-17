@@ -14,6 +14,7 @@ export async function createWhopCheckout({
   redirectUrl = `${window.location.origin}/reservation-succes`,
 }) {
   const roundedAmount = Math.round(Number(amount));
+  const safeTitle = (title ? String(title) : 'SELY Privé - Réservation').slice(0, 30);
 
   // 1. Try serverless backend route first
   try {
@@ -23,7 +24,7 @@ export async function createWhopCheckout({
       body: JSON.stringify({
         amount: roundedAmount,
         currency,
-        title,
+        title: safeTitle,
         description,
         metadata,
         redirectUrl,
@@ -52,7 +53,7 @@ export async function createWhopCheckout({
       redirect_url: redirectUrl,
       metadata,
       plan: {
-        title,
+        title: safeTitle,
         description,
         plan_type: 'one_time',
         initial_price: roundedAmount,
