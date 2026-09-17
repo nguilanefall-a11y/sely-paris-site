@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send } from 'lucide-react';
+import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send, Zap } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
 import styles from './SpecialRequestPage.module.css';
 
 export default function SpecialRequestPage() {
   const { t, cityName, currentCity } = useCity();
+  const [searchParams] = useSearchParams();
+  const initialType = searchParams.get('type') === 'rapide' ? 'rapide' : 'sur-mesure';
+  const [requestType, setRequestType] = useState(initialType);
   const [status, setStatus] = useState('idle');
+
+  const prefilledPickup = searchParams.get('pickup') || '';
+  const prefilledDate = searchParams.get('date') || '';
+  const prefilledTime = searchParams.get('time') || '';
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     company: '',
-    message: '',
+    message: initialType === 'rapide' && (prefilledPickup || prefilledDate || prefilledTime)
+      ? `Prise en charge rapide souhaitée : ${prefilledPickup ? `Départ : ${prefilledPickup}` : ''}${prefilledDate ? ` le ${prefilledDate}` : ''}${prefilledTime ? ` à ${prefilledTime}` : ''}.`
+      : '',
   });
 
   const handleChange = (field) => (e) => {
@@ -25,15 +36,20 @@ export default function SpecialRequestPage() {
     e.preventDefault();
     setStatus('loading');
 
+    const isUrgent = requestType === 'rapide';
+
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           access_key: getFormAccessKey(),
-          subject: `Demande Spécifique [${cityName || 'Paris'}] - SELY`,
+          subject: isUrgent
+            ? `⚡ URGENT - Prise en charge rapide [${cityName || 'Paris'}] - SELY`
+            : `Demande Spécifique [${cityName || 'Paris'}] - SELY`,
           from_name: `${form.firstName} ${form.lastName}`,
           Ville: cityName || currentCity || 'Paris',
+          'Type de demande': isUrgent ? '⚡ Prise en charge rapide (< 3h ou Nuit)' : 'Sur-mesure / Événement',
           'Prénom': form.firstName,
           'Nom': form.lastName,
           'Email': form.email,
@@ -97,6 +113,51 @@ export default function SpecialRequestPage() {
             {t('specialRequest.subtitle', 'Événement, plusieurs journées, itinéraire sur-mesure... Décrivez votre besoin, nous nous occupons du reste.')}
           </p>
         </div>
+
+        <div className={styles.typeSelectorRow}>
+          <button
+            type="button"
+            className={`${styles.typeOption} ${requestType === 'rapide' ? styles.typeOptionActive : ''}`}
+            onClick={() => {
+              setRequestType('rapide');
+              if (!form.message) {
+                setForm(prev => ({ ...prev, message: 'Demande de prise en charge rapide / urgente : ' }));
+              }
+            }}
+          >
+            {t('specialRequest.type_urgent', '⚡ Prise en charge rapide (< 3h ou Nuit)')}
+          </button>
+          <button
+            type="button"
+            className={`${styles.typeOption} ${requestType === 'sur-mesure' ? styles.typeOptionActive : ''}`}
+            onClick={() => setRequestType('sur-mesure')}
+          >
+            {t('specialRequest.type_event', 'Événement / Sur-mesure')}
+          </button>
+          <button
+            type="button"
+            className={`${styles.typeOption} ${requestType === 'autre' ? styles.typeOptionActive : ''}`}
+            onClick={() => setRequestType('autre')}
+          >
+            {t('specialRequest.type_other', 'Autre demande spécifique')}
+          </button>
+        </div>
+
+        {requestType === 'rapide' && (
+          <div className={styles.urgentBanner}>
+            <div className={styles.urgentBannerHeader}>
+              <Zap size={18} />
+              <span>{t('specialRequest.urgentBannerTitle', 'Prise en charge rapide & prioritaire')}</span>
+            </div>
+            <p className={styles.urgentBannerText}>
+              {t('specialRequest.urgentBannerText', 'Votre demande sera traitée en priorité absolue par notre régulateur d\'astreinte 24/7. Pour un départ immédiat sous 1 heure, vous pouvez également joindre directement notre standard.')}
+            </p>
+            <a href="tel:+33184160842" className={styles.urgentCallBtn}>
+              <Phone size={14} />
+              <span>+33 1 84 16 08 42</span>
+            </a>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Coordonnées */}

@@ -58,7 +58,11 @@
     "special_text": "Vous avez une question ou une demande spécifique ?",
     "special_cta_full": "Demande sur-mesure",
     "error_pickup": "Veuillez renseigner une adresse exacte de prise en charge pour continuer.",
-    "error_destination": "Veuillez renseigner une adresse exacte de destination."
+    "error_destination": "Veuillez renseigner une adresse exacte de destination.",
+    "error_past_datetime": "Veuillez sélectionner une date et une heure dans le futur.",
+    "error_min_notice_3h": "Les réservations en ligne nécessitent un délai d'au moins 3 heures.",
+    "error_night_before_8am": "Les réservations de nuit ou matinales ne sont pas disponibles avant 08h00 en ligne.",
+    "urgent_cta": "Prise en charge rapide"
   },
   "philosophy": {
     "quote": "\"L'excellence n'est pas une option, c'est une exigence. Notre mission est de transformer chacun de vos trajets à Paris en un moment de quiétude absolue.\"",
@@ -493,11 +497,21 @@
     "pricing_service": "Prestation :",
     "pricing_options": "Options à bord :",
     "pricing_included": "Service inclus :",
-    "pricing_amenities": "Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements"
+    "pricing_amenities": "Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements",
+    "error_past_datetime": "Veuillez sélectionner une date et une heure dans le futur.",
+    "error_min_notice_3h": "Les réservations en ligne nécessitent un délai d'au moins 3 heures.",
+    "error_night_before_8am": "Les réservations de nuit ou matinales ne sont pas disponibles avant 08h00 en ligne.",
+    "urgent_cta": "Prise en charge rapide"
   },
   "specialRequest": {
     "title": "Demande spécifique",
     "subtitle": "Événement, plusieurs journées, itinéraire sur-mesure... Décrivez votre besoin, nous nous occupons du reste.",
+    "typeLabel": "Type de demande",
+    "type_urgent": "⚡ Prise en charge rapide (< 3h ou Nuit)",
+    "type_event": "Événement / Sur-mesure",
+    "type_other": "Autre demande spécifique",
+    "urgentBannerTitle": "Prise en charge rapide & prioritaire",
+    "urgentBannerText": "Votre demande sera traitée en priorité absolue par notre régulateur d'astreinte 24/7. Pour un départ immédiat sous 1 heure, vous pouvez également joindre directement notre standard.",
     "infoLabel": "Vos coordonnées",
     "firstName": "Prénom",
     "firstNamePlaceholder": "Votre prénom",

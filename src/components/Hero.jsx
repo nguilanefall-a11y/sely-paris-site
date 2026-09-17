@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useCity } from '../hooks/useCity';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Hero.module.css';
 import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
+import { formatDateISO, formatTimeHHMM, getEarliestBookingDateTime, validateBookingDateTime } from '../lib/bookingTime';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,8 +89,11 @@ export default function Hero() {
   const [pickupCoords, setPickupCoords] = useState(null);
   const [destCoords, setDestCoords] = useState(null);
   
-  const [dateValue, setDateValue] = useState('');
-  const [timeValue, setTimeValue] = useState('');
+  const earliestDateTime = useMemo(() => getEarliestBookingDateTime(), []);
+  const todayISO = useMemo(() => formatDateISO(new Date()), []);
+
+  const [dateValue, setDateValue] = useState(() => formatDateISO(earliestDateTime));
+  const [timeValue, setTimeValue] = useState(() => formatTimeHHMM(earliestDateTime));
   const [durationValue, setDurationValue] = useState('');
 
   // Suggestion focused states
@@ -98,22 +102,6 @@ export default function Hero() {
 
   const dateInputRef = useRef(null);
   const timeInputRef = useRef(null);
-
-  // Pre-fill date and time by default
-  useEffect(() => {
-    const now = new Date();
-    
-    // Date: YYYY-MM-DD
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const d = String(now.getDate()).padStart(2, '0');
-    setDateValue(`${y}-${m}-${d}`);
-    
-    // Time: next rounded hour
-    let h = now.getHours() + 1;
-    if (h >= 24) h = 0;
-    setTimeValue(`${String(h).padStart(2, '0')}:00`);
-  }, []);
 
   // GSAP refs
   const sectionRef = useRef(null);
@@ -150,6 +138,23 @@ export default function Hero() {
     return val;
   };
 
+  const getErrorFallback = (key) => {
+    switch (key) {
+      case 'error_pickup':
+        return 'Veuillez renseigner une adresse exacte de prise en charge pour continuer.';
+      case 'error_destination':
+        return 'Veuillez renseigner une adresse exacte de destination.';
+      case 'error_past_datetime':
+        return 'Veuillez sélectionner une date et une heure dans le futur.';
+      case 'error_min_notice_3h':
+        return "Les réservations en ligne nécessitent un délai d'au moins 3 heures.";
+      case 'error_night_before_8am':
+        return 'Les départs matinaux en réservation directe ne sont pas disponibles avant 08h00.';
+      default:
+        return 'Veuillez vérifier vos informations.';
+    }
+  };
+
   const handleBookingClick = (e) => {
     e.preventDefault();
     setErrorKey('');
@@ -165,6 +170,13 @@ export default function Hero() {
     if (activeTab === 'transfer' && (!destinationValue || destinationValue.trim().length < 3)) {
       setErrorKey('error_destination');
       setDestFocused(true);
+      return;
+    }
+
+    // Lead time & night check: minimum 3h notice, night not before 8am
+    const timeValidation = validateBookingDateTime(dateValue, timeValue);
+    if (!timeValidation.isValid) {
+      setErrorKey(timeValidation.errorKey);
       return;
     }
 
@@ -462,6 +474,7 @@ export default function Hero() {
               <input
                 ref={dateInputRef}
                 type="date"
+                min={todayISO}
                 className={styles.hiddenNativeInput}
                 onChange={(e) => setDateValue(e.target.value)}
                 value={dateValue}
@@ -502,7 +515,30 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             className={styles.heroError}
           >
-            ⚠️ {t(`hero.${errorKey}`, errorKey === 'error_pickup' ? 'Veuillez renseigner une adresse exacte de prise en charge pour continuer.' : 'Veuillez renseigner une adresse exacte de destination.')}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', width: '100%' }}>
+              <span>⚠️ {t(`hero.${errorKey}`, getErrorFallback(errorKey))}</span>
+              {['error_min_notice_3h', 'error_night_before_8am', 'error_past_datetime'].includes(errorKey) && (
+                <button
+                  type="button"
+                  onClick={() => navigate(getCityPath(`/demande-specifique?type=rapide&pickup=${encodeURIComponent(pickupValue || '')}&date=${dateValue}&time=${timeValue}`))}
+                  style={{
+                    background: '#e5c158',
+                    color: '#0b0c0e',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '5px 12px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  ⚡ {t('hero.urgent_cta', 'Prise en charge rapide')}
+                </button>
+              )}
+            </div>
           </motion.div>
         )}
 

@@ -58,7 +58,11 @@
     "special_text": "Do you have a question or a specific request?",
     "special_cta_full": "Bespoke Request",
     "error_pickup": "Please enter an exact pick-up address to continue.",
-    "error_destination": "Please enter an exact destination address to continue."
+    "error_destination": "Please enter an exact destination address to continue.",
+    "error_past_datetime": "Please select a date and time in the future.",
+    "error_min_notice_3h": "Online reservations require at least 3 hours advance notice.",
+    "error_night_before_8am": "Night or early morning departures cannot be booked online before 08:00 AM.",
+    "urgent_cta": "Urgent dispatch"
   },
   "philosophy": {
     "quote": "\"Excellence is not an option, it is a requirement. Our mission is to transform every journey in Paris into a moment of absolute tranquility.\"",
@@ -493,11 +497,21 @@
     "pricing_service": "Service :",
     "pricing_options": "On-board options :",
     "pricing_included": "Included service :",
-    "pricing_amenities": "Suited chauffeur, personalized meet & greet, Wi-Fi, refreshments"
+    "pricing_amenities": "Suited chauffeur, personalized meet & greet, Wi-Fi, refreshments",
+    "error_past_datetime": "Please select a date and time in the future.",
+    "error_min_notice_3h": "Online reservations require at least 3 hours advance notice.",
+    "error_night_before_8am": "Night or early morning departures cannot be booked online before 08:00 AM.",
+    "urgent_cta": "Urgent dispatch"
   },
   "specialRequest": {
     "title": "Special request",
     "subtitle": "Events, multi-day trips, bespoke itineraries... Describe your needs, we'll take care of the rest.",
+    "typeLabel": "Request type",
+    "type_urgent": "⚡ Urgent dispatch (< 3h or Overnight)",
+    "type_event": "Event / Bespoke",
+    "type_other": "Other specific request",
+    "urgentBannerTitle": "Fast & Priority Dispatch",
+    "urgentBannerText": "Your request will be handled with highest priority by our on-duty dispatcher. For departures within 1 hour, you can also contact our 24/7 hotline directly.",
     "infoLabel": "Your details",
     "firstName": "First name",
     "firstNamePlaceholder": "Your first name",

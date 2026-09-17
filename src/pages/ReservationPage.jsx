@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
+import { formatDateISO, formatTimeHHMM, getEarliestBookingDateTime, validateBookingDateTime } from '../lib/bookingTime';
 import {
   MapPin,
   Calendar,
@@ -166,8 +167,12 @@ function containsAirport(value) {
 
 /* ─── component ─── */
 export default function ReservationPage() {
-  const { t, cityName, currentCity, i18n } = useCity();
+  const { t, cityName, currentCity, getCityPath, i18n } = useCity();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const earliestDateTime = useMemo(() => getEarliestBookingDateTime(), []);
+  const todayISO = useMemo(() => formatDateISO(new Date()), []);
 
   /* --- pre-filled trip info from URL --- */
   const [serviceType, setServiceType] = useState(
@@ -206,15 +211,11 @@ export default function ReservationPage() {
   const [duration, setDuration] = useState(searchParams.get('duration') || '3 heures');
   const [date, setDate] = useState(() => {
     if (searchParams.get('date')) return searchParams.get('date');
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return formatDateISO(earliestDateTime);
   });
   const [time, setTime] = useState(() => {
     if (searchParams.get('time')) return searchParams.get('time');
-    const now = new Date();
-    let h = now.getHours() + 1;
-    if (h >= 24) h = 0;
-    return `${String(h).padStart(2, '0')}:00`;
+    return formatTimeHHMM(earliestDateTime);
   });
 
   /* --- vehicle --- */
@@ -352,6 +353,15 @@ export default function ReservationPage() {
         setStatus('error');
         if (!pickup) setPickupFocused(true);
         else setDestFocused(true);
+        window.scrollTo({ top: 180, behavior: 'smooth' });
+        return;
+      }
+
+      // Timing check: minimum 3h notice & night rule
+      const timeValidation = validateBookingDateTime(date, time);
+      if (!timeValidation.isValid) {
+        setErrorMessage(timeValidation.errorKey);
+        setStatus('error');
         window.scrollTo({ top: 180, behavior: 'smooth' });
         return;
       }
@@ -697,12 +707,13 @@ export default function ReservationPage() {
               >
                 <span className={date ? styles.valueSet : styles.valuePlaceholder}>
                   {date
-                    ? new Date(date + 'T00:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                    ? new Date(date + 'T00:00:00').toLocaleDateString(i18n?.language === 'en' ? 'en-US' : 'fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
                     : 'jj/mm/aaaa'}
                 </span>
                 <input
                   id="res-date-input"
                   type="date"
+                  min={todayISO}
                   className={styles.hiddenNativeInput}
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
@@ -1175,12 +1186,35 @@ export default function ReservationPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <AlertCircle size={16} />
-              <span>
-                {errorMessage?.startsWith('error_')
-                  ? t(`reservation.${errorMessage}`)
-                  : (errorMessage || t('reservation.error', 'Une erreur est survenue lors du traitement. Veuillez réessayer.'))}
-              </span>
+              <AlertCircle size={16} style={{ flexShrink: 0 }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', width: '100%' }}>
+                <span>
+                  {errorMessage?.startsWith('error_')
+                    ? t(`reservation.${errorMessage}`, t(`hero.${errorMessage}`, errorMessage))
+                    : (errorMessage || t('reservation.error', 'Une erreur est survenue lors du traitement. Veuillez réessayer.'))}
+                </span>
+                {['error_min_notice_3h', 'error_night_before_8am', 'error_past_datetime'].includes(errorMessage) && (
+                  <button
+                    type="button"
+                    onClick={() => navigate(getCityPath(`/demande-specifique?type=rapide&pickup=${encodeURIComponent(pickup || '')}&date=${date}&time=${time}`))}
+                    style={{
+                      background: '#e5c158',
+                      color: '#0b0c0e',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    ⚡ {t('reservation.urgent_cta', 'Prise en charge rapide')}
+                  </button>
+                )}
+              </div>
             </motion.div>
           )}
 
