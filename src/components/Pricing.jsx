@@ -1,41 +1,41 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import styles from './Pricing.module.css';
 
 export default function Pricing() {
-  const { t } = useTranslation();
+  const { t, getCityPath } = useCity();
 
   const pricingPlans = [
     {
-      name: t('pricing.plan1_name', 'Transfert Aéroport'),
-      price: t('pricing.plan1_price', '60€'),
-      prefix: t('pricing.plan1_prefix', 'À partir de'),
+      name: t('pricing.plan1_name', 'Transfert Aéroport & Gare'),
+      price: t('pricing.plan1_price', 'Sur Devis'),
+      prefix: t('pricing.plan1_prefix', 'Formule Sur-Mesure'),
       features: [
-        t('pricing.plan1_f1', 'Aéroport Mérignac / Gare St Jean'),
-        t('pricing.plan1_f2', 'Attente avec pancarte'),
-        t('pricing.plan1_f3', 'Suivi du vol en temps réel')
+        t('pricing.plan1_f1', 'Aéroports de Paris / Gares'),
+        t('pricing.plan1_f2', 'Accueil personnalisé avec pancarte'),
+        t('pricing.plan1_f3', 'Ajustement automatique aux retards')
       ]
     },
     {
       name: t('pricing.plan2_name', 'Mise à Disposition'),
-      price: t('pricing.plan2_price', '250€'),
-      prefix: t('pricing.plan2_prefix', 'À partir de (4h)'),
+      price: t('pricing.plan2_price', 'Sur Devis'),
+      prefix: t('pricing.plan2_prefix', 'Formule Sur-Mesure'),
       features: [
         t('pricing.plan2_f1', 'Chauffeur dédié'),
-        t('pricing.plan2_f2', 'Kilométrage inclus (100km)'),
+        t('pricing.plan2_f2', 'Kilométrage inclus adapté'),
         t('pricing.plan2_f3', 'Flexibilité totale des trajets')
       ],
       highlighted: true
     },
     {
-      name: t('pricing.plan3_name', 'Wine Tour'),
+      name: t('pricing.plan3_name', 'Wine Tour / Événements'),
       price: t('pricing.plan3_price', 'Sur Devis'),
-      prefix: t('pricing.plan3_prefix', 'Forfait Journée'),
+      prefix: t('pricing.plan3_prefix', 'Formule Sur-Mesure'),
       features: [
         t('pricing.plan3_f1', 'Itinéraire sur-mesure'),
-        t('pricing.plan3_f2', 'Attente aux châteaux'),
+        t('pricing.plan3_f2', 'Attente aux étapes & châteaux'),
         t('pricing.plan3_f3', 'Service conciergerie inclus')
       ]
     }
@@ -51,8 +51,8 @@ export default function Pricing() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <h2>{t('pricing.title', 'Tarification Transparente')}</h2>
-          <p>{t('pricing.subtitle', 'Le luxe sans surprise. Des forfaits clairs et adaptés à vos besoins.')}</p>
+          <h2>{t('pricing.title', 'Prestations Sur-Mesure')}</h2>
+          <p>{t('pricing.subtitle', 'Toutes nos prestations sont établies sur devis personnalisé selon vos exigences.')}</p>
         </motion.div>
 
         <div className={styles.grid}>
@@ -82,8 +82,8 @@ export default function Pricing() {
                 ))}
               </ul>
               
-              <a href="/reserver" className={plan.highlighted ? styles.btnPrimary : styles.btnSecondary}>
-                {t('pricing.cta', 'Réserver')}
+              <a href={getCityPath('/reserver')} className={plan.highlighted ? styles.btnPrimary : styles.btnSecondary}>
+                {t('pricing.cta', 'Demander un devis')}
               </a>
             </motion.div>
           ))}

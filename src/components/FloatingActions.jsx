@@ -7,7 +7,7 @@ import styles from './FloatingActions.module.css';
 export default function FloatingActions() {
   const { t } = useCity();
   const whatsappLink = t('contact.whatsapp_link', 'https://wa.me/33605827497');
-  const phoneLink = t('contact.phone_link', 'tel:+33184160842');
+  const phoneLink = t('footer.phone_link', t('contact.phone_link', 'tel:+33184805665'));
 
   return (
     <motion.div 

@@ -504,7 +504,7 @@ export default function Hero() {
           </div>
 
           <button onClick={handleBookingClick} className={styles.bookingCta}>
-            <span>{t('hero.cta_options', 'Réservez')}</span>
+            <span>{t('hero.cta_options', 'Demander un devis')}</span>
             <ArrowRight size={15} className={styles.ctaArrow} />
           </button>
         </div>

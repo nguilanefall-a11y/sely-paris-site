@@ -152,9 +152,9 @@ export default function SpecialRequestPage() {
             <p className={styles.urgentBannerText}>
               {t('specialRequest.urgentBannerText', 'Votre demande sera traitée en priorité absolue par notre régulateur d\'astreinte 24/7. Pour un départ immédiat sous 1 heure, vous pouvez également joindre directement notre standard.')}
             </p>
-            <a href="tel:+33184160842" className={styles.urgentCallBtn}>
+            <a href="tel:+33184805665" className={styles.urgentCallBtn}>
               <Phone size={14} />
-              <span>+33 1 84 16 08 42</span>
+              <span>+33 1 84 80 56 65</span>
             </a>
           </div>
         )}

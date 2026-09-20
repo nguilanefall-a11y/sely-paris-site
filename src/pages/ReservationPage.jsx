@@ -34,7 +34,6 @@ import {
 } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
 import { calculateTripPrice, getDrivingDistanceKm } from '../lib/pricingEngine';
-import { createWhopCheckout } from '../lib/whopCheckout';
 import { useBookingsStore } from '../admin/store/useBookingsStore';
 import styles from './ReservationPage.module.css';
 
@@ -373,10 +372,7 @@ export default function ReservationPage() {
 
       setStatus('loading');
 
-      const isPayment = actionType === 'pay';
-      const totalTTC = calculatedPrice ? `${calculatedPrice.total} € TTC` : 'Sur devis';
-
-      // 0. Enregistrer immédiatement dans l'Espace Admin SELY Office
+      // 0. Enregistrer la demande dans l'Espace Admin SELY Office
       try {
         useBookingsStore.getState().addBooking({
           clientName: `${firstName} ${lastName}`.trim(),
@@ -392,8 +388,8 @@ export default function ReservationPage() {
           passengerCount,
           luggageCount,
           vehicle: selectedVehicleData?.nameFallback || 'Mercedes Classe S',
-          amount: calculatedPrice ? calculatedPrice.total : 0,
-          status: isPayment ? 'pending' : 'quote',
+          amount: 0,
+          status: 'quote',
           flightNumber,
           specialRequests,
         });
@@ -403,15 +399,10 @@ export default function ReservationPage() {
 
       const payload = {
         access_key: getFormAccessKey(),
-        subject: isPayment
-          ? `[RÉSERVATION & PAIEMENT WHOP] [${cityName || 'Paris'}] - SELY (${totalTTC})`
-          : `[DEMANDE DE DEVIS] [${cityName || 'Paris'}] - SELY (${totalTTC})`,
+        subject: `[DEMANDE DE DEVIS] [${cityName || 'Paris'}] - ${firstName} ${lastName} - SELY`,
         from_name: `${firstName} ${lastName}`,
         Ville: cityName || currentCity || 'Paris',
-        'Montant calculé': totalTTC,
-        'Détail tarif': calculatedPrice?.details || '—',
-        ...(distanceKm ? { 'Distance estimée': `${distanceKm} km` } : {}),
-        /* trip */
+        'Type de prestation': 'Sur Devis',
         'Type de service': serviceType === 'transfer' ? 'Transfert' : 'Mise à disposition',
         'Lieu de prise en charge': pickup,
         ...(serviceType === 'transfer'
@@ -419,72 +410,33 @@ export default function ReservationPage() {
           : { Durée: duration || '3 heures' }),
         Date: date,
         Heure: time,
-        /* vehicle */
         Véhicule: selectedVehicleData?.nameFallback || 'Mercedes Classe S',
-        /* personal */
         Prénom: firstName,
         Nom: lastName,
         Email: email,
         Téléphone: phone,
         Société: company || '—',
         'Nombre de passagers': passengerCount,
-        /* options */
-        'Siège bébé': babySeat ? 'Oui (+15€)' : 'Non',
-        'Siège enfant': childSeat ? 'Oui (+15€)' : 'Non',
-        'Accueil avec panneau': nameBoard ? 'Oui (+20€)' : 'Non',
+        'Siège bébé': babySeat ? 'Oui' : 'Non',
+        'Siège enfant': childSeat ? 'Oui' : 'Non',
+        'Accueil avec panneau': nameBoard ? 'Oui' : 'Non',
         ...(showFlightField ? { 'Numéro de vol': flightNumber || '—' } : {}),
         'Nombre de bagages': luggageCount,
         'Demandes particulières': specialRequests || '—',
       };
 
       try {
-        // 1. Sauvegarder la réservation et notifier la direction par email
+        // 1. Notifier la direction par email
         await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         }).catch((err) => console.warn('Email notification warning:', err));
 
-        if (isPayment) {
-          if (!calculatedPrice || !calculatedPrice.total || calculatedPrice.total <= 0) {
-            setErrorMessage('error_price_calc');
-            setStatus('error');
-            return;
-          }
-
-          // 2. Générer le checkout Whop dynamique
-          const returnUrl = `${window.location.origin}/${currentCity ? currentCity + '/' : ''}reservation-succes`;
-          const vehicleNameShort = selectedVehicleData?.nameFallback ? selectedVehicleData.nameFallback.replace('Mercedes ', '') : 'Chauffeur';
-          const checkoutUrl = await createWhopCheckout({
-            amount: calculatedPrice.total,
-            currency: 'eur',
-            title: `SELY - ${vehicleNameShort}`.slice(0, 30),
-            description: `${calculatedPrice.details} | Client: ${firstName} ${lastName} | Trajet: ${pickup} → ${serviceType === 'transfer' ? destination : duration} | Date: ${date} ${time}`,
-            metadata: {
-              client: `${firstName} ${lastName}`,
-              email,
-              phone,
-              city: currentCity || 'paris',
-              serviceType,
-              pickup,
-              destination: serviceType === 'transfer' ? destination : `${duration || 3}h`,
-            },
-            redirectUrl: returnUrl,
-          });
-
-          if (checkoutUrl) {
-            window.location.href = checkoutUrl;
-            return;
-          } else {
-            throw new Error("Impossible de générer l'URL de redirection Whop.");
-          }
-        }
-
-        // Si demande de devis simple expressément demandée
         setStatus('success');
       } catch (err) {
         console.error('Reservation submission error:', err);
-        setErrorMessage(err.message || 'error_whop_redirect');
+        setErrorMessage(err.message || 'error');
         setStatus('error');
       }
     },
@@ -766,16 +718,6 @@ export default function ReservationPage() {
             </span>
           </div>
 
-          {!isTripDefined && (
-            <div className={styles.tripNotice}>
-              <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
-              <div>
-                <strong>{t('reservation.notice_vehicle_title', 'Indiquez votre lieu de départ et de destination ci-dessus')}</strong>
-                <p>{t('reservation.notice_vehicle_desc', "Les tarifs exacts garantis par véhicule s'afficheront dès la saisie de votre trajet.")}</p>
-              </div>
-            </div>
-          )}
-
           <div className={styles.vehicleGrid}>
             {VEHICLES.map((vehicle, i) => {
               const isSelected = selectedVehicle === vehicle.id;
@@ -821,23 +763,7 @@ export default function ReservationPage() {
                         {vehicle.passengers}
                       </span>
                       <span className={styles.vehiclePrice}>
-                        {(() => {
-                          if (!isTripDefined) {
-                            return t('reservation.address_required', 'Adresse requise');
-                          }
-                          const vPrice = calculateTripPrice({
-                            city: currentCity || 'paris',
-                            serviceType,
-                            vehicleId: vehicle.id,
-                            duration: duration || '3',
-                            distanceKm,
-                            pickup,
-                            destination,
-                            time,
-                            lang: i18n?.language === 'en' ? 'en' : 'fr',
-                          });
-                          return `${vPrice.total} €`;
-                        })()}
+                        {t('reservation.address_required', 'Sur Devis')}
                       </span>
                     </div>
                     <p className={styles.vehicleDesc}>
@@ -1114,71 +1040,54 @@ export default function ReservationPage() {
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
         >
-          {calculatedPrice && (
-            <motion.div 
-              className={styles.pricingCard}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className={styles.pricingHeader}>
-                <div className={styles.pricingTitleBox}>
-                  <span className={styles.pricingBadge}>
-                    <Sparkles size={12} />
-                    {t('reservation.pricing_guaranteed', 'Tarif Garanti & Tout Inclus')}
-                  </span>
-                </div>
-                <div className={styles.pricingAmountBox}>
-                  <span className={styles.pricingAmount}>
-                    {calculatedPrice.total} {calculatedPrice.symbol}
-                  </span>
-                  <span className={styles.pricingTax}>TTC</span>
-                </div>
+          <motion.div 
+            className={styles.pricingCard}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className={styles.pricingHeader}>
+              <div className={styles.pricingTitleBox}>
+                <span className={styles.pricingBadge}>
+                  <Sparkles size={12} />
+                  {t('reservation.pricing_guaranteed', 'Service Sur-Mesure & Devis Gratuit')}
+                </span>
               </div>
-
-              <div className={styles.pricingBreakdown}>
-                <div className={styles.pricingItem}>
-                  <span className={styles.pricingItemLabel}>{t('reservation.pricing_service', 'Prestation :')}</span>
-                  <span className={styles.pricingItemValue}>{calculatedPrice.details}</span>
-                </div>
-                {calculatedPrice.optionsPrice > 0 && (
-                  <div className={styles.pricingItem}>
-                    <span className={styles.pricingItemLabel}>{t('reservation.pricing_options', 'Options à bord :')}</span>
-                    <span className={styles.pricingItemValue}>+{calculatedPrice.optionsPrice} €</span>
-                  </div>
-                )}
-                <div className={styles.pricingItem}>
-                  <span className={styles.pricingItemLabel}>{t('reservation.pricing_included', 'Service inclus :')}</span>
-                  <span className={styles.pricingItemValue}>{t('reservation.pricing_amenities', 'Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements')}</span>
-                </div>
-              </div>
-
-              <div className={styles.pricingBadgesRow}>
-                <div className={styles.pricingBadgeItem}>
-                  <Shield size={13} color="#e5c158" />
-                  <span>{t('reservation.badge_secure', 'Paiement 100% sécurisé')}</span>
-                </div>
-                <div className={styles.pricingBadgeItem}>
-                  <CreditCard size={13} color="#e5c158" />
-                  <span>{t('reservation.badge_payment_methods', 'Apple Pay • Google Pay • CB')}</span>
-                </div>
-                <div className={styles.pricingBadgeItem}>
-                  <Sparkles size={13} color="#e5c158" />
-                  <span>{t('reservation.badge_instant_confirmation', 'Confirmation instantanée')}</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {!isTripDefined && (
-            <div className={styles.tripNotice} style={{ marginBottom: '1.5rem', background: 'rgba(229, 193, 88, 0.08)', border: '1px solid rgba(229, 193, 88, 0.25)' }}>
-              <MapPin size={18} color="#e5c158" style={{ flexShrink: 0 }} />
-              <div>
-                <strong>{t('reservation.notice_checkout_title', 'Adresses précises requises pour calculer le tarif garanti')}</strong>
-                <p>{t('reservation.notice_checkout_desc', "Veuillez renseigner votre lieu de prise en charge et votre destination exacte en haut de page pour calculer l'itinéraire et activer le paiement sécurisé en ligne.")}</p>
+              <div className={styles.pricingAmountBox}>
+                <span className={styles.pricingAmount}>
+                  Sur Devis
+                </span>
               </div>
             </div>
-          )}
+
+            <div className={styles.pricingBreakdown}>
+              <div className={styles.pricingItem}>
+                <span className={styles.pricingItemLabel}>{t('reservation.pricing_service', 'Prestation :')}</span>
+                <span className={styles.pricingItemValue}>
+                  {serviceType === 'transfer' ? 'Transfert Sur-Mesure' : `Mise à disposition (${duration || '3h'})`} - {selectedVehicleData?.nameFallback || 'Mercedes'}
+                </span>
+              </div>
+              <div className={styles.pricingItem}>
+                <span className={styles.pricingItemLabel}>{t('reservation.pricing_included', 'Service inclus :')}</span>
+                <span className={styles.pricingItemValue}>{t('reservation.pricing_amenities', 'Chauffeur en costume, accueil personnalisé, wifi, rafraîchissements')}</span>
+              </div>
+            </div>
+
+            <div className={styles.pricingBadgesRow}>
+              <div className={styles.pricingBadgeItem}>
+                <Shield size={13} color="#e5c158" />
+                <span>{t('reservation.badge_secure', 'Devis 100% Gratuit')}</span>
+              </div>
+              <div className={styles.pricingBadgeItem}>
+                <Sparkles size={13} color="#e5c158" />
+                <span>{t('reservation.badge_payment_methods', 'Réponse sous 15 min')}</span>
+              </div>
+              <div className={styles.pricingBadgeItem}>
+                <Sparkles size={13} color="#e5c158" />
+                <span>{t('reservation.badge_instant_confirmation', 'Sans engagement')}</span>
+              </div>
+            </div>
+          </motion.div>
 
           {status === 'error' && (
             <motion.div
@@ -1221,42 +1130,30 @@ export default function ReservationPage() {
           <div className={styles.paymentActionsRow}>
             <motion.button
               type="submit"
-              onClick={() => setSubmissionAction('pay')}
               className={styles.submitBtnWhop}
               disabled={status === 'loading'}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
             >
-              {status === 'loading' && submissionAction === 'pay' ? (
+              {status === 'loading' ? (
                 <>
                   <Loader2 size={18} className={styles.spinner} />
-                  <span>{t('reservation.generating_payment', 'Génération sécurisée du paiement...')}</span>
+                  <span>{t('reservation.submitting', 'Envoi de votre demande...')}</span>
                 </>
               ) : (
                 <>
-                  <CreditCard size={18} />
+                  <FileText size={18} />
                   <span>
-                    {t('reservation.pay_btn', 'Réserver & Payer en ligne')} ({calculatedPrice ? `${calculatedPrice.total} €` : '—'})
+                    {t('reservation.pay_btn', 'Envoyer ma demande de devis')}
                   </span>
                   <ArrowRight size={16} />
                 </>
               )}
             </motion.button>
-
-            <button
-              type="submit"
-              className={styles.quoteOnlyBtn}
-              onClick={() => setSubmissionAction('quote')}
-              disabled={status === 'loading'}
-            >
-              {status === 'loading' && submissionAction === 'quote'
-                ? t('reservation.processing', 'Traitement en cours...')
-                : t('reservation.quote_btn', 'Demander un devis sans paiement immédiat')}
-            </button>
           </div>
 
           <p className={styles.submitNote}>
-            {t('reservation.secure_note', 'Transaction sécurisée par Whop Inc. Chauffeur privé professionnel garanti.')}
+            {t('reservation.secure_note', 'Service de chauffeur privé d\'excellence. Devis gratuit sans aucun engagement.')}
           </p>
         </motion.div>
       </form>

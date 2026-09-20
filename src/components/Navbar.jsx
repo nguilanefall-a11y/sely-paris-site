@@ -58,9 +58,9 @@ export default function Navbar({ isHome }) {
           </Link>
         </motion.div>
 
-        <a href={t('contact.phone_link', 'tel:+33184160842')} className={styles.phoneBadge}>
+        <a href={t('footer.phone_link', t('contact.phone_link', 'tel:+33184805665'))} className={styles.phoneBadge}>
           <Phone size={14} />
-          <span>{t('contact.phone', '+33 1 84 16 08 42')}</span>
+          <span>{t('footer.phone', t('contact.phone', '+33 1 84 80 56 65'))}</span>
         </a>
 
         <motion.nav 

@@ -33,7 +33,7 @@ export default function Footer() {
             <h4>{t('footer.col2_contact', 'Contact')}</h4>
             <div className={styles.contactItem}>
               <Phone size={16} className={styles.contactIcon} />
-              <a href={t('contact.phone_link', 'tel:+33184160842')}>{t('contact.phone', '+33 1 84 16 08 42')}</a>
+              <a href={t('footer.phone_link', t('contact.phone_link', 'tel:+33184805665'))}>{t('footer.phone', t('contact.phone', '+33 1 84 80 56 65'))}</a>
             </div>
             <div className={styles.contactItem}>
               <Mail size={16} className={styles.contactIcon} />

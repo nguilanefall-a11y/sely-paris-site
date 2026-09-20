@@ -87,8 +87,8 @@ export default function VehiclesPage() {
       </div>
 
       <div className={styles.ctaWrapper}>
-        <Link to={getCityPath('/contact')} className={styles.cta}>
-          {t('page_vehicules.cta', 'Réserver un véhicule')}
+        <Link to={getCityPath('/reserver')} className={styles.cta}>
+          {t('page_vehicules.cta', 'Demander un devis pour un véhicule')}
         </Link>
       </div>
     </div>

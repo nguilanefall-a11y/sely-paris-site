@@ -40,7 +40,7 @@ export default function Booking() {
                 <Phone size={20} className={styles.contactIcon} />
                 <div className={styles.contactText}>
                   <strong>{t('booking.phoneLabel')}</strong>
-                  <a href="tel:+33184160842" className={styles.contactLink}>+33 1 84 16 08 42</a>
+                  <a href={t('footer.phone_link', 'tel:+33184805665')} className={styles.contactLink}>{t('footer.phone', '+33 1 84 80 56 65')}</a>
                 </div>
               </div>
 
@@ -62,7 +62,7 @@ export default function Booking() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className={`glass-panel ${styles.formBox}`}
             >
-              <h3 className={styles.formTitle}>{t('booking.choose_service', 'Sélectionnez un service pour réserver')}</h3>
+              <h3 className={styles.formTitle}>{t('booking.choose_service', 'Sélectionnez un service pour obtenir votre devis')}</h3>
               
               <div className={styles.buttonsContainer}>
                 <button 
