@@ -46,12 +46,12 @@ export default function ReservationSuccessPage() {
         </div>
 
         <div className={styles.contactRow}>
-          <a href="tel:+33184805665" className={styles.contactBtn}>
+          <a href="tel:+33184805676" className={styles.contactBtn}>
             <Phone size={15} />
             Conciergerie 24/7
           </a>
           <a 
-            href="https://wa.me/33184805665?text=Bonjour%20SELY,%20je%20viens%20d'effectuer%20une%20demande%20de%20devis%20sur%20le%20site." 
+            href="https://wa.me/33184805676?text=Bonjour%20SELY,%20je%20viens%20d'effectuer%20une%20demande%20de%20devis%20sur%20le%20site." 
             target="_blank" 
             rel="noopener noreferrer" 
             className={styles.whatsappBtn}

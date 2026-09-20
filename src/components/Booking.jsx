@@ -40,7 +40,7 @@ export default function Booking() {
                 <Phone size={20} className={styles.contactIcon} />
                 <div className={styles.contactText}>
                   <strong>{t('booking.phoneLabel')}</strong>
-                  <a href={t('footer.phone_link', 'tel:+33184805665')} className={styles.contactLink}>{t('footer.phone', '+33 1 84 80 56 65')}</a>
+                  <a href={t('footer.phone_link', 'tel:+33184805676')} className={styles.contactLink}>{t('footer.phone', '+33 1 84 80 56 76')}</a>
                 </div>
               </div>
 
