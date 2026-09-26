@@ -9,13 +9,13 @@ const seenFrSlugs = new Set();
 
 for (const file of journalFiles) {
   const content = fs.readFileSync(path.join(journalDir, file), 'utf8');
-  const matchSlugs = [...content.matchAll(/slugs:\s*\{([^}]+)\}/g)];
+  const matchSlugs = [...content.matchAll(/\"?slugs\"?:\s*\{([^}]+)\}/g)];
   for (const m of matchSlugs) {
     const inner = m[1];
-    const fr = inner.match(/fr:\s*['"]([^'"]+)['"]/)?.[1];
-    const en = inner.match(/en:\s*['"]([^'"]+)['"]/)?.[1];
-    const es = inner.match(/es:\s*['"]([^'"]+)['"]/)?.[1];
-    const ar = inner.match(/ar:\s*['"]([^'"]+)['"]/)?.[1];
+    const fr = inner.match(/\"?fr\"?:\s*['"]([^'"]+)['"]/)?.[1];
+    const en = inner.match(/\"?en\"?:\s*['"]([^'"]+)['"]/)?.[1];
+    const es = inner.match(/\"?es\"?:\s*['"]([^'"]+)['"]/)?.[1];
+    const ar = inner.match(/\"?ar\"?:\s*['"]([^'"]+)['"]/)?.[1];
     if (fr && !seenFrSlugs.has(fr)) {
       seenFrSlugs.add(fr);
       articlesList.push({ fr, en, es, ar });
