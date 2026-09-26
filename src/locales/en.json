@@ -293,10 +293,13 @@
     "email": "direction@sely.pro",
     "location": "Paris & Île-de-France",
     "legal": "Legal Notice",
+    "journal": "The Journal",
+    "legal_notices": "Legal Notice & VTC License",
     "faq": "FAQ",
     "rights": "SELY Privé. All rights reserved.",
     "privacy_policy": "Privacy Policy"
   },
+
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",

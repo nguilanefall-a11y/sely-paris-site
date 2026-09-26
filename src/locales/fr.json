@@ -293,10 +293,13 @@
     "email": "direction@sely.pro",
     "location": "Paris & Île-de-France",
     "legal": "Mentions Légales",
+    "journal": "Le Journal",
+    "legal_notices": "Mentions Légales & Licence VTC",
     "faq": "FAQ",
     "rights": "SELY Privé. Tous droits réservés.",
     "privacy_policy": "Politique de confidentialité"
   },
+
   "page_experience": {
     "title": "L'Expérience",
     "subtitle": "Plus qu'un simple trajet, un moment de grâce hors du temps.",

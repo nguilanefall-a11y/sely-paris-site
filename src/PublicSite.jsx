@@ -16,6 +16,8 @@ import SpecialRequestPage from './pages/SpecialRequestPage';
 import ReservationSuccessPage from './pages/ReservationSuccessPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import LegalPage from './pages/LegalPage';
+import JournalHubPage from './pages/JournalHubPage';
+import JournalArticlePage from './pages/JournalArticlePage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -57,7 +59,10 @@ function PublicSite() {
             <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
             <Route path="/politique-de-confidentialite" element={<PrivacyPolicyPage />} />
             <Route path="/mentions-legales" element={<LegalPage />} />
+            <Route path="/journal" element={<JournalHubPage />} />
+            <Route path="/journal/:slug" element={<JournalArticlePage />} />
           </Routes>
+
         </main>
         <Footer />
         <FloatingActions />

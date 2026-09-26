@@ -16,12 +16,23 @@ const selySmartDetector = {
   lookup() {
     if (typeof window === 'undefined') return 'fr';
 
+    const pathname = (window.location.pathname || '').toLowerCase();
+    const firstSegment = pathname.split('/').filter(Boolean)[0];
+    if (['fr', 'en', 'es', 'ar', 'zh'].includes(firstSegment)) {
+      if (firstSegment === 'ar') {
+        document.documentElement.dir = 'rtl';
+      } else {
+        document.documentElement.dir = 'ltr';
+      }
+      return firstSegment;
+    }
+
     const saved = localStorage.getItem('i18nextLng');
     if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
 
-    const pathname = (window.location.pathname || '').toLowerCase();
     if (pathname.startsWith('/london') || pathname.startsWith('/usa')) return 'en';
     if (pathname.startsWith('/uae')) return 'ar';
+
 
     const navLangs = navigator.languages || [navigator.language || ''];
     for (const l of navLangs) {

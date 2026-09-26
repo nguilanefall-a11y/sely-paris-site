@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /sely-office/
+Disallow: /portal
+
+Sitemap: https://www.selyprive.com/sitemap.xml
