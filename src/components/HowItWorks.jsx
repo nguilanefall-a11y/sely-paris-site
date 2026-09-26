@@ -35,7 +35,6 @@ function StepMonolith({ step, index }) {
 
       <div className={styles.stepCardInner}>
         <div className={styles.stepHeader}>
-          <span className={styles.stepNumberBadge}>0{index + 1}</span>
           <div className={styles.stepIcon}>{step.icon}</div>
         </div>
 
