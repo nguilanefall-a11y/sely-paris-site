@@ -1,0 +1,125 @@
+.legalPage {
+  background-color: #fafafa;
+  min-height: 100vh;
+  color: #0a0a0a;
+  padding-bottom: 6rem;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 0;
+}
+
+.complianceBanner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #0a0a0a;
+  border-radius: 16px;
+  padding: 1.8rem 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.complianceIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #0a0a0a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.complianceText h3 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+  color: #0a0a0a;
+}
+
+.complianceText p {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: #555555;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.legalCard {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 2rem;
+  transition: all 0.2s ease;
+}
+
+.legalCard:hover {
+  border-color: #0a0a0a;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cardIcon {
+  color: #0a0a0a;
+}
+
+.cardHeader h2 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #444444;
+}
+
+.cardBody strong {
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.cardBody a {
+  color: #0a0a0a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .complianceBanner {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}

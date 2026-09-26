@@ -103,7 +103,7 @@ export default function Booking() {
                       {t('booking.book_title', 'Votre déplacement d\'exception commence ici')}
                     </h3>
                     <p className={styles.formSubtitle}>
-                      {t('booking.book_subtitle', 'Transfert, mise à disposition avec chauffeur dédié ou accueil personnalisé.')}
+                      {t('booking.book_subtitle', 'Transfert, chauffeur à la journée avec chauffeur dédié ou accueil personnalisé.')}
                     </p>
                     
                     <div className={styles.buttonsContainer}>
@@ -117,7 +117,7 @@ export default function Booking() {
                         </div>
                         <div className={styles.btnTextWrapper}>
                           <span className={styles.btnTitle}>{t('hero.primary_cta', 'Réservez votre service')}</span>
-                          <span className={styles.btnDesc}>{t('hero.primary_cta_sub', 'Transfert · Mise à disposition · Sur-mesure')}</span>
+                          <span className={styles.btnDesc}>{t('hero.primary_cta_sub', 'Transfert · Chauffeur à la journée · Sur-mesure')}</span>
                         </div>
                         <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="5" y1="12" x2="19" y2="12"></line>

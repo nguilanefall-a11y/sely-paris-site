@@ -107,7 +107,7 @@ export default function Services() {
     {
       serviceKey: 'hourly',
       icon: <Clock size={20} strokeWidth={1.5} />,
-      title: t('services.srv3_title', 'Mise à Disposition'),
+      title: t('services.srv3_title', 'Chauffeur à la journée'),
       desc: t('services.srv3_desc', 'Un véhicule et un chauffeur dédiés pour quelques heures, la journée ou vos événements parisiens haute couture.'),
       tag: isEn ? 'BESPOKE AVAILABILITY' : 'SUR-MESURE & ÉVÉNEMENTS',
       bgImage: '/louvre-chauffeur-hero.jpg'

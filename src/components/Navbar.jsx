@@ -4,6 +4,7 @@ import { useCity } from '../hooks/useCity';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Phone } from 'lucide-react';
 import CitySelector from './CitySelector';
+import LanguageSelector from './LanguageSelector';
 import styles from './Navbar.module.css';
 
 export default function Navbar({ isHome }) {
@@ -66,9 +67,7 @@ export default function Navbar({ isHome }) {
           ))}
           <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book_service', 'Réservez votre service')}</Link>
           <CitySelector />
-          <button onClick={toggleLanguage} className={styles.langToggle}>
-            {i18n.language.startsWith('en') ? 'EN' : 'FR'}
-          </button>
+          <LanguageSelector />
         </nav>
 
         <button
@@ -98,9 +97,7 @@ export default function Navbar({ isHome }) {
             <Link to={getCityPath('/reserver')} className={styles.mobileCta}>{t('nav.book_service', 'Réservez votre service')}</Link>
             <div className={styles.mobileActions}>
               <CitySelector />
-              <button onClick={toggleLanguage} className={styles.mobileLangToggle}>
-                {i18n.language.startsWith('en') ? 'English' : 'Français'}
-              </button>
+              <LanguageSelector variant="mobileFull" />
             </div>
           </motion.div>
         )}

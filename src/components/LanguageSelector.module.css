@@ -1,0 +1,157 @@
+.selectorWrapper {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-sans);
+}
+
+.triggerBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #0a0a0a;
+  padding: 0.42rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 0px;
+  outline: none;
+}
+
+.triggerBtn:hover {
+  border-color: #0a0a0a;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.globeIcon {
+  color: #555;
+}
+
+.flag {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.shortCode {
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.chevron {
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #0a0a0a;
+  padding: 0.35rem;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1050;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.55rem 0.85rem;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #333333;
+  transition: all 0.15s ease;
+  border-radius: 0px;
+}
+
+.menuItem:hover {
+  background: #f4f4f4;
+  color: #0a0a0a;
+}
+
+.itemActive {
+  background: #f0f0f0;
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.itemFlag {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.itemLabel {
+  flex: 1;
+}
+
+.activeDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #0a0a0a;
+}
+
+/* Variant: Tunnel (dark background or floating) */
+.tunnel .triggerBtn {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tunnel .triggerBtn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tunnel .globeIcon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tunnel .shortCode {
+  color: #ffffff;
+}
+
+.tunnel .chevron {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Mobile full-width */
+@media (max-width: 1024px) {
+  .mobileFull {
+    width: 100%;
+  }
+
+  .mobileFull .triggerBtn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+  }
+
+  .mobileFull .dropdownMenu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+    margin-top: 0.35rem;
+  }
+}

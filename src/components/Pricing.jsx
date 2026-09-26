@@ -19,7 +19,7 @@ export default function Pricing() {
       ]
     },
     {
-      name: t('pricing.plan2_name', 'Mise à Disposition'),
+      name: t('pricing.plan2_name', 'Chauffeur à la journée'),
       price: t('pricing.plan2_price', 'Sur Devis'),
       prefix: t('pricing.plan2_prefix', 'Formule Sur-Mesure'),
       features: [

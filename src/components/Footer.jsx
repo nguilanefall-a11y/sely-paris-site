@@ -50,6 +50,8 @@ export default function Footer() {
           <div className={styles.copyright}>
             &copy; {currentYear} {t('footer.rights')}
             <span className={styles.separator}>|</span>
+            <Link to={getCityPath('/mentions-legales')} className={styles.privacyLink}>{t('footer.legal_notices', 'Mentions Légales & Licence VTC')}</Link>
+            <span className={styles.separator}>|</span>
             <Link to={getCityPath('/politique-de-confidentialite')} className={styles.privacyLink}>{t('footer.privacy_policy')}</Link>
           </div>
         </div>

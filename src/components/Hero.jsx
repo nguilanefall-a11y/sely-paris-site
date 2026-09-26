@@ -191,7 +191,7 @@ export default function Hero() {
 
           {/* Countries — discreet trust line */}
           <div className={styles.operatesInRow}>
-            <span className={styles.operatesInLabel}>Nous opérons en :</span>
+            <span className={styles.operatesInLabel}>{t('hero.operates_in', 'Nous opérons en :')}</span>
             {HERO_TERRITORIES.map((terr, i) => (
               <span key={terr.id}>
                 <button
@@ -206,6 +206,14 @@ export default function Hero() {
                 )}
               </span>
             ))}
+          </div>
+
+          {/* Social Proof — Google VIP Reviews */}
+          <div className={styles.heroTrustBadge}>
+            <span className={styles.stars}>★★★★★</span>
+            <span className={styles.ratingText}>
+              <strong>5.0 / 5</strong> · {t('testimonials.google_rating', '63 avis vérifiés sur Google')}
+            </span>
           </div>
         </div>
       </div>

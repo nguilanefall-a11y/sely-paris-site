@@ -43,6 +43,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
+import LanguageSelector from '../components/LanguageSelector';
+import { MessageCircle } from 'lucide-react';
 import { calculateTripPrice, getDrivingDistanceKm } from '../lib/pricingEngine';
 import { useBookingsStore } from '../admin/store/useBookingsStore';
 import LuxuryDateTimePicker from '../components/LuxuryDateTimePicker';
@@ -776,6 +778,28 @@ export default function ReservationPage() {
     initialLang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
   });
 
+
+  // Formatted WhatsApp message for direct continuation
+  const whatsappQuoteText = useMemo(() => {
+    const cityName = currentCity ? (currentCity.charAt(0).toUpperCase() + currentCity.slice(1)) : 'Paris';
+    const lines = [
+      `*DEMANDE DE DEVIS SELY PRIVÉ*`,
+      `• Service : ${service === 'transfer' ? 'Transfert' : service === 'hourly' ? 'Chauffeur à la journée' : 'Sur-mesure'}`,
+      `• Destination / Ville : ${cityName}`,
+      pickup ? `• Prise en charge : ${pickup}` : null,
+      destination ? `• Destination : ${destination}` : null,
+      date ? `• Date : ${date} à ${time}` : null,
+      selectedVehicleData ? `• Véhicule : ${selectedVehicleData.name}` : null,
+      phone ? `• Téléphone : ${phone}` : null,
+      email ? `• Email : ${email}` : null,
+      flightNumber ? `• N° Vol : ${flightNumber}` : null,
+      specialRequests ? `• Instructions : ${specialRequests}` : null,
+      bespokeText ? `• Demande sur-mesure : ${bespokeText}` : null,
+      `\nPouvez-vous me confirmer la disponibilité et le tarif ? Merci.`
+    ].filter(Boolean).join('\n');
+    return encodeURIComponent(lines);
+  }, [currentCity, service, pickup, destination, date, time, selectedVehicleData, phone, email, flightNumber, specialRequests, bespokeText]);
+
   // Final submit handler
   const handleFinalSubmit = async (e, paymentAction = 'quote') => {
     if (e && e.preventDefault) e.preventDefault();
@@ -960,11 +984,12 @@ export default function ReservationPage() {
 
         {step > 0 && (
           <div className={styles.stepCounter}>
-            <span>{service === 'transfer' ? 'Transfert' : service === 'hourly' ? 'Mise à disposition' : 'Sur-mesure'}</span>
+            <span>{service === 'transfer' ? t('tunnel.service_transfer', 'Transfert') : service === 'hourly' ? t('tunnel.service_hourly', 'Chauffeur à la journée') : t('tunnel.service_bespoke', 'Sur-mesure')}</span>
           </div>
         )}
 
-        <div className={styles.headerRight}>
+                <div className={styles.headerRight}>
+          <LanguageSelector variant="tunnel" />
           <button
             type="button"
             onClick={() => navigate(getCityPath('/'))}
@@ -994,16 +1019,14 @@ export default function ReservationPage() {
             >
               <div className={styles.screenIntro}>
                 <div className={styles.territoryPillRow}>
-                  <span className={styles.microBadge}>SÉLECTION DU SERVICE</span>
+                  <span className={styles.microBadge}>{t('tunnel.step0_badge', 'SÉLECTION DU SERVICE')}</span>
                   <span className={styles.territoryIndicatorBadge}>
                     <span className={styles.territoryIndicatorDot} />
                     {activeTerritory.name.toUpperCase()} · {activeTerritory.hubs}
                   </span>
                 </div>
-                <h1 className={styles.screenTitle}>Comment souhaitez-vous voyager ?</h1>
-                <p className={styles.screenSubtitle}>
-                  Choisissez la formule adaptée à votre déplacement en {activeTerritory.name}.
-                </p>
+                <h1 className={styles.screenTitle}>{t('tunnel.step0_title', 'Comment souhaitez-vous voyager ?')}</h1>
+                <p className={styles.screenSubtitle}>{t('tunnel.step0_subtitle', 'Choisissez la formule adaptée à votre déplacement.')}</p>
               </div>
 
               <div className={styles.serviceCardsGrid}>
@@ -1018,11 +1041,9 @@ export default function ReservationPage() {
                     <Navigation size={22} strokeWidth={1.5} />
                   </div>
                   <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>POINT A À POINT B</div>
-                    <h3 className={styles.serviceChoiceTitle}>Transfert</h3>
-                    <p className={styles.serviceChoiceDesc}>
-                      Liaisons directes d'adresse à adresse, aéroports, gares parisiennes et trajets intercités.
-                    </p>
+                    <div className={styles.serviceChoiceBadge}>{t('tunnel.transfer_badge', 'POINT A À POINT B')}</div>
+                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.transfer_title', 'Transfert')}</h3>
+                    <p className={styles.serviceChoiceDesc}>{t('tunnel.transfer_desc', "Liaisons directes d'adresse à adresse, aéroports, gares parisiennes et trajets intercités.")}</p>
                   </div>
                   <div className={styles.serviceChoiceCta}>
                     <span>Sélectionner</span>
@@ -1041,11 +1062,9 @@ export default function ReservationPage() {
                     <Clock size={22} strokeWidth={1.5} />
                   </div>
                   <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>CHAUFFEUR DÉDIÉ</div>
-                    <h3 className={styles.serviceChoiceTitle}>Chauffeur à la journée</h3>
-                    <p className={styles.serviceChoiceDesc}>
-                      Berline et chauffeur privé réservés à l'heure ou pour la journée complète.
-                    </p>
+                    <div className={styles.serviceChoiceBadge}>{t('tunnel.hourly_badge', 'CHAUFFEUR DÉDIÉ')}</div>
+                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.hourly_title', 'Chauffeur à la journée')}</h3>
+                    <p className={styles.serviceChoiceDesc}>{t('tunnel.hourly_desc', "Berline et chauffeur privé réservés à l'heure ou pour la journée complète.")}</p>
                   </div>
                   <div className={styles.serviceChoiceCta}>
                     <span>Sélectionner</span>
@@ -1064,11 +1083,9 @@ export default function ReservationPage() {
                     <SlidersHorizontal size={22} strokeWidth={1.5} />
                   </div>
                   <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>SUR-MESURE & ÉVÉNEMENTS</div>
-                    <h3 className={styles.serviceChoiceTitle}>Demande sur mesure</h3>
-                    <p className={styles.serviceChoiceDesc}>
-                      Fashion Week, délégations diplomatiques, convois officiels, mariages ou exigences exclusives.
-                    </p>
+                    <div className={styles.serviceChoiceBadge}>{t('tunnel.bespoke_badge', 'SUR-MESURE & ÉVÉNEMENTS')}</div>
+                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.bespoke_title', 'Demande sur mesure')}</h3>
+                    <p className={styles.serviceChoiceDesc}>{t('tunnel.bespoke_desc', 'Fashion Week, délégations diplomatiques, convois officiels, mariages ou exigences exclusives.')}</p>
                   </div>
                   <div className={styles.serviceChoiceCta}>
                     <span>Sélectionner</span>
@@ -1096,17 +1113,13 @@ export default function ReservationPage() {
             >
               <div className={styles.screenIntro}>
                 <span className={styles.microBadge}>
-                  {service === 'transfer' ? 'VOTRE TRAJET' : 'CHAUFFEUR À LA JOURNÉE'}
+                  {service === 'transfer' ? t('tunnel.step1_badge_transfer', 'VOTRE TRAJET') : t('tunnel.step1_badge_hourly', 'CHAUFFEUR À LA JOURNÉE')}
                 </span>
                 <h2 className={styles.screenTitle}>
-                  {service === 'transfer'
-                    ? 'Configurez votre transfert'
-                    : 'Configurez votre journée chauffeur'}
+                  {service === 'transfer' ? t('tunnel.step1_title_transfer', 'Configurez votre transfert') : t('tunnel.step1_title_hourly', 'Configurez votre journée chauffeur')}
                 </h2>
                 <p className={styles.screenSubtitle}>
-                  {service === 'transfer'
-                    ? 'Renseignez votre départ, destination, date et heure en une seule fois.'
-                    : 'Indiquez votre zone de départ, le nombre de jours et les horaires souhaités.'}
+                  {service === 'transfer' ? t('tunnel.step1_sub_transfer', 'Renseignez votre départ, destination, date et heure en une seule fois.') : t('tunnel.step1_sub_hourly', 'Indiquez votre zone de départ, le nombre de jours et les horaires souhaités.')}
                 </p>
               </div>
 
@@ -1116,7 +1129,7 @@ export default function ReservationPage() {
                 <div className={styles.mergedFieldGroup}>
                   <label className={styles.mergedFieldLabel}>
                     <MapPin size={15} />
-                    <span>{service === 'transfer' ? 'Lieu de départ *' : 'Point de rendez-vous *'}</span>
+                    <span>{service === 'transfer' ? t('tunnel.pickup_label', 'Lieu de départ *') : t('tunnel.pickup_hourly_label', 'Point de rendez-vous *')}</span>
                   </label>
                   <div className={styles.searchBar}>
                     <MapPin size={18} className={styles.inputIcon} />
@@ -1180,7 +1193,7 @@ export default function ReservationPage() {
                   <div className={styles.mergedFieldGroup}>
                     <label className={styles.mergedFieldLabel}>
                       <Navigation size={15} />
-                      <span>Destination *</span>
+                      <span>{t('tunnel.dest_label', 'Destination *')}</span>
                     </label>
                     <div className={styles.searchBar}>
                       <Navigation size={18} className={styles.inputIcon} />
@@ -1225,7 +1238,7 @@ export default function ReservationPage() {
                   <div className={styles.mergedFieldGroup}>
                     <label className={styles.mergedFieldLabel}>
                       <Calendar size={15} />
-                      <span>Date et heure de prise en charge *</span>
+                      <span>{t('tunnel.datetime_label', 'Date et heure de prise en charge *')}</span>
                     </label>
                     <LuxuryDateTimePicker
                       selectedDate={date}
@@ -1344,7 +1357,7 @@ export default function ReservationPage() {
                   className={styles.nextStepBtn}
                   id="step1-continue-btn"
                 >
-                  <span>Choisir mon véhicule</span>
+                  <span>{t('tunnel.choose_vehicle_cta', 'Choisir mon véhicule')}</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -1365,11 +1378,9 @@ export default function ReservationPage() {
               className={styles.screenContainerLarge}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>FLOTTE DE PRESTIGE</span>
-                <h2 className={styles.screenTitle}>Sélectionnez votre véhicule</h2>
-                <p className={styles.screenSubtitle}>
-                  Prestation de prestige tout inclus (carburant, péages, accueil chauffeur et accompagnement dédié).
-                </p>
+                <span className={styles.microBadge}>{t('tunnel.step2_badge', 'FLOTTE DE PRESTIGE')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.step2_title', 'Sélectionnez votre véhicule')}</h2>
+                <p className={styles.screenSubtitle}>{t('tunnel.step2_subtitle', 'Prestation de prestige tout inclus (carburant, péages, accueil chauffeur et accompagnement dédié).')}</p>
               </div>
 
               {/* Class Filter Quick Tabs */}
@@ -1379,7 +1390,7 @@ export default function ReservationPage() {
                   onClick={() => setSelectedClassFilter('all')}
                   className={`${styles.classFilterTab} ${selectedClassFilter === 'all' ? styles.classFilterActive : ''}`}
                 >
-                  <span>Toute la flotte</span>
+                  <span>{t('tunnel.fleet_all', 'Toute la flotte')}</span>
                 </button>
                 {VEHICLE_CLASSES.map((cls) => (
                   <button
@@ -1553,7 +1564,7 @@ export default function ReservationPage() {
 
                                 <div className={styles.vehicleSelectCtaRow}>
                                   <span className={styles.vehicleSelectText}>
-                                    {isSelected ? 'Véhicule sélectionné' : 'Choisir ce véhicule'}
+                                    {isSelected ? t('tunnel.vehicle_selected', 'Véhicule sélectionné') : t('tunnel.choose_this_vehicle', 'Choisir ce véhicule')}
                                   </span>
                                   <ArrowRight size={14} />
                                 </div>
@@ -1583,11 +1594,9 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>VOS COORDONNÉES</span>
-                <h2 className={styles.screenTitle}>Où vous contacter pour confirmer ?</h2>
-                <p className={styles.screenSubtitle}>
-                  Seuls votre numéro de téléphone et votre email sont nécessaires. Notre équipe vous répond sous 30 minutes.
-                </p>
+                <span className={styles.microBadge}>{t('tunnel.step3_badge', 'VOS COORDONNÉES')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.step3_title', 'Où vous contacter pour confirmer ?')}</h2>
+                <p className={styles.screenSubtitle}>{t('tunnel.step3_subtitle', 'Seuls votre numéro de téléphone et votre email sont nécessaires. Notre équipe vous répond sous 30 minutes.')}</p>
               </div>
 
               <div className={styles.contactFormGrid}>
@@ -1595,7 +1604,7 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Phone size={14} />
-                      <span>Téléphone mobile *</span>
+                      <span>{t('tunnel.phone_label', 'Téléphone mobile *')}</span>
                     </label>
                     <input
                       type="tel"
@@ -1611,7 +1620,7 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Mail size={14} />
-                      <span>Email *</span>
+                      <span>{t('tunnel.email_label', 'Email *')}</span>
                     </label>
                     <input
                       type="email"
@@ -1630,7 +1639,7 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <PlaneTakeoff size={14} />
-                      <span>Numéro de vol (optionnel)</span>
+                      <span>{t('tunnel.flight_label', 'Numéro de vol (optionnel)')}</span>
                     </label>
                     <input
                       type="text"
@@ -1646,7 +1655,7 @@ export default function ReservationPage() {
                 <div className={styles.formGroup}>
                   <label className={styles.fieldLabel}>
                     <MessageSquare size={14} />
-                    <span>Précisions particulières (optionnel)</span>
+                    <span>{t('tunnel.notes_label', 'Précisions particulières (optionnel)')}</span>
                   </label>
                   <textarea
                     rows={2}
@@ -1666,7 +1675,7 @@ export default function ReservationPage() {
                   className={styles.nextStepBtn}
                   id="contact-continue-btn"
                 >
-                  <span>Voir le récapitulatif</span>
+                  <span>{t('tunnel.view_summary_cta', 'Voir le récapitulatif')}</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -1707,7 +1716,7 @@ export default function ReservationPage() {
                 <div className={styles.summaryVehicleHeader}>
                   <img src={selectedVehicleData.image} alt={selectedVehicleData.name} className={styles.summaryVehicleThumb} />
                   <div className={styles.summaryVehicleDetails}>
-                    <span className={styles.summaryTag}>{service === 'transfer' ? 'TRANSFERT PRIVÉ' : 'MISE À DISPOSITION'}</span>
+                    <span className={styles.summaryTag}>{service === 'transfer' ? 'TRANSFERT PRIVÉ' : 'CHAUFFEUR À LA JOURNÉE'}</span>
                     <h3 className={styles.summaryVehicleTitle}>{selectedVehicleData.name}</h3>
                     <span className={styles.summarySpecs}>
                       <Users size={14} /> Jusqu'à {selectedVehicleData.maxPassengers} passagers max · <Luggage size={14} /> {selectedVehicleData.maxLuggage} valises max
@@ -2046,7 +2055,7 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Phone size={14} />
-                      <span>Téléphone mobile *</span>
+                      <span>{t('tunnel.phone_label', 'Téléphone mobile *')}</span>
                     </label>
                     <input
                       type="tel"
@@ -2062,7 +2071,7 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Mail size={14} />
-                      <span>Email *</span>
+                      <span>{t('tunnel.email_label', 'Email *')}</span>
                     </label>
                     <input
                       type="email"
