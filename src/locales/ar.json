@@ -185,13 +185,14 @@
   "testimonials": {
     "badge": "TESTIMONIALS",
     "title": "A few words that matter to us",
-    "google_rating": "5/5 on Google – 63 reviews",
+    "google_rating": "5.0 على Google · 409 تقييم موثق",
     "t1_quote": "The SELY chauffeur service is simply flawless. From the personalized welcome at the airport to the silent comfort of the S-Class, everything is designed for serene travel.",
     "t1_name": "Jean-Marc L., Business traveler",
     "t2_quote": "Traveling frequently to Paris for business, punctuality and comfort are essential for me. The V-Class is exceptional, acting as a true mobile office between meetings.",
     "t2_name": "James T.",
     "t3_quote": "From the moment we arrived at the airport, the welcome was perfect. The vehicle was immaculate and the ride to our hotel was incredibly smooth. A premium service I highly recommend.",
-    "t3_name": "Alexander V."
+    "t3_name": "Alexander V.",
+    "google_reviews_count": "409 تقييم موثق على Google"
   },
   "final_cta": {
     "title": "Ready to experience your next exceptional journey?",

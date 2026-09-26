@@ -270,13 +270,14 @@
   "testimonials": {
     "badge": "AVIS CLIENTS",
     "title": "Quelques mots qui comptent pour nous",
-    "google_rating": "5/5 sur Google – 63 avis",
+    "google_rating": "5.0 sur Google · 409 avis vérifiés",
     "t1_quote": "Le service de chauffeur SELY est tout simplement irréprochable. De l'accueil personnalisé à l'aéroport jusqu'au confort silencieux de la Classe S, tout est fait pour voyager sereinement.",
     "t1_name": "Jean-Marc L., Voyageur d'affaires",
     "t2_quote": "Voyageant fréquemment à Paris pour affaires, la ponctualité et le confort sont essentiels pour moi. Le Classe V est exceptionnel, c'est un véritable bureau mobile entre deux rendez-vous.",
     "t2_name": "James T.",
     "t3_quote": "Dès notre arrivée à l'aéroport, l'accueil fut parfait. Le véhicule était immaculé et le trajet jusqu'à notre hôtel s'est déroulé de manière très fluide. Un service haut de gamme que je recommande.",
-    "t3_name": "Alexander V."
+    "t3_name": "Alexander V.",
+    "google_reviews_count": "409 avis vérifiés sur Google"
   },
   "final_cta": {
     "title": "Prêt à vivre votre prochaine expérience d'exception ?",

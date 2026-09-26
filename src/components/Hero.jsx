@@ -212,7 +212,7 @@ export default function Hero() {
           <div className={styles.heroTrustBadge}>
             <span className={styles.stars}>★★★★★</span>
             <span className={styles.ratingText}>
-              <strong>5.0 / 5</strong> · {t('testimonials.google_rating', '63 avis vérifiés sur Google')}
+              <strong>5.0 / 5</strong> · {t('testimonials.google_reviews_count', '409 avis vérifiés sur Google')}
             </span>
           </div>
         </div>
