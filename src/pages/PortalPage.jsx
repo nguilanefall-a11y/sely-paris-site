@@ -13,7 +13,11 @@ export default function PortalPage() {
     { key: 'paris', label: t('cities.paris', 'PARIS').toUpperCase(), bg: '/sclass_paris.png' },
     { key: 'bordeaux', label: t('cities.bordeaux', 'BORDEAUX').toUpperCase(), bg: '/chateau_bordeaux.png' },
     { key: 'french-riviera', label: t('cities.french-riviera', 'CÔTE D\'AZUR').toUpperCase(), bg: '/airport_transfer_luxury.png' },
-    { key: 'london', label: t('cities.london', 'LONDON').toUpperCase(), bg: '/hero-bg.jpg' }
+    { key: 'london', label: t('cities.london', 'LONDON').toUpperCase(), bg: '/hero-bg.jpg' },
+    { key: 'suisse', label: t('cities.suisse', 'SUISSE').toUpperCase(), bg: '/swiss_hero_bg.jpg' },
+    { key: 'italie', label: t('cities.italie', 'ITALIE').toUpperCase(), bg: '/italie_hero_bg.jpg' },
+    { key: 'uae', label: t('cities.uae', 'ÉMIRATS (UAE)').toUpperCase(), bg: '/uae_hero_bg.jpg' },
+    { key: 'usa', label: t('cities.usa', 'ÉTATS-UNIS (USA)').toUpperCase(), bg: '/usa_hero_bg.jpg' }
   ];
 
   const toggleLanguage = () => {

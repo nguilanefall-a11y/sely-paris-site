@@ -148,9 +148,9 @@ export default function ExcellencePage() {
         <h2 className={styles.sectionTitle}>{t('page_excellence.onboard_title')}</h2>
         <div className={styles.onboardGrid}>
           {[
-            { img: '/interior-1.jpg', key: 'onboard_1' },
+            { img: '/sclass-interior-white.jpg', key: 'onboard_1' },
             { img: '/interior-2.jpg', key: 'onboard_2' },
-            { img: '/interior-3.jpg', key: 'onboard_3' }
+            { img: '/maybach-interior-first-class.jpg', key: 'onboard_3' }
           ].map((item, idx) => (
             <div
               key={item.key}

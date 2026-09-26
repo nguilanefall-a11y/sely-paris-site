@@ -1,13 +1,13 @@
 /* ============================================================
-   PageLoader – luxury full-screen intro overlay
+   PageLoader – Luxury Tarmac Sunset Preloader (Jet & Chauffeur)
    ============================================================ */
 
-/* ---- keyframes ---- */
+/* ---- Keyframes ---- */
 
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.7;
+    opacity: 0.85;
     transform: scale(0.98);
   }
   50% {
@@ -28,67 +28,112 @@
 @keyframes fadeInSoft {
   0% {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   100% {
-    opacity: 0.5;
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* ---- overlay ---- */
+@keyframes subtleSlowZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.04);
+  }
+}
+
+/* ---- Overlay ---- */
 
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: #0a0a0a;
+  z-index: 99999;
+  background: #08080a;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
+  overflow: hidden;
   will-change: transform;
 }
 
-/* ---- logo mark ---- */
+/* Background image: Private jet & luxury limousine on tarmac at sunset */
+.bgImage {
+  position: absolute;
+  inset: 0;
+  background-image: url('/hero-jet-tarmac.jpg');
+  background-size: cover;
+  background-position: center 60%;
+  animation: subtleSlowZoom 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  filter: brightness(0.85) contrast(1.08);
+}
 
+/* Refined cinematic vignette veil to guarantee crisp legibility while showing the jet */
+.backdropVeil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(8, 8, 10, 0.32) 0%,
+    rgba(8, 8, 10, 0.55) 60%,
+    rgba(8, 8, 10, 0.85) 100%
+  );
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+}
+
+.contentContainer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Luxury Monogram */
 .logoMark {
-  font-family: 'Inter', sans-serif;
-  font-size: 3rem;
-  font-weight: 200;
+  font-family: var(--font-serif);
+  font-size: 3.4rem;
+  font-weight: 400;
   letter-spacing: 0.35em;
   color: #ffffff;
   user-select: none;
-  animation: pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   line-height: 1;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  animation: pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* ---- brand wordmark ---- */
-
+/* Brand Wordmark */
 .brandName {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 300;
-  letter-spacing: 0.4em;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.48em;
   text-transform: uppercase;
   color: #ffffff;
   opacity: 0;
-  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
-  margin-bottom: 32px;
+  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+  margin-bottom: 24px;
   user-select: none;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
 }
 
-/* ---- progress bar ---- */
-
+/* Delicate 1px progress track */
 .progressTrack {
-  width: 120px;
+  width: 140px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 0px;
   overflow: hidden;
   position: relative;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
 }
 
 .progressFill {
@@ -97,6 +142,19 @@
   left: 0;
   height: 100%;
   background: #ffffff;
-  border-radius: 1px;
   animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Micro luxury caption */
+.loadingText {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }

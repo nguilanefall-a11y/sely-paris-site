@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingActions from './components/FloatingActions';
 import SmoothScroll from './components/SmoothScroll';
+import AmbientGleam from './components/AmbientGleam';
 
 import HomePage from './pages/HomePage';
 import ExcellencePage from './pages/ExcellencePage';
@@ -30,7 +31,7 @@ function ScrollToTop() {
 function PublicSite() {
   const { city } = useParams();
   const location = useLocation();
-  const validCities = ['paris', 'bordeaux', 'french-riviera', 'london'];
+  const validCities = ['paris', 'bordeaux', 'french-riviera', 'london', 'suisse', 'usa', 'italie', 'uae'];
 
   if (!validCities.includes(city)) {
     return <Navigate to="/paris" replace />;
@@ -41,6 +42,7 @@ function PublicSite() {
   return (
     <SmoothScroll>
       <div className="app-container">
+        <AmbientGleam />
         <ScrollToTop />
         <Navbar isHome={isHome} />
         <main>

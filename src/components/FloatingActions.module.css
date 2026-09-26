@@ -1,133 +1,103 @@
-.floatingContainer {
+/* ── Floating WhatsApp pill — visible on all screens, fixed right ── */
+.floatingWa {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.waBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.25rem;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.waBtn:hover {
+  background: #1a1a1a;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.38);
+  transform: translateY(-1px);
+}
+
+.waIcon {
+  width: 15px;
+  height: 15px;
+  fill: #25d366;
+  flex-shrink: 0;
+}
+
+/* ── Phone pill — mobile only, bottom center ── */
+.floatingPhone {
+  display: none;
   position: fixed;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
-  pointer-events: none;
-  display: none; /* Hidden on desktop */
+  z-index: 999;
 }
 
-.bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.5rem;
-  background: rgba(15, 15, 15, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  pointer-events: auto;
-}
-
-.whatsappBtn, .phoneBtn {
-  display: flex;
+.phoneBtn {
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.7rem 1.4rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border-radius: 100px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  background: #ffffff;
+  border: 1px solid #0a0a0a;
+  border-radius: 2px;
+  text-decoration: none;
+  color: #0a0a0a;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   white-space: nowrap;
-}
-
-/* WhatsApp Button — premium silver */
-.whatsappBtn {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.whatsappIcon {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-  transition: transform 0.3s ease;
-}
-
-.whatsappBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: #ffffff;
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.whatsappBtn:hover .whatsappIcon {
-  transform: scale(1.1) rotate(-8deg);
-}
-
-/* Divider line */
-.divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Phone Button — premium white glass */
-.phoneBtn {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.phoneIcon {
-  color: inherit;
-  transition: transform 0.3s ease;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  transition: all 0.2s ease;
 }
 
 .phoneBtn:hover {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: #000000;
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  background: #f5f5f5;
 }
 
-.phoneBtn:hover .phoneIcon {
-  transform: scale(1.1) rotate(15deg);
-}
-
-/* ─── Responsive (Mobile sticky bar) ─── */
 @media (max-width: 768px) {
-  .floatingContainer {
-    bottom: 0;
-    left: 0;
-    transform: none;
-    width: 100%;
-    display: block; /* Show on mobile */
+  .floatingWa {
+    bottom: 5.5rem;
+    right: 1rem;
   }
 
-  .bar {
-    border-radius: 20px 20px 0 0;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
-    gap: 0.75rem;
-    width: 100%;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
+  .waBtn {
+    padding: 0.65rem 1rem;
+    font-size: 0.68rem;
   }
 
-  .whatsappBtn, .phoneBtn {
-    flex: 1;
-    justify-content: center;
-    padding: 0.8rem 1rem;
-    font-size: 0.82rem;
-  }
-
-  .divider {
+  .waLabel {
     display: none;
+  }
+
+  .floatingPhone {
+    display: flex;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 320px;
+  }
+
+  .phoneBtn {
+    width: 100%;
+    justify-content: center;
   }
 }

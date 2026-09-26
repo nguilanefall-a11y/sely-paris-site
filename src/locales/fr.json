@@ -2,8 +2,12 @@
   "cities": {
     "paris": "Paris",
     "bordeaux": "Bordeaux",
-    "french-riviera": "Côte d'Azur",
-    "london": "Londres"
+    "french-riviera": "French Riviera",
+    "london": "Londres",
+    "suisse": "Suisse",
+    "italie": "Italie",
+    "uae": "Émirats (UAE)",
+    "usa": "États-Unis (USA)"
   },
   "nav": {
     "home": "Accueil",
@@ -18,13 +22,21 @@
     "testimonials": "Témoignages",
     "vehicules": "Flotte",
     "cta": "Réserver",
-    "book": "Réserver"
+    "book": "Réserver",
+    "book_service": "Réservez votre service"
   },
   "hero": {
+    "primary_cta": "Réserver un chauffeur",
+    "primary_cta_sub": "Book services · Transfert & Mise à disposition",
     "headline": "L'art du <em>déplacement</em>.",
     "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Paris & Île-de-France</span>",
     "subtitle": "Un service haut de gamme de véhicules privés premium avec chauffeur expérimenté. <br/> Confort absolu, discrétion et professionnalisme pour vos déplacements et vos séjours dans la capitale.",
     "cta": "DEMANDER UN DEVIS PERSONNALISÉ",
+    "quote_instruction": "Appuyez sur un pays pour obtenir votre devis personnalisé",
+    "quote_badge": "OBTENIR UN DEVIS",
+    "quote_subtag": "Appuyez sur un pays ➔",
+    "quote_cta_title": "Obtenir un devis en",
+    "quote_hub_prefix": "DEVIS IMMÉDIAT EN",
     "call_us": "Nous appeler",
     "location": "Paris & Région",
     "tab_transfer": "Transfert",
@@ -100,7 +112,7 @@
     "section_title": "Nos Véhicules",
     "v0_title": "Tesla Model Y",
     "v0_subtitle": "L'excellence 100% électrique, version Black Edition.",
-    "v1_title": "Mercedes Classe V",
+    "v1_title": "Mercedes Classe V Business",
     "v1_subtitle": "Le summum du transport de groupe haut de gamme.",
     "v2_title": "Tesla Model 3",
     "v2_subtitle": "La berline 100% électrique de référence, agile et épurée.",
@@ -119,7 +131,21 @@
     "v7_title": "Mercedes Classe E",
     "v7_subtitle": "Élégance et performance pour un transport en toute discrétion.",
     "v8_title": "Mercedes-Maybach",
-    "v8_subtitle": "L'ultime expression du luxe, un salon privé sur roues."
+    "v8_subtitle": "L'ultime expression du luxe, un salon privé sur roues.",
+    "v9_title": "Rolls-Royce Phantom",
+    "v9_subtitle": "L'incarnation ultime du prestige et de l'élégance mondialement reconnue.",
+    "v10_title": "Rolls-Royce Cullinan",
+    "v10_subtitle": "Le SUV le plus luxueux au monde, présence majestueuse.",
+    "v11_title": "Mercedes Classe G",
+    "v11_subtitle": "L'icône tout-terrain d'exception, puissance et prestige VIP.",
+    "v12_title": "Range Rover Autobiography",
+    "v12_subtitle": "Le SUV britannique d'exception, raffinement et sérénité.",
+    "v13_title": "G-Class Brabus 800",
+    "v13_subtitle": "La déclinaison ultra-exclusive Brabus, puissance et prestance inégalée.",
+    "v14_title": "Cadillac Escalade ESV",
+    "v14_subtitle": "Le SUV américain iconique grand volume, luxe et confort ultime.",
+    "v15_title": "Peugeot Traveller",
+    "v15_subtitle": "Le van grand confort 6 places, spacieux et soigné pour vos trajets, délégations et familles."
   },
   "fleet": {
     "badge": "LA FLOTTE",
@@ -241,7 +267,7 @@
     "e3_title": "Événements & Séminaires",
     "e3_desc": "Mariages, soirées professionnelles, congrès ou lancements. Une flotte de véhicules élégants pour vos invités.",
     "e4_title": "Service Sur Mesure",
-    "e4_desc": "Une attention particulière pour chaque trajet : chargeurs universels, eau fraîche et conciergerie à votre disposition."
+    "e4_desc": "Une attention particulière pour chaque trajet : chargeurs universels, eau fraîche et chauffeur dédié à votre service."
   },
   "testimonials": {
     "badge": "AVIS CLIENTS",
@@ -305,14 +331,14 @@
     "v3_inc2": "Coordination événementielle",
     "v3_inc3": "Service voiturier de luxe",
     "v4_title": "Service Sur Mesure",
-    "v4_desc": "Une demande spécifique ? Notre service de conciergerie mobile répond à toutes vos exigences. De la bouteille de champagne au millésime précis, jusqu'aux macarons de la région, nous façonnons l'habitacle selon vos désirs.",
+    "v4_desc": "Une demande spécifique ? Notre service sur-mesure répond à toutes vos exigences. De la bouteille de champagne au millésime précis, jusqu'aux macarons de la région, nous façonnons l'habitacle selon vos désirs.",
     "v4_inc1": "Attention VIP",
-    "v4_inc2": "Conciergerie dédiée",
+    "v4_inc2": "Service dédié",
     "v4_inc3": "Personnalisation totale",
     "v5_title": "Événements Exceptionnels",
     "v5_desc": "Sublimez votre mariage ou vos événements spéciaux avec nos véhicules d'exception. Un service irréprochable pour faire de votre journée un moment inoubliable.",
-    "v6_title": "Conciergerie Sur Mesure",
-    "v6_desc": "Notre équipe dédiée répond à toutes vos exigences pour un séjour parisien sans faille. Réservation de restaurants, hôtels et demandes spécifiques gérées avec la plus grande discrétion.",
+    "v6_title": "Demande Sur Mesure",
+    "v6_desc": "Notre équipe dédiée répond à toutes vos exigences pour vos déplacements d'exception. Déplacements officiels, convois et demandes spécifiques gérées avec la plus grande discrétion.",
     "cta": "Demander un Devis Personnalisé"
   },
   "page_processus": {
@@ -372,7 +398,7 @@
     "subtitle": "Ceux qui parlent le mieux de notre service sont ceux qui l'ont vécu.",
     "t4_quote": "L'équipe de SELY Privé a pris en charge nos invités pour notre mariage. L'organisation était sans faille et le standing parfaitement au rendez-vous.",
     "t4_name": "Claire & David",
-    "t5_quote": "Un service de conciergerie mobile incroyable. Nous avions des demandes spécifiques pour des vins introuvables et tout était prêt à notre arrivée.",
+    "t5_quote": "Un service sur-mesure incroyable. Nous avions des demandes spécifiques pour des vins introuvables et tout était prêt à notre arrivée.",
     "t5_name": "Laurent H.",
     "t6_quote": "Le meilleur service de chauffeur que j'ai pu expérimenter en France. La connaissance de la région par le chauffeur a rendu notre séjour mémorable.",
     "t6_name": "Antoine G.",
@@ -554,8 +580,8 @@
   },
   "paris": {
     "hero": {
-      "video": "/paris-hero-video.mp4",
-      "video_position": "center",
+      "video": "/paris_hero_eiffel.jpg",
+      "video_position": "center 45%",
       "video_filter": "none"
     }
   },
@@ -667,7 +693,7 @@
   },
   "london": {
     "hero": {
-      "video": "/london-hero-video.mp4",
+      "video": "/london_hero_daylight.jpg",
       "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Londres & Heathrow</span>",
       "subtitle": "Découvrez Londres sous son meilleur jour avec notre service de chauffeur professionnel. Véhicules de luxe, expertise locale et fiabilité absolue pour vos voyages d'affaires et transferts aéroports.",
       "location": "Londres & Grand Londres",
@@ -716,6 +742,218 @@
       "intro": "À Londres, SELY Privé offre un service exécutif d'exception répondant aux standards internationaux. Qu'il s'agisse de roadshows corporate ou d'escapades à Mayfair, notre flotte de prestige est à votre entière disposition.",
       "c3_title": "L'Art de Vivre Londonien",
       "c3_desc": "Des hubs financiers du centre de Londres aux domaines royaux historiques, profitez d'une sérénité absolue et d'une confidentialité totale."
+    }
+  },
+  "suisse": {
+    "hero": {
+      "video": "/swiss_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Suisse & Alpes</span>",
+      "subtitle": "Déplacements de haute précision à Genève, Zurich, Gstaad et St-Moritz. Berlines 4MATIC d'exception, discrétion helvétique absolue et ponctualité rigoureuse pour vos rendez-vous d'affaires et séjours alpins.",
+      "location": "Genève, Zurich & Stations Alpines",
+      "pickup_placeholder": "Genève Aéroport (GVA), Hôtel des Bergues, Zurich...",
+      "destination_placeholder": "Gstaad Palace, Badrutt's Palace St-Moritz, Verbier..."
+    },
+    "about": {
+      "subtitle": "L'art de la grande remise en Suisse.",
+      "desc_p1": "SELY Privé déploie ses standards d'excellence au cœur de la Confédération helvétique. De la place financière genevoise aux sommets enneigés des Grisons, nous accompagnons dirigeants, familles royales et voyageurs exigeants avec une discrétion absolue.",
+      "desc_p2": "Chauffeurs alpins chevronnés, formés à la conduite en toutes saisons et au protocole diplomatique international. Chaque trajet reflète l'exigence et la précision de la haute horlogerie suisse.",
+      "image": "/swiss_hero_bg.jpg",
+      "image_alt": "Chauffeur Privé SELY Privé en Suisse devant le Beau-Rivage Genève"
+    },
+    "services": {
+      "srv1_desc": "Transferts directs et accueil VIP sur le tarmac ou terminaux d'affaires : Genève Cointrin (GVA / TAG Aviation), Zurich Kloten (ZRH) et Sion."
+    },
+    "experiences": {
+      "e1_image": "/experience_chauffeur_no_watch.png",
+      "e1_title": "Liaisons Stations de Ski VIP",
+      "e1_desc": "Transferts sécurisés tout confort vers Gstaad, St-Moritz, Verbier et Zermatt à bord de nos limousines et SUV à transmission intégrale 4MATIC.",
+      "e2_image": "/experience_fleet.png",
+      "e2_title": "Roadshows Banques Privées & Horlogerie",
+      "e2_desc": "Itinéraires minutés entre banques privées, family offices et manufactures horlogères à Genève, Zurich et dans la Vallée de Joux.",
+      "e3_image": "/vclass_interior_vip_lounge.jpg",
+      "e3_title": "Délégations & Sommets Internationaux",
+      "e3_desc": "Convois officiels et logistique sur-mesure pour les forums mondiaux, congrès diplomatiques de l'ONU et réceptions privées."
+    },
+    "wine_tours": {
+      "badge": "Excursions Alpines & Lacustres",
+      "title": "Mise à Disposition Suisse & Route du Lavaux",
+      "subtitle": "Explorez les rives enchanteresses du Lac Léman, les vignobles en terrasses du Lavaux classés à l'UNESCO ou les cols panoramiques alpins avec un chauffeur dédié.",
+      "bg_image": "/swiss_hero_bg.jpg",
+      "bg_alt": "Vue panoramique sur le lac Léman et les Alpes suisses",
+      "f1_title": "Conduite Alpine Sécurisée",
+      "f1_desc": "Véhicules équipés de transmission intégrale permanente et chauffeurs experts de la montagne pour une sérénité totale.",
+      "f2_title": "Discrétion Helvétique",
+      "f2_desc": "Confidentialité totale garantie pour tous vos entretiens et conversations téléphoniques à bord."
+    },
+    "contact": {
+      "location": "Genève, Zurich & Alpes Suisses"
+    },
+    "page_excellence": {
+      "immersive_image": "/swiss_hero_bg.jpg",
+      "title": "L'Excellence SELY Suisse",
+      "subtitle": "Précision, discrétion et prestige alpin.",
+      "intro": "La Suisse incarne la quintessence du calme, de la sécurité et du raffinement. SELY Privé y perpétue une vision sans compromis du transport privé avec chauffeur pour une clientèle habituée aux plus hautes exigences.",
+      "c3_title": "L'Art de Vivre Helvétique",
+      "c3_desc": "Des palaces de Montreux aux chalets privés de Gstaad, nous garantissons des transferts fluides et un accompagnement discret de chaque instant."
+    }
+  },
+  "usa": {
+    "hero": {
+      "video": "/usa_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">USA · New York, Miami & LA</span>",
+      "subtitle": "L'excellence du transport avec chauffeur privé aux États-Unis. Berlines de prestige, SUV Cadillac Escalade et chauffeurs d'élite pour vos voyages d'affaires à Manhattan, vos séjours à Miami ou vos événements à Los Angeles.",
+      "location": "New York, Miami & Los Angeles",
+      "pickup_placeholder": "The Plaza NYC, JFK Airport, South Beach Miami, Beverly Hills...",
+      "destination_placeholder": "Wall Street, Hamptons, Faena Miami, Bel-Air..."
+    },
+    "about": {
+      "subtitle": "Le standard Palace de la grande remise aux USA.",
+      "desc_p1": "SELY Privé transpose l'élégance de la grande remise européenne dans les métropoles les plus vibrantes des États-Unis. À New York, Miami et Los Angeles, nos équipes locales assurent une mobilité irréprochable et sécurisée.",
+      "desc_p2": "Chauffeurs bilingues chevronnés, navigation experte au cœur des centres urbains et salons roulants insonorisés pour transformer chaque trajet en moment de détente ou de productivité.",
+      "image": "/usa_hero_bg.jpg",
+      "image_alt": "Chauffeur Privé SELY Privé devant The Plaza Fifth Avenue à New York"
+    },
+    "services": {
+      "srv1_desc": "Transferts prioritaires aéroports et aviation privée : JFK, Teterboro (TEB), Miami International (MIA / Opa-locka), LAX et Van Nuys."
+    },
+    "experiences": {
+      "e1_image": "/cadillac-escalade-main.jpg",
+      "e1_title": "Roadshows Financiers à Manhattan",
+      "e1_desc": "Naviguez entre Wall Street, Midtown et Hudson Yards sans stress. Espace de travail connecté et chauffeur dédié disponible à la minute.",
+      "e2_image": "/usa_hero_bg.jpg",
+      "e2_title": "Escapades Miami Beach & Art Basel",
+      "e2_desc": "Prise en charge exclusive pour les salons d'art, galas caritatifs et villas privées de Star Island et Fisher Island.",
+      "e3_image": "/rolls-phantom-main.jpg",
+      "e3_title": "Tapis Rouge & Avant-Premières à Los Angeles",
+      "e3_desc": "Arrivées remarquées à Beverly Hills, Hollywood et Malibu pour remises de prix, festivals et réceptions privées."
+    },
+    "wine_tours": {
+      "badge": "Mise à Disposition USA",
+      "title": "Chauffeur Dédié & Longues Distances USA",
+      "subtitle": "Réservez une berline ou un SUV grand gabarit pour vos journées de réunions ou vos transferts d'exception vers les Hamptons, Palm Beach ou Santa Barbara.",
+      "bg_image": "/usa_hero_bg.jpg",
+      "bg_alt": "Cadillac Escalade avec chauffeur privé à New York Fifth Avenue",
+      "f1_title": "Flotte Grand Format VIP",
+      "f1_desc": "SUV de prestige et vans grand confort pour voyager avec bagages multiples et collaborateurs en totale sérénité.",
+      "f2_title": "Flexibilité Absolue 24/7",
+      "f2_desc": "Coordination directe avec vos assistants personnels et régulation en temps réel selon vos rendez-vous."
+    },
+    "contact": {
+      "location": "New York, Miami & Los Angeles"
+    },
+    "page_excellence": {
+      "immersive_image": "/usa_hero_bg.jpg",
+      "title": "L'Excellence SELY États-Unis",
+      "subtitle": "L'élégance européenne au cœur des grandes métropoles américaines.",
+      "intro": "De Manhattan à la côte Pacifique, SELY Privé délivre une expérience de transport d'élite alliant rigueur, courtoisie et réactivité pour les dirigeants mondiaux et les voyageurs d'exception.",
+      "c3_title": "L'Art de Vivre Américain",
+      "c3_desc": "Du cœur financier de New York aux rivages ensoleillés de Floride et de Californie, voyagez au plus haut niveau de standing."
+    }
+  },
+  "italie": {
+    "hero": {
+      "video": "/italie_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Italie · Milan, Rome & Riviera</span>",
+      "subtitle": "Voyagez au sommet de l'élégance italienne. Véhicules de prestige et chauffeurs de maître pour vos Fashion Weeks à Milan, vos séjours historiques à Rome et vos villégiatures sur le Lac de Côme ou la Côte Amalfitaine.",
+      "location": "Milan, Rome, Florence & Côte Amalfitaine",
+      "pickup_placeholder": "Milan Malpensa (MXP), Hôtel Four Seasons, Rome FCO...",
+      "destination_placeholder": "Villa d'Este Lac de Côme, Portofino, Positano, Florence..."
+    },
+    "about": {
+      "subtitle": "La dolce vita sublimée par la grande remise.",
+      "desc_p1": "SELY Privé vous ouvre les portes de l'Italie la plus raffinée. Entre dynamisme économique lombard, faste de la Rome impériale et charme intemporel des lacs italiens, votre chauffeur privé vous accompagne avec une distinction absolue.",
+      "desc_p2": "Chauffeurs italiens parfaitement bilingues, accès privilégié aux zones à trafic limité (ZTL) et connaissance intime des palais, domaines viticoles et adresses confidentielles de la péninsule.",
+      "image": "/italie_hero_bg.jpg",
+      "image_alt": "Mercedes Maybach SELY Privé sur la corniche panoramique italienne"
+    },
+    "services": {
+      "srv1_desc": "Transferts directs et liaisons d'affaires depuis Milan Malpensa (MXP), Linate (LIN), Rome Fiumicino (FCO) et Ciampino Aviation Privée."
+    },
+    "experiences": {
+      "e1_image": "/luxury_event_gala.png",
+      "e1_title": "Milan Fashion Week & Quadrilatero della Moda",
+      "e1_desc": "Rotations minutées entre défilés, showrooms de via Montenapoleone et dîners de gala au cœur de la capitale de la mode.",
+      "e2_image": "/italie_hero_bg.jpg",
+      "e2_title": "Villégiature au Lac de Côme & Portofino",
+      "e2_desc": "Liaisons directes depuis Milan vers la Villa d'Este, Bellagio ou Portofino dans le silence souverain d'une berline de luxe.",
+      "e3_image": "/chateau_medoc.png",
+      "e3_title": "Escapades Romaines & Toscane Secrète",
+      "e3_desc": "Découvrez les merveilles de la Ville Éternelle ou parcourez le Val d'Orcia et le Chianti avec un chauffeur à votre entière disposition."
+    },
+    "wine_tours": {
+      "badge": "Vignobles & Grands Domaines",
+      "title": "Wine Tours & Route des Vins de Toscane",
+      "subtitle": "Parcourez les collines toscanes à la découverte des plus grands crus italiens (Brunello di Montalcino, Chianti Classico, Bolgheri Sassicaia) dans un confort palace.",
+      "bg_image": "/italie_hero_bg.jpg",
+      "bg_alt": "Mercedes Maybach avec chauffeur sur la côte italienne",
+      "f1_title": "Accès ZTL Garanti",
+      "f1_desc": "Autorisations officielles d'accès dans tous les centres historiques et zones piétonnes protégées d'Italie.",
+      "f2_title": "Accueil Italien Distingué",
+      "f2_desc": "Une courtoisie légendaire, une conduite fluide et un accompagnement d'exception pour chaque instant."
+    },
+    "contact": {
+      "location": "Milan, Rome & Lac de Côme"
+    },
+    "page_excellence": {
+      "immersive_image": "/italie_hero_bg.jpg",
+      "title": "L'Excellence SELY Italie",
+      "subtitle": "Le raffinement italien au plus haut degré d'exigence.",
+      "intro": "L'Italie conjugue beauté esthétique et art de vivre incomparable. SELY Privé met son savoir-faire d'excellence au service de vos déplacements italiens les plus mémorables.",
+      "c3_title": "L'Art de Vivre Italien",
+      "c3_desc": "Des terrasses de Capri aux ateliers haute couture milanais, bénéficiez d'une mobilité souveraine et d'un confort sans compromis."
+    }
+  },
+  "uae": {
+    "hero": {
+      "video": "/uae_hero_bg.jpg",
+      "title": "Service de Chauffeur Privé <br /> <span class=\"heroHighlight\">Émirats · Dubaï & Abu Dhabi</span>",
+      "subtitle": "Le summum du luxe automobile au Moyen-Orient. Berlines de prestige, Mercedes-Maybach et SUV d'élite avec chauffeurs privés d'exception pour vos rendez-vous d'affaires au DIFC, vos séjours palaces et vos transferts Al Majlis VIP.",
+      "location": "Dubaï, Abu Dhabi & Émirats",
+      "pickup_placeholder": "Dubaï International (DXB Al Majlis), Burj Al Arab, Atlantis...",
+      "destination_placeholder": "Emirates Palace Abu Dhabi, DIFC, Palm Jumeirah..."
+    },
+    "about": {
+      "subtitle": "L'hospitalité royale au cœur des Émirats.",
+      "desc_p1": "SELY Privé propose une expérience de transport d'une distinction incomparable aux Émirats Arabes Unis. À Dubaï et Abu Dhabi, nous répondons aux exigences des délégations officielles, investisseurs internationaux et personnalités VIP.",
+      "desc_p2": "Chauffeurs formés aux protocoles royaux, climatisation cabine préalablement rafraîchie, rafraîchissements de prestige à bord et connexion instantanée avec l'aviation privée.",
+      "image": "/uae_hero_bg.jpg",
+      "image_alt": "Chauffeur Privé SELY Privé sur le tarmac aviation privée à Dubaï"
+    },
+    "services": {
+      "srv1_desc": "Prise en charge VIP sur le tarmac et terminaux dédiés : DXB Al Majlis VIP, Al Maktoum DWC Private Jet et Abu Dhabi VIP Terminal."
+    },
+    "experiences": {
+      "e1_image": "/rolls-cullinan-main.jpg",
+      "e1_title": "Roadshows DIFC & Downtown Dubaï",
+      "e1_desc": "Mobilité d'affaires fluide au cœur du pôle financier de Dubaï. Véhicule climatisé et chauffeur dédié pour enchaîner vos réunions stratégiques.",
+      "e2_image": "/uae_hero_bg.jpg",
+      "e2_title": "Transfert Express Dubaï – Abu Dhabi",
+      "e2_desc": "Liaison ultra-confortable entre les deux métropoles émiraties via la Sheikh Zayed Road, avec arrêt au Musée du Louvre ou à l'Emirates Palace.",
+      "e3_image": "/minibus-14-vip-interior.jpg",
+      "e3_title": "Grands Prix F1 & Sommets Événementiels",
+      "e3_desc": "Flottes coordonnées pour le Formula 1 Etihad Airways Abu Dhabi Grand Prix, salons Gitex, COP et soirées d'exception."
+    },
+    "wine_tours": {
+      "badge": "Service Royal & Mise à Disposition",
+      "title": "Mise à Disposition Dubaï & Émirats",
+      "subtitle": "Un véhicule avec chauffeur privé à votre entière disposition pour vos virées shopping de luxe, déjeuners d'affaires ou découvertes des déserts émiratis.",
+      "bg_image": "/uae_hero_bg.jpg",
+      "bg_alt": "Limousine de luxe sur le tarmac de Dubaï au coucher de soleil",
+      "f1_title": "Accueil Al Majlis VIP",
+      "f1_desc": "Prise en charge directe en sortie de passerelle avec salon VIP privatif et passage des formalités accéléré.",
+      "f2_title": "Flotte Maybach & Grand Confort",
+      "f2_desc": "Intérieurs d'un raffinement absolu, sièges massants, climatisation quadri-zone et bouteilles d'eau thermale à bord."
+    },
+    "contact": {
+      "location": "Dubaï & Abu Dhabi"
+    },
+    "page_excellence": {
+      "immersive_image": "/uae_hero_bg.jpg",
+      "title": "L'Excellence SELY Émirats",
+      "subtitle": "Le raffinement royal au sommet de l'hôtellerie mondiale.",
+      "intro": "Aux Émirats Arabes Unis, l'excellence n'est pas une option, c'est une règle absolue. SELY Privé y livre une prestation digne des plus grands palaces pour une sérénité totale à chaque kilomètre.",
+      "c3_title": "L'Art de Vivre Émirati",
+      "c3_desc": "Des îles artificielles de Palm Jumeirah aux dunes dorées d'Abu Dhabi, vivez une expérience automobile incomparable."
     }
   }
 }

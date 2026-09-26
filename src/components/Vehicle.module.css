@@ -1,309 +1,996 @@
+/* ── Fleet 3D Scenography Section ── */
 .vehicleSection {
-  padding: 8rem 2rem;
-  background-color: var(--bg-surface);
+  padding: 8rem 1.5rem 6.5rem;
+  background-color: #070709;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Deep Background Plan: Monumental Floating Watermark ── */
+.watermarkStage {
+  position: absolute;
+  top: 6%;
+  left: 0;
+  width: 100%;
+  height: 480px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.watermarkText {
+  font-family: var(--font-serif);
+  font-size: clamp(5.5rem, 15vw, 17rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  white-space: nowrap;
+  text-transform: uppercase;
+  will-change: transform, opacity;
+  text-shadow: 0 0 60px rgba(255, 255, 255, 0.04);
+}
+
+.ambientBeam {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 100%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.045) 0%, transparent 75%);
+  pointer-events: none;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
+/* ── Section Header ── */
 .header {
-  text-align: left;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
   width: 100%;
 }
 
-.header h2 {
-  font-size: 3rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-}
-
-.header p {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.imageWrapper {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
-
-.glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  z-index: 1;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06), transparent 70%);
-  animation: pulseGlow 3s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-}
-
-.mainImage {
-  width: 100%;
-  object-fit: contain;
-  z-index: 5;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
-}
-
-.gallery {
-  width: 100%;
-  margin-top: 5rem;
-  overflow: hidden;
-  position: relative;
-}
-
-.galleryScroll {
-  display: flex;
-  gap: 2rem;
-  overflow-x: auto;
-  padding: 1rem 0 3rem;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-}
-
-.galleryScroll::-webkit-scrollbar {
-  display: none;
-}
-
-.galleryScroll img {
-  width: 400px;
-  height: 260px;
-  object-fit: cover;
-  border-radius: 16px;
-  flex-shrink: 0;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  scroll-snap-align: center;
-  transition: transform 0.4s ease;
-}
-
-.galleryScroll img:hover {
-  transform: scale(1.02);
-}
-
-.carouselWrapper {
-  position: relative;
-  width: 100%;
+.headerTop {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.navButton {
-  position: absolute;
-  top: 35%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: white;
+.categoryBadgeGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.luxuryDot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 20;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
 }
 
-.navButton:hover {
-  background: rgba(255,255,255,0.2);
-  border-color: var(--text-primary);
-  color: var(--text-primary);
-}
-
-.navButton:first-child {
-  left: -4rem;
-}
-
-.navButton:last-child {
-  right: -4rem;
-}
-
-.carouselContent {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.vehicleInfo {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.vehicleTitle {
-  font-size: 2.4rem;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+.categoryBadge {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.vehicleSubtitle {
-  color: var(--text-secondary);
-  font-size: 1rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  color: #a1a1aa;
 }
 
-@media (max-width: 1024px) {
-  .navButton:first-child { left: -1rem; }
-  .navButton:last-child { right: -1rem; }
+.paradeIndicator {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
-@media (max-width: 768px) {
-  .vehicleSection {
-    padding: 4rem 1rem;
-  }
-
-  .container {
-    align-items: center;
-  }
-
-  .header {
-    text-align: center;
-  }
-  
-  .header h2 {
-    font-size: 2.2rem;
-  }
-
-  .header p {
-    font-size: 0.95rem;
-  }
-
-  .vehicleTitle {
-    font-size: 1.8rem;
-  }
-
-  .gallery {
-    margin-top: 3rem;
-  }
-
-  .navButton {
-    width: 40px;
-    height: 40px;
-    top: 25%;
-  }
-
-  .navButton:first-child { left: 0.5rem; }
-  .navButton:last-child { right: 0.5rem; }
-
-  .galleryScroll {
-    gap: 1rem;
-    padding: 1rem 0 2rem;
-  }
-
-  .galleryScroll img {
-    width: 260px;
-    height: 170px;
-  }
+.playPauseBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e4e4e7;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.38rem 0.85rem;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
 }
 
-@media (max-width: 480px) {
-  .vehicleSection {
-    padding: 3rem 0.75rem;
-  }
+.playPauseBtn:hover {
+  background: #ffffff;
+  color: #070709;
+  border-color: #ffffff;
+}
 
-  .header h2 {
-    font-size: 1.8rem;
-  }
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+}
 
-  .vehicleTitle {
-    font-size: 1.5rem;
-  }
+.counterCurrent {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
 
-  .navButton {
-    width: 36px;
-    height: 36px;
-  }
+.counterDivider {
+  font-size: 0.85rem;
+  color: #52525b;
+}
 
-  .galleryScroll img {
-    width: 220px;
-    height: 145px;
-  }
+.counterTotal {
+  font-size: 0.85rem;
+  color: #71717a;
 }
 
 .titleRow {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  width: 100%;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
 }
 
-.capacitySelector {
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.12;
+  margin: 0;
+}
+
+.titleItalic {
+  font-style: italic;
+  font-weight: 300;
+  opacity: 0.88;
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  color: #a1a1aa;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.68;
+  max-width: 680px;
+  margin: 0;
+}
+
+/* ── Filter Tabs ── */
+.filterTabs {
   display: flex;
-  gap: 0.35rem;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.25rem;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.25rem;
 }
 
-.capTab {
+.filterTab {
   background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 0.4rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #71717a;
+  padding: 0.55rem 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 0px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterTab:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.filterTabActive {
+  background: #ffffff !important;
+  color: #070709 !important;
+  border-color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.18);
+}
+
+/* ── Main Vehicle Spotlight 3D Stage ── */
+.spotlightWrapper {
+  position: relative;
+  background: #0d0d11;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0px;
+  margin-bottom: 3.5rem;
+  overflow: hidden;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75);
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #ffffff;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.spotlightGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  min-height: 560px;
+}
+
+/* Left: 3D Visual Stage with Perspective Tilt */
+.visualContainer {
+  position: relative;
+  background: #000000;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 520px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: crosshair;
+}
+
+.specularGlare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  mix-blend-mode: screen;
+}
+
+.visualFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.carImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0);
+}
+
+.frameVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.55) 100%),
+              linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 25%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Floating Status Pill (Z: +40px) */
+.floatingStatusPill {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(10, 10, 14, 0.88);
+  color: #ffffff;
+  padding: 0.45rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  z-index: 10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  transform: translateZ(35px);
+}
+
+.statusPillIcon {
+  color: #ffffff;
+}
+
+.statusPillDot {
+  opacity: 0.35;
+}
+
+.statusPillAngle {
+  color: #a1a1aa;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+/* ── Cinematic 3D Angle Dial / Selector ── */
+.cameraDialBar {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 12;
+  background: rgba(8, 8, 12, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px 8px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7);
+  transform: translateZ(45px);
+}
+
+.cameraDialLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #71717a;
+  padding-left: 0.5rem;
+}
+
+.cameraDialPills {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dialPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #a1a1aa;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: all 0.22s ease;
   white-space: nowrap;
 }
 
-.capTab:hover {
+.dialPill:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.capTabActive {
+.dialPillActive {
+  background: #ffffff !important;
+  color: #070709 !important;
+  border-color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.25);
+}
+
+.dialNum {
+  font-size: 0.58rem;
+  opacity: 0.65;
+  letter-spacing: 0.05em;
+}
+
+.dialPillActive .dialNum {
+  color: #070709;
+  opacity: 0.85;
+}
+
+/* Visual Navigation Controls */
+.navControls {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.4rem;
+  z-index: 12;
+  transform: translateZ(45px);
+}
+
+.navBtn {
+  width: 42px;
+  height: 42px;
+  background: rgba(10, 10, 14, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(12px);
+}
+
+.navBtn:hover {
   background: #ffffff;
-  color: #121212;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  color: #070709;
+  border-color: #ffffff;
 }
 
-.capTabActive:hover {
+/* Right: Architectural Monolith & Specifications */
+.detailsContainer {
+  padding: 3.5rem 3.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #101015;
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryLine {
+  margin-bottom: 0.75rem;
+}
+
+.categoryLabel {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 3px;
+}
+
+.carName {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  margin: 0.35rem 0 0.75rem;
+  line-height: 1.15;
+}
+
+.carDesc {
+  font-family: var(--font-sans);
+  font-size: 0.96rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: #a1a1aa;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Interactive Minibus VIP / Standard & Capacity Configurator ── */
+.minibusConfigurator {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  margin-bottom: 1.85rem;
+}
+
+.configRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+.configLabel {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+.configPills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.configBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #d4d4d8;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 6px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.configBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.configBtnActive {
+  background: #ffffff !important;
+  color: #070709 !important;
+  border-color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.25);
+}
+
+.configBtnVip {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.configBtnVipActive {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.3);
+}
+
+/* 3D Specs Monolith Blocks */
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.specBox {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  padding: 1.1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0px;
+  transition: all 0.25s ease;
+}
+
+.specBox:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.specIcon {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.specInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.specTitle {
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #71717a;
+}
+
+.specValue {
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* High Fashion Standards Checklist */
+.highlightsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.highlightsHeader {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #71717a;
+  margin-bottom: 0.25rem;
+}
+
+.highlightRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+}
+
+.highlightIndex {
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: #71717a;
+  letter-spacing: 0.05em;
+}
+
+.highlightText {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #d4d4d8;
+  line-height: 1.5;
+}
+
+/* Actions Row */
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   background: #ffffff;
-  color: #121212;
+  color: #070709;
+  padding: 1rem 1.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 0px;
+  border: 1px solid #ffffff;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
 }
 
-@media (max-width: 600px) {
-  .titleRow {
-    flex-direction: column;
-    align-items: flex-start;
+.primaryCta:hover {
+  background: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+}
+
+.ctaArrow {
+  transition: transform 0.25s ease;
+}
+
+.primaryCta:hover .ctaArrow {
+  transform: translateX(3px);
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: #d4d4d8;
+  padding: 1rem 1.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 0px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.secondaryCta:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── 3D Interactive Horizontal Fleet Carousel Strip ── */
+.stripSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stripHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stripHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stripTitle {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e4e4e7;
+}
+
+.stripSubtitle {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 300;
+  color: #71717a;
+}
+
+.stripHint {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: #a1a1aa;
+}
+
+.stripScrollWrapper {
+  display: flex;
+  gap: 1.15rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  perspective: 1000px;
+}
+
+.stripScrollWrapper::-webkit-scrollbar {
+  height: 3px;
+}
+
+.stripScrollWrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stripCard {
+  position: relative;
+  flex: 0 0 250px;
+  background: #0e0e13;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stripCard:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-4px) scale(1.02);
+  background: #14141a;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.stripCardActive {
+  border-color: #ffffff;
+  background: #181820;
+  box-shadow: 0 10px 32px rgba(255, 255, 255, 0.12);
+}
+
+.stripCardThumb {
+  width: 100%;
+  height: 125px;
+  overflow: hidden;
+  background: #000000;
+  margin-bottom: 0.85rem;
+  position: relative;
+}
+
+.stripCardThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.stripCard:hover .stripCardThumb img {
+  transform: scale(1.06);
+}
+
+.stripCardGlow {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.stripCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.stripCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stripCardIndex {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #71717a;
+  letter-spacing: 0.05em;
+}
+
+.stripCardBadge {
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 500;
+  color: #a1a1aa;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stripCardName {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stripCardCat {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  color: #71717a;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stripActiveIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* ── Responsive Refinements ── */
+@media (max-width: 960px) {
+  .spotlightGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .visualContainer {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .visualFrame {
+    min-height: 380px;
+  }
+
+  .detailsContainer {
+    padding: 2.5rem 2rem;
+  }
+
+  .watermarkText {
+    font-size: 18vw;
+  }
+}
+
+@media (max-width: 640px) {
+  .vehicleSection {
+    padding: 5rem 1rem 4rem;
+  }
+
+  .cameraDialBar {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    justify-content: space-between;
+  }
+
+  .cameraDialLabel {
+    display: none;
+  }
+
+  .cameraDialPills {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dialPill {
+    padding: 6px 9px;
+    font-size: 0.6rem;
+  }
+
+  .navControls {
+    display: none;
+  }
+
+  .specsGrid {
+    grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  .actionsRow {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primaryCta, .secondaryCta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stripCard {
+    flex: 0 0 210px;
   }
 }

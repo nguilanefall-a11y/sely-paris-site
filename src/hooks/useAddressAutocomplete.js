@@ -5,6 +5,10 @@ const CITY_COORDS = {
   london: { lat: 51.5074, lon: -0.1278 },
   'french-riviera': { lat: 43.7102, lon: 7.2620 },
   bordeaux: { lat: 44.8378, lon: -0.5792 },
+  suisse: { lat: 46.2044, lon: 6.1432 },
+  usa: { lat: 40.7128, lon: -74.0060 },
+  italie: { lat: 45.4642, lon: 9.1900 },
+  uae: { lat: 25.2048, lon: 55.2708 },
 };
 
 export function useAddressAutocomplete(initialValue = '', city = 'paris') {

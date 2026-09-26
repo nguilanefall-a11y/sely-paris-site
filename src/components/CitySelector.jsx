@@ -14,8 +14,12 @@ export default function CitySelector() {
   const cities = [
     { key: 'paris', label: t('cities.paris', 'Paris') },
     { key: 'bordeaux', label: t('cities.bordeaux', 'Bordeaux') },
-    { key: 'french-riviera', label: t('cities.french-riviera', 'Côte d\'Azur') },
-    { key: 'london', label: t('cities.london', 'London') }
+    { key: 'french-riviera', label: t('cities.french-riviera', 'French Riviera') },
+    { key: 'london', label: t('cities.london', 'Londres') },
+    { key: 'suisse', label: t('cities.suisse', 'Suisse') },
+    { key: 'italie', label: t('cities.italie', 'Italie') },
+    { key: 'uae', label: t('cities.uae', 'Émirats (UAE)') },
+    { key: 'usa', label: t('cities.usa', 'États-Unis (USA)') },
   ];
 
   const currentLabel = cities.find(c => c.key === city)?.label || t('cities.paris', 'Paris');

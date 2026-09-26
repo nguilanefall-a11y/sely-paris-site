@@ -1,149 +1,324 @@
+/* ── Services Section ── */
 .servicesSection {
-  background-color: var(--bg-color);
-  padding: 10rem 0;
-  display: flex;
-  justify-content: center;
+  padding: 8.5rem 1.5rem 7.5rem;
+  background-color: #070709;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Deep Background Plan: Watermark ── */
+.watermarkLayer {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.035;
+}
+
+.watermarkText {
+  font-family: var(--font-serif);
+  font-size: clamp(6rem, 16vw, 18rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .container {
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 2rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
+/* ── Header ── */
 .header {
-  text-align: left;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
+  max-width: 720px;
+}
+
+.eyebrowRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #a1a1aa;
 }
 
 .title {
-  font-size: 3.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  letter-spacing: -0.03em;
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 1.25rem;
+}
+
+.titleItalic {
+  font-style: italic;
+  font-weight: 300;
+  opacity: 0.9;
 }
 
 .subtitle {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  max-width: 550px;
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  color: #a1a1aa;
+  font-size: 1rem;
   font-weight: 300;
+  line-height: 1.68;
+  margin: 0;
 }
 
+/* ── 3D Floating Glass Monoliths Grid ── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
 
-.card {
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.monolithCard {
   position: relative;
+  min-height: 480px;
+  background: #0d0d12;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.25rem 2rem;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.monolithCard:hover {
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+}
+
+/* Background Image Layer */
+.imageBackdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.imageBackdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.28;
+  filter: grayscale(85%) contrast(110%);
+  transform: scale(1.02);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.monolithCard:hover .imageBackdrop img {
+  transform: scale(1.08);
+  opacity: 0.38;
+}
+
+.darkGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 14, 0.75) 0%,
+    rgba(10, 10, 14, 0.5) 40%,
+    rgba(7, 7, 9, 0.95) 100%
+  );
+  pointer-events: none;
+}
+
+/* Dynamic Specular Sheen */
+.specularGlare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+/* Foreground Monolith Content */
+.cardContent {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateZ(30px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.iconCircle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  will-change: transform, opacity;
+  transition: all 0.3s ease;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 17px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.05));
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+.monolithCard:hover .iconCircle {
+  background: #ffffff;
+  color: #070709;
+  border-color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
 }
 
-.card:hover::before {
-  opacity: 1;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.iconWrapper {
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  opacity: 0.4;
-}
-
-.card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.card p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
+.ghostIndex {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
   font-weight: 300;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.3);
 }
 
-@media (max-width: 768px) {
+.cardBody {
+  margin-top: auto;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTag {
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+  margin-bottom: 0.6rem;
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0 0 0.85rem;
+}
+
+.cardDesc {
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.cardFooter {
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ctaText {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transition: opacity 0.25s ease;
+}
+
+.ctaArrowWrapper {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.25s ease;
+}
+
+.ctaArrow {
+  transition: transform 0.25s ease;
+}
+
+.monolithCard:hover .ctaArrowWrapper {
+  background: #ffffff;
+  color: #070709;
+  border-color: #ffffff;
+}
+
+.monolithCard:hover .ctaArrow {
+  transform: translateX(2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1120px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .monolithCard {
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 640px) {
   .servicesSection {
-    padding: 5rem 0;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .title {
-    font-size: 2.2rem;
-    text-align: center;
-  }
-
-  .subtitle {
-    text-align: center;
-    max-width: 100%;
+    padding: 5.5rem 1rem 4.5rem;
   }
 
   .grid {
     grid-template-columns: 1fr;
-  }
-  
-  .card {
-    padding: 2rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .servicesSection {
-    padding: 4rem 0;
+    gap: 1.25rem;
   }
 
-  .container {
-    padding: 0 1rem;
-  }
-
-  .title {
-    font-size: 1.8rem;
-  }
-
-  .subtitle {
-    font-size: 1rem;
-  }
-
-  .header {
-    margin-bottom: 2rem;
-  }
-
-  .card {
-    padding: 1.5rem 1.2rem;
+  .monolithCard {
+    min-height: 380px;
+    padding: 1.75rem 1.5rem;
   }
 }

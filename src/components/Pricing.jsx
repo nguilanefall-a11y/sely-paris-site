@@ -36,7 +36,7 @@ export default function Pricing() {
       features: [
         t('pricing.plan3_f1', 'Itinéraire sur-mesure'),
         t('pricing.plan3_f2', 'Attente aux étapes & châteaux'),
-        t('pricing.plan3_f3', 'Service conciergerie inclus')
+        t('pricing.plan3_f3', 'Service sur-mesure inclus')
       ]
     }
   ];

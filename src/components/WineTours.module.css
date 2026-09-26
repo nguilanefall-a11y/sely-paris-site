@@ -48,31 +48,37 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
   color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 100px;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-xs, 3px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
   margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
 }
 
 .title {
-  font-size: 3.5rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   margin-bottom: 1rem;
   color: #ffffff;
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  color: #f0f0f0;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  color: #e0e0e0;
   margin-bottom: 3rem;
   line-height: 1.6;
+  font-weight: 300;
 }
 
 .features {
@@ -95,34 +101,41 @@
 }
 
 .feature h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  margin-bottom: 0.35rem;
   color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .feature p {
-  color: #d0d0d0;
+  font-family: var(--font-sans);
+  color: #cccccc;
   line-height: 1.5;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  font-weight: 300;
 }
 
 .ctaButton {
   display: inline-block;
   background: #ffffff;
-  color: #000000;
-  padding: 1rem 2.5rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  color: #0a0a0a;
+  padding: 1rem 2.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
   letter-spacing: 0.1em;
-  border-radius: 100px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid #ffffff;
+  transition: all 0.25s ease;
 }
 
 .ctaButton:hover {
-  transform: scale(1.03);
-  background: #f0f0f0;
+  background: transparent;
+  color: #ffffff;
 }
 
 @media (max-width: 992px) {

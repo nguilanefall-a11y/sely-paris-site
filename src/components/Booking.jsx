@@ -1,13 +1,16 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
-import { motion } from 'framer-motion';
-import { MapPin, Navigation, Clock, Phone, Mail } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Phone, Mail, Compass, SlidersHorizontal, Sparkles, ArrowRight } from 'lucide-react';
 import styles from './Booking.module.css';
 
 export default function Booking() {
   const { t, getCityPath } = useCity();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') === 'specifique' ? 'specific' : 'standard';
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   return (
     <section id="booking" className={styles.bookingSection}>
@@ -62,59 +65,121 @@ export default function Booking() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className={`glass-panel ${styles.formBox}`}
             >
-              <h3 className={styles.formTitle}>{t('booking.choose_service', 'Sélectionnez un service pour obtenir votre devis')}</h3>
-              
-              <div className={styles.buttonsContainer}>
-                <button 
-                  onClick={() => navigate(getCityPath('/reserver?service=transfer'))}
-                  className={styles.actionBtn}
+              {/* Onglets Contact */}
+              <div className={styles.tabNav}>
+                <button
+                  type="button"
+                  className={`${styles.tabBtn} ${activeTab === 'standard' ? styles.tabBtnActive : ''}`}
+                  onClick={() => setActiveTab('standard')}
+                  id="contact-tab-reservation"
                 >
-                  <div className={styles.btnIconWrapper}>
-                    <Navigation size={24} />
-                  </div>
-                  <div className={styles.btnTextWrapper}>
-                    <span className={styles.btnTitle}>{t('hero.tab_transfer', 'Transfert')}</span>
-                    <span className={styles.btnDesc}>{t('booking.btn_transfer_desc', 'Aéroports, gares et trajets de ville à ville')}</span>
-                  </div>
-                  <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  <Compass size={15} />
+                  <span>Réserver un service</span>
                 </button>
-
-                <button 
-                  onClick={() => navigate(getCityPath('/reserver?service=hourly'))}
-                  className={styles.actionBtn}
+                <button
+                  type="button"
+                  className={`${styles.tabBtn} ${activeTab === 'specific' ? styles.tabBtnActive : ''}`}
+                  onClick={() => setActiveTab('specific')}
+                  id="contact-tab-demande-specifique"
                 >
-                  <div className={styles.btnIconWrapper}>
-                    <Clock size={24} />
-                  </div>
-                  <div className={styles.btnTextWrapper}>
-                    <span className={styles.btnTitle}>{t('hero.tab_hourly', 'Mise à disposition')}</span>
-                    <span className={styles.btnDesc}>{t('booking.btn_hourly_desc', 'Chauffeur privé dédié pour quelques heures ou la journée')}</span>
-                  </div>
-                  <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  <SlidersHorizontal size={15} />
+                  <span>Demande spécifique</span>
                 </button>
               </div>
 
-              <div className={styles.specialRequestWrapper}>
-                <span className={styles.specialText}>
-                  {t('hero.special_text', 'Vous avez une question ou une demande spécifique ?')}
-                </span>
-                <button 
-                  onClick={() => navigate(getCityPath('/demande-specifique'))} 
-                  className={styles.specialLink}
-                >
-                  {t('hero.special_cta_full', 'Demande sur-mesure')}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </button>
-              </div>
+              <AnimatePresence mode="wait">
+                {activeTab === 'standard' ? (
+                  <motion.div
+                    key="tab-standard"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <div className={styles.tabBadge}>
+                      <span>SERVICE PRIVÉ AVEC CHAUFFEUR</span>
+                    </div>
+                    <h3 className={styles.formTitle}>
+                      {t('booking.book_title', 'Votre déplacement d\'exception commence ici')}
+                    </h3>
+                    <p className={styles.formSubtitle}>
+                      {t('booking.book_subtitle', 'Transfert, mise à disposition avec chauffeur dédié ou accueil personnalisé.')}
+                    </p>
+                    
+                    <div className={styles.buttonsContainer}>
+                      <button 
+                        onClick={() => navigate(getCityPath('/reserver'))}
+                        className={styles.actionBtn}
+                        id="booking-section-primary-btn"
+                      >
+                        <div className={styles.btnIconWrapper}>
+                          <Compass size={22} strokeWidth={1.5} />
+                        </div>
+                        <div className={styles.btnTextWrapper}>
+                          <span className={styles.btnTitle}>{t('hero.primary_cta', 'Réservez votre service')}</span>
+                          <span className={styles.btnDesc}>{t('hero.primary_cta_sub', 'Transfert · Mise à disposition · Sur-mesure')}</span>
+                        </div>
+                        <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className={styles.quickLine}>
+                      <span>Besoin d'aide immédiate ?</span>
+                      <a href={t('footer.phone_link', 'tel:+33184805676')} className={styles.quickLineLink}>
+                        <Phone size={13} />
+                        <span>{t('footer.phone', '+33 1 84 80 56 76')}</span>
+                      </a>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="tab-specific"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <div className={styles.tabBadge}>
+                      <span>SUR-MESURE & ÉVÉNEMENTS</span>
+                    </div>
+                    <h3 className={styles.formTitle}>Demande spécifique & sur-mesure</h3>
+                    <p className={styles.formSubtitle}>
+                      Événements officiels, délégations, transferts urgents (&lt; 3h), convois multi-véhicules ou demandes particulières.
+                    </p>
+                    
+                    <div className={styles.buttonsContainer}>
+                      <button 
+                        onClick={() => navigate(getCityPath('/demande-specifique'))}
+                        className={styles.actionBtn}
+                        id="booking-section-specific-btn"
+                      >
+                        <div className={styles.btnIconWrapper}>
+                          <SlidersHorizontal size={22} strokeWidth={1.5} />
+                        </div>
+                        <div className={styles.btnTextWrapper}>
+                          <span className={styles.btnTitle}>Accéder au formulaire Demande Spécifique</span>
+                          <span className={styles.btnDesc}>Traitement prioritaire par notre direction sous 1h</span>
+                        </div>
+                        <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className={styles.quickLine}>
+                      <span>Ligne directe prioritaire :</span>
+                      <a href={t('footer.phone_link', 'tel:+33184805676')} className={styles.quickLineLink}>
+                        <Phone size={13} />
+                        <span>{t('footer.phone', '+33 1 84 80 56 76')}</span>
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </div>

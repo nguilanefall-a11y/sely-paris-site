@@ -44,46 +44,42 @@ export default function Navbar({ isHome }) {
   return (
     <>
       <header className={navClass}>
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1 }}
-          className={styles.logoContainer}
-        >
+        <div className={styles.logoContainer}>
           <Link to={getCityPath('/')} className={styles.logoLink}>
             <span className={styles.logoMark}>S</span>
             <div className={styles.logoText}>
               SELY<br/><span>{getCityLogoLabel(city)}</span>
             </div>
           </Link>
-        </motion.div>
+        </div>
 
         <a href={t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'))} className={styles.phoneBadge}>
           <Phone size={14} />
           <span>{t('footer.phone', t('contact.phone', '+33 1 84 80 56 76'))}</span>
         </a>
 
-        <motion.nav 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className={styles.nav}
-        >
+        <nav className={styles.nav}>
           {links.map((link) => (
             <Link key={link.to} to={link.to} className={location.pathname === link.to ? styles.active : ''}>
               {link.label}
             </Link>
           ))}
-          <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book', 'Réserver')}</Link>
+          <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book_service', 'Réservez votre service')}</Link>
           <CitySelector />
           <button onClick={toggleLanguage} className={styles.langToggle}>
             {i18n.language.startsWith('en') ? 'EN' : 'FR'}
           </button>
-        </motion.nav>
+        </nav>
 
-        <div className={styles.mobileMenuToggle} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+        <button
+          type="button"
+          aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={mobileMenuOpen}
+          className={styles.mobileMenuToggle}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
           {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </div>
+        </button>
       </header>
 
       <AnimatePresence>
@@ -99,7 +95,7 @@ export default function Navbar({ isHome }) {
                 {link.label}
               </Link>
             ))}
-            <Link to={getCityPath('/reserver')} className={styles.mobileCta}>{t('nav.book', 'Réserver')}</Link>
+            <Link to={getCityPath('/reserver')} className={styles.mobileCta}>{t('nav.book_service', 'Réservez votre service')}</Link>
             <div className={styles.mobileActions}>
               <CitySelector />
               <button onClick={toggleLanguage} className={styles.mobileLangToggle}>

@@ -1,22 +1,27 @@
 .bookingSection {
-  background-color: var(--bg-color);
-  padding: 10rem 0 0;
+  background-color: #070709;
+  padding: 8.5rem 0 7.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
 }
 
 .container {
   width: 100%;
-  max-width: 1200px;
-  padding: 0 2rem;
-  margin: 0 auto 10rem auto;
+  max-width: 1240px;
+  padding: 0 1.5rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .splitLayout {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 5rem;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 4.5rem;
   align-items: center;
 }
 
@@ -25,41 +30,45 @@
 }
 
 .contactSection h2 {
-  font-size: 3.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
 .divider {
-  width: 50px;
-  height: 2px;
-  background-color: var(--text-primary);
+  width: 44px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.4);
   margin-bottom: 2rem;
 }
 
 .contactDesc {
-  color: var(--text-secondary);
+  color: #a1a1aa;
   line-height: 1.7;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  font-weight: 300;
   margin-bottom: 3rem;
+  max-width: 500px;
 }
 
 .contactItems {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .contactItem {
   display: flex;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: 1.25rem;
 }
 
 .contactIcon {
-  color: var(--text-primary);
+  color: #ffffff;
   margin-top: 0.2rem;
   flex-shrink: 0;
 }
@@ -67,105 +76,174 @@
 .contactText {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .contactText strong {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
+  letter-spacing: 0.18em;
+  color: #71717a;
+  font-weight: 600;
 }
 
 .contactText span {
+  font-family: var(--font-sans);
   font-size: 1.05rem;
-  color: var(--text-primary);
+  color: #ffffff;
+  font-weight: 400;
 }
 
 .contactLink {
+  font-family: var(--font-sans);
   font-size: 1.05rem;
-  color: var(--text-primary);
+  color: #ffffff;
   text-decoration: none;
-  transition: opacity 0.3s ease;
+  font-weight: 400;
+  transition: opacity 0.25s ease;
 }
 
 .contactLink:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
+/* Right Section: 3D Architectural Monolith Card */
 .formSection {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
 }
 
 .formBox {
-  padding: 3.5rem;
-  border-radius: 24px;
+  padding: 2.75rem 2.5rem;
+  border-radius: 0px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  background: #0d0d12;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+}
+
+/* Tabs Switcher */
+.tabNav {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: 0px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 2rem;
+  gap: 4px;
+}
+
+.tabBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: #a1a1aa;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tabBtn:hover {
+  color: #ffffff;
+}
+
+.tabBtnActive {
+  background: #ffffff;
+  color: #070709;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #71717a;
+  margin-bottom: 0.75rem;
 }
 
 .formTitle {
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: var(--text-primary);
-  margin-bottom: 2rem;
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
   letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.formSubtitle {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #a1a1aa;
+  margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
 .buttonsContainer {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .actionBtn {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 1.5rem 2rem;
+  padding: 1.35rem 1.6rem;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0px;
+  color: #ffffff;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  overflow: hidden;
 }
 
 .actionBtn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.07);
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
 }
 
 .btnIconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  margin-right: 1.5rem;
-  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0px;
+  margin-right: 1.25rem;
+  color: #ffffff;
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .actionBtn:hover .btnIconWrapper {
-  background: var(--text-primary);
-  color: var(--bg-color);
-  border-color: var(--text-primary);
+  background: #ffffff;
+  color: #070709;
+  border-color: #ffffff;
 }
 
 .btnTextWrapper {
@@ -173,543 +251,75 @@
   flex-direction: column;
   gap: 0.25rem;
   flex-grow: 1;
-  padding-right: 1.5rem;
+  padding-right: 1rem;
 }
 
 .btnTitle {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  letter-spacing: 0.01em;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .btnDesc {
+  font-family: var(--font-sans);
   font-size: 0.82rem;
-  color: var(--text-secondary);
-  font-weight: 300;
+  color: #a1a1aa;
   line-height: 1.4;
+  font-weight: 300;
 }
 
 .btnArrow {
-  color: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #a1a1aa;
   flex-shrink: 0;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 .actionBtn:hover .btnArrow {
-  color: var(--text-primary);
+  color: #ffffff;
   transform: translateX(4px);
 }
 
-.specialRequestWrapper {
-  margin-top: 2rem;
+.quickLine {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 1.5rem;
-}
-
-.specialText {
-  font-family: 'Inter', sans-serif;
+  justify-content: space-between;
+  font-family: var(--font-sans);
   font-size: 0.82rem;
-  color: var(--text-secondary);
-  font-weight: 300;
+  color: #71717a;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.specialLink {
+.quickLineLink {
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: transparent;
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 100px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.35rem;
+  transition: opacity 0.2s ease;
 }
 
-.specialLink:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
+.quickLineLink:hover {
+  opacity: 0.7;
 }
 
-.specialLink svg {
-  transition: transform 0.3s ease;
-}
-
-.specialLink:hover svg {
-  transform: translateX(3px);
-}
-
-.form {
-  padding: 3.5rem;
-  border-radius: 20px;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-}
-
-.formLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.formLabel span {
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
-}
-
-.formLabelIcon {
-  color: var(--text-secondary);
-}
-
-.specialForm {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.specialDesc {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: 2rem;
-  font-weight: 300;
-}
-
-.specialGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.successState {
-  text-align: center;
-  padding: 50px 20px;
-}
-
-.successIcon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: var(--text-primary);
-  margin: 0 auto 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.successState h3 {
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-  color: var(--text-primary);
-  font-weight: 400;
-}
-
-.successState p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.errorMsg {
-  color: #ff6b6b;
-  text-align: center;
-  margin-top: 16px;
-  font-size: 0.85rem;
-}
-
-.formTabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-}
-
-.formTab {
-  padding: 0.65rem 1.6rem;
-  font-size: 0.82rem;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: 0.02em;
-  border-radius: 100px;
-}
-
-.formTab:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.formTabActive {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.formTabActive:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.fullWidth {
-  grid-column: 1 / -1;
-}
-
-.formGroup label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.8rem;
-}
-
-.inputWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.inputIcon {
-  position: absolute;
-  top: 50%;
-  left: 1rem;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  pointer-events: none;
-}
-
-.input, .textarea, .inputWithIcon {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 1.1rem;
-  color: var(--text-primary);
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 300;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.inputWithIcon {
-  padding-left: 3.2rem;
-}
-
-::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.customSelectWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.customSelectValue {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: border-color 0.3s ease, background 0.3s ease;
-}
-
-.selectArrow {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-  pointer-events: none;
-}
-
-.selectArrow.rotated {
-  transform: translateY(-50%) rotate(180deg);
-  color: var(--text-primary);
-}
-
-.activeWrapper {
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  width: 100%;
-  background: rgba(22, 22, 22, 0.97);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  overflow: hidden;
-  z-index: 50;
-  box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.5),
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  animation: dropdownSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes dropdownSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.dropdownItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.9rem 1.3rem;
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.92rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  user-select: none;
-}
-
-.dropdownItem + .dropdownItem {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.dropdownItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-}
-
-.activeItem {
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-  font-weight: 500;
-}
-
-.input:focus, .textarea:focus, .inputWithIcon:focus {
-  outline: none;
-  border-color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.submitBtn {
-  width: 100%;
-  background: var(--text-primary);
-  color: var(--bg-color);
-  padding: 1.4rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 100px;
-  border: none;
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-}
-
-.submitBtn:hover {
-  transform: scale(1.02);
-  background: #e8e8e8;
-  color: #000;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-}
-
-.submitBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.submitBtnOutline {
-  width: 100%;
-  background: transparent;
-  color: var(--text-primary);
-  padding: 1.2rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-}
-
-.submitBtnOutline:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: scale(1.02);
-}
-
-.submitBtnOutline:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.footer {
-  width: 100%;
-  padding: 2rem;
-  text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: space-between;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-}
-
-@media (max-width: 992px) {
+@media (max-width: 900px) {
   .splitLayout {
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: 3.5rem;
   }
 
-  .contactSection {
-    max-width: 600px;
-  }
-
-  .formBox {
-    padding: 2.5rem;
-  }
-}
-
-@media (max-width: 768px) {
   .bookingSection {
-    padding: 5rem 0 0;
-  }
-
-  .container {
-    margin: 0 auto 4rem auto;
-    padding: 0 1.5rem;
-  }
-
-  .contactSection h2 {
-    font-size: 2.2rem;
-  }
-
-  .contactSection {
-    max-width: 100%;
+    padding: 5.5rem 0 4.5rem;
   }
 
   .formBox {
-    padding: 2rem 1.5rem;
-  }
-
-  .formGrid,
-  .specialGrid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .bookingSection {
-    padding: 3rem 0 0;
-  }
-
-  .container {
-    margin: 0 auto 3rem auto;
-    padding: 0 1rem;
-  }
-
-  .contactSection h2 {
-    font-size: 1.8rem;
-  }
-
-  .formBox {
-    padding: 1.5rem 1rem;
-    border-radius: 14px;
-  }
-
-  .actionBtn {
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
-  }
-
-  .btnIconWrapper {
-    width: 38px;
-    height: 38px;
-    margin-right: 1rem;
-    border-radius: 8px;
-  }
-
-  .btnIconWrapper svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .btnTitle {
-    font-size: 0.95rem;
-  }
-
-  .btnDesc {
-    font-size: 0.76rem;
-  }
-
-  .submitBtn, .submitBtnOutline {
-    padding: 1.2rem;
-    font-size: 0.85rem;
+    padding: 2.25rem 1.5rem;
   }
 }

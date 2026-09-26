@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   logoAccent: {
     width: 30,
     height: 2,
-    backgroundColor: '#c4a165',
+    backgroundColor: '#000000',
     marginTop: 4,
     marginBottom: 10,
   },
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     marginTop: 6,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#c4a165',
-    backgroundColor: '#fffcf5',
+    borderColor: '#e5e5e5',
+    backgroundColor: '#f8fafc',
   },
   depositText: {
     fontSize: 8.5,
@@ -215,7 +215,7 @@ const renderPremiumDescription = (text) => {
                     marginTop: 2,
                     paddingLeft: 6, 
                     borderLeftWidth: 1.5, 
-                    borderLeftColor: '#c4a165',
+                    borderLeftColor: '#000000',
                     borderLeftStyle: 'solid'
                   }}>
                     <Text style={{ flex: 1, fontSize: 8.5, color: '#333333', lineHeight: 1.4 }}>
@@ -260,13 +260,13 @@ const InvoicePDFTemplate = ({ invoice, settings }) => {
           <View>
             <View style={{ marginBottom: 15, flexDirection: 'row', alignItems: 'center' }}>
               <Svg width="36" height="36" viewBox="0 0 32 32">
-                <Path d="M16 2L2 9V23L16 30L30 23V9L16 2Z" stroke="#c4a165" strokeWidth="1" />
-                <Path d="M16 8L8 12V20L16 24L24 20V12L16 8Z" stroke="#c4a165" strokeWidth="0.5" opacity="0.6"/>
-                <Path d="M16 2V8M2 9L8 12M30 9L24 12M16 30V24M2 23L8 20M30 23L24 20" stroke="#c4a165" strokeWidth="0.5" opacity="0.4"/>
+                <Path d="M16 2L2 9V23L16 30L30 23V9L16 2Z" stroke="#000000" strokeWidth="1" />
+                <Path d="M16 8L8 12V20L16 24L24 20V12L16 8Z" stroke="#000000" strokeWidth="0.5" opacity="0.6"/>
+                <Path d="M16 2V8M2 9L8 12M30 9L24 12M16 30V24M2 23L8 20M30 23L24 20" stroke="#000000" strokeWidth="0.5" opacity="0.4"/>
               </Svg>
               <View style={{ marginLeft: 10 }}>
                 <Text style={{ fontSize: 18, fontWeight: 'bold', letterSpacing: 2, color: '#000000' }}>SELY</Text>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', letterSpacing: 3, color: '#c4a165', marginTop: 2 }}>CHAUFFEUR</Text>
+                <Text style={{ fontSize: 7, fontWeight: 'bold', letterSpacing: 3, color: '#555555', marginTop: 2 }}>CHAUFFEUR</Text>
               </View>
             </View>
             <Text style={styles.companyInfo}>{settings.legalForm}</Text>

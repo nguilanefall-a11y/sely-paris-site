@@ -8,7 +8,7 @@ export function useCity() {
 
   const pathParts = location.pathname.split('/');
   const firstSegment = pathParts[1];
-  const validCities = ['paris', 'bordeaux', 'french-riviera', 'london'];
+  const validCities = ['paris', 'bordeaux', 'french-riviera', 'london', 'suisse', 'usa', 'italie', 'uae'];
   
   const currentCity = validCities.includes(city)
     ? city

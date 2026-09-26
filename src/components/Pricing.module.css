@@ -15,14 +15,16 @@
 }
 
 .header h2 {
-  font-size: 3.5rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 500;
   margin-bottom: 1rem;
   color: var(--text-primary);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 .header p {
+  font-family: var(--font-sans);
   color: var(--text-secondary);
   font-size: 1.1rem;
   font-weight: 300;
@@ -90,14 +92,17 @@
 }
 
 .cardHeader h3 {
-  font-size: 1.4rem;
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
   margin-bottom: 0.5rem;
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .prefix {
   display: block;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -107,8 +112,9 @@
 }
 
 .price {
-  font-size: 3rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 2.8rem;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -140,8 +146,9 @@
   display: block;
   text-align: center;
   padding: 1rem;
-  border-radius: 100px;
-  font-weight: 600;
+  border-radius: var(--radius-sm, 4px);
+  font-family: var(--font-sans);
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

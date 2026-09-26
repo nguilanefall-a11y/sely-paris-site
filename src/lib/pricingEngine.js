@@ -41,6 +41,42 @@ export const CITY_CONFIGS = {
     multiplier: 0.95,
     defaultDistanceKm: 25, // Bordeaux - Mérignac / Châteaux
   },
+  suisse: {
+    name: 'Suisse (Genève & Zurich)',
+    currency: 'EUR',
+    symbol: '€',
+    lat: 46.2044,
+    lon: 6.1432,
+    multiplier: 1.25, // Marché suisse haute horlogerie / banques privées
+    defaultDistanceKm: 35, // Genève - Cologny / Nyon
+  },
+  usa: {
+    name: 'USA (New York, Miami, LA)',
+    currency: 'EUR',
+    symbol: '€',
+    lat: 40.7128,
+    lon: -74.0060,
+    multiplier: 1.20,
+    defaultDistanceKm: 30, // Manhattan - JFK
+  },
+  italie: {
+    name: 'Italie (Milan & Rome)',
+    currency: 'EUR',
+    symbol: '€',
+    lat: 45.4642,
+    lon: 9.1900,
+    multiplier: 1.05,
+    defaultDistanceKm: 45, // Milan - Malpensa
+  },
+  uae: {
+    name: 'Émirats (Dubaï & Abu Dhabi)',
+    currency: 'EUR',
+    symbol: '€',
+    lat: 25.2048,
+    lon: 55.2708,
+    multiplier: 1.15,
+    defaultDistanceKm: 35, // Downtown - DXB
+  },
 };
 
 export const VEHICLE_RATES = {
@@ -63,13 +99,22 @@ export const VEHICLE_RATES = {
     transferMin: 190,
   },
   'classe-v': {
-    name: 'Mercedes Classe V',
-    category: 'Van Prestige (7 places)',
+    name: 'Mercedes Classe V Business',
+    category: 'Van Prestige Business (7 places)',
     hourlyRate: 90,
     minHours: 2,
     transferBase: 50,
     perKm: 2.80,
     transferMin: 120,
+  },
+  'peugeot-traveller': {
+    name: 'Peugeot Traveller',
+    category: 'Van Confort (6 places)',
+    hourlyRate: 85,
+    minHours: 2,
+    transferBase: 50,
+    perKm: 2.70,
+    transferMin: 110,
   },
   'maybach': {
     name: 'Mercedes-Maybach',
@@ -80,14 +125,41 @@ export const VEHICLE_RATES = {
     perKm: 7.50,
     transferMin: 350,
   },
-  'sprinter-minibus': {
-    name: 'Minibus Sprinter (16-19 places)',
-    category: 'Transport de Groupe Exécutif',
-    hourlyRate: 170,
+  'sprinter-7-vip': {
+    name: 'Mercedes Sprinter VIP (7 places)',
+    category: 'Salon VIP Mobile & Jet Privé',
+    hourlyRate: 230,
     minHours: 3,
-    transferBase: 120,
-    perKm: 4.50,
-    transferMin: 240,
+    transferBase: 160,
+    perKm: 5.80,
+    transferMin: 320,
+  },
+  'sprinter-14-vip': {
+    name: 'Mercedes Sprinter VIP (14 places)',
+    category: 'Salon Conférence VIP Prestige',
+    hourlyRate: 270,
+    minHours: 3,
+    transferBase: 190,
+    perKm: 6.80,
+    transferMin: 380,
+  },
+  'sprinter-19-standard': {
+    name: 'Mercedes Sprinter Standard (19 places)',
+    category: 'Minibus Grand Tourisme & Confort',
+    hourlyRate: 200,
+    minHours: 3,
+    transferBase: 140,
+    perKm: 5.20,
+    transferMin: 280,
+  },
+  'sprinter-minibus': {
+    name: 'Minibus Sprinter (19 places)',
+    category: 'Transport de Groupe Exécutif',
+    hourlyRate: 200,
+    minHours: 3,
+    transferBase: 140,
+    perKm: 5.20,
+    transferMin: 280,
   },
   'sprinter-vip': {
     name: 'Mercedes Sprinter VIP (7 places)',
@@ -99,7 +171,7 @@ export const VEHICLE_RATES = {
     transferMin: 320,
   },
   'sprinter-12': {
-    name: 'Mercedes Sprinter VIP (12 places)',
+    name: 'Mercedes Sprinter VIP (14 places)',
     category: 'Grand Salon VIP Prestige',
     hourlyRate: 270,
     minHours: 3,
@@ -124,6 +196,60 @@ export const VEHICLE_RATES = {
     transferBase: 180,
     perKm: 7.00,
     transferMin: 350,
+  },
+  'rolls-phantom': {
+    name: 'Rolls-Royce Phantom',
+    category: 'Hyper Luxe & Prestige',
+    hourlyRate: 350,
+    minHours: 3,
+    transferBase: 250,
+    perKm: 9.00,
+    transferMin: 450,
+  },
+  'rolls-cullinan': {
+    name: 'Rolls-Royce Cullinan',
+    category: 'SUV Ultra Luxe',
+    hourlyRate: 380,
+    minHours: 3,
+    transferBase: 280,
+    perKm: 9.50,
+    transferMin: 500,
+  },
+  'range-rover': {
+    name: 'Range Rover Autobiography',
+    category: 'SUV Prestige',
+    hourlyRate: 180,
+    minHours: 3,
+    transferBase: 110,
+    perKm: 5.20,
+    transferMin: 220,
+  },
+  'classe-g': {
+    name: 'Mercedes Classe G',
+    category: 'SUV d\'Exception',
+    hourlyRate: 250,
+    minHours: 3,
+    transferBase: 160,
+    perKm: 6.80,
+    transferMin: 320,
+  },
+  'brabus-g': {
+    name: 'G-Class Brabus 800',
+    category: 'Supercar SUV Exclusive',
+    hourlyRate: 320,
+    minHours: 3,
+    transferBase: 220,
+    perKm: 8.50,
+    transferMin: 420,
+  },
+  'cadillac-escalade': {
+    name: 'Cadillac Escalade ESV',
+    category: 'SUV VIP Américain',
+    hourlyRate: 240,
+    minHours: 3,
+    transferBase: 150,
+    perKm: 6.50,
+    transferMin: 300,
   },
 };
 
@@ -184,6 +310,7 @@ export function calculateTripPrice({
   pickup = '',
   destination = '',
   time = '',
+  isLongDistance = false,
   options = {}, // { babySeat, childSeat, nameBoard }
   lang = 'fr',
 }) {
@@ -197,14 +324,19 @@ export function calculateTripPrice({
   let billedDistance = 0;
 
   if (serviceType === 'hourly') {
-    // Parse duration (ex: "3 heures", "3h", "3", etc.)
-    const parsedDuration = parseInt(String(duration).replace(/\D/g, ''), 10) || vehicle.minHours;
+    // Parse duration (ex: "3 heures", "3h", 11, etc.)
+    const parsedDuration = typeof duration === 'number'
+      ? duration
+      : (parseInt(String(duration).replace(/\D/g, ''), 10) || vehicle.minHours);
     billedHours = Math.max(parsedDuration, vehicle.minHours);
     const hourlyRate = Math.round(vehicle.hourlyRate * multiplier);
     basePrice = billedHours * hourlyRate;
+    const ldLabel = isLongDistance
+      ? (lang === 'en' ? ' · Long distance itinerary' : ' · Longue distance incluse')
+      : '';
     calculationDetails = lang === 'en'
-      ? `Hourly service ${billedHours}h in ${vehicle.name} (${hourlyRate} €/h)`
-      : `Mise à disposition ${billedHours}h en ${vehicle.name} (${hourlyRate} €/h)`;
+      ? `Hourly service ${billedHours}h in ${vehicle.name} (${hourlyRate} €/h)${ldLabel}`
+      : `Mise à disposition ${billedHours}h en ${vehicle.name} (${hourlyRate} €/h)${ldLabel}`;
   } else {
     // Mode transfert
     // Si distance non connue, on utilise la distance typique aéroport/ville de la région
@@ -240,6 +372,7 @@ export function calculateTripPrice({
 
   return {
     total,
+    totalPrice: total,
     currency: cityConfig.currency,
     symbol: cityConfig.symbol,
     details: calculationDetails,

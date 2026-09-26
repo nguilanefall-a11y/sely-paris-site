@@ -1,0 +1,338 @@
+/* ── Container ── */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 100%;
+}
+
+/* ── Recap bar ── */
+.recapBar {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid #18181b;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.recapDate {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
+}
+
+.recapSep {
+  color: #a1a1aa;
+  font-size: 1rem;
+}
+
+.recapTime {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: 0.04em;
+}
+
+.recapNote {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #71717a;
+  letter-spacing: 0.01em;
+}
+
+/* ── 2-col layout ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Cards ── */
+.card {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  padding: 1.25rem 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cardLabel {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #71717a;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── Quick presets ── */
+.quickRow {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.quickBtn {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 0.28rem 0.65rem;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  color: #525252;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.quickBtn:hover {
+  background: #f7f7f7;
+  color: #000000;
+  border-color: #000000;
+}
+
+.quickBtnActive {
+  background: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Month nav ── */
+.monthNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.monthNavBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.monthNavBtn:hover:not(:disabled) {
+  background: #f7f7f7;
+  color: #000000;
+  border-color: #000000;
+}
+
+.monthNavBtn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.monthTitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #0a0a0a;
+}
+
+/* ── Weekday row ── */
+.weekRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.35rem;
+}
+
+.weekCell {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #a3a3a3;
+}
+
+/* ── Days grid ── */
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.dayBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dayBtn:hover:not(:disabled):not(.daySelected) {
+  background: #f5f5f5;
+  border-color: #e5e5e5;
+}
+
+.daySelected {
+  background: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.dayToday:not(.daySelected) {
+  border-color: #71717a;
+}
+
+.dayPast {
+  opacity: 0.22;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Clock display ── */
+.clockDisplay {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.9rem 0.5rem;
+  background: #ffffff;
+  border: 1px solid #18181b;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.clockHH,
+.clockMM {
+  font-family: var(--font-sans);
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #000000;
+  line-height: 1;
+}
+
+.clockColon {
+  font-family: var(--font-sans);
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #71717a;
+  line-height: 1;
+  padding-bottom: 0.1rem;
+}
+
+/* ── Section labels ── */
+.sectionLabel {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a3a3a3;
+}
+
+/* ── Hours grid ── */
+.hoursGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+}
+
+.hChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #3a3a3a;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hChip:hover {
+  background: #f7f7f7;
+  color: #000000;
+  border-color: #000000;
+}
+
+.hChipActive {
+  background: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Minutes row ── */
+.minutesRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.mChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #3a3a3a;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mChip:hover {
+  background: #f7f7f7;
+  color: #000000;
+  border-color: #000000;
+}
+
+.mChipActive {
+  background: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}

@@ -13,13 +13,13 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <Vehicle />
+      <SectionDivider />
       <About />
       <SectionDivider />
       <HowItWorks />
       <SectionDivider />
       <Services />
-      <SectionDivider />
-      <Vehicle />
       <SectionDivider />
       <Experiences />
       <SectionDivider />
