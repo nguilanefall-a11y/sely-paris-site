@@ -786,11 +786,13 @@ export default function ReservationPage() {
   const {
     isListening,
     errorMessage: voiceError,
+    voiceLang,
+    setVoiceLang,
     toggleListening: toggleSpeechRecognition,
   } = useVoiceDictation({
     value: bespokeText,
     onChange: setBespokeText,
-    lang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
+    initialLang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
   });
 
   // Final submit handler
@@ -2374,24 +2376,45 @@ export default function ReservationPage() {
               <div className={styles.bespokeInputBox}>
                 <div className={styles.textareaHeader}>
                   <span className={styles.inputHeaderTitle}>VOTRE PROGRAMME DE MOBILITÉ</span>
-                  <button
-                    type="button"
-                    onClick={toggleSpeechRecognition}
-                    className={`${styles.voiceBtn} ${isListening ? styles.voiceBtnActive : ''}`}
-                    title="Activer la saisie vocale"
-                  >
-                    {isListening ? (
-                      <>
-                        <MicOff size={16} />
-                        <span>En écoute... Cliquez pour arrêter</span>
-                      </>
-                    ) : (
-                      <>
-                        <Mic size={16} />
-                        <span>Parler au micro</span>
-                      </>
-                    )}
-                  </button>
+                  <div className={styles.voiceControlGroup}>
+                    <button
+                      type="button"
+                      onClick={toggleSpeechRecognition}
+                      className={`${styles.voiceBtn} ${isListening ? styles.voiceBtnActive : ''}`}
+                      title={voiceLang.startsWith('fr') ? "Parler au micro en français" : "Speak into microphone in English"}
+                    >
+                      {isListening ? (
+                        <>
+                          <MicOff size={16} />
+                          <span>{voiceLang.startsWith('fr') ? 'En écoute... Arrêter' : 'Listening... Stop'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Mic size={16} />
+                          <span>{voiceLang.startsWith('fr') ? 'Parler au micro' : 'Speak into mic'}</span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className={styles.voiceLangToggle}>
+                      <button
+                        type="button"
+                        className={`${styles.voiceLangBtn} ${voiceLang.startsWith('fr') ? styles.voiceLangBtnActive : ''}`}
+                        onClick={() => setVoiceLang('fr-FR')}
+                        title="Micro en Français"
+                      >
+                        🇫🇷 FR
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.voiceLangBtn} ${voiceLang.startsWith('en') ? styles.voiceLangBtnActive : ''}`}
+                        onClick={() => setVoiceLang('en-US')}
+                        title="Micro in English"
+                      >
+                        🇬🇧 EN
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <textarea
@@ -2405,7 +2428,11 @@ export default function ReservationPage() {
                 {isListening && (
                   <div className={styles.listeningBadge}>
                     <span className={styles.listeningDot} />
-                    <span>Microphone actif : dictez votre demande...</span>
+                    <span>
+                      {voiceLang.startsWith('fr')
+                        ? 'Microphone actif (Français 🇫🇷) : parlez maintenant...'
+                        : 'Microphone active (English 🇬🇧) : speak now...'}
+                    </span>
                   </div>
                 )}
                 {voiceError && (

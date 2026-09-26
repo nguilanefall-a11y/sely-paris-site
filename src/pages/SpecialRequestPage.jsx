@@ -36,11 +36,13 @@ export default function SpecialRequestPage() {
   const {
     isListening,
     errorMessage: voiceError,
+    voiceLang,
+    setVoiceLang,
     toggleListening: toggleVoiceMessage,
   } = useVoiceDictation({
     value: form.message,
     onChange: (text) => setForm(prev => ({ ...prev, message: text })),
-    lang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
+    initialLang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
   });
 
   const handleSubmit = async (e) => {
@@ -254,24 +256,45 @@ export default function SpecialRequestPage() {
               <MessageSquare size={14} />
               <span>{t('specialRequest.messageLabel', 'Votre demande')}</span>
             </div>
-            <button
-              type="button"
-              onClick={toggleVoiceMessage}
-              className={`${styles.voiceBtn} ${isListening ? styles.voiceBtnActive : ''}`}
-              title="Activer la dictée vocale au micro"
-            >
-              {isListening ? (
-                <>
-                  <MicOff size={14} />
-                  <span>En écoute... Cliquez pour arrêter</span>
-                </>
-              ) : (
-                <>
-                  <Mic size={14} />
-                  <span>Parler au micro</span>
-                </>
-              )}
-            </button>
+            <div className={styles.voiceControlGroup}>
+              <button
+                type="button"
+                onClick={toggleVoiceMessage}
+                className={`${styles.voiceBtn} ${isListening ? styles.voiceBtnActive : ''}`}
+                title={voiceLang.startsWith('fr') ? "Parler au micro en français" : "Speak into microphone in English"}
+              >
+                {isListening ? (
+                  <>
+                    <MicOff size={14} />
+                    <span>{voiceLang.startsWith('fr') ? 'En écoute... Arrêter' : 'Listening... Stop'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic size={14} />
+                    <span>{voiceLang.startsWith('fr') ? 'Parler au micro' : 'Speak into mic'}</span>
+                  </>
+                )}
+              </button>
+
+              <div className={styles.voiceLangToggle}>
+                <button
+                  type="button"
+                  className={`${styles.voiceLangBtn} ${voiceLang.startsWith('fr') ? styles.voiceLangBtnActive : ''}`}
+                  onClick={() => setVoiceLang('fr-FR')}
+                  title="Micro en Français"
+                >
+                  🇫🇷 FR
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.voiceLangBtn} ${voiceLang.startsWith('en') ? styles.voiceLangBtnActive : ''}`}
+                  onClick={() => setVoiceLang('en-US')}
+                  title="Micro in English"
+                >
+                  🇬🇧 EN
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className={styles.inputGroup}>
@@ -287,7 +310,11 @@ export default function SpecialRequestPage() {
             {isListening && (
               <div className={styles.listeningBadge}>
                 <span className={styles.listeningDot} />
-                <span>Microphone actif : dictez votre demande...</span>
+                <span>
+                  {voiceLang.startsWith('fr')
+                    ? 'Microphone actif (Français 🇫🇷) : parlez maintenant...'
+                    : 'Microphone active (English 🇬🇧) : speak now...'}
+                </span>
               </div>
             )}
             {voiceError && (
