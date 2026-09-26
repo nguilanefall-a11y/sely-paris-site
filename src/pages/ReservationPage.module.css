@@ -3046,3 +3046,151 @@
 .homeSuccessBtn:hover {
   color: #0a0a0a;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   DEDICATED SMARTPHONE REFINEMENTS (MAX-WIDTH 600PX)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .funnelHeader {
+    padding: 0.75rem 1rem;
+  }
+
+  .headerLeft,
+  .headerRight {
+    min-width: auto;
+    gap: 8px;
+  }
+
+  .stepCounter {
+    display: none;
+  }
+
+  .navBackBtn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
+  }
+
+  .funnelMain {
+    padding: 1.25rem 0.85rem 4.5rem;
+  }
+
+  .screenContainer,
+  .screenContainerLarge {
+    gap: 1.4rem;
+    width: 100%;
+  }
+
+  .screenTitle {
+    font-size: clamp(1.5rem, 5.5vw, 2rem);
+    line-height: 1.25;
+  }
+
+  .screenSubtitle {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  /* Service choice cards (Screen 0) */
+  .serviceChoiceCard {
+    padding: 1.25rem 1.1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  }
+
+  .serviceChoiceIcon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 0.85rem;
+  }
+
+  .serviceChoiceBody {
+    margin-bottom: 1rem;
+  }
+
+  .serviceChoiceTitle {
+    font-size: 1.15rem;
+  }
+
+  .serviceChoiceDesc {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  /* Screen Footers & CTA Buttons */
+  .screenFooter,
+  .screenFooterBetween {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    margin-top: 1.25rem !important;
+  }
+
+  .screenFooterBetween .skipBtn {
+    order: 2;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .screenFooterBetween .nextStepBtn {
+    order: 1;
+  }
+
+  .nextStepBtn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 1.1rem 1.25rem !important;
+    font-size: 0.92rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Shortcuts in search inputs */
+  .shortcutsGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .shortcutChip {
+    padding: 0.5rem 0.65rem !important;
+    min-height: 44px !important;
+  }
+
+  .chipLabel {
+    font-size: 0.75rem !important;
+  }
+
+  /* Vehicle Selection Cards */
+  .vehicleImgBox {
+    height: 160px;
+  }
+
+  .vehicleSelectCard {
+    border-radius: 12px;
+  }
+
+  /* Summary Voucher (Step 4) */
+  .summaryBox {
+    padding: 1.15rem 1rem !important;
+  }
+
+  .summaryCard {
+    padding: 1.15rem 1rem !important;
+  }
+
+  /* Success Screen on mobile */
+  .successActionsStack {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .whatsappSuccessBtn {
+    padding: 0.95rem 1.1rem !important;
+  }
+
+  .waBtnTitle {
+    font-size: 0.88rem !important;
+  }
+
+  .waBtnSub {
+    font-size: 0.68rem !important;
+  }
+}

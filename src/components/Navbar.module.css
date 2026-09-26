@@ -216,19 +216,23 @@
     right: 0;
     bottom: 0;
     background: #ffffff;
-    padding: 6rem 2rem 2rem;
-    gap: 1.5rem;
+    padding: 5.5rem 1.5rem 4.5rem;
+    gap: 1.25rem;
     z-index: 110;
     align-items: flex-start;
     justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100vh;
+    max-height: 100dvh;
   }
 
   .mobileNav a {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: #0a0a0a;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
   }
 
   .mobileCta {
@@ -280,5 +284,20 @@
   .mobileLangToggle:active {
     background: #0a0a0a;
     color: #ffffff;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.65rem 1rem;
+  }
+
+  .phoneBadge {
+    padding: 0.45rem 0.6rem;
+    margin-right: 0.5rem;
+  }
+
+  .phoneBadge span {
+    display: none;
   }
 }

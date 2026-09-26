@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { Phone } from 'lucide-react';
@@ -12,18 +13,41 @@ const WhatsAppIcon = () => (
 
 export default function FloatingActions() {
   const { t } = useCity();
+  const location = useLocation();
+
+  // Hide on booking tunnel and specific pages to avoid obstructing the form buttons
+  const isTunnelPage =
+    location.pathname.includes('/reserver') ||
+    location.pathname.includes('/demande-specifique') ||
+    location.pathname.includes('/reservation-succes');
+
+  if (isTunnelPage) return null;
+
   const whatsappLink = t('contact.whatsapp_link', 'https://wa.me/33605827497');
   const phoneLink = t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'));
   const phoneDisplay = t('footer.phone_display', '+33 1 84 80 56 76');
 
   return (
-    <>
-      {/* WhatsApp — always visible, bottom right */}
+    <div className={styles.floatingStack}>
+      {/* Phone — mobile circular button / desktop hide */}
+      <motion.div
+        className={styles.floatingPhone}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 1.1 }}
+      >
+        <a href={phoneLink} className={styles.phoneBtn} aria-label={`Appeler SELY ${phoneDisplay}`}>
+          <Phone size={19} strokeWidth={1.9} />
+          <span className={styles.phoneLabel}>{phoneDisplay}</span>
+        </a>
+      </motion.div>
+
+      {/* WhatsApp — bottom right */}
       <motion.div
         className={styles.floatingWa}
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, delay: 1.2, ease: 'easeOut' }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 1.2 }}
       >
         <a
           href={whatsappLink}
@@ -36,19 +60,6 @@ export default function FloatingActions() {
           <span className={styles.waLabel}>WhatsApp</span>
         </a>
       </motion.div>
-
-      {/* Phone — mobile only, bottom center */}
-      <motion.div
-        className={styles.floatingPhone}
-        initial={{ opacity: 0, y: 20, x: '-50%' }}
-        animate={{ opacity: 1, y: 0, x: '-50%' }}
-        transition={{ duration: 0.7, delay: 1.4, ease: 'easeOut' }}
-      >
-        <a href={phoneLink} className={styles.phoneBtn} aria-label="Appeler SELY">
-          <Phone size={14} strokeWidth={1.8} />
-          <span>{phoneDisplay}</span>
-        </a>
-      </motion.div>
-    </>
+    </div>
   );
 }

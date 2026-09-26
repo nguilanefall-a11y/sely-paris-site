@@ -337,17 +337,63 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .heroCtaContainer { max-width: 100%; }
+  .heroSection {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 5.5rem 1rem 3rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(2.2rem, 7.5vw, 4.2rem);
+    margin-bottom: 0.95rem;
+  }
+
+  .heroSubhead {
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .heroContentWrapper {
+    gap: 1.75rem;
+  }
+
+  .heroCtaContainer {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .bookingWidget {
+    padding: 1.15rem 1rem;
+    border-radius: 16px;
+  }
 
   .widgetInputRow {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+  }
+
+  .widgetInput {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #f7f7f8;
   }
 
   .widgetCta {
     justify-content: center;
     padding: 14px 20px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    width: 100%;
   }
 
-  .bookingWidget { border-radius: 16px; }
+  .operatesInRow {
+    font-size: 0.68rem;
+    gap: 3px 6px;
+  }
+
+  .heroTrustBadge {
+    padding: 5px 12px;
+    font-size: 0.68rem;
+  }
 }
