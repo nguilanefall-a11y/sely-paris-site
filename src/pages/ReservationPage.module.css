@@ -2909,3 +2909,30 @@
     font-size: 0.72rem !important;
   }
 }
+
+/* ─── Merged Step 1 Form (Pickup + Destination + Date all-in-one) ─── */
+.mergedFormStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.mergedFieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.mergedFieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #555;
+  text-transform: uppercase;
+}

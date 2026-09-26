@@ -42,25 +42,6 @@ const FLEET_VEHICLES = [
     group: 'vans'
   },
   {
-    id: 'peugeot-traveller',
-    key: 'v15',
-    category: 'VAN CONFORT 6 PLACES',
-    categoryEn: 'COMFORT VAN 6 SEATS',
-    name: 'Peugeot Traveller',
-    watermark: 'TRAVELLER',
-    subtitle: 'Confort spacieux et fonctionnel 6 places pour groupes, familles et délégations',
-    subtitleEn: 'Spacious and functional 6-seat comfort for groups, families and delegations',
-    image: '/peugeot-traveller-front-paris.jpg',
-    rearImage: '/peugeot-traveller-rear-paris.jpg',
-    passengers: '6',
-    luggage: '6',
-    badge: 'NOUVEAU FLEET',
-    badgeEn: 'NEW FLEET',
-    highlights: ['Configuration 6 places spacieuse et modulable', 'Climatisation multi-zone & Vitres surteintées', 'Sièges individuels confortables & Grand volume bagages'],
-    highlightsEn: ['Spacious modular 6-seat configuration', 'Multi-zone climate control & Privacy glass', 'Comfortable individual seating & Large luggage space'],
-    group: 'vans'
-  },
-  {
     id: 'classe-s',
     key: 'v3',
     category: 'BERLINE DE PRESTIGE',

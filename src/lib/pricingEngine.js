@@ -107,15 +107,6 @@ export const VEHICLE_RATES = {
     perKm: 2.80,
     transferMin: 120,
   },
-  'peugeot-traveller': {
-    name: 'Peugeot Traveller',
-    category: 'Van Confort (6 places)',
-    hourlyRate: 85,
-    minHours: 2,
-    transferBase: 50,
-    perKm: 2.70,
-    transferMin: 110,
-  },
   'maybach': {
     name: 'Mercedes-Maybach',
     category: 'Luxe Absolu',

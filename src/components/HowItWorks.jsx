@@ -65,7 +65,7 @@ export default function HowItWorks() {
 
   const steps = [
     {
-      category: isEn ? 'STEP 01 · SELECTION' : 'ÉTAPE 01 · SÉLECTION',
+      category: isEn ? 'SELECTION' : 'SÉLECTION',
       icon: <Car size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step1_title', 'Configuration & Choix'),
       desc: t(
@@ -75,7 +75,7 @@ export default function HowItWorks() {
       meta: isEn ? 'Instant online quote' : 'Devis instantané en ligne'
     },
     {
-      category: isEn ? 'STEP 02 · CONFIRMATION' : 'ÉTAPE 02 · PROTOCOLE',
+      category: isEn ? 'CONFIRMATION' : 'PROTOCOLE',
       icon: <UserCheck size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step2_title', 'Attribution du Chauffeur'),
       desc: t(
@@ -85,7 +85,7 @@ export default function HowItWorks() {
       meta: isEn ? '24/7 dedicated dispatch' : 'Suivi télémétrique des vols'
     },
     {
-      category: isEn ? 'STEP 03 · JOURNEY' : 'ÉTAPE 03 · EXPÉRIENCE',
+      category: isEn ? 'JOURNEY' : 'EXPÉRIENCE',
       icon: <ShieldCheck size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step3_title', 'Prise en Charge Palace'),
       desc: t(

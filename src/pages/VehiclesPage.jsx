@@ -23,21 +23,6 @@ const VEHICLES_CATALOG = [
     badgeEn: 'MOST REQUESTED'
   },
   {
-    id: 'peugeot-traveller',
-    title: 'Peugeot Traveller',
-    titleEn: 'Peugeot Traveller',
-    category: 'VAN CONFORT (6 PLACES)',
-    categoryEn: 'COMFORT VAN (6 SEATS)',
-    desc: 'Van spacieux et sobre, configuration 6 places modulable grand confort. Idéal pour transferts d\'entreprises, délégations et familles.',
-    descEn: 'Spacious and functional van with modular 6-passenger layout. Ideal for corporate transfers, delegations, and family itineraries.',
-    passengers: '6',
-    luggage: '6',
-    image: '/peugeot-traveller-front-paris.jpg',
-    rearImage: '/peugeot-traveller-rear-paris.jpg',
-    badge: 'NOUVEAU FLEET',
-    badgeEn: 'NEW FLEET'
-  },
-  {
     id: 'classe-s',
     title: 'Mercedes Classe S',
     titleEn: 'Mercedes S-Class',
@@ -239,7 +224,7 @@ export default function VehiclesPage() {
     if (activeCategory === 'berlines') return v.id === 'classe-s' || v.id === 'classe-e' || v.id === 'tesla-y';
     if (activeCategory === 'prestige') return v.id === 'maybach' || v.id === 'rolls-phantom' || v.id === 'rolls-cullinan';
     if (activeCategory === 'suv') return v.id === 'range-rover' || v.id === 'classe-g' || v.id === 'brabus-g' || v.id === 'cadillac-escalade';
-    if (activeCategory === 'vans') return v.id === 'classe-v' || v.id === 'peugeot-traveller';
+    if (activeCategory === 'vans') return v.id === 'classe-v';
     if (activeCategory === 'minibus') {
       if (!v.id.startsWith('sprinter')) return false;
       if (minibusFilter === 'vip') return v.id.includes('vip');

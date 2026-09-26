@@ -170,19 +170,6 @@ const VEHICLES = [
     interiorImage: '/vclass_interior_vip_lounge.jpg',
   },
   {
-    id: 'peugeot-traveller',
-    name: 'Peugeot Traveller',
-    classId: 'xl',
-    classTitle: 'Classe XL',
-    passengers: '6 passagers',
-    maxPassengers: 6,
-    maxLuggage: 6,
-    categoryBadge: 'CLASSE XL VAN',
-    desc: 'Van spacieux et sobre, configuration 6 places grand confort, idéal pour les transferts d\'entreprises, délégations et familles.',
-    image: '/peugeot-traveller-front-paris.jpg',
-    rearImage: '/peugeot-traveller-rear-paris.jpg',
-  },
-  {
     id: 'sprinter-19-standard',
     name: 'Mercedes Sprinter Standard (19 places)',
     classId: 'xl',
@@ -752,14 +739,10 @@ export default function ReservationPage() {
     i18n?.language,
   ]);
 
-  // Navigation handlers
+  // Navigation handlers — simplified 4-step tunnel
   const goToNextStep = () => {
     setDirection(1);
-    if (service === 'hourly' && step === 2) {
-      setStep(4);
-    } else {
-      setStep((prev) => prev + 1);
-    }
+    setStep((prev) => prev + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -768,8 +751,6 @@ export default function ReservationPage() {
     if (step <= 1) {
       setStep(0);
       setService(null);
-    } else if (service === 'hourly' && step === 4) {
-      setStep(2);
     } else {
       setStep((prev) => prev - 1);
     }
@@ -906,19 +887,12 @@ export default function ReservationPage() {
     }
   };
 
-  // Step counter & displayed steps
-  const displayedStep = useMemo(() => {
-    if (service === 'hourly' && step >= 4) {
-      return step - 1;
-    }
-    return step;
-  }, [service, step]);
+  // Step counter — new 4-step tunnel
+  const displayedStep = step;
 
   const displayedTotalSteps = useMemo(() => {
-    if (service === 'hourly') return 6;
-    if (service === 'transfer') return 7;
     if (service === 'bespoke') return 2;
-    return 1;
+    return 4; // transfer and hourly both have 4 steps
   }, [service]);
 
   const progressPct = useMemo(() => {
@@ -987,8 +961,6 @@ export default function ReservationPage() {
         {step > 0 && (
           <div className={styles.stepCounter}>
             <span>{service === 'transfer' ? 'Transfert' : service === 'hourly' ? 'Mise à disposition' : 'Sur-mesure'}</span>
-            <span className={styles.stepDot}>·</span>
-            <span>Étape {displayedStep} sur {displayedTotalSteps}</span>
           </div>
         )}
 
@@ -1058,7 +1030,7 @@ export default function ReservationPage() {
                   </div>
                 </button>
 
-                {/* 2. Mise à disposition */}
+                {/* 2. Chauffeur à la journée */}
                 <button
                   type="button"
                   onClick={() => selectService('hourly')}
@@ -1070,7 +1042,7 @@ export default function ReservationPage() {
                   </div>
                   <div className={styles.serviceChoiceBody}>
                     <div className={styles.serviceChoiceBadge}>CHAUFFEUR DÉDIÉ</div>
-                    <h3 className={styles.serviceChoiceTitle}>Mise à disposition</h3>
+                    <h3 className={styles.serviceChoiceTitle}>Chauffeur à la journée</h3>
                     <p className={styles.serviceChoiceDesc}>
                       Berline et chauffeur privé réservés à l'heure ou pour la journée complète.
                     </p>
@@ -1108,11 +1080,13 @@ export default function ReservationPage() {
           )}
 
           {/* ══════════════════════════════════════════════════════════════════════════
-              TRANSFER & HOURLY — STEP 1 : PICKUP LOCATION
+              STEP 1 : ITINÉRAIRE + DATE (ALL-IN-ONE)
+              Transfer: départ + destination + date/heure
+              Hourly: point de départ + planning + date
               ══════════════════════════════════════════════════════════════════════════ */}
           {((service === 'transfer' && step === 1) || (service === 'hourly' && step === 1)) && (
             <motion.div
-              key="pickup-step-1"
+              key="step-1-merged"
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -1121,552 +1095,256 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <div className={styles.territoryPillRow}>
-                  <span className={styles.microBadge}>
-                    {service === 'transfer' ? 'LIEU DE DÉPART' : 'POINT DE RENDEZ-VOUS'}
-                  </span>
-                  <span className={styles.territoryIndicatorBadge}>
-                    <span className={styles.territoryIndicatorDot} />
-                    {activeTerritory.name.toUpperCase()}
-                  </span>
-                </div>
+                <span className={styles.microBadge}>
+                  {service === 'transfer' ? 'VOTRE TRAJET' : 'CHAUFFEUR À LA JOURNÉE'}
+                </span>
                 <h2 className={styles.screenTitle}>
                   {service === 'transfer'
-                    ? 'Où votre chauffeur vient-il vous chercher ?'
-                    : 'Où commence votre mise à disposition ?'}
+                    ? 'Configurez votre transfert'
+                    : 'Configurez votre journée chauffeur'}
                 </h2>
                 <p className={styles.screenSubtitle}>
                   {service === 'transfer'
-                    ? 'Indiquez une adresse précise, un hôtel ou un terminal d\'aéroport.'
-                    : 'Indiquez le point de rencontre avec votre chauffeur privé dédié.'}
+                    ? 'Renseignez votre départ, destination, date et heure en une seule fois.'
+                    : 'Indiquez votre zone de départ, le nombre de jours et les horaires souhaités.'}
                 </p>
               </div>
 
-              <div className={styles.inputWrapper}>
-                <div className={styles.searchBar}>
-                  <MapPin size={20} className={styles.inputIcon} />
-                  <input
-                    type="text"
-                    value={pickup}
-                    onChange={(e) => setPickup(e.target.value)}
-                    placeholder={
-                      service === 'transfer'
-                        ? 'Adresse de prise en charge, aéroport, palace...'
-                        : 'Hôtel, palace, bureau, adresse parisienne...'
-                    }
-                    autoFocus
-                    className={styles.luxuryInput}
-                    id="pickup-input"
-                  />
-                  {pickup && (
-                    <button type="button" onClick={() => setPickup('')} className={styles.clearBtn}>
-                      <X size={16} />
-                    </button>
+              <div className={styles.mergedFormStack}>
+
+                {/* ── Pickup ── */}
+                <div className={styles.mergedFieldGroup}>
+                  <label className={styles.mergedFieldLabel}>
+                    <MapPin size={15} />
+                    <span>{service === 'transfer' ? 'Lieu de départ *' : 'Point de rendez-vous *'}</span>
+                  </label>
+                  <div className={styles.searchBar}>
+                    <MapPin size={18} className={styles.inputIcon} />
+                    <input
+                      type="text"
+                      value={pickup}
+                      onChange={(e) => setPickup(e.target.value)}
+                      placeholder={
+                        service === 'transfer'
+                          ? 'Adresse, aéroport, hôtel, palace...'
+                          : 'Hôtel, palace, bureau, adresse parisienne...'
+                      }
+                      className={styles.luxuryInput}
+                      id="pickup-input"
+                    />
+                    {pickup && (
+                      <button type="button" onClick={() => setPickup('')} className={styles.clearBtn}>
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
+                  {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 && (
+                    <div className={styles.suggestionsBox}>
+                      {pickupAutocomplete.suggestions.map((s, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setPickup(s.label);
+                            if (s.coordinates) setPickupCoords(s.coordinates);
+                            pickupAutocomplete.setSuggestions([]);
+                          }}
+                          className={styles.suggestionItem}
+                        >
+                          <MapPin size={16} className={styles.sugIcon} />
+                          <span className={styles.sugLabel}>{s.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {/* Quick suggestions */}
+                  {!pickup && (
+                    <div className={styles.shortcutsGrid} style={{ marginTop: '0.5rem' }}>
+                      {LUXURY_SUGGESTIONS.slice(0, 4).map((item, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setPickup(item.label)}
+                          className={styles.shortcutChip}
+                        >
+                          <span className={styles.chipCat}>{item.category}</span>
+                          <span className={styles.chipLabel}>{item.label}</span>
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
 
-                {/* Autocomplete Dropdown */}
-                {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 && (
-                  <div className={styles.suggestionsBox}>
-                    {pickupAutocomplete.suggestions.map((s, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setPickup(s.label);
-                          if (s.coordinates) setPickupCoords(s.coordinates);
-                          pickupAutocomplete.setSuggestions([]);
-                          goToNextStep();
-                        }}
-                        className={styles.suggestionItem}
-                      >
-                        <MapPin size={16} className={styles.sugIcon} />
-                        <span className={styles.sugLabel}>{s.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Luxury fast shortcuts */}
-                <div className={styles.shortcutsSection}>
-                  <span className={styles.shortcutsTitle}>SUGGESTIONS FRÉQUENTES</span>
-                  <div className={styles.shortcutsGrid}>
-                    {LUXURY_SUGGESTIONS.slice(0, 6).map((item, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setPickup(item.label);
-                          goToNextStep();
-                        }}
-                        className={styles.shortcutChip}
-                      >
-                        <span className={styles.chipCat}>{item.category}</span>
-                        <span className={styles.chipLabel}>{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.screenFooter}>
-                <button
-                  type="button"
-                  disabled={!pickup || pickup.trim().length < 3}
-                  onClick={goToNextStep}
-                  className={styles.nextStepBtn}
-                  id="pickup-continue-btn"
-                >
-                  <span>Continuer</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════════════════════════
-              TRANSFER FLOW — STEP 2 : DESTINATION
-              ══════════════════════════════════════════════════════════════════════════ */}
-          {service === 'transfer' && step === 2 && (
-            <motion.div
-              key="transfer-step-2"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className={styles.screenContainer}
-            >
-              <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>DESTINATION</span>
-                <h2 className={styles.screenTitle}>Où souhaitez-vous vous rendre ?</h2>
-                <p className={styles.screenSubtitle}>
-                  Précisez votre lieu d'arrivée pour calculer l'itinéraire de prestige.
-                </p>
-              </div>
-
-              <div className={styles.inputWrapper}>
-                <div className={styles.searchBar}>
-                  <Navigation size={20} className={styles.inputIcon} />
-                  <input
-                    type="text"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    placeholder="Adresse de destination, aéroport, restaurant..."
-                    autoFocus
-                    className={styles.luxuryInput}
-                    id="destination-input"
-                  />
-                  {destination && (
-                    <button type="button" onClick={() => setDestination('')} className={styles.clearBtn}>
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-
-                {/* Autocomplete Dropdown */}
-                {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 && (
-                  <div className={styles.suggestionsBox}>
-                    {destAutocomplete.suggestions.map((s, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setDestination(s.label);
-                          if (s.coordinates) setDestCoords(s.coordinates);
-                          destAutocomplete.setSuggestions([]);
-                          goToNextStep();
-                        }}
-                        className={styles.suggestionItem}
-                      >
-                        <MapPin size={16} className={styles.sugIcon} />
-                        <span className={styles.sugLabel}>{s.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Shortcuts */}
-                <div className={styles.shortcutsSection}>
-                  <span className={styles.shortcutsTitle}>DESTINATIONS POPULAIRES</span>
-                  <div className={styles.shortcutsGrid}>
-                    {LUXURY_SUGGESTIONS.map((item, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setDestination(item.label);
-                          goToNextStep();
-                        }}
-                        className={styles.shortcutChip}
-                      >
-                        <span className={styles.chipCat}>{item.category}</span>
-                        <span className={styles.chipLabel}>{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.screenFooter}>
-                <button
-                  type="button"
-                  disabled={!destination || destination.trim().length < 3}
-                  onClick={goToNextStep}
-                  className={styles.nextStepBtn}
-                  id="destination-continue-btn"
-                >
-                  <span>Continuer</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════════════════════════
-              HOURLY FLOW — STEP 2 : MISE À DISPOSITION INSTINCTIVE
-              ══════════════════════════════════════════════════════════════════════════ */}
-          {service === 'hourly' && step === 2 && (
-            <motion.div
-              key="hourly-step-2-schedule"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className={styles.screenContainer}
-            >
-              <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>MISE À DISPOSITION</span>
-                <h2 className={styles.screenTitle}>Configurez votre planning</h2>
-                <p className={styles.screenSubtitle}>
-                  Choisissez votre durée par jour, avec des horaires flexibles ou sur-mesure.
-                </p>
-              </div>
-
-              <div className={styles.scheduleContainer}>
-                <div className={styles.multiDaysList}>
-                  {scheduleDays.map((d, index) => {
-                    const isToday = d.date === todayISO;
-                    return (
-                      <div key={d.id} className={styles.dayCard}>
-                        {/* Day Card Header */}
-                        <div className={styles.dayCardHeader}>
-                          <div className={styles.dayCardHeaderLeft}>
-                            <span className={styles.dayBadge}>
-                              Jour {index + 1}
-                            </span>
-                            <span className={styles.dayHeaderDateDesc}>
-                              · {formatDayShort(d.date)}
-                            </span>
-                          </div>
-                          {scheduleDays.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => removeScheduleDay(d.id)}
-                              className={styles.removeDayMiniBtn}
-                              title={`Supprimer Jour ${index + 1}`}
-                            >
-                              <Trash2 size={13} />
-                              <span>Retirer</span>
-                            </button>
-                          )}
-                        </div>
-
-                        {/* 1. Date selection: Only Aujourd'hui and Autre date */}
-                        <div className={styles.daySubBlock}>
-                          <div className={styles.daySubBlockTitle}>
-                            <Calendar size={13} />
-                            <span>Date :</span>
-                          </div>
-                          <div className={styles.dateTwoButtonsRow}>
-                            <button
-                              type="button"
-                              onClick={() => updateDayDate(d.id, todayISO)}
-                              className={`${styles.dateSelectBtn} ${isToday ? styles.dateSelectActive : ''}`}
-                            >
-                              <span>Aujourd'hui</span>
-                            </button>
-
-                            <label
-                              className={`${styles.dateSelectBtn} ${!isToday ? styles.dateSelectActive : ''}`}
-                              onClick={(e) => {
-                                const input = e.currentTarget.querySelector('input');
-                                if (input && typeof input.showPicker === 'function') {
-                                  try { input.showPicker(); } catch (err) {}
-                                }
-                              }}
-                            >
-                              <Calendar size={13} />
-                              <span>{!isToday ? formatDayShort(d.date) : 'Autre date'}</span>
-                              <input
-                                type="date"
-                                min={todayISO}
-                                value={d.date}
-                                onChange={(e) => {
-                                  if (e.target.value) updateDayDate(d.id, e.target.value);
-                                }}
-                                className={styles.nativeDateOverlay}
-                              />
-                            </label>
-                          </div>
-                          <div className={styles.dateVisualDisplay}>
-                            Date retenue : <strong>{formatDayFull(d.date)}</strong>
-                          </div>
-                        </div>
-
-                        {/* 2. Duration selection: Horizontal scroll strip */}
-                        <div className={styles.daySubBlock}>
-                          <div className={styles.daySubBlockTitleBetween}>
-                            <div className={styles.daySubBlockTitle}>
-                              <Clock size={13} />
-                              <span>Durée : <strong>{d.hours || 8}h</strong></span>
-                            </div>
-                            <span className={styles.scrollHintText}>Faites défiler horizontalement ➔</span>
-                          </div>
-
-                          <div className={styles.durationScrollWrapper}>
-                            <div className={styles.durationScrollStrip}>
-                              {[2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24].map((h) => {
-                                const isSelected = (d.hours || 8) === h;
-                                return (
-                                  <button
-                                    key={h}
-                                    type="button"
-                                    onClick={() => setDayPresetHours(d.id, h)}
-                                    className={`${styles.durationScrollPill} ${isSelected ? styles.durationPillActive : ''}`}
-                                  >
-                                    <span className={styles.durationPillNumber}>{h}h</span>
-                                    {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
-                                    {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
-                                    {h === 24 && <span className={styles.durationPillTag}>24/24</span>}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 3. Flexible hours or exact hours */}
-                        <div className={styles.daySubBlock}>
-                          {d.isFlexible ? (
-                            <div className={styles.flexibleTimeCard}>
-                              <div className={styles.flexibleCardLeft}>
-                                <span className={styles.flexibleDot} />
-                                <div>
-                                  <div className={styles.flexibleTitle}>
-                                    Horaires flexibles ({d.hours || 8}h)
-                                  </div>
-                                  <div className={styles.flexibleDesc}>
-                                    Départ libre · Votre chauffeur se tient prêt selon vos besoins
-                                  </div>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => toggleDayFlexible(d.id)}
-                                className={styles.togglePreciseBtn}
-                              >
-                                <Clock size={13} />
-                                <span>+ Préciser des horaires exacts</span>
-                              </button>
-                            </div>
-                          ) : (
-                            <div className={styles.exactTimeCard}>
-                              <div className={styles.exactTimeHeader}>
-                                <span>Horaires précis souhaités :</span>
-                                <button
-                                  type="button"
-                                  onClick={() => toggleDayFlexible(d.id)}
-                                  className={styles.backToFlexibleLink}
-                                >
-                                  Revenir en horaires flexibles
-                                </button>
-                              </div>
-                              <div className={styles.exactTimeInputsRow}>
-                                <div className={styles.timeFieldCol}>
-                                  <label className={styles.timeFieldLabel}>Début :</label>
-                                  <input
-                                    type="time"
-                                    value={d.startTime || '09:00'}
-                                    onChange={(e) => updateDayStartTime(d.id, e.target.value)}
-                                    className={styles.timeInputField}
-                                  />
-                                </div>
-                                <div className={styles.timeSeparatorCol}>
-                                  <ArrowRight size={16} />
-                                </div>
-                                <div className={styles.timeFieldCol}>
-                                  <label className={styles.timeFieldLabel}>Fin :</label>
-                                  <input
-                                    type="time"
-                                    value={d.endTime || '17:00'}
-                                    onChange={(e) => updateDayEndTime(d.id, e.target.value)}
-                                    className={styles.timeInputField}
-                                  />
-                                </div>
-                                <div className={styles.timeResultBadge}>
-                                  <strong>{d.hours || 8}h</strong>
-                                  <span>de service</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Add day / Add week action buttons */}
-                <div className={styles.addScheduleRow}>
-                  <button
-                    type="button"
-                    onClick={addScheduleDay}
-                    className={styles.addDayActionBtn}
-                    id="add-day-btn"
-                  >
-                    <Plus size={15} />
-                    <span>Ajouter une journée</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={addScheduleWeek}
-                    className={styles.addWeekActionBtn}
-                    id="add-week-btn"
-                  >
-                    <CalendarRange size={15} />
-                    <span>Ajouter une semaine (7 jours)</span>
-                  </button>
-                </div>
-
-                {/* Schedule Summary Banner */}
-                <div className={styles.scheduleSummaryBox}>
-                  <div className={styles.scheduleSummaryLeft}>
-                    <Calendar size={18} />
-                    <div>
-                      <span className={styles.scheduleSummaryTitle}>
-                        {scheduleDays.length} journée{scheduleDays.length > 1 ? 's' : ''} configurée{scheduleDays.length > 1 ? 's' : ''}
-                      </span>
-                      <span className={styles.scheduleSummarySubtitle}>
-                        Chauffeur privé dédié selon votre planning quotidien
-                      </span>
-                    </div>
-                  </div>
-                  <div className={styles.scheduleSummaryHoursBadge}>
-                    {totalScheduleHours}h au total
-                  </div>
-                </div>
-
-                {/* Long Distance Option (Common to both modes) */}
-                <div className={styles.longDistanceSectionClean}>
-                  <div className={styles.ldTitleHeader}>
-                    <Route size={18} />
-                    <div>
-                      <h4 className={styles.ldTitleText}>Périmètre des déplacements</h4>
-                      <p className={styles.ldSubText}>
-                        Souhaitez-vous circuler en agglomération ou prévoir des trajets régionaux / intercités ?
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.ldSegmentedRow}>
-                    <button
-                      type="button"
-                      onClick={() => setHasLongDistance(false)}
-                      className={`${styles.ldSegmentBtn} ${!hasLongDistance ? styles.ldSegmentActive : ''}`}
-                    >
-                      <Building2 size={16} />
-                      <div className={styles.ldSegmentLabelBox}>
-                        <strong>Paris & Île-de-France</strong>
-                        <span>Trajets locaux et environs</span>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setHasLongDistance(true)}
-                      className={`${styles.ldSegmentBtn} ${hasLongDistance ? styles.ldSegmentActive : ''}`}
-                    >
-                      <Route size={16} />
-                      <div className={styles.ldSegmentLabelBox}>
-                        <strong>Longue distance / Intercités</strong>
-                        <span>Trajets régionaux (&gt; 100 km)</span>
-                      </div>
-                    </button>
-                  </div>
-
-                  {hasLongDistance && (
-                    <div className={styles.ldInputDrawer}>
-                      <label className={styles.ldDrawerLabel}>
-                        Précisez les villes, étapes ou régions prévues :
-                      </label>
+                {/* ── Destination (Transfer only) ── */}
+                {service === 'transfer' && (
+                  <div className={styles.mergedFieldGroup}>
+                    <label className={styles.mergedFieldLabel}>
+                      <Navigation size={15} />
+                      <span>Destination *</span>
+                    </label>
+                    <div className={styles.searchBar}>
+                      <Navigation size={18} className={styles.inputIcon} />
                       <input
                         type="text"
-                        value={longDistanceCities}
-                        onChange={(e) => setLongDistanceCities(e.target.value)}
-                        placeholder="Ex : Paris - Deauville, Normandie, Reims, Champagne..."
+                        value={destination}
+                        onChange={(e) => setDestination(e.target.value)}
+                        placeholder="Adresse d'arrivée, aéroport, restaurant, hôtel..."
                         className={styles.luxuryInput}
-                        autoFocus
+                        id="destination-input"
                       />
+                      {destination && (
+                        <button type="button" onClick={() => setDestination('')} className={styles.clearBtn}>
+                          <X size={16} />
+                        </button>
+                      )}
                     </div>
-                  )}
-                </div>
+                    {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 && (
+                      <div className={styles.suggestionsBox}>
+                        {destAutocomplete.suggestions.map((s, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              setDestination(s.label);
+                              if (s.coordinates) setDestCoords(s.coordinates);
+                              destAutocomplete.setSuggestions([]);
+                            }}
+                            className={styles.suggestionItem}
+                          >
+                            <MapPin size={16} className={styles.sugIcon} />
+                            <span className={styles.sugLabel}>{s.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ── Date + Time (Transfer) ── */}
+                {service === 'transfer' && (
+                  <div className={styles.mergedFieldGroup}>
+                    <label className={styles.mergedFieldLabel}>
+                      <Calendar size={15} />
+                      <span>Date et heure de prise en charge *</span>
+                    </label>
+                    <LuxuryDateTimePicker
+                      selectedDate={date}
+                      onDateChange={setDate}
+                      selectedTime={time}
+                      onTimeChange={setTime}
+                      isEn={i18n?.language === 'en'}
+                      minDateISO={todayISO}
+                    />
+                  </div>
+                )}
+
+                {/* ── Planning Hourly (inline, simplified) ── */}
+                {service === 'hourly' && (
+                  <div className={styles.mergedFieldGroup}>
+                    <label className={styles.mergedFieldLabel}>
+                      <Calendar size={15} />
+                      <span>Planning des journées</span>
+                    </label>
+                    <div className={styles.scheduleContainer}>
+                      <div className={styles.multiDaysList}>
+                        {scheduleDays.map((d, index) => {
+                          const isToday = d.date === todayISO;
+                          return (
+                            <div key={d.id} className={styles.dayCard}>
+                              <div className={styles.dayCardHeader}>
+                                <div className={styles.dayCardHeaderLeft}>
+                                  <span className={styles.dayBadge}>Jour {index + 1}</span>
+                                  <span className={styles.dayHeaderDateDesc}>· {formatDayShort(d.date)}</span>
+                                </div>
+                                {scheduleDays.length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => removeScheduleDay(d.id)}
+                                    className={styles.removeDayMiniBtn}
+                                  >
+                                    <Trash2 size={13} />
+                                    <span>Retirer</span>
+                                  </button>
+                                )}
+                              </div>
+
+                              <div className={styles.daySubBlock}>
+                                <div className={styles.dateTwoButtonsRow}>
+                                  <button
+                                    type="button"
+                                    onClick={() => updateDayDate(d.id, todayISO)}
+                                    className={`${styles.dateSelectBtn} ${isToday ? styles.dateSelectActive : ''}`}
+                                  >
+                                    <span>Aujourd'hui</span>
+                                  </button>
+                                  <label
+                                    className={`${styles.dateSelectBtn} ${!isToday ? styles.dateSelectActive : ''}`}
+                                    onClick={(e) => {
+                                      const input = e.currentTarget.querySelector('input');
+                                      if (input && typeof input.showPicker === 'function') {
+                                        try { input.showPicker(); } catch (err) {}
+                                      }
+                                    }}
+                                  >
+                                    <Calendar size={13} />
+                                    <span>{!isToday ? formatDayShort(d.date) : 'Autre date'}</span>
+                                    <input
+                                      type="date"
+                                      min={todayISO}
+                                      value={d.date}
+                                      onChange={(e) => { if (e.target.value) updateDayDate(d.id, e.target.value); }}
+                                      className={styles.nativeDateOverlay}
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div className={styles.daySubBlock}>
+                                <div className={styles.durationScrollWrapper}>
+                                  <div className={styles.durationScrollStrip}>
+                                    {[2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24].map((h) => (
+                                      <button
+                                        key={h}
+                                        type="button"
+                                        onClick={() => setDayPresetHours(d.id, h)}
+                                        className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
+                                      >
+                                        <span className={styles.durationPillNumber}>{h}h</span>
+                                        {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
+                                        {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className={styles.addScheduleRow}>
+                        <button type="button" onClick={addScheduleDay} className={styles.addDayActionBtn}>
+                          <Plus size={15} />
+                          <span>Ajouter une journée</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               </div>
 
               <div className={styles.screenFooter}>
                 <button
                   type="button"
+                  disabled={
+                    !pickup || pickup.trim().length < 3 ||
+                    (service === 'transfer' && (!destination || destination.trim().length < 3))
+                  }
                   onClick={goToNextStep}
                   className={styles.nextStepBtn}
-                  id="schedule-continue-btn"
+                  id="step1-continue-btn"
                 >
-                  <span>Continuer vers les véhicules ({totalScheduleHours}h)</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════════════════════════
-              TRANSFER FLOW — STEP 3 : DATE & HEURE
-              ══════════════════════════════════════════════════════════════════════════ */}
-          {service === 'transfer' && step === 3 && (
-            <motion.div
-              key="datetime-step"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className={styles.screenContainer}
-            >
-              <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>PLANIFICATION</span>
-                <h2 className={styles.screenTitle}>Quand votre chauffeur doit-il se présenter ?</h2>
-                <p className={styles.screenSubtitle}>
-                  Sélectionnez la date et l'horaire précis de votre prise en charge.
-                </p>
-              </div>
-
-              <LuxuryDateTimePicker
-                selectedDate={date}
-                onDateChange={setDate}
-                selectedTime={time}
-                onTimeChange={setTime}
-                isEn={i18n?.language === 'en'}
-                minDateISO={todayISO}
-              />
-
-              <div className={styles.screenFooter}>
-                <button
-                  type="button"
-                  onClick={goToNextStep}
-                  className={styles.nextStepBtn}
-                  id="datetime-continue-btn"
-                >
-                  <span>Continuer vers les véhicules</span>
+                  <span>Choisir mon véhicule</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -1676,9 +1354,9 @@ export default function ReservationPage() {
           {/* ══════════════════════════════════════════════════════════════════════════
               TRANSFER & HOURLY — STEP : VEHICLE SELECTION
               ══════════════════════════════════════════════════════════════════════════ */}
-          {((service === 'transfer' && step === 4) || (service === 'hourly' && step === 4)) && (
+          {((service === 'transfer' && step === 2) || (service === 'hourly' && step === 2)) && (
             <motion.div
-              key="vehicle-selection-step"
+              key="vehicle-step-2"
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -1894,7 +1572,7 @@ export default function ReservationPage() {
           {/* ══════════════════════════════════════════════════════════════════════════
               TRANSFER & HOURLY — STEP 5 : CONTACT DETAILS
               ══════════════════════════════════════════════════════════════════════════ */}
-          {((service === 'transfer' && step === 5) || (service === 'hourly' && step === 5)) && (
+          {((service === 'transfer' && step === 3) || (service === 'hourly' && step === 3)) && (
             <motion.div
               key="contact-step"
               custom={direction}
@@ -1905,57 +1583,15 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>COORDONNÉES CLIENT</span>
-                <h2 className={styles.screenTitle}>Vos informations de contact</h2>
+                <span className={styles.microBadge}>VOS COORDONNÉES</span>
+                <h2 className={styles.screenTitle}>Où vous contacter pour confirmer ?</h2>
                 <p className={styles.screenSubtitle}>
-                  Pour recevoir votre confirmation et les détails du chauffeur avant la course.
+                  Seuls votre numéro de téléphone et votre email sont nécessaires. Notre équipe vous répond sous 30 minutes.
                 </p>
               </div>
 
               <div className={styles.contactFormGrid}>
                 <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.fieldLabel}>Prénom *</label>
-                    <input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Jean"
-                      required
-                      className={styles.luxuryInput}
-                      id="firstname-input"
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label className={styles.fieldLabel}>Nom *</label>
-                    <input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Dupont"
-                      required
-                      className={styles.luxuryInput}
-                      id="lastname-input"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.fieldLabel}>
-                      <Mail size={14} />
-                      <span>Email *</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="jean.dupont@gmail.com"
-                      required
-                      className={styles.luxuryInput}
-                      id="email-input"
-                    />
-                  </div>
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Phone size={14} />
@@ -1967,76 +1603,35 @@ export default function ReservationPage() {
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+33 6 12 34 56 78"
                       required
+                      autoFocus
                       className={styles.luxuryInput}
                       id="phone-input"
                     />
                   </div>
+                  <div className={styles.formGroup}>
+                    <label className={styles.fieldLabel}>
+                      <Mail size={14} />
+                      <span>Email *</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="votre.email@domain.com"
+                      required
+                      className={styles.luxuryInput}
+                      id="email-input"
+                    />
+                  </div>
                 </div>
 
-                <div className={styles.formGroup}>
-                  <label className={styles.fieldLabel}>
-                    <Building2 size={14} />
-                    <span>Société (Optionnel)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    placeholder="Maison de couture, Ambassade, Entreprise..."
-                    className={styles.luxuryInput}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.screenFooter}>
-                <button
-                  type="button"
-                  disabled={!firstName?.trim() || !lastName?.trim() || !isEmailValid || !phone?.trim()}
-                  onClick={goToNextStep}
-                  className={styles.nextStepBtn}
-                  id="contact-continue-btn"
-                >
-                  <span>Continuer</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════════════════════════
-              TRANSFER & HOURLY — STEP 6 : INSTRUCTIONS CHAUFFEUR & CONFORT
-              ══════════════════════════════════════════════════════════════════════════ */}
-          {((service === 'transfer' && step === 6) || (service === 'hourly' && step === 6)) && (
-            <motion.div
-              key="options-step"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className={styles.screenContainer}
-            >
-              <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>CONFORT À BORD</span>
-                <h2 className={styles.screenTitle}>Détails complémentaires pour votre confort</h2>
-                <p className={styles.screenSubtitle}>
-                  Toutes ces options sont facultatives et incluses dans votre service.
-                </p>
-              </div>
-
-              <div className={styles.optionsStack}>
-                {/* CONTEXT-AWARE: FLIGHT NUMBER ONLY IF AIRPORT TRIP! */}
+                {/* Numéro de vol si aéroport */}
                 {isAirportTrip && (
-                  <div className={styles.optionBox}>
-                    <div className={styles.optionBoxTop}>
-                      <PlaneTakeoff size={20} />
-                      <div className={styles.optionBoxText}>
-                        <span className={styles.optionBoxTitle}>Numéro de vol d'arrivée</span>
-                        <span className={styles.optionBoxDesc}>
-                          Permet au chauffeur de suivre l'heure exacte de votre atterrissage en temps réel.
-                        </span>
-                      </div>
-                    </div>
+                  <div className={styles.formGroup}>
+                    <label className={styles.fieldLabel}>
+                      <PlaneTakeoff size={14} />
+                      <span>Numéro de vol (optionnel)</span>
+                    </label>
                     <input
                       type="text"
                       value={flightNumber}
@@ -2047,56 +1642,30 @@ export default function ReservationPage() {
                   </div>
                 )}
 
-                {/* Instructions particulières pour le chauffeur */}
-                <div className={styles.instructionsSection}>
-                  <label className={styles.fieldLabel} style={{ marginBottom: '0.85rem' }}>
-                    <MessageSquare size={16} />
-                    <span style={{ fontSize: '0.95rem', fontWeight: 500 }}>Instructions particulières pour le chauffeur</span>
+                {/* Notes libres */}
+                <div className={styles.formGroup}>
+                  <label className={styles.fieldLabel}>
+                    <MessageSquare size={14} />
+                    <span>Précisions particulières (optionnel)</span>
                   </label>
-
-                  <div className={styles.checkboxOptionsGrid}>
-                    {DRIVER_INSTRUCTIONS_LIST.map((item) => {
-                      const isChecked = driverInstructions.includes(item.id);
-                      return (
-                        <label
-                          key={item.id}
-                          className={`${styles.checkOptionCard} ${isChecked ? styles.checkOptionActive : ''}`}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleDriverInstruction(item.id)}
-                            className={styles.hiddenCheckbox}
-                          />
-                          <div className={styles.checkSquare}>
-                            {isChecked && <Check size={14} />}
-                          </div>
-                          <div className={styles.checkText}>
-                            <strong>{item.title}</strong>
-                            <span>{item.desc}</span>
-                          </div>
-                        </label>
-                      );
-                    })}
-                  </div>
-
-                  <div className={styles.noteBox} style={{ marginTop: '1.25rem' }}>
-                    <textarea
-                      rows={2}
-                      value={specialRequests}
-                      onChange={(e) => setSpecialRequests(e.target.value)}
-                      placeholder="Autre consigne ou code d'accès éventuel (optionnel)..."
-                      className={styles.luxuryTextarea}
-                    />
-                  </div>
+                  <textarea
+                    rows={2}
+                    value={specialRequests}
+                    onChange={(e) => setSpecialRequests(e.target.value)}
+                    placeholder="Code d'accès, instructions spécifiques, nom pour l'accueil chauffeur..."
+                    className={styles.luxuryTextarea}
+                  />
                 </div>
               </div>
 
-              <div className={styles.screenFooterBetween}>
-                <button type="button" onClick={goToNextStep} className={styles.skipBtn}>
-                  Passer cette étape
-                </button>
-                <button type="button" onClick={goToNextStep} className={styles.nextStepBtn} id="options-continue-btn">
+              <div className={styles.screenFooter}>
+                <button
+                  type="button"
+                  disabled={!isEmailValid || !phone?.trim()}
+                  onClick={goToNextStep}
+                  className={styles.nextStepBtn}
+                  id="contact-continue-btn"
+                >
                   <span>Voir le récapitulatif</span>
                   <ArrowRight size={16} />
                 </button>
@@ -2107,7 +1676,7 @@ export default function ReservationPage() {
           {/* ══════════════════════════════════════════════════════════════════════════
               TRANSFER & HOURLY — STEP 7 : SUMMARY & FINAL CONFIRMATION
               ══════════════════════════════════════════════════════════════════════════ */}
-          {((service === 'transfer' && step === 7) || (service === 'hourly' && step === 7)) && (
+          {((service === 'transfer' && step === 4) || (service === 'hourly' && step === 4)) && (
             <motion.div
               key="summary-step"
               custom={direction}
@@ -2128,10 +1697,6 @@ export default function ReservationPage() {
               <div className={styles.summaryCard}>
                 {/* Official Voucher Top Ribbon */}
                 <div className={styles.voucherTopRibbon}>
-                  <div className={styles.voucherRefBox}>
-                    <span className={styles.voucherLabel}>RÉFÉRENCE DU DEVIS</span>
-                    <span className={styles.voucherRef}>SELY-{date?.replace(/-/g, '') || '2026'}-VIP</span>
-                  </div>
                   <div className={styles.voucherStatusBadge}>
                     <CheckCircle2 size={13} />
                     <span>DEVIS OFFICIEL SUR-MESURE</span>
