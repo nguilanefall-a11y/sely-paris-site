@@ -1,19 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read articles directly from articles.js
-const articlesFile = fs.readFileSync(path.join(__dirname, 'src/data/journal/articles.js'), 'utf8');
+// Read articles directly from all modular files in src/data/journal
+const journalDir = path.join(__dirname, 'src/data/journal');
+const journalFiles = fs.readdirSync(journalDir).filter(f => f.startsWith('articles') && f !== 'articles.js' && f.endsWith('.js'));
+let articlesList = [];
+const seenFrSlugs = new Set();
 
-// Extract slugs
-const matchSlugs = [...articlesFile.matchAll(/slugs:\s*\{([^}]+)\}/g)];
-const articlesList = matchSlugs.map((m) => {
-  const inner = m[1];
-  const fr = inner.match(/fr:\s*['"]([^'"]+)['"]/)?.[1];
-  const en = inner.match(/en:\s*['"]([^'"]+)['"]/)?.[1];
-  const es = inner.match(/es:\s*['"]([^'"]+)['"]/)?.[1];
-  const ar = inner.match(/ar:\s*['"]([^'"]+)['"]/)?.[1];
-  return { fr, en, es, ar };
-});
+for (const file of journalFiles) {
+  const content = fs.readFileSync(path.join(journalDir, file), 'utf8');
+  const matchSlugs = [...content.matchAll(/slugs:\s*\{([^}]+)\}/g)];
+  for (const m of matchSlugs) {
+    const inner = m[1];
+    const fr = inner.match(/fr:\s*['"]([^'"]+)['"]/)?.[1];
+    const en = inner.match(/en:\s*['"]([^'"]+)['"]/)?.[1];
+    const es = inner.match(/es:\s*['"]([^'"]+)['"]/)?.[1];
+    const ar = inner.match(/ar:\s*['"]([^'"]+)['"]/)?.[1];
+    if (fr && !seenFrSlugs.has(fr)) {
+      seenFrSlugs.add(fr);
+      articlesList.push({ fr, en, es, ar });
+    }
+  }
+}
 
 const BASE_URL = 'https://www.selyprive.com';
 const today = new Date().toISOString().split('T')[0];

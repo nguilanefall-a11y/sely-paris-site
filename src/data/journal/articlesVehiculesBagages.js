@@ -1,0 +1,330 @@
+// ─── ARTICLES DE LA CATÉGORIE : VÉHICULES & BAGAGES ───
+
+export const ARTICLES_VEHICULES_BAGAGES = [
+  // ─── SUJET 10 : Quel véhicule avec chauffeur choisir à Paris ? ───
+  {
+    id: 10,
+    category: 'vehicules-bagages',
+    heroImage: '/experience_fleet.png',
+    secondaryImages: ['/sclass_paris.png', '/vclass-paris-luxury.jpg', '/maybach-main.png'],
+    readingTime: '6 min',
+    publishedAt: '2026-03-29',
+    slugs: {
+      fr: 'quel-vehicule-chauffeur-choisir-paris',
+      en: 'which-chauffeur-vehicle-to-choose-paris',
+      es: 'que-vehiculo-con-chofer-elegir-paris',
+      ar: 'ay-sayara-ma-saeq-takhtar-baris',
+    },
+    translations: {
+      fr: {
+        title: 'Quel véhicule avec chauffeur choisir à Paris ? Guide Comparatif 2026',
+        metaTitle: 'Quel véhicule avec chauffeur choisir à Paris ? Berlines vs Vans',
+        metaDescription: 'Guide pour choisir le véhicule idéal avec chauffeur à Paris : Mercedes Classe E, Classe S, Classe V, Maybach ou Sprinter selon vos passagers et bagages.',
+        h1: 'Quel véhicule avec chauffeur choisir à Paris ?',
+        heroAlt: 'Flotte prestigieuse de véhicules noirs Mercedes avec chauffeurs privés à Paris',
+        directAnswer: 'Le choix de votre véhicule dépend du nombre de passagers, du volume de bagages et du standing souhaité : pour 1 à 3 passagers d’affaires, la Mercedes Classe E offre l’équilibre parfait ; pour un confort palace et protocolaire, la Mercedes Classe S Limousine ou la Maybach sont incomparables ; pour les familles ou groupes de 4 à 7 personnes avec de nombreuses valises, la Mercedes Classe V s’impose ; et au-delà de 8 passagers, le Mercedes Sprinter VIP assure un transfert de groupe d’élite.',
+        intro: 'Chaque modèle de notre flotte répond à une exigence précise pour faire de chaque trajet un prolongement naturel de votre art de vivre.',
+        sections: [
+          {
+            h2: 'Synthèse des capacités et usages de la flotte SELY',
+            content: 'Découvrez la recommandation idéale selon vos besoins de mobilité :',
+          },
+        ],
+        comparisonTable: {
+          headers: ['Modèle Mercedes', 'Passagers max', 'Valises soute', 'Usage privilégié'],
+          rows: [
+            ['Mercedes Classe E (Affaires)', '1 à 3 passagers', '2 grandes valises', 'Rendez-vous corporate, transferts aéroports express'],
+            ['Mercedes Classe S (Palace)', '1 à 3 passagers', '2 à 3 valises', 'Dirigeants, réceptions, dîners gastronomiques'],
+            ['Mercedes-Maybach (First Class)', '1 à 2 passagers', '3 valises', 'Ultra-luxe, mariages de prestige, délégations royales'],
+            ['Mercedes Classe V (Van VIP)', '1 à 7 passagers', '7 à 8 valises', 'Familles, shopping intensif, Fashion Week, roadshows'],
+            ['Mercedes Sprinter VIP (Minibus)', '8 à 16 passagers', '12 à 18 valises', 'Délégations internationales, événements, mariages'],
+          ],
+        },
+        faq: [
+          {
+            q: 'Puis-je demander un véhicule avec intérieur cuir clair ?',
+            a: 'Oui, sur demande spécifique lors de votre réservation, nous pouvons allouer nos modèles avec finitions cuir nappa crème ou surpiqûres exclusives.',
+          },
+        ],
+        cta: {
+          title: 'Trouvez le véhicule parfait pour votre séjour parisien',
+          subtitle: 'Découvrez les fiches détaillées et les vues à 360° de notre flotte.',
+          buttonText: 'Découvrir tous les véhicules',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['mercedes-classe-s-ou-maybach-chauffeur', 'combien-de-bagages-mercedes-classe-v'],
+      },
+      en: {
+        title: 'Which Chauffeur Vehicle to Choose in Paris? Comparison Guide',
+        metaTitle: 'Which Chauffeur Car to Choose in Paris | Fleet Guide',
+        metaDescription: 'Find the ideal luxury chauffeur vehicle in Paris: Mercedes E-Class, S-Class, V-Class van, Maybach, or Sprinter based on group size and luggage.',
+        h1: 'Which Chauffeur Vehicle to Choose in Paris?',
+        heroAlt: 'Lineup of black Mercedes chauffeur vehicles in Paris',
+        directAnswer: 'The ideal chauffeur car depends on passenger count, luggage volume, and desired prestige: for 1-3 business travelers, the Mercedes E-Class is ideal; for palace-grade elegance, the S-Class or Maybach reigns supreme; for families or 4-7 guests with luggage, the Mercedes V-Class is unmatched; and for groups above 8, the Mercedes Sprinter VIP delivers executive travel.',
+        comparisonTable: {
+          headers: ['Mercedes Model', 'Max Guests', 'Check-In Luggage', 'Best Suited For'],
+          rows: [
+            ['Mercedes E-Class', '1 - 3', '2 suitcases', 'Corporate roadshows, airport transit'],
+            ['Mercedes S-Class', '1 - 3', '2 - 3 suitcases', 'CEOs, palace arrivals, luxury dining'],
+            ['Mercedes-Maybach', '1 - 2', '3 suitcases', 'Royal delegations, high-profile galas'],
+            ['Mercedes V-Class', '1 - 7', '7 - 8 suitcases', 'Families, extensive shopping, Fashion Week'],
+            ['Mercedes Sprinter VIP', '8 - 16', '12 - 18 suitcases', 'International delegations, event convoys'],
+          ],
+        },
+        cta: {
+          title: 'Select your preferred vehicle for Paris',
+          subtitle: 'Palace standards across our entire fleet.',
+          buttonText: 'View private fleet',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['mercedes-s-class-vs-maybach-chauffeur', 'v-class-luggage-capacity'],
+      },
+      es: {
+        title: '¿Qué vehículo con chófer elegir en París? Guía comparativa',
+        metaTitle: 'Qué Vehículo con Chófer Elegir en París | Guía Flota',
+        metaDescription: 'Descubra el vehículo con chófer ideal en París: Mercedes Clase E, Clase S, Clase V, Maybach o Sprinter según pasajeros y maletas.',
+        h1: '¿Qué vehículo con chófer elegir en París?',
+        heroAlt: 'Flota de vehículos Mercedes de lujo con chófer privado en París',
+        directAnswer: 'Para 1 a 3 personas en viaje de negocios, el Mercedes Clase E es perfecto; para máxima distinción, el Clase S o Maybach son insuperables; para familias y grupos de hasta 7 personas con mucho equipaje, el Clase V es la referencia indiscutible.',
+        cta: {
+          title: 'Elija su vehículo ideal en París',
+          subtitle: 'Máxima elegancia y confort para cada trayecto.',
+          buttonText: 'Ver nuestra flota',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['mercedes-clase-s-o-maybach-chofer', 'capacidad-equipaje-mercedes-clase-v'],
+      },
+      ar: {
+        title: 'أي سيارة مع سائق تختار في باريس؟ دليل الأسطول الشامل',
+        metaTitle: 'أي سيارة مع سائق تختار في باريس؟ | دليل مقارنة الأسطول',
+        metaDescription: 'دليل اختيار السيارة المثالية مع سائق خاص في باريس: مرسيدس الفئة E، الفئة S، فان الفئة V، مايباخ أو سبرينتر حسب الركاب والحقائب.',
+        h1: 'أي سيارة مع سائق خاص تختار لرحلتك في باريس؟',
+        heroAlt: 'أسطول سيارات مرسيدس الفاخرة مع سائقين خاصين في باريس',
+        directAnswer: 'يعتمد اختيار السيارة المثالية على عدد أفراد أسرتكم وحجم الأمتعة ومستوى الفخامة المطلوب: لـ 1 إلى 3 ركاب في رحلات العمل، تمثل مرسيدس الفئة E خياراً عملياً راقياً؛ ولأقصى درجات الفخامة والخصوصية، تعد مرسيدس الفئة S أو مايباخ الخيار الأمثل؛ وللعائلات ومجموعات 4 إلى 7 أشخاص مع أمتعة سفر كثيرة، يعتبر فان مرسيدس الفئة V الخيار الأفضل بلا منازع.',
+        cta: {
+          title: 'اختر سيارتك الفاخرة المثالية في باريس',
+          subtitle: 'أسطول متكامل يلبي كافة متطلباتكم.',
+          buttonText: 'استكشف أسطول سيارات SELY',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['mercedes-class-s-vs-maybach-saeq', 'siat-haqaeb-mercedes-class-v'],
+      },
+    },
+  },
+
+  // ─── SUJET 22 : Mercedes Classe S ou Maybach avec chauffeur ? ───
+  {
+    id: 22,
+    category: 'vehicules-bagages',
+    heroImage: '/maybach-main.png',
+    secondaryImages: ['/sclass-main-new.jpg', '/maybach-interior-first-class.jpg', '/sclass_paris.png'],
+    readingTime: '7 min',
+    publishedAt: '2026-03-18',
+    slugs: {
+      fr: 'mercedes-classe-s-ou-maybach-chauffeur',
+      en: 'mercedes-s-class-vs-maybach-chauffeur',
+      es: 'mercedes-clase-s-o-maybach-chofer',
+      ar: 'mercedes-class-s-vs-maybach-saeq',
+    },
+    translations: {
+      fr: {
+        title: 'Mercedes Classe S ou Maybach avec chauffeur : quelles différences ?',
+        metaTitle: 'Mercedes Classe S ou Maybach avec chauffeur : Le Comparatif',
+        metaDescription: 'Comparatif exclusif : Mercedes Classe S vs Mercedes-Maybach avec chauffeur à Paris. Espace arrière, insonorisation, confort First Class et occasions idéales.',
+        h1: 'Mercedes Classe S ou Maybach avec chauffeur : quelles différences ?',
+        heroAlt: 'Duo Mercedes Classe S et Mercedes-Maybach de prestige garées devant un palace parisien',
+        directAnswer: 'La principale différence réside dans le niveau d’exclusivité et l’espace arrière : la Mercedes-Maybach propose un empattement allongé de 18 centimètres supplémentaires entièrement dédiés aux passagers arrière, des sièges First Class inclinables jusqu’à 43,5° avec repose-mollets massants, et une insonorisation acoustique absolue avec réduction active des bruits de roulement. La Classe S demeure la référence absolue du luxe contemporain, tandis que la Maybach incarne l’ultra-luxe protocolaire.',
+        sections: [
+          {
+            h2: 'Confort à bord et aménagements arrière',
+            content: 'Si la Classe S offre déjà un confort digne d’un salon palace, la Maybach pousse le raffinement dans ses moindres détails :',
+            bulletPoints: [
+              'Espace aux jambes : la Maybach offre un recul permettant d’allonger complètement les jambes, idéal après un vol long-courrier.',
+              'Portes arrière à assistance électrique : sur la Maybach, les portes peuvent être actionnées sans aucun effort physique par le chauffeur ou le passager.',
+              'Insonorisation acoustique Burmester 4D High-End : la Maybach utilise un système de compensation active qui neutralise les bruits extérieurs par ondes contraires.',
+              'Équipements optionnels d’apparat : compartiment réfrigéré pour bouteilles de champagne, flûtes en argent Robbe & Berking et tablettes déployables en cuir.',
+            ],
+          },
+        ],
+        comparisonTable: {
+          headers: ['Critères', 'Mercedes Classe S Limousine', 'Mercedes-Maybach Classe S'],
+          rows: [
+            ['Longueur totale', '5,29 m (Empattement Long)', '5,47 m (+18 cm d’empattement)'],
+            ['Configuration arrière', 'Banquette 3 places ou 2 sièges Executive', '2 sièges First Class indépendants'],
+            ['Inclinaison des sièges', 'Jusqu’à 37°', 'Jusqu’à 43,5° avec repose-jambes'],
+            ['Usage privilégié', 'Business, transferts aéroports, diplomatie', 'Galas, mariages de prestige, délégations royales'],
+          ],
+        },
+        faq: [
+          {
+            q: 'Pour quel événement privilégier la Maybach ?',
+            a: 'La Maybach est plébiscitée pour les mariages de prestige, les montées des marches lors de festivals, les déplacements de chefs d’État ou les soirées de gala où l’impact visuel doit être inégalé.',
+          },
+        ],
+        cta: {
+          title: 'Choisissez l’élégance ultime pour vos déplacements à Paris',
+          subtitle: 'Réservez votre Mercedes Classe S ou Maybach avec chauffeur privé d’apparat.',
+          buttonText: 'Découvrir la flotte SELY',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['quel-vehicule-chauffeur-choisir-paris', 'combien-de-bagages-mercedes-classe-v'],
+      },
+      en: {
+        title: 'Mercedes S-Class vs Maybach with Chauffeur: What Are the Key Differences?',
+        metaTitle: 'Mercedes S-Class vs Maybach with Chauffeur | Luxury Comparison',
+        metaDescription: 'In-depth comparison between Mercedes S-Class and Mercedes-Maybach with private chauffeur in Paris. Rear legroom, First Class seats, acoustic isolation, and prestige.',
+        h1: 'Mercedes S-Class or Maybach with Chauffeur: Which One to Choose?',
+        heroAlt: 'Mercedes S-Class and Maybach parked side by side in front of a Paris 5-star palace',
+        directAnswer: 'The core difference lies in rear passenger space and ultra-luxury appointments: the Mercedes-Maybach features an extended wheelbase with 18 extra centimeters (7 inches) dedicated entirely to the rear cabin, First Class executive reclining seats (up to 43.5°) with calf rests, and active road noise cancellation.',
+        comparisonTable: {
+          headers: ['Feature', 'Mercedes S-Class Long', 'Mercedes-Maybach S-Class'],
+          rows: [
+            ['Length', '5.29 m (Long Wheelbase)', '5.47 m (+18 cm wheelbase)'],
+            ['Rear Cabin', '2 or 3 executive seats', '2 bespoke First Class recliner seats'],
+            ['Max Incline', 'Up to 37°', 'Up to 43.5° with calf support'],
+            ['Primary Occasion', 'Corporate, airport transfers, summits', 'Gala events, royal delegations, luxury weddings'],
+          ],
+        },
+        cta: {
+          title: 'Experience Parisian automotive prestige',
+          subtitle: 'Reserve your Mercedes S-Class or Maybach with a dedicated Palace chauffeur.',
+          buttonText: 'Explore our vehicle collection',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['which-chauffeur-vehicle-to-choose-paris', 'v-class-luggage-capacity'],
+      },
+      es: {
+        title: 'Mercedes Clase S o Maybach con chófer: ¿cuáles son las diferencias?',
+        metaTitle: 'Mercedes Clase S vs Maybach con Chófer | Comparativa de Lujo',
+        metaDescription: 'Comparativa entre Mercedes Clase S y Maybach con chófer en París: espacio trasero, confort de Primera Clase, insonorización y ocasiones recomendadas.',
+        h1: 'Mercedes Clase S o Maybach con chófer: ¿cuáles son las diferencias?',
+        heroAlt: 'Mercedes Clase S y Maybach de lujo estacionadas en París',
+        directAnswer: 'El Maybach ofrece 18 cm adicionales de batalla dedicados a los asientos traseros, butacas First Class reclinables hasta 43,5° con reposapiés y cancelación activa de ruido. La Clase S es la referencia del lujo ejecutivo, mientras que el Maybach representa el summum ceremonial.',
+        cta: {
+          title: 'Descubra la cumbre del confort en París',
+          subtitle: 'Reserve su Mercedes de gala con chófer privado.',
+          buttonText: 'Ver nuestra flota',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['que-vehiculo-con-chofer-elegir-paris', 'capacidad-equipaje-mercedes-clase-v'],
+      },
+      ar: {
+        title: 'مرسيدس الفئة S أم مايباخ مع سائق خاص: ما هي الفروق الجوهرية؟',
+        metaTitle: 'مرسيدس الفئة S أم مايباخ مع سائق خاص | مقارنة الفخامة المطلقة',
+        metaDescription: 'مقارنة حصرية بين مرسيدس الفئة S ومايباخ الفاخرة مع سائق خاص في باريس: المساحة الخلفية، مقاعد الدرجة الأولى، العزل الصوتي والمناسبات.',
+        h1: 'مرسيدس الفئة S أم مايباخ مع سائق خاص: أيهما تختار في باريس؟',
+        heroAlt: 'سيارتا مرسيدس الفئة S ومايباخ الفاخرتان أمام فندق قصر فخم في باريس',
+        directAnswer: 'الفرق الجوهري يكمن في مستوى الرحابة والفخامة الاستثنائية: تتميز مرسيدس-مايباخ بقاعدة عجلات أطول بمقدار 18 سنتيمتراً مخصصة بالكامل لراحة المقاعد الخلفية، مع مقاعد الدرجة الأولى الفاخرة القابلة للإمالة حتى 43.5 درجة والمزودة بمساند تدليك للأرجل، ونظام عزل صوتي نشط يعزل تماماً ضوضاء الطريق.',
+        cta: {
+          title: 'عش تجربة تنقل ملكية في قلب باريس',
+          subtitle: 'احجز مرسيدس الفئة S أو مايباخ مع سائق بروتوكولي خاص.',
+          buttonText: 'استكشف أسطول سيارات SELY',
+          link: '/paris/vehicules',
+        },
+        relatedSlugs: ['ay-sayara-ma-saeq-takhtar-baris', 'siat-haqaeb-mercedes-class-v'],
+      },
+    },
+  },
+
+  // ─── SUJET 26 : Combien de bagages dans une Mercedes Classe V ? ───
+  {
+    id: 26,
+    category: 'vehicules-bagages',
+    heroImage: '/vclass-main.png',
+    secondaryImages: ['/vclass_interior_vip_lounge.jpg', '/van_interior_luxury.png'],
+    readingTime: '6 min',
+    publishedAt: '2026-03-19',
+    slugs: {
+      fr: 'combien-de-bagages-mercedes-classe-v',
+      en: 'v-class-luggage-capacity',
+      es: 'capacidad-equipaje-mercedes-clase-v',
+      ar: 'siat-haqaeb-mercedes-class-v',
+    },
+    translations: {
+      fr: {
+        title: 'Combien de bagages peut transporter une Mercedes Classe V ?',
+        metaTitle: 'Combien de bagages dans une Mercedes Classe V avec chauffeur ?',
+        metaDescription: 'Capacité bagages exacte de la Mercedes Classe V à Paris : jusqu’à 7-8 grandes valises soute + bagages cabine en version Extra-Longue.',
+        h1: 'Combien de bagages peut transporter une Mercedes Classe V ?',
+        heroAlt: 'Coffre spacieux et intérieur salon VIP d’un van Mercedes Classe V avec chauffeur à Paris',
+        directAnswer: 'En version Extra-Longue opérée par SELY Privé, la Mercedes Classe V peut transporter confortablement jusqu’à 7 ou 8 grandes valises de soute (taille L/XL de 28 à 30 pouces) ainsi que 5 à 7 bagages cabine, tout en accueillant jusqu’à 7 passagers à bord. En configuration berline classique, la capacité est limitée à 2 ou 3 valises.',
+        comparisonTable: {
+          headers: ['Véhicule', 'Passagers max', 'Grandes valises soute (28-30")', 'Bagages cabine'],
+          rows: [
+            ['Mercedes Classe E', '3', '2 valises', '2 valises cabine'],
+            ['Mercedes Classe S Limousine', '3', '2 à 3 valises', '2 valises cabine'],
+            ['Mercedes Classe V Extra-Longue', '7', '7 à 8 valises', '6 à 7 valises cabine'],
+            ['Mercedes Sprinter VIP', '8 à 16', '12 à 18 valises', 'Volume illimité'],
+          ],
+        },
+        faq: [
+          {
+            q: 'Puis-je transporter des sacs de golf ou poussettes volumineuses ?',
+            a: 'Oui. Le volume de la Classe V Extra-Longue accueille sans difficulté 2 à 3 sacs de golf complets ou une poussette double en plus des valises.',
+          },
+        ],
+        cta: {
+          title: 'Vous voyagez en groupe ou avec beaucoup de bagages ?',
+          subtitle: 'Réservez notre Mercedes Classe V VIP pour un transfert sans compromis sur l’espace.',
+          buttonText: 'Réserver la Mercedes Classe V',
+          link: '/paris/reserver?service=transfer',
+        },
+        relatedSlugs: ['mercedes-classe-s-ou-maybach-chauffeur', 'quel-vehicule-chauffeur-choisir-paris'],
+      },
+      en: {
+        title: 'How Much Luggage Can a Mercedes V-Class Hold with Chauffeur?',
+        metaTitle: 'Mercedes V-Class Luggage Capacity with Chauffeur in Paris',
+        metaDescription: 'Exact baggage capacity of the Mercedes V-Class in Paris: up to 7-8 large check-in suitcases plus carry-ons in the Extra-Long edition.',
+        h1: 'How Much Luggage Can a Mercedes V-Class Carry?',
+        heroAlt: 'Spacious trunk and leather interior of Mercedes V-Class luxury van in Paris',
+        directAnswer: 'In the Extra-Long specification operated by SELY Privé, a Mercedes V-Class comfortably holds up to 7 or 8 full-size check-in suitcases (28 to 30 inches) plus 5 to 7 cabin bags while carrying up to 7 passengers simultaneously.',
+        comparisonTable: {
+          headers: ['Vehicle', 'Max Passengers', 'Check-In Luggage (28-30")', 'Carry-On Bags'],
+          rows: [
+            ['Mercedes E-Class', '3', '2 bags', '2 cabin bags'],
+            ['Mercedes S-Class', '3', '2 - 3 bags', '2 cabin bags'],
+            ['Mercedes V-Class Extra-Long', '7', '7 - 8 bags', '6 - 7 cabin bags'],
+            ['Mercedes Sprinter VIP', '8 - 16', '12 - 18 bags', 'Unrestricted'],
+          ],
+        },
+        cta: {
+          title: 'Traveling with generous luggage or in a group?',
+          subtitle: 'Book our Mercedes V-Class with professional chauffeur for total peace of mind.',
+          buttonText: 'Book a Mercedes V-Class',
+          link: '/paris/reserver?service=transfer',
+        },
+        relatedSlugs: ['which-chauffeur-vehicle-to-choose-paris', 'mercedes-s-class-vs-maybach-chauffeur'],
+      },
+      es: {
+        title: '¿Cuánto equipaje puede transportar una Mercedes Clase V?',
+        metaTitle: 'Capacidad de Equipaje Mercedes Clase V con Chófer en París',
+        metaDescription: 'Capacidad real de maletas en la Mercedes Clase V en París: hasta 7-8 maletas grandes de bodega más maletas de mano.',
+        h1: '¿Cuánto equipaje puede transportar una Mercedes Clase V?',
+        heroAlt: 'Interior espacioso de Mercedes Clase V con chófer en París',
+        directAnswer: 'En su versión Extra-Larga, la Mercedes Clase V puede transportar hasta 7 u 8 maletas grandes de bodega (28-30 pulgadas) y 5 a 7 maletas de cabina, alojando con total confort hasta 7 pasajeros.',
+        cta: {
+          title: '¿Viaja con mucho equipaje a París?',
+          subtitle: 'Reserve su Mercedes Clase V con chófer privado.',
+          buttonText: 'Reservar Clase V',
+          link: '/paris/reserver?service=transfer',
+        },
+        relatedSlugs: ['que-vehiculo-con-chofer-elegir-paris', 'mercedes-clase-s-o-maybach-chofer'],
+      },
+      ar: {
+        title: 'كم عدد الحقائب التي يمكن أن تستوعبها مرسيدس الفئة V في باريس؟',
+        metaTitle: 'سعة استيعاب الحقائب في مرسيدس الفئة V مع سائق في باريس',
+        metaDescription: 'سعة الأمتعة الدقيقة لمرسيدس الفئة V: حتى 7-8 حقائب سفر كبيرة بالإضافة إلى حقائب اليد والركاب.',
+        h1: 'كم عدد الحقائب التي تستوعبها مرسيدس الفئة V مع سائق خاص؟',
+        heroAlt: 'مساحة الأمتعة الرحبة في سيارة مرسيدس الفئة V الفاخرة في باريس',
+        directAnswer: 'في طراز الفئة V فائق الطول (Extra-Long) المعتمد لدى SELY Privé، يمكن للسيارة استيعاب ما يصل إلى 7 أو 8 حقائب سفر كبيرة مخصصة للشحن (مقاس 28 إلى 30 بوصة)، بالإضافة إلى 5 إلى 7 حقائب يد، مع استقبال حتى 7 ركاب براحة تامة.',
+        cta: {
+          title: 'هل تسافر برفقة العائلة أو بأمتعة متعددة؟',
+          subtitle: 'احجز مرسيدس الفئة V العائلية الفاخرة الآن واستمتع برحابة لا مثيل لها.',
+          buttonText: 'حجز مرسيدس الفئة V الآن',
+          link: '/paris/reserver?service=transfer',
+        },
+        relatedSlugs: ['ay-sayara-ma-saeq-takhtar-baris', 'mercedes-class-s-vs-maybach-saeq'],
+      },
+    },
+  },
+];
