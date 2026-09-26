@@ -46,6 +46,7 @@ import { getFormAccessKey } from '../lib/formRouting';
 import { calculateTripPrice, getDrivingDistanceKm } from '../lib/pricingEngine';
 import { useBookingsStore } from '../admin/store/useBookingsStore';
 import LuxuryDateTimePicker from '../components/LuxuryDateTimePicker';
+import { useVoiceDictation } from '../hooks/useVoiceDictation';
 import styles from './ReservationPage.module.css';
 
 /* ─── vehicle catalogue (reused directly) ─── */
@@ -656,8 +657,6 @@ export default function ReservationPage() {
 
   // Bespoke Flow inputs
   const [bespokeText, setBespokeText] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef(null);
 
   // Form submission state
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
@@ -784,56 +783,15 @@ export default function ReservationPage() {
   };
 
   // Voice Recognition for Bespoke flow
-  const toggleSpeechRecognition = () => {
-    if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("La reconnaissance vocale n'est pas prise en charge sur ce navigateur. Vous pouvez saisir votre demande au clavier.");
-      return;
-    }
-
-    try {
-      const recognition = new SpeechRecognition();
-      recognition.lang = i18n?.language === 'en' ? 'en-US' : 'fr-FR';
-      recognition.continuous = true;
-      recognition.interimResults = true;
-
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
-
-      recognition.onresult = (event) => {
-        let transcript = '';
-        for (let i = 0; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript + ' ';
-        }
-        setBespokeText((prev) => {
-          const current = prev.trim();
-          return current ? `${current} ${transcript.trim()}` : transcript.trim();
-        });
-      };
-
-      recognition.onerror = () => {
-        setIsListening(false);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognitionRef.current = recognition;
-      recognition.start();
-    } catch (e) {
-      setIsListening(false);
-    }
-  };
+  const {
+    isListening,
+    errorMessage: voiceError,
+    toggleListening: toggleSpeechRecognition,
+  } = useVoiceDictation({
+    value: bespokeText,
+    onChange: setBespokeText,
+    lang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
+  });
 
   // Final submit handler
   const handleFinalSubmit = async (e, paymentAction = 'quote') => {
@@ -2442,9 +2400,17 @@ export default function ReservationPage() {
                   onChange={(e) => setBespokeText(e.target.value)}
                   placeholder="Ex : Nous sommes 6 personnes arrivant de New York ce vendredi. Nous avons besoin d'un Classe V pour trois jours et d'une berline supplémentaire samedi soir..."
                   className={styles.bespokeLargeTextarea}
-                  id="bespoke-textarea"
                 />
 
+                {isListening && (
+                  <div className={styles.listeningBadge}>
+                    <span className={styles.listeningDot} />
+                    <span>Microphone actif : dictez votre demande...</span>
+                  </div>
+                )}
+                {voiceError && (
+                  <p className={styles.voiceErrorNotice}>{voiceError}</p>
+                )}
               </div>
 
               <div className={styles.screenFooter}>

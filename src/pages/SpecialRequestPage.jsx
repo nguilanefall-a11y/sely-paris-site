@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send, Zap } from 'lucide-react';
+import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send, Zap, Mic, MicOff } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
+import { useVoiceDictation } from '../hooks/useVoiceDictation';
 import styles from './SpecialRequestPage.module.css';
 
 export default function SpecialRequestPage() {
-  const { t, cityName, currentCity } = useCity();
+  const { t, cityName, currentCity, i18n } = useCity();
   const [searchParams] = useSearchParams();
   const initialType = searchParams.get('type') === 'rapide' ? 'rapide' : 'sur-mesure';
   const [requestType, setRequestType] = useState(initialType);
@@ -31,6 +32,16 @@ export default function SpecialRequestPage() {
   const handleChange = (field) => (e) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));
   };
+
+  const {
+    isListening,
+    errorMessage: voiceError,
+    toggleListening: toggleVoiceMessage,
+  } = useVoiceDictation({
+    value: form.message,
+    onChange: (text) => setForm(prev => ({ ...prev, message: text })),
+    lang: i18n?.language?.startsWith('en') ? 'en-US' : 'fr-FR',
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -238,9 +249,29 @@ export default function SpecialRequestPage() {
           </div>
 
           {/* Message */}
-          <div className={styles.sectionLabel}>
-            <MessageSquare size={14} />
-            <span>{t('specialRequest.messageLabel', 'Votre demande')}</span>
+          <div className={styles.sectionLabelBetween}>
+            <div className={styles.sectionLabelLeft}>
+              <MessageSquare size={14} />
+              <span>{t('specialRequest.messageLabel', 'Votre demande')}</span>
+            </div>
+            <button
+              type="button"
+              onClick={toggleVoiceMessage}
+              className={`${styles.voiceBtn} ${isListening ? styles.voiceBtnActive : ''}`}
+              title="Activer la dictée vocale au micro"
+            >
+              {isListening ? (
+                <>
+                  <MicOff size={14} />
+                  <span>En écoute... Cliquez pour arrêter</span>
+                </>
+              ) : (
+                <>
+                  <Mic size={14} />
+                  <span>Parler au micro</span>
+                </>
+              )}
+            </button>
           </div>
 
           <div className={styles.inputGroup}>
@@ -251,7 +282,17 @@ export default function SpecialRequestPage() {
               onChange={handleChange('message')}
               placeholder={t('specialRequest.messagePlaceholder', 'Décrivez votre besoin : type d\'événement, nombre de jours, itinéraire souhaité, nombre de passagers, dates...')}
               className={styles.textarea}
+              id="special-request-textarea"
             />
+            {isListening && (
+              <div className={styles.listeningBadge}>
+                <span className={styles.listeningDot} />
+                <span>Microphone actif : dictez votre demande...</span>
+              </div>
+            )}
+            {voiceError && (
+              <p className={styles.voiceErrorNotice}>{voiceError}</p>
+            )}
           </div>
 
           <motion.button
