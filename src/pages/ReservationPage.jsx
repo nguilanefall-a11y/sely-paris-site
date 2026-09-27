@@ -19,6 +19,8 @@ import {
   AlertCircle,
   ArrowRight,
   ArrowLeft,
+  ChevronLeft,
+  ArrowUpDown,
   X,
   User,
   Mail,
@@ -527,16 +529,20 @@ export default function ReservationPage() {
     }
   }, []);
 
-  // Service selection: null (Screen 0), 'transfer', 'hourly', 'bespoke'
-  const initialService = searchParams.get('service') || null;
+  // Service selection: 'transfer' (default: Aller simple), 'hourly' (Chauffeur à l'heure), 'bespoke'
+  const initialService = searchParams.get('service') || 'transfer';
   const [service, setService] = useState(initialService);
 
-  // Step counter (1-indexed for each service, 0 for Welcome & Destination screen)
+  // Step counter (starts at Step 1: Réservez un voyage)
   const [step, setStep] = useState(() => {
     const s = searchParams.get('step');
-    if (s && !isNaN(parseInt(s, 10))) return parseInt(s, 10);
-    return 0;
+    if (s && !isNaN(parseInt(s, 10)) && parseInt(s, 10) > 0) return parseInt(s, 10);
+    return 1;
   });
+
+  const [serviceMenuOpen, setServiceMenuOpen] = useState(false);
+  const [urgentModalOpen, setUrgentModalOpen] = useState(false);
+  const [activeInputFocus, setActiveInputFocus] = useState(null); // 'pickup' | 'destination' | null
 
   // Direction for slide animation: 1 = forward, -1 = backward
   const [direction, setDirection] = useState(1);
@@ -857,12 +863,31 @@ export default function ReservationPage() {
   const goToPrevStep = () => {
     setDirection(-1);
     if (step <= 1) {
-      setStep(0);
-      setService(null);
+      navigate(getCityPath('/'));
     } else {
       setStep((prev) => prev - 1);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSwapAddresses = () => {
+    const prevPickup = pickup;
+    const prevPickupCoords = pickupCoords;
+    setPickup(destination || '');
+    setPickupCoords(destCoords || null);
+    setDestination(prevPickup || '');
+    setDestCoords(prevPickupCoords || null);
+  };
+
+  const handleSelectSuggestion = (place) => {
+    if (activeInputFocus === 'pickup' || (!pickup && destination)) {
+      setPickup(place.label);
+      if (place.coordinates) setPickupCoords(place.coordinates);
+    } else {
+      setDestination(place.label);
+      if (place.coordinates) setDestCoords(place.coordinates);
+    }
+    setActiveInputFocus(null);
   };
 
   const selectService = (type) => {
@@ -1099,399 +1124,397 @@ export default function ReservationPage() {
     }),
   };
 
-  if (step === 0) {
+  if (step <= 1) {
     return (
-      <div className={`${styles.screen0Wrapper} ${isRtl ? styles.rtl : ''}`}>
-        <div className={styles.screen0Bg} />
-        <div className={styles.screen0Vignette} />
-
-        {/* Top bar: Bienvenue on left, hamburger menu on right */}
-        <header className={styles.screen0TopBar}>
-          <h1 className={styles.welcomeHeading}>{welcomeT.welcome}</h1>
+      <div className={`${styles.voyageScreenWrapper} ${isRtl ? styles.rtl : ''}`}>
+        {/* Top bar: Back circle button + Serif Title */}
+        <header className={styles.voyageHeader}>
           <button
             type="button"
-            onClick={() => setMenuOpen(true)}
-            className={styles.hamburgerBtn}
-            aria-label="Menu"
+            onClick={goToPrevStep}
+            className={styles.backCircleBtn}
+            aria-label="Retour à l'accueil"
           >
-            <Menu size={26} strokeWidth={1.8} />
+            <ChevronLeft size={22} strokeWidth={1.8} />
           </button>
+          <h1 className={styles.voyageTitle}>
+            {t('tunnel.reserve_title', 'Réservez un voyage')}
+          </h1>
         </header>
 
-        {/* Lower Third: Hero Title + Destination Input + Explore Link */}
-        <div className={styles.screen0MainContent}>
-          <motion.h2
-            className={styles.heroSerifTitle}
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.1 }}
-          >
-            {welcomeT.heroTitle}
-          </motion.h2>
-
-          {/* Saisissez votre destination input line */}
-          <motion.div
-            className={styles.destinationLineWrapper}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.2 }}
-          >
-            <input
-              type="text"
-              className={styles.destinationUnderlineInput}
-              placeholder={welcomeT.destinationPlaceholder}
-              value={destAutocomplete.query}
-              onChange={(e) => {
-                destAutocomplete.setQuery(e.target.value);
-                setDestScreen0Open(true);
-              }}
-              onFocus={() => setDestScreen0Open(true)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  selectService('transfer');
-                  setStep(1);
-                }
-              }}
-              aria-label={welcomeT.destinationPlaceholder}
-              autoComplete="off"
-            />
-
+        {/* Capsule Pills Row */}
+        <div style={{ position: 'relative', marginBottom: '1.75rem' }}>
+          <div className={styles.pillsRow}>
+            {/* Pill 1: Aller simple / Chauffeur à l'heure */}
             <button
               type="button"
-              className={styles.destSubmitArrowBtn}
               onClick={() => {
-                selectService('transfer');
-                setStep(1);
+                setServiceMenuOpen(!serviceMenuOpen);
+                setUrgentModalOpen(false);
               }}
-              aria-label="Valider la destination"
+              className={styles.pillSelectorBtn}
+              id="service-selector-pill"
             >
-              <ArrowRight size={20} strokeWidth={1.8} />
+              <Route size={16} strokeWidth={1.8} />
+              <span>{service === 'hourly' ? t('tunnel.service_hourly_label', 'Chauffeur à l’heure') : t('tunnel.service_transfer_label', 'Aller simple')}</span>
+              <ChevronDown size={14} className={styles.pillChevron} />
             </button>
 
-            {/* Suggestions dropdown: live Photon API or instant popular destinations */}
-            {destScreen0Open && (
-              <div className={styles.destSuggestionsPopup}>
-                {(destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0
-                  ? destAutocomplete.suggestions
-                  : getPopularDestinations(currentCity, destAutocomplete.query)
-                ).map((sug, i) => {
-                  const lbl = sug.label || sug.description || '';
-                  const isAirport =
-                    sug.type === 'airport' ||
-                    lbl.toLowerCase().includes('aéroport') ||
-                    lbl.toLowerCase().includes('airport') ||
-                    lbl.includes('CDG') ||
-                    lbl.includes('ORY');
-                  const isStation =
-                    sug.type === 'station' ||
-                    lbl.toLowerCase().includes('gare') ||
-                    lbl.toLowerCase().includes('station');
+            {/* Pill 2: Demande spécifique urgente */}
+            <button
+              type="button"
+              onClick={() => {
+                setUrgentModalOpen(true);
+                setServiceMenuOpen(false);
+              }}
+              className={styles.pillSelectorBtn}
+              id="urgent-request-pill"
+            >
+              <Sparkles size={16} strokeWidth={1.8} style={{ color: '#b8903c' }} />
+              <span>{t('tunnel.urgent_pill_label', 'Demande spécifique urgente')}</span>
+              <ChevronDown size={14} className={styles.pillChevron} />
+            </button>
+          </div>
 
-                  return (
-                    <button
-                      key={sug.id || i}
-                      type="button"
-                      className={styles.destSuggestionItem}
-                      onClick={() => {
-                        destAutocomplete.setQuery(lbl);
-                        setDestScreen0Open(false);
-                        selectService('transfer');
-                        setStep(1);
-                      }}
-                    >
-                      {isAirport ? (
-                        <PlaneTakeoff size={15} className={styles.suggestionIcon} />
-                      ) : isStation ? (
-                        <Route size={15} className={styles.suggestionIcon} />
-                      ) : (
-                        <MapPin size={15} className={styles.suggestionIcon} />
-                      )}
-                      <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                        <span style={{ fontSize: '0.88rem', fontWeight: 500, color: '#ffffff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                          {lbl}
-                        </span>
-                        {sug.subtitle && (
-                          <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {sug.subtitle}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </motion.div>
-
-          {/* Underneath: ↓ Explorez les voyages et les services */}
-          <motion.button
-            type="button"
-            className={styles.exploreServicesLinkBtn}
-            onClick={() => setShowServicesSheet(true)}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <span>{welcomeT.exploreServices}</span>
-          </motion.button>
-        </div>
-
-        {/* Bottom Floating Navigation Capsule */}
-        <nav className={styles.floatingCapsuleNav} aria-label="Navigation principale">
-          <button
-            type="button"
-            className={`${styles.capsuleNavBtn} ${styles.capsuleNavBtnActive}`}
-            onClick={() => navigate(getCityPath('/'))}
-          >
-            <Home size={19} strokeWidth={1.8} />
-            <span>{welcomeT.navHome}</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles.capsuleNavBtn}
-            onClick={() => setShowServicesSheet(true)}
-          >
-            <Compass size={19} strokeWidth={1.8} />
-            <span>{welcomeT.navJourneys}</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles.capsuleNavBtn}
-            onClick={() => setHelpOpen(true)}
-          >
-            <MessageSquare size={19} strokeWidth={1.8} />
-            <span>{welcomeT.navHelp}</span>
-          </button>
-        </nav>
-
-        {/* Side Menu Drawer */}
-        <AnimatePresence>
-          {menuOpen && (
-            <>
-              <motion.div
-                className={styles.sideDrawerBackdrop}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setMenuOpen(false)}
-              />
-              <motion.div
-                className={styles.sideDrawer}
-                initial={{ x: isRtl ? '-100%' : '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: isRtl ? '-100%' : '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              >
-                <div className={styles.drawerHeader}>
-                  <span className={styles.drawerBrand}>SELY PRIVÉ</span>
+          {/* Service Dropdown Popover */}
+          <AnimatePresence>
+            {serviceMenuOpen && (
+              <>
+                <div
+                  style={{ position: 'fixed', inset: 0, zIndex: 1001 }}
+                  onClick={() => setServiceMenuOpen(false)}
+                />
+                <motion.div
+                  className={styles.popoverMenu}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.16 }}
+                >
                   <button
                     type="button"
-                    onClick={() => setMenuOpen(false)}
-                    className={styles.drawerCloseBtn}
+                    className={`${styles.popoverMenuItem} ${service === 'transfer' ? styles.popoverMenuItemActive : ''}`}
+                    onClick={() => {
+                      setService('transfer');
+                      setServiceMenuOpen(false);
+                    }}
                   >
-                    <X size={20} />
+                    <div className={styles.sugIconCircle}>
+                      <Route size={16} />
+                    </div>
+                    <div className={styles.popoverMenuItemText}>
+                      <strong>{t('tunnel.service_transfer_label', 'Aller simple')}</strong>
+                      <span>{t('tunnel.service_transfer_desc', 'Transfert direct point à point')}</span>
+                    </div>
+                    {service === 'transfer' && <Check size={16} />}
                   </button>
-                </div>
 
-                <div className={styles.drawerLanguage}>
-                  <span className={styles.drawerSectionLabel}>Langue / Language</span>
-                  <LanguageSelector variant="tunnel" />
-                </div>
-
-                <div className={styles.drawerNavLinks}>
-                  <Link to={getCityPath('/')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
-                    Accueil
-                  </Link>
-                  <Link to={getCityPath('/vehicules')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
-                    Flotte de Prestige
-                  </Link>
-                  <Link to={getCityPath('/excellence')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
-                    L'Excellence & Services
-                  </Link>
-                  <Link to={getCityPath('/contact')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
-                    Contact & Conciergerie
-                  </Link>
-                  <Link to={getCityPath('/demande-specifique')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
-                    Demande Sur-Mesure
-                  </Link>
-                </div>
-
-                <div className={styles.drawerFooter}>
-                  <a href="tel:+33184805676" className={styles.drawerPhoneBtn}>
-                    <Phone size={15} />
-                    <span>+33 1 84 80 56 76</span>
-                  </a>
-                  <a
-                    href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.drawerWhatsappBtn}
+                  <button
+                    type="button"
+                    className={`${styles.popoverMenuItem} ${service === 'hourly' ? styles.popoverMenuItemActive : ''}`}
+                    onClick={() => {
+                      setService('hourly');
+                      setServiceMenuOpen(false);
+                    }}
                   >
-                    <MessageSquare size={15} />
-                    <span>WhatsApp Conciergerie</span>
-                  </a>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
+                    <div className={styles.sugIconCircle}>
+                      <Clock size={16} />
+                    </div>
+                    <div className={styles.popoverMenuItemText}>
+                      <strong>{t('tunnel.service_hourly_label', 'Chauffeur à l’heure')}</strong>
+                      <span>{t('tunnel.service_hourly_desc', 'Mise à disposition horaire ou à la journée')}</span>
+                    </div>
+                    {service === 'hourly' && <Check size={16} />}
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
 
-        {/* Services Bottom Sheet (when user clicks Explorez les services or Voyages) */}
+        {/* Underline Inputs Container */}
+        <div className={styles.inputsContainer}>
+          {/* Pickup field */}
+          <div className={styles.fieldBlock}>
+            <label className={styles.fieldLabel}>
+              {service === 'hourly' ? t('tunnel.pickup_hourly_label', 'Point de rendez-vous') : t('tunnel.pickup_label', 'Lieu de prise en charge')}
+            </label>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type="text"
+                className={styles.underlineInputClean}
+                placeholder={t('tunnel.pickup_placeholder', 'Aéroport, adresse, hôtel, ...')}
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+                onFocus={() => setActiveInputFocus('pickup')}
+                id="pickup-input"
+                autoComplete="off"
+                style={{ paddingRight: pickup ? '2rem' : '0' }}
+              />
+              {pickup && (
+                <button
+                  type="button"
+                  onClick={() => setPickup('')}
+                  className={styles.clearBtn}
+                  style={{ position: 'absolute', right: 0 }}
+                  aria-label="Effacer le départ"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* Pickup autocomplete dropdown */}
+            {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 && activeInputFocus === 'pickup' && (
+              <div className={styles.fieldSuggestionsDropdown}>
+                {pickupAutocomplete.suggestions.map((s, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setPickup(s.label);
+                      if (s.coordinates) setPickupCoords(s.coordinates);
+                      pickupAutocomplete.setSuggestions([]);
+                      setActiveInputFocus(null);
+                    }}
+                    className={styles.fieldSuggestionItem}
+                  >
+                    <div className={styles.sugIconCircle}>
+                      <MapPin size={16} />
+                    </div>
+                    <div className={styles.sugDetails}>
+                      <span className={styles.sugMain}>{s.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Floating Swap Button */}
+          <button
+            type="button"
+            onClick={handleSwapAddresses}
+            className={styles.swapBtnFloating}
+            aria-label="Inverser les adresses"
+            title="Inverser départ et destination"
+          >
+            <ArrowUpDown size={17} strokeWidth={1.8} />
+          </button>
+
+          {/* Destination field */}
+          <div className={styles.fieldBlock}>
+            <label className={styles.fieldLabel}>
+              {service === 'hourly' ? t('tunnel.dest_hourly_label', 'Zone de déplacement (optionnel)') : t('tunnel.dest_label', 'Destination')}
+            </label>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type="text"
+                className={styles.underlineInputClean}
+                placeholder={service === 'hourly' ? t('tunnel.dest_hourly_placeholder', 'Paris & Île-de-France, province...') : t('tunnel.dest_placeholder', 'Où aller ?')}
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                onFocus={() => setActiveInputFocus('destination')}
+                id="destination-input"
+                autoComplete="off"
+                style={{ paddingRight: destination ? '2rem' : '0' }}
+              />
+              {destination && (
+                <button
+                  type="button"
+                  onClick={() => setDestination('')}
+                  className={styles.clearBtn}
+                  style={{ position: 'absolute', right: 0 }}
+                  aria-label="Effacer la destination"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* Destination autocomplete dropdown */}
+            {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 && activeInputFocus === 'destination' && (
+              <div className={styles.fieldSuggestionsDropdown}>
+                {destAutocomplete.suggestions.map((s, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setDestination(s.label);
+                      if (s.coordinates) setDestCoords(s.coordinates);
+                      destAutocomplete.setSuggestions([]);
+                      setActiveInputFocus(null);
+                    }}
+                    className={styles.fieldSuggestionItem}
+                  >
+                    <div className={styles.sugIconCircle}>
+                      <MapPin size={16} />
+                    </div>
+                    <div className={styles.sugDetails}>
+                      <span className={styles.sugMain}>{s.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Section Suggérée */}
+        <div className={styles.suggestedSection}>
+          <h3 className={styles.suggestedHeaderTitle}>
+            {t('tunnel.suggested_title', 'Suggérée')}
+          </h3>
+          <p className={styles.suggestedHeaderText}>
+            {t('tunnel.suggested_desc', 'Des suggestions et vos lieux favoris apparaîtront ici lorsque vous utiliserez notre service.')}
+          </p>
+          <div className={styles.suggestedPlacesList}>
+            {LUXURY_SUGGESTIONS.slice(0, 6).map((item, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleSelectSuggestion(item)}
+                className={styles.suggestedPlaceRow}
+              >
+                <div className={styles.sugIconCircle}>
+                  {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
+                    <PlaneTakeoff size={16} />
+                  ) : (
+                    <MapPin size={16} />
+                  )}
+                </div>
+                <div className={styles.sugDetails}>
+                  <span className={styles.sugMain}>{item.label}</span>
+                  <span className={styles.sugSub}>{item.category}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Date & Time selection */}
+        <div className={styles.datetimeSection}>
+          <LuxuryDateTimePicker
+            selectedDate={date}
+            onDateChange={setDate}
+            selectedTime={time}
+            onTimeChange={setTime}
+            isEn={i18n?.language === 'en'}
+            minDateISO={todayISO}
+          />
+        </div>
+
+        {/* If hourly: duration pills */}
+        {service === 'hourly' && (
+          <div style={{ marginBottom: '1.75rem' }}>
+            <label className={styles.fieldLabel} style={{ marginBottom: '0.65rem', display: 'block' }}>
+              {t('tunnel.hourly_duration_label', 'Durée de la mise à disposition')}
+            </label>
+            <div className={styles.durationScrollWrapper}>
+              <div className={styles.durationScrollStrip}>
+                {[3, 4, 5, 6, 8, 10, 12, 24].map((h) => (
+                  <button
+                    key={h}
+                    type="button"
+                    onClick={() => setDayPresetHours(scheduleDays[0]?.id || 1, h)}
+                    className={`${styles.durationScrollPill} ${(scheduleDays[0]?.hours || 8) === h ? styles.durationPillActive : ''}`}
+                  >
+                    <span className={styles.durationPillNumber}>{h}h</span>
+                    {h === 8 && <span className={styles.durationPillTag}>{t('tunnel.one_day', '1 jour')}</span>}
+                    {h === 4 && <span className={styles.durationPillTag}>{t('tunnel.half_day', '1/2 j')}</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Button: Choisir mon véhicule */}
+        <button
+          type="button"
+          disabled={
+            !pickup ||
+            pickup.trim().length < 2 ||
+            (service === 'transfer' && (!destination || destination.trim().length < 2))
+          }
+          onClick={goToNextStep}
+          className={styles.continueBtnLuxury}
+          id="voyage-continue-btn"
+        >
+          <span>{t('tunnel.choose_vehicle', 'Choisir mon véhicule')}</span>
+          <ArrowRight size={18} />
+        </button>
+
+        {/* Urgent Request Modal */}
         <AnimatePresence>
-          {showServicesSheet && (
+          {urgentModalOpen && (
             <>
-              <motion.div
-                className={styles.sideDrawerBackdrop}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setShowServicesSheet(false)}
+              <div
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  background: 'rgba(0,0,0,0.5)',
+                  backdropFilter: 'blur(3px)',
+                  zIndex: 1001,
+                }}
+                onClick={() => setUrgentModalOpen(false)}
               />
               <motion.div
-                className={styles.servicesBottomSheet}
-                initial={{ y: '100%' }}
-                animate={{ y: 0 }}
-                exit={{ y: '100%' }}
-                transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+                className={styles.urgentModal}
+                initial={{ opacity: 0, scale: 0.95, y: '-50%', x: '-50%' }}
+                animate={{ opacity: 1, scale: 1, y: '-50%', x: '-50%' }}
+                exit={{ opacity: 0, scale: 0.95, y: '-50%', x: '-50%' }}
+                transition={{ duration: 0.2 }}
               >
-                <div className={styles.bottomSheetHandle} />
-                <div className={styles.bottomSheetHeader}>
-                  <div>
-                    <h3 className={styles.bottomSheetTitle}>{welcomeT.servicesTitle}</h3>
-                    <p className={styles.bottomSheetSubtitle}>{welcomeT.servicesSubtitle}</p>
+                <div className={styles.urgentHeader}>
+                  <div className={styles.urgentTitleRow}>
+                    <div className={styles.urgentBadgeIcon}>
+                      <Sparkles size={18} />
+                    </div>
+                    <h3>{t('tunnel.urgent_modal_title', 'Demande spécifique urgente')}</h3>
                   </div>
                   <button
                     type="button"
-                    onClick={() => setShowServicesSheet(false)}
-                    className={styles.bottomSheetCloseBtn}
+                    onClick={() => setUrgentModalOpen(false)}
+                    className={styles.clearBtn}
+                    aria-label="Fermer"
                   >
-                    <X size={20} />
+                    <X size={18} />
                   </button>
                 </div>
 
-                <div className={styles.serviceCardsGrid}>
-                  {/* 1. Transfert */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      selectService('transfer');
-                      setShowServicesSheet(false);
-                      setStep(1);
-                    }}
-                    className={styles.serviceChoiceCard}
-                  >
-                    <div className={styles.serviceChoiceIcon}>
-                      <Navigation size={22} strokeWidth={1.5} />
-                    </div>
-                    <div className={styles.serviceChoiceBody}>
-                      <div className={styles.serviceChoiceBadge}>{t('tunnel.transfer_badge', 'POINT A À POINT B')}</div>
-                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.transfer_title', 'Transfert')}</h4>
-                      <p className={styles.serviceChoiceDesc}>{t('tunnel.transfer_desc', "Liaisons directes d'adresse à adresse, aéroports, gares parisiennes et trajets intercités.")}</p>
-                    </div>
-                    <div className={styles.serviceChoiceCta}>
-                      <span>Sélectionner</span>
-                      <ArrowRight size={15} strokeWidth={1.5} />
-                    </div>
-                  </button>
+                <p className={styles.urgentText}>
+                  {t('tunnel.urgent_modal_desc', 'Besoin immédiat dans l’heure, convoi de berlines officielles, sécurité rapprochée ou requête sur-mesure ? Notre régie opérationnelle VIP est active 24h/24 et 7j/7.')}
+                </p>
 
-                  {/* 2. Chauffeur à la journée */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      selectService('hourly');
-                      setShowServicesSheet(false);
-                      setStep(1);
-                    }}
-                    className={styles.serviceChoiceCard}
-                  >
-                    <div className={styles.serviceChoiceIcon}>
-                      <Clock size={22} strokeWidth={1.5} />
-                    </div>
-                    <div className={styles.serviceChoiceBody}>
-                      <div className={styles.serviceChoiceBadge}>{t('tunnel.hourly_badge', 'CHAUFFEUR DÉDIÉ')}</div>
-                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.hourly_title', 'Chauffeur à la journée')}</h4>
-                      <p className={styles.serviceChoiceDesc}>{t('tunnel.hourly_desc', "Berline et chauffeur privé réservés à l'heure ou pour la journée complète.")}</p>
-                    </div>
-                    <div className={styles.serviceChoiceCta}>
-                      <span>Sélectionner</span>
-                      <ArrowRight size={15} strokeWidth={1.5} />
-                    </div>
-                  </button>
-
-                  {/* 3. Sur-mesure */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      selectService('bespoke');
-                      setShowServicesSheet(false);
-                      setStep(1);
-                    }}
-                    className={styles.serviceChoiceCard}
-                  >
-                    <div className={styles.serviceChoiceIcon}>
-                      <SlidersHorizontal size={22} strokeWidth={1.5} />
-                    </div>
-                    <div className={styles.serviceChoiceBody}>
-                      <div className={styles.serviceChoiceBadge}>{t('tunnel.bespoke_badge', 'SUR-MESURE & ÉVÉNEMENTS')}</div>
-                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.bespoke_title', 'Demande sur mesure')}</h4>
-                      <p className={styles.serviceChoiceDesc}>{t('tunnel.bespoke_desc', 'Fashion Week, délégations diplomatiques, convois officiels, mariages ou exigences exclusives.')}</p>
-                    </div>
-                    <div className={styles.serviceChoiceCta}>
-                      <span>Sélectionner</span>
-                      <ArrowRight size={15} strokeWidth={1.5} />
-                    </div>
-                  </button>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-
-        {/* Quick Help Modal */}
-        <AnimatePresence>
-          {helpOpen && (
-            <>
-              <motion.div
-                className={styles.sideDrawerBackdrop}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setHelpOpen(false)}
-              />
-              <motion.div
-                className={styles.helpModal}
-                initial={{ scale: 0.94, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.94, opacity: 0 }}
-              >
-                <div className={styles.helpModalHeader}>
-                  <h3>{welcomeT.helpTitle}</h3>
-                  <button
-                    type="button"
-                    onClick={() => setHelpOpen(false)}
-                    className={styles.drawerCloseBtn}
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-                <p className={styles.helpModalSubtitle}>{welcomeT.helpSubtitle}</p>
-                <div className={styles.helpModalActions}>
+                <div className={styles.urgentActions}>
                   <a
-                    href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20j'ai%20besoin%20d'aide%20pour%20une%20réservation."
+                    href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20j'ai%20une%20demande%20spécifique%20urgente."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={styles.drawerWhatsappBtn}
+                    className={styles.urgentWaBtn}
                   >
-                    <MessageSquare size={16} />
-                    <span>{welcomeT.helpWhatsapp}</span>
+                    <MessageSquare size={17} />
+                    <span>{t('tunnel.urgent_wa_cta', 'Échanger directement sur WhatsApp')}</span>
                   </a>
-                  <a href="tel:+33184805676" className={styles.drawerPhoneBtn}>
-                    <Phone size={16} />
-                    <span>{welcomeT.helpPhone}</span>
+
+                  <a href="tel:+33184805676" className={styles.urgentPhoneBtn}>
+                    <Phone size={17} />
+                    <span>{t('tunnel.urgent_phone_cta', 'Appeler la permanence (+33 1 84 80 56 76)')}</span>
                   </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUrgentModalOpen(false);
+                      navigate(getCityPath('/demande-specifique'));
+                    }}
+                    className={styles.urgentBespokeLink}
+                  >
+                    {t('tunnel.urgent_bespoke_cta', 'Remplir le formulaire sur-mesure détaillé →')}
+                  </button>
                 </div>
               </motion.div>
             </>
@@ -1500,6 +1523,7 @@ export default function ReservationPage() {
       </div>
     );
   }
+
 
   return (
     <div className={styles.funnelOverlay}>

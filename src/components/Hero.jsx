@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useCity } from '../hooks/useCity';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -7,15 +7,9 @@ import {
   Home,
   X,
   Phone,
-  PlaneTakeoff,
-  Train,
-  MapPin,
   Car,
-  Loader2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
-import { getPopularDestinations } from '../lib/popularDestinations';
 import styles from './Hero.module.css';
 
 const HERO_TEXTS = {
@@ -70,14 +64,9 @@ export default function Hero() {
   const { city, i18n } = useCity();
   const navigate = useNavigate();
 
-  const [inputFocused, setInputFocused] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
 
-  const containerRef = useRef(null);
-
   const currentCity = city || 'paris';
-  const destAutocomplete = useAddressAutocomplete('', currentCity);
 
   const langKey = i18n?.language?.startsWith('en')
     ? 'en'
@@ -91,70 +80,10 @@ export default function Hero() {
 
   const ht = HERO_TEXTS[langKey] || HERO_TEXTS.fr;
 
-  // Handle outside click to close suggestions dropdown
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-        setInputFocused(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, []);
-
-  // Filtered popular proposals for the active city
-  const popularList = useMemo(() => {
-    return getPopularDestinations(currentCity, destAutocomplete.query);
-  }, [currentCity, destAutocomplete.query]);
-
-  // Combined list to display: live photon results if available, otherwise matched popular destinations
-  const displayList = useMemo(() => {
-    if (destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0) {
-      return destAutocomplete.suggestions.map((item) => ({
-        id: item.id,
-        label: item.label || item.description,
-        subtitle: item.subtitle || (item.label && item.label.includes(',') ? item.label.split(',').slice(1).join(',').trim() : ''),
-        type: item.type || (item.label.toLowerCase().includes('aéroport') || item.label.toLowerCase().includes('airport') ? 'airport' : 'address'),
-      }));
-    }
-    return popularList;
-  }, [destAutocomplete.suggestions, popularList]);
-
-  const handleSelectDestination = useCallback((item) => {
-    const label = item.label || item.description || '';
-    destAutocomplete.setQuery(label);
-    setDropdownOpen(false);
-    setInputFocused(false);
-
+  const handleGoToReservation = () => {
     const cityPath = currentCity !== 'paris' ? currentCity : 'paris';
-    const params = new URLSearchParams({
-      step: '1',
-      service: 'transfer',
-      destination: label,
-    });
-    navigate(`/${cityPath}/reserver?${params.toString()}`);
-  }, [currentCity, destAutocomplete, navigate]);
-
-  const handleSubmit = useCallback((e) => {
-    if (e) e.preventDefault();
-    const cityPath = currentCity !== 'paris' ? currentCity : 'paris';
-    const val = destAutocomplete.query.trim();
-    if (!val) {
-      navigate(`/${cityPath}/reserver`);
-      return;
-    }
-    const params = new URLSearchParams({
-      step: '1',
-      service: 'transfer',
-      destination: val,
-    });
-    navigate(`/${cityPath}/reserver?${params.toString()}`);
-  }, [currentCity, destAutocomplete.query, navigate]);
+    navigate(`/${cityPath}/reserver`);
+  };
 
   const scrollToServices = () => {
     const el = document.getElementById('vehicules') || document.querySelector('section:nth-of-type(2)');
@@ -164,8 +93,6 @@ export default function Hero() {
       window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' });
     }
   };
-
-  const showSuggestions = dropdownOpen && displayList && displayList.length > 0;
 
   return (
     <section className={styles.heroSection}>
@@ -183,95 +110,27 @@ export default function Hero() {
           ))}
         </h1>
 
-        {/* Destination Input with Immediate Live Proposals attached right underneath */}
-        <div className={styles.destinationContainer} ref={containerRef}>
-          <form
-            className={`${styles.destinationLineWrapper} ${inputFocused ? styles.destinationLineWrapperFocused : ''}`}
-            onSubmit={handleSubmit}
+        {/* Destination Line Trigger: tapping it navigates directly to the dedicated booking screen */}
+        <div className={styles.destinationContainer}>
+          <div
+            className={styles.destinationLineWrapper}
+            onClick={handleGoToReservation}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleGoToReservation();
+              }
+            }}
+            aria-label={ht.destinationPlaceholder}
           >
-            <input
-              type="text"
-              className={styles.destinationUnderlineInput}
-              placeholder={ht.destinationPlaceholder}
-              value={destAutocomplete.query}
-              onChange={(e) => {
-                destAutocomplete.setQuery(e.target.value);
-                setDropdownOpen(true);
-              }}
-              onFocus={() => {
-                setInputFocused(true);
-                setDropdownOpen(true);
-              }}
-              aria-label={ht.destinationPlaceholder}
-              autoComplete="off"
-            />
-            {destAutocomplete.isLoading ? (
-              <div className={styles.destLoadingSpinner}>
-                <Loader2 size={18} className={styles.spinnerIcon} />
-              </div>
-            ) : (
-              <button
-                type="submit"
-                className={styles.destSubmitArrowBtn}
-                aria-label="Valider la destination"
-              >
-                <ArrowRight size={20} strokeWidth={1.8} />
-              </button>
-            )}
-          </form>
-
-          {/* Autocomplete proposals popover directly attached below the input */}
-          <AnimatePresence>
-            {showSuggestions && (
-              <motion.div
-                className={styles.destSuggestionsDropdown}
-                initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                transition={{ duration: 0.18 }}
-              >
-                {displayList.map((item, idx) => {
-                  const lbl = item.label || '';
-                  const isAirport =
-                    item.type === 'airport' ||
-                    lbl.toLowerCase().includes('aéroport') ||
-                    lbl.toLowerCase().includes('airport') ||
-                    lbl.includes('CDG') ||
-                    lbl.includes('ORY') ||
-                    lbl.includes('LFPB');
-                  const isStation =
-                    item.type === 'station' ||
-                    lbl.toLowerCase().includes('gare') ||
-                    lbl.toLowerCase().includes('station');
-
-                  return (
-                    <button
-                      key={item.id || idx}
-                      type="button"
-                      className={styles.destSuggestionItem}
-                      onClick={() => handleSelectDestination(item)}
-                    >
-                      <div className={styles.suggestionIconWrap}>
-                        {isAirport ? (
-                          <PlaneTakeoff size={15} strokeWidth={1.8} />
-                        ) : isStation ? (
-                          <Train size={15} strokeWidth={1.8} />
-                        ) : (
-                          <MapPin size={15} strokeWidth={1.8} />
-                        )}
-                      </div>
-                      <div className={styles.suggestionTextWrap}>
-                        <span className={styles.suggestionMainText}>{lbl}</span>
-                        {item.subtitle && (
-                          <span className={styles.suggestionSubText}>{item.subtitle}</span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <span className={styles.destinationTriggerPlaceholder}>
+              {ht.destinationPlaceholder}
+            </span>
+            <div className={styles.destSubmitArrowBtn}>
+              <ArrowRight size={20} strokeWidth={1.8} />
+            </div>
+          </div>
         </div>
 
         <button
@@ -283,39 +142,37 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* Floating Bottom Capsule Nav matching exact mobile photo (hidden when typing/focused to keep screen clean) */}
-      {!inputFocused && (
-        <nav className={styles.floatingCapsuleNav} aria-label="Navigation">
-          <button
-            type="button"
-            className={`${styles.capsuleNavBtn} ${styles.capsuleNavBtnActive}`}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <div className={styles.activePillBackground}>
-              <Home size={18} strokeWidth={2} />
-              <span>{ht.navHome}</span>
-            </div>
-          </button>
+      {/* Floating Bottom Capsule Nav matching exact mobile photo */}
+      <nav className={styles.floatingCapsuleNav} aria-label="Navigation">
+        <button
+          type="button"
+          className={`${styles.capsuleNavBtn} ${styles.capsuleNavBtnActive}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <div className={styles.activePillBackground}>
+            <Home size={18} strokeWidth={2} />
+            <span>{ht.navHome}</span>
+          </div>
+        </button>
 
-          <button
-            type="button"
-            className={styles.capsuleNavBtn}
-            onClick={scrollToServices}
-          >
-            <Car size={18} strokeWidth={1.8} />
-            <span>{ht.navJourneys}</span>
-          </button>
+        <button
+          type="button"
+          className={styles.capsuleNavBtn}
+          onClick={scrollToServices}
+        >
+          <Car size={18} strokeWidth={1.8} />
+          <span>{ht.navJourneys}</span>
+        </button>
 
-          <button
-            type="button"
-            className={styles.capsuleNavBtn}
-            onClick={() => setHelpOpen(true)}
-          >
-            <MessageSquare size={18} strokeWidth={1.8} />
-            <span>{ht.navHelp}</span>
-          </button>
-        </nav>
-      )}
+        <button
+          type="button"
+          className={styles.capsuleNavBtn}
+          onClick={() => setHelpOpen(true)}
+        >
+          <MessageSquare size={18} strokeWidth={1.8} />
+          <span>{ht.navHelp}</span>
+        </button>
+      </nav>
 
       {/* Help Modal */}
       <AnimatePresence>

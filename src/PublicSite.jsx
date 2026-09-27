@@ -41,13 +41,14 @@ function PublicSite() {
   }
 
   const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/`;
+  const isTunnel = location.pathname.includes('/reserver');
 
   return (
     <SmoothScroll>
       <div className="app-container">
         <AmbientGleam />
         <ScrollToTop />
-        <Navbar isHome={isHome} />
+        {!isTunnel && <Navbar isHome={isHome} />}
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -64,10 +65,9 @@ function PublicSite() {
             <Route path="/journal" element={<JournalHubPage />} />
             <Route path="/journal/:slug" element={<JournalArticlePage />} />
           </Routes>
-
         </main>
-        <Footer />
-        <FloatingActions />
+        {!isTunnel && <Footer />}
+        {!isTunnel && <FloatingActions />}
       </div>
     </SmoothScroll>
   );

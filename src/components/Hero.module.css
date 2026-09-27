@@ -71,11 +71,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  transition: border-bottom-color 0.2s ease;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease, opacity 0.2s ease;
 }
 
-.destinationLineWrapperFocused {
+.destinationLineWrapper:hover {
   border-bottom-color: #ffffff;
+  opacity: 0.95;
+}
+
+.destinationTriggerPlaceholder {
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 1.05rem;
+  font-weight: 300;
+  user-select: none;
 }
 
 .destinationUnderlineInput {
