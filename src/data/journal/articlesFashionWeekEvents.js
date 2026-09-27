@@ -485,7 +485,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
     "category": "fashion-week-evenements",
     "heroImage": "/journal/journal_topic_33.jpg",
     "secondaryImages": [
-      "/sclass_paris.png",
+      "/sclass_paris_hero.jpg",
       "/vclass-paris-luxury.jpg"
     ],
     "readingTime": "9 min",
@@ -965,8 +965,8 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
     "category": "fashion-week-evenements",
     "heroImage": "/journal/journal_topic_35.jpg",
     "secondaryImages": [
-      "/vclass-paris-luxury.jpg",
-      "/sclass_paris.png"
+      "/sclass_paris.png",
+      "/vclass_interior_vip_lounge.jpg"
     ],
     "readingTime": "10 min",
     "publishedAt": "2026-03-31",
