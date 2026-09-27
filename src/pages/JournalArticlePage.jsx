@@ -265,8 +265,26 @@ export default function JournalArticlePage() {
           {tr.sections &&
             tr.sections.map((section, idx) => (
               <section key={idx} className={styles.contentSection}>
-                <h2 className={styles.sectionH2}>{section.h2}</h2>
+                {section.h2 && <h2 className={styles.sectionH2}>{section.h2}</h2>}
+                {section.h3 && <h3 className={styles.sectionH3}>{section.h3}</h3>}
+
+                {/* Single content or array of paragraphs */}
                 {section.content && <p className={styles.paragraph}>{section.content}</p>}
+                {section.paragraphs &&
+                  section.paragraphs.map((p, pIdx) => (
+                    <p key={pIdx} className={styles.paragraph}>{p}</p>
+                  ))}
+
+                {/* Callout box / Pro-Tip */}
+                {section.callout && (
+                  <div className={styles.calloutBox}>
+                    <div className={styles.calloutHeader}>
+                      <span className={styles.calloutBadge}>{section.callout.badge || 'Conseil SELY'}</span>
+                      {section.callout.title && <h4 className={styles.calloutTitle}>{section.callout.title}</h4>}
+                    </div>
+                    <p className={styles.calloutText}>{section.callout.text}</p>
+                  </div>
+                )}
 
                 {section.bulletPoints && (
                   <ul className={styles.bulletList}>
@@ -278,14 +296,41 @@ export default function JournalArticlePage() {
                     ))}
                   </ul>
                 )}
+
+                {/* Contextual image inside section */}
+                {section.image && (
+                  <div className={styles.inlineImageWrapper}>
+                    <img
+                      src={section.image.src}
+                      alt={section.image.alt || tr.title}
+                      className={styles.inlineImage}
+                      loading="lazy"
+                    />
+                    {section.image.caption && (
+                      <figcaption className={styles.imageCaption}>{section.image.caption}</figcaption>
+                    )}
+                  </div>
+                )}
               </section>
             ))}
 
+          {/* Secondary Photo Showcase if available and not placed inline */}
+          {article.secondaryImages && article.secondaryImages.length > 0 && !tr.sections?.some(s => s.image) && (
+            <div className={styles.secondaryImageShowcase}>
+              <img
+                src={article.secondaryImages[0]}
+                alt={tr.title}
+                className={styles.secondaryImage}
+                loading="lazy"
+              />
+            </div>
+          )}
+
           {/* Bespoke Step-by-Step Workflow (for Process & Airport Pickups) */}
-          {tr.stepsWorkflow && tr.stepsWorkflow.length > 0 && (
+          {(tr.stepsWorkflow || tr.steps) && (tr.stepsWorkflow || tr.steps).length > 0 && (
             <section className={styles.stepsSection}>
               <div className={styles.stepsGrid}>
-                {tr.stepsWorkflow.map((st, sIdx) => (
+                {(tr.stepsWorkflow || tr.steps).map((st, sIdx) => (
                   <div key={sIdx} className={styles.stepCard}>
                     <div className={styles.stepHeader}>
                       <span className={styles.stepBadge}>{st.stepNumber}</span>
@@ -325,6 +370,56 @@ export default function JournalArticlePage() {
               </div>
             </section>
           )}
+
+          {/* Secondary Sections (Sections 2) if present after table */}
+          {tr.sections2 &&
+            tr.sections2.map((section, idx) => (
+              <section key={`sec2-${idx}`} className={styles.contentSection}>
+                {section.h2 && <h2 className={styles.sectionH2}>{section.h2}</h2>}
+                {section.h3 && <h3 className={styles.sectionH3}>{section.h3}</h3>}
+
+                {section.content && <p className={styles.paragraph}>{section.content}</p>}
+                {section.paragraphs &&
+                  section.paragraphs.map((p, pIdx) => (
+                    <p key={pIdx} className={styles.paragraph}>{p}</p>
+                  ))}
+
+                {section.callout && (
+                  <div className={styles.calloutBox}>
+                    <div className={styles.calloutHeader}>
+                      <span className={styles.calloutBadge}>{section.callout.badge || 'Conseil SELY'}</span>
+                      {section.callout.title && <h4 className={styles.calloutTitle}>{section.callout.title}</h4>}
+                    </div>
+                    <p className={styles.calloutText}>{section.callout.text}</p>
+                  </div>
+                )}
+
+                {section.bulletPoints && (
+                  <ul className={styles.bulletList}>
+                    {section.bulletPoints.map((pt, pIdx) => (
+                      <li key={pIdx} className={styles.bulletItem}>
+                        <CheckCircle2 size={15} className={styles.bulletIcon} />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {section.image && (
+                  <div className={styles.inlineImageWrapper}>
+                    <img
+                      src={section.image.src}
+                      alt={section.image.alt || tr.title}
+                      className={styles.inlineImage}
+                      loading="lazy"
+                    />
+                    {section.image.caption && (
+                      <figcaption className={styles.imageCaption}>{section.image.caption}</figcaption>
+                    )}
+                  </div>
+                )}
+              </section>
+            ))}
 
           {tr.bottomContent && (
             <p className={styles.bottomParagraph}>{tr.bottomContent}</p>

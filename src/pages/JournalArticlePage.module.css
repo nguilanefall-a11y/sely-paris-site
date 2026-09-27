@@ -237,6 +237,84 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
+.sectionH3 {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.01em;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.calloutBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0a0a0a;
+  border-radius: 4px;
+  padding: 1.25rem 1.4rem;
+  margin: 1.5rem 0;
+}
+
+.calloutHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.5rem;
+}
+
+.calloutBadge {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+.calloutTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0a0a0a;
+}
+
+.calloutText {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #334155;
+  margin: 0;
+}
+
+.inlineImageWrapper {
+  margin: 1.75rem 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ebebeb;
+  background: #fafafa;
+}
+
+.inlineImage {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.secondaryImageShowcase {
+  margin: 2rem 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ebebeb;
+}
+
+.secondaryImage {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
 .paragraph {
   font-size: 1rem;
   line-height: 1.75;

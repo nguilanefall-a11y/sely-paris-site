@@ -4,13 +4,13 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 7,
     "category": "mise-a-disposition",
-    "heroImage": "/london_hourly_bg.jpg",
+    "heroImage": "/chauffeur.png",
     "secondaryImages": [
       "/sclass_paris.png",
-      "/vclass-paris-luxury.jpg"
+      "/interior-1.jpg"
     ],
-    "readingTime": "6 min",
-    "publishedAt": "2026-03-26",
+    "readingTime": "10 min",
+    "publishedAt": "2026-03-07",
     "slugs": {
       "fr": "prix-mise-a-disposition-chauffeur-paris",
       "en": "hourly-chauffeur-paris-cost",
@@ -19,223 +19,294 @@ export const ARTICLES_MISE_A_DISPOSITION = [
     },
     "translations": {
       "fr": {
-        "title": "Combien coûte une mise à disposition avec chauffeur à Paris ? Forfaits 2026",
-        "metaTitle": "Prix d’une Mise à Disposition avec Chauffeur à Paris | Tarifs Forfaits",
-        "metaDescription": "Tarifs d’une mise à disposition horaire avec chauffeur privé à Paris : forfaits 3h, demi-journée (4h) et journée complète (8h). Véhicules Mercedes Classe E, S et V.",
-        "h1": "Combien coûte une mise à disposition avec chauffeur à Paris ?",
-        "heroAlt": "Chauffeur privé attendant son passager devant un palace parisien lors d’une mise à disposition",
-        "directAnswer": "À Paris, une mise à disposition horaire avec chauffeur privé coûte généralement entre 90 € et 130 € par heure pour une berline affaires (Mercedes Classe E) ou un van VIP (Mercedes Classe V), et entre 140 € et 250 € par heure pour une berline de grand luxe (Mercedes Classe S ou Maybach). La plupart des Maisons de prestige appliquent un minimum de réservation de 3 ou 4 heures consécutives, incluant le carburant, les assurances professionnelles et un forfait kilométrique urbain généreux.",
-        "intro": "La mise à disposition (aussi appelée « chauffeur à l’heure » ou « chauffeur à la journée ») est la formule privilégiée des dirigeants, des familles et des délégations souhaitant une liberté de mouvement totale sans contrainte de commande répétée.",
-        "sections": [
-          {
-            "h2": "Les forfaits types constatés à Paris",
-            "content": "Découvrez les fourchettes tarifaires courantes pour une mise à disposition d’excellence :"
-          }
-        ],
+        "title": "Combien coûte une mise à disposition avec chauffeur privé à Paris ? Tarifs 2026",
+        "metaTitle": "Prix Mise à Disposition Chauffeur Paris 2026 | Forfaits Horaires & Journée",
+        "metaDescription": "Tarifs réels d’une mise à disposition de chauffeur privé à Paris : de 90 € à 160 € / heure selon véhicule (Classe E, S, V), forfaits demi-journée et journée complète.",
+        "h1": "Combien coûte une mise à disposition avec chauffeur privé à Paris ?",
+        "heroAlt": "Chauffeur privé en costume attendant patiemment devant une berline Mercedes dans une rue prestigieuse de Paris",
+        "directAnswer": "À Paris, le coût d’une mise à disposition avec chauffeur privé se situe généralement entre 90 € et 160 € par heure selon la catégorie de véhicule Mercedes retenue : comptez environ 90 € à 110 € / heure pour une berline affaires Mercedes Classe E, 120 € à 150 € / heure pour un van VIP Mercedes Classe V, et 130 € à 160 € / heure pour une limousine d’apparat Mercedes Classe S (la Mercedes-Maybach étant proposée à partir de 250 € / heure). La réservation s’effectue généralement sur une base minimale de 3 ou 4 heures, ou sur des forfaits journée complète (8 à 12 heures) incluant véhicule, chauffeur dédié, carburant, assurance passagers illimitée et un forfait kilométrique généreux de 20 à 25 km par heure réservée.",
+        "intro": "La mise à disposition est la formule reine de la Grande Remise parisienne : disposer d’un véhicule de prestige et d’un chauffeur dédié prêt à intervenir au moindre appel permet d’enchaîner rendez-vous d’affaires, shopping de luxe et dîners sans aucune contrainte de stationnement.",
         "comparisonTable": {
           "headers": [
-            "Formule",
-            "Durée & Kilométrage",
-            "Mercedes Classe E / V",
-            "Mercedes Classe S / Maybach"
+            "Catégorie de Véhicule",
+            "Tarif horaire indicatif",
+            "Forfait Demi-Journée (4h)",
+            "Forfait Journée (8h)",
+            "Inclusions kilométriques"
           ],
           "rows": [
             [
-              "Forfait 3 Heures (Minimum)",
-              "3 heures · 60 km inclus",
-              "270 € à 360 €",
-              "420 € à 650 €"
+              "Mercedes Classe E (Affaires)",
+              "90 € à 110 € / h",
+              "360 € à 420 €",
+              "700 € à 800 €",
+              "20 à 25 km / heure incluse"
             ],
             [
-              "Demi-Journée (4 Heures)",
-              "4 heures · 80 km inclus",
-              "360 € à 480 €",
-              "560 € à 850 €"
+              "Mercedes Classe S (Palace Limousine)",
+              "130 € à 160 € / h",
+              "500 € à 600 €",
+              "950 € à 1 200 €",
+              "25 km / heure incluse"
             ],
             [
-              "Journée Complète (8 Heures)",
-              "8 heures · 150 km inclus",
-              "720 € à 960 €",
-              "1 120 € à 1 800 €"
+              "Mercedes Classe V (Van VIP Extra-Long)",
+              "120 € à 150 € / h",
+              "460 € à 550 €",
+              "900 € à 1 100 €",
+              "25 km / heure incluse"
             ],
             [
-              "Heure supplémentaire",
-              "Au-delà du forfait",
-              "90 € à 120 € / h",
-              "140 € à 220 € / h"
+              "Mercedes-Maybach (Haute Couture)",
+              "Dès 250 € / h",
+              "Dès 1 000 €",
+              "Dès 1 900 €",
+              "Kilométrage sur mesure"
             ]
           ]
         },
-        "sections2": [
+        "sections": [
           {
-            "h2": "Ce que comprend le forfait horaire SELY Privé",
-            "content": "Nos forfaits de mise à disposition incluent tous les frais opérationnels :",
-            "bulletPoints": [
-              "Chauffeur privé bilingue dédié exclusivement à votre planning tout au long de la durée.",
-              "Kilométrage généreux adapté aux déplacements dans Paris intramuros et la petite couronne.",
-              "Carburant et assurance responsabilité civile illimitée pour les passagers transportés.",
-              "Attente du chauffeur sur place ou à proximité immédiate à chacun de vos rendez-vous.",
-              "Rafraîchissements, chargeurs de smartphones et connexion Wi-Fi haut débit à bord."
+            "h2": "Ce qui est inclus dans le tarif de mise à disposition SELY Privé",
+            "paragraphs": [
+              "• Chauffeur privé dédié en costume cravate restant en faction permanente à proximité immédiate.",
+              "• Arrêts et étapes illimités dans Paris et sa proche banlieue.",
+              "• Garde sécurisée de vos affaires personnelles, dossiers ou paquets shopping à bord.",
+              "• Eau minérale fraîche Evian, lingettes d’accueil rafraîchissantes, chargeurs pour smartphones et connexion Wi-Fi haut débit.",
+              "• Carburant, assurances professionnelles passagers et péages inclus dans le forfait kilométrique."
+            ]
+          },
+          {
+            "h2": "Comment sont facturées les heures ou kilomètres supplémentaires ?",
+            "paragraphs": [
+              "Si votre journée se prolonge au-delà de la durée initialement réservée, chaque heure supplémentaire est facturée au tarif horaire de base convenu, sans pénalité arbitraire.",
+              "Pour les escapades lointaines (escapade en Champagne à Reims, visite des châteaux de la Loire ou journée en Normandie), des forfaits kilométriques étendus sont calculés sur mesure."
             ]
           }
         ],
         "faq": [
           {
-            "q": "Les péages et parkings sont-ils inclus ?",
-            "a": "Les parkings payants demandés par le client lors d’attentes spécifiques (gares, salons ou événements) ou les péages hors Île-de-France peuvent être refacturés au réel sur justificatif."
+            "q": "Y a-t-il une durée minimale de réservation pour une mise à disposition ?",
+            "a": "Oui, la durée minimale standard est généralement de 3 ou 4 heures, permettant d’allouer un véhicule préparé et un chauffeur dédié."
           },
           {
-            "q": "Peut-on prolonger la mise à disposition en cours de journée ?",
-            "a": "Absolument. Si vos réunions ou vos dîners se prolongent, prévenez simplement votre chauffeur. Les heures supplémentaires sont comptabilisées en toute transparence."
+            "q": "Le chauffeur peut-il nous déposer et attendre pendant un déjeuner de 2 heures ?",
+            "a": "Absolument, c’est tout le principe de la mise à disposition : le chauffeur stationne à proximité immédiate et reste joignable par téléphone ou WhatsApp pour réavancer le véhicule dès votre sortie."
           }
         ],
         "cta": {
-          "title": "Besoin d’un chauffeur dédié pour plusieurs heures à Paris ?",
-          "subtitle": "Configurez votre forfait personnalisé et recevez votre devis en direct.",
+          "title": "Bénéficiez d’un chauffeur dédié à votre rythme",
+          "subtitle": "Réservez votre mise à disposition horaire à Paris en Mercedes de prestige.",
           "buttonText": "Réserver une mise à disposition",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "comment-fonctionne-mise-a-disposition-chauffeur",
-          "reserver-chauffeur-prive-toute-une-journee-paris"
+          "comment-fonctionne-mise-a-disposition-chauffeur-paris",
+          "peut-on-reserver-chauffeur-journee-complete-paris",
+          "prix-chauffeur-prive-paris"
         ]
       },
       "en": {
-        "title": "How Much Does an Hourly Chauffeur Cost in Paris? 2026 Pricing",
-        "metaTitle": "Hourly Chauffeur Cost in Paris | Rates for Daily Hire",
-        "metaDescription": "Discover the price of hourly and daily private chauffeur hire in Paris: 3-hour, half-day (4h), and full-day (8h) packages for Mercedes E, S, and V-Class.",
-        "h1": "How Much Does an Hourly Chauffeur Cost in Paris?",
-        "heroAlt": "Chauffeur waiting by luxury car during an hourly disposal in Paris",
-        "directAnswer": "In Paris, hourly private chauffeur hire typically ranges between €90 and €130 per hour for an executive saloon (Mercedes E-Class) or luxury van (Mercedes V-Class), and between €140 and €250 per hour for an ultra-luxury palace limousine (Mercedes S-Class or Maybach). Luxury houses generally require a 3 or 4-hour minimum charter, including fuel, comprehensive commercial insurance, and generous urban mileage.",
+        "title": "How Much Does an Hourly Chauffeur Service Cost in Paris? 2026 Rates",
+        "metaTitle": "Hourly Private Chauffeur Cost Paris 2026 | Half-Day & Full-Day Rates",
+        "metaDescription": "Complete price guide for hourly as-directed private chauffeur service in Paris: €90 to €160 / hour, 4-hour and full-day packages, Mercedes E, S, and V-Class.",
+        "h1": "How Much Does an Hourly Chauffeur Service Cost in Paris?",
+        "heroAlt": "Suited private chauffeur patiently standing by executive Mercedes on luxury Paris boulevard",
+        "directAnswer": "In Paris, hiring an hourly as-directed private chauffeur (mise à disposition) typically costs between €90 and €160 per hour depending on your chosen Mercedes vehicle class: expect €90 to €110 / hour for an executive Mercedes E-Class sedan, €120 to €150 / hour for an executive Mercedes V-Class van, and €130 to €160 / hour for a flagship Mercedes S-Class limousine (with Mercedes-Maybach starting from €250 / hour). Reservations typically require a 3 or 4-hour minimum booking or full-day packages (8 to 12 hours) including dedicated vehicle, suited chauffeur, fuel, comprehensive passenger insurance, and a generous allowance of 20 to 25 kilometers per booked hour.",
+        "intro": "Hourly disposal is the premier service tier of Parisian Grande Remise hospitality. Having a dedicated luxury vehicle and chauffeur on permanent standby outside your appointments liberates you from parking constraints and navigation stress.",
         "comparisonTable": {
           "headers": [
-            "Package",
-            "Duration & Mileage",
-            "Mercedes E / V-Class",
-            "Mercedes S-Class / Maybach"
+            "Mercedes Vehicle Class",
+            "Indicative Hourly Rate",
+            "Half-Day Package (4h)",
+            "Full-Day Package (8h)",
+            "Included Mileage"
           ],
           "rows": [
             [
-              "3-Hour Charter (Minimum)",
-              "3 hours · 60 km included",
-              "€270 to €360",
-              "€420 to €650"
+              "Mercedes E-Class (Executive)",
+              "€90 - €110 / hour",
+              "€360 - €420",
+              "€700 - €800",
+              "20 - 25 km / hour included"
             ],
             [
-              "Half-Day (4 Hours)",
-              "4 hours · 80 km included",
-              "€360 to €480",
-              "€560 to €850"
+              "Mercedes S-Class (Palace Limousine)",
+              "€130 - €160 / hour",
+              "€500 - €600",
+              "€950 - €1,200",
+              "25 km / hour included"
             ],
             [
-              "Full Day (8 Hours)",
-              "8 hours · 150 km included",
-              "€720 to €960",
-              "€1,120 to €1,800"
+              "Mercedes V-Class (VIP Van XL)",
+              "€120 - €150 / hour",
+              "€460 - €550",
+              "€900 - €1,100",
+              "25 km / hour included"
             ],
             [
-              "Overtime Hour",
-              "Per additional hour",
-              "€90 to €120 / hr",
-              "€140 to €220 / hr"
+              "Mercedes-Maybach (First Class)",
+              "From €250 / hour",
+              "From €1,000",
+              "From €1,900",
+              "Custom bespoke mileage"
             ]
           ]
         },
+        "sections": [
+          {
+            "h2": "What is included in your hourly disposal package?",
+            "paragraphs": [
+              "• Dedicated professional chauffeur remaining on permanent standby right outside your location.",
+              "• Unlimited stops and route adjustments throughout Paris and surrounding departments.",
+              "• Continuous security surveillance for shopping bags, laptops, and personal effects left onboard.",
+              "• Chilled Evian water, refreshing towelettes, smartphone charging cables, and high-speed Wi-Fi.",
+              "• Fuel, tolls, and comprehensive commercial passenger insurance."
+            ]
+          }
+        ],
         "faq": [
           {
-            "q": "Can I extend my hourly booking on the go?",
-            "a": "Yes, simply inform your chauffeur if your dinner or business meetings run over schedule. Extra hours are billed transparently."
+            "q": "Is there a minimum booking duration for hourly disposal in Paris?",
+            "a": "Yes, the standard minimum booking is typically 3 or 4 hours to dedicate a pristine vehicle and chauffeur exclusively to your itinerary."
+          },
+          {
+            "q": "Can the chauffeur wait while we dine at a restaurant for two hours?",
+            "a": "Yes, that is the essence of as-directed service: your chauffeur parks nearby and returns to the restaurant entrance upon receiving a quick text message."
           }
         ],
         "cta": {
-          "title": "Book a dedicated chauffeur by the hour in Paris",
-          "subtitle": "Complete flexibility with dedicated Mercedes vehicles.",
-          "buttonText": "Book hourly charter",
+          "title": "Enjoy Paris at your own pace with a dedicated chauffeur",
+          "subtitle": "Reserve your hourly Mercedes disposal with transparent fixed rates.",
+          "buttonText": "Book Hourly Chauffeur",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "hourly-chauffeur-paris-cost",
-          "book-private-chauffeur-full-day-paris"
+          "how-hourly-chauffeur-service-works-paris",
+          "can-you-book-chauffeur-full-day-paris",
+          "private-chauffeur-paris-cost"
         ]
       },
       "es": {
-        "title": "¿Cuánto cuesta un chófer por horas en París? Tarifas 2026",
-        "metaTitle": "Precio de un Chófer por Horas en París | Tarifas por Día",
-        "metaDescription": "Tarifas de alquiler de chófer privado por horas en París: paquetes de media jornada (4h) y jornada completa (8h) en Mercedes Clase E, S y V.",
-        "h1": "¿Cuánto cuesta un chófer por horas en París?",
-        "heroAlt": "Chófer privado esperando durante un servicio por horas en París",
-        "directAnswer": "En París, contratar un chófer privado por horas cuesta entre 90 € y 130 € por hora en Clase E o Clase V, y entre 140 € y 250 € por hora en Clase S o Maybach. Los servicios suelen contratarse con un mínimo de 3 o 4 horas con kilometraje urbano, combustible y seguro incluidos.",
+        "title": "¿Cuánto cuesta un chófer privado por horas en París? Tarifas 2026",
+        "metaTitle": "Precio Chófer Privado por Horas en París | Tarifas a Disposición 2026",
+        "metaDescription": "Precios de un chófer privado a disposición por horas en París: de 90 € a 160 € / hora según modelo (Clase E, S, V), paquetes de media jornada y día completo.",
+        "h1": "¿Cuánto cuesta un servicio de chófer privado por horas en París?",
+        "heroAlt": "Chófer privado elegante esperando junto a una berlina Mercedes en París",
+        "directAnswer": "En París, un servicio de chófer privado a disposición por horas cuesta generalmente entre 90 € y 160 € por hora según el vehículo Mercedes: 90 € a 110 €/h para Clase E, 120 € a 150 €/h para van Clase V y 130 € a 160 €/h para limusina Clase S. Las reservas suelen requerir un mínimo de 3 o 4 horas, o paquetes de jornada completa (8 a 12 horas) con combustible, seguro y kilometraje generoso incluido.",
+        "intro": "Tener un vehículo de lujo con chófer exclusivo esperando en cada parada permite encadenar reuniones de negocios y compras con total serenidad.",
         "comparisonTable": {
           "headers": [
-            "Paquete",
-            "Duración",
-            "Mercedes Clase E / V",
-            "Mercedes Clase S / Maybach"
+            "Vehículo Mercedes",
+            "Tarifa por hora",
+            "Media Jornada (4h)",
+            "Jornada Completa (8h)"
           ],
           "rows": [
             [
-              "Media Jornada (4h)",
-              "4 horas",
-              "360 € a 480 €",
-              "560 € a 850 €"
+              "Mercedes Clase E",
+              "90 € - 110 € / h",
+              "360 € - 420 €",
+              "700 € - 800 €"
             ],
             [
-              "Jornada Completa (8h)",
-              "8 horas",
-              "720 € a 960 €",
-              "1.120 € a 1.800 €"
+              "Mercedes Clase S",
+              "130 € - 160 € / h",
+              "500 € - 600 €",
+              "950 € - 1.200 €"
+            ],
+            [
+              "Mercedes Clase V",
+              "120 € - 150 € / h",
+              "460 € - 550 €",
+              "900 € - 1.100 €"
             ]
           ]
         },
+        "sections": [
+          {
+            "h2": "Servicios incluidos a bordo",
+            "paragraphs": [
+              "Chófer dedicado en espera permanente, paradas ilimitadas, custodia de maletas y compras, agua mineral y wifi."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "¿Hay un mínimo de horas para reservar?",
+            "a": "Sí, el mínimo estándar suele ser de 3 o 4 horas."
+          }
+        ],
         "cta": {
-          "title": "Contrate un chófer privado por horas en París",
-          "subtitle": "Máxima flexibilidad para sus traslados y reuniones.",
+          "title": "Reserve su chófer privado por horas en París",
+          "subtitle": "Máxima flexibilidad para sus citas de negocios y ocio.",
           "buttonText": "Reservar por horas",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "precio-chofer-por-horas-paris",
-          "como-funciona-chofer-por-horas-paris"
+          "como-funciona-chofer-a-disposicion-paris",
+          "se-puede-reservar-chofer-dia-completo-paris"
         ]
       },
       "ar": {
-        "title": "كم تكلفة سائق خاص بالساعة في باريس؟ باقات وأسعار 2026",
-        "metaTitle": "تكلفة حجز سائق خاص بالساعة في باريس | باقات يومية",
-        "metaDescription": "أسعار حجز سائق خاص بالساعة في باريس: باقات نصف يوم (4 ساعات) ويوم كامل (8 ساعات) مع سيارات مرسيدس الفئة E و S و V.",
-        "h1": "كم تكلفة حجز سائق خاص بالساعة في باريس؟",
-        "heroAlt": "سائق خاص ينتظر ضيفه خلال خدمة حجز بالساعة في باريس",
-        "directAnswer": "في باريس، تتراوح تكلفة حجز سائق خاص بالساعة (Mise à disposition) عادةً بين 90 € و 130 € للساعة لسيارات مرسيدس الفئة E أو فان الفئة V، وبين 140 € و 250 € للساعة لسيارات مرسيدس الفئة S الملكية أو مايباخ. وتشترط معظم دور النقل الفاخر حداً أدنى يبدأ من 3 أو 4 ساعات متتالية شاملة الوقود والتأمين الشامل وكيلومترات مجانية كافية.",
+        "title": "كم تكلفة استئجار سائق خاص بالساعة في باريس؟ أسعار 2026",
+        "metaTitle": "تكلفة سائق خاص بالساعة في باريس | أسعار نصف يوم ويوم كامل 2026",
+        "metaDescription": "دليل أسعار استئجار سائق خاص بالساعة في باريس: من 90 € إلى 160 € / ساعة حسب فئة السيارة (مرسيدس E أو S أو V)، وباقات نصف يوم ويوم كامل.",
+        "h1": "كم تكلفة خدمة السائق الخاص بالساعة في باريس؟",
+        "heroAlt": "سائق خاص رسمي ينتظر بجوار سيارة مرسيدس فارهة في أحد شوارع باريس الراقية",
+        "directAnswer": "في باريس، تتراوح تكلفة استئجار سائق خاص بالساعة (تحت تصرفك) عادة بين 90 € و 160 € في الساعة حسب فئة سيارة مرسيدس المختارة: حوالي 90 € إلى 110 € / ساعة لمرسيدس الفئة E، و 120 € إلى 150 € / ساعة لفان الفئة V الفاخر، و 130 € إلى 160 € / ساعة لليموزين الفئة S (وتبدأ مايباخ من 250 € / ساعة). تبدأ فترات الحجز عادة من 3 أو 4 ساعات كحد أدنى أو باقات يوم كامل (8 إلى 12 ساعة) شاملة السائق المخصص والوقود والتأمين وعدد كيلومترات مفتوح للتنقل براحة تامة.",
+        "intro": "تعتبر خدمة السائق الخاص بالساعة الخيار الأمثل لرجال الأعمال والعائلات للتنقل بين الاجتماعات والمطاعم ومتاجر التسوق دون أي قلق بشأن المواقف أو الازدحام.",
         "comparisonTable": {
           "headers": [
-            "الباقة",
-            "المدة والكيلومترات",
-            "مرسيدس E أو الفئة V",
-            "مرسيدس الفئة S أو مايباخ"
+            "فئة السيارة",
+            "السعر بالساعة",
+            "نصف يوم (4 ساعات)",
+            "يوم كامل (8 ساعات)"
           ],
           "rows": [
             [
-              "نصف يوم (4 ساعات)",
-              "4 ساعات · 80 كم مشمول",
-              "360 € إلى 480 €",
-              "560 € إلى 850 €"
+              "مرسيدس الفئة E",
+              "90 € إلى 110 €",
+              "360 € إلى 420 €",
+              "700 € إلى 800 €"
             ],
             [
-              "يوم كامل (8 ساعات)",
-              "8 ساعات · 150 كم مشمول",
-              "720 € إلى 960 €",
-              "1,120 € إلى 1,800 €"
+              "مرسيدس الفئة S",
+              "130 € إلى 160 €",
+              "500 € إلى 600 €",
+              "950 € إلى 1,200 €"
+            ],
+            [
+              "مرسيدس الفئة V",
+              "120 € إلى 150 €",
+              "460 € إلى 550 €",
+              "900 € إلى 1,100 €"
             ]
           ]
         },
+        "sections": [
+          {
+            "h2": "المزايا المشمولة في خدمة التأجير بالساعة",
+            "paragraphs": [
+              "سائق رسمي في انتظارك الدائم أمام كل محطة، محطات توقف غير محدودة، حراسة المشتريات والمقتنيات داخل السيارة، ومياه باردة وإنترنت سريع."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "ما هو الحد الأدنى لساعات الحجز؟",
+            "a": "الحد الأدنى المعتاد هو 3 أو 4 ساعات لضمان تخصيص سيارة وسائق مفرغ لخدمتكم بالكامل."
+          }
+        ],
         "cta": {
-          "title": "احجز سائقك المكرس بالساعة في باريس",
-          "subtitle": "مرونة تامة لرحلات التسوق والاجتماعات.",
-          "buttonText": "احجز بالساعة الآن",
+          "title": "استمتع بالتنقل في باريس بحرية ومرونة تامة",
+          "subtitle": "احجز سيارتك الفاخرة مع سائق خاص بالساعة بسعر محدد مسبقاً.",
+          "buttonText": "حجز سائق بالساعة",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "taklifat-saeq-bil-saa-baris",
-          "kaif-yaamal-saeq-bil-saa-baris"
+          "kayfa-taamal-khidmet-saeq-bi-al-saa-baris",
+          "hal-yumkin-hajz-saeq-yawm-kamel-baris"
         ]
       }
     }
@@ -243,13 +314,13 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 8,
     "category": "mise-a-disposition",
-    "heroImage": "/london_about.jpg",
+    "heroImage": "/chauffeur.png",
     "secondaryImages": [
-      "/experience_concierge.png",
-      "/sclass-amg-int.jpg"
+      "/sclass_paris.png",
+      "/interior-1.jpg"
     ],
-    "readingTime": "5 min",
-    "publishedAt": "2026-03-27",
+    "readingTime": "9 min",
+    "publishedAt": "2026-03-08",
     "slugs": {
       "fr": "comment-fonctionne-mise-a-disposition-chauffeur",
       "en": "how-hourly-chauffeur-service-works",
@@ -258,126 +329,265 @@ export const ARTICLES_MISE_A_DISPOSITION = [
     },
     "translations": {
       "fr": {
-        "title": "Comment fonctionne une mise à disposition avec chauffeur privé à Paris ?",
-        "metaTitle": "Comment fonctionne une mise à disposition avec chauffeur ?",
-        "metaDescription": "Guide pratique du fonctionnement d’une mise à disposition : liberté d’arrêts, chauffeur en attente sur place, garde de vos affaires et flexibilité.",
-        "h1": "Comment fonctionne une mise à disposition avec chauffeur ?",
-        "heroAlt": "Chauffeur privé en costume attendant patiemment son passager à Paris",
-        "directAnswer": "Lors d’une mise à disposition, le véhicule et le chauffeur vous sont exclusivement réservés pour un bloc d’heures défini (ex: 4h, 8h ou journée entière). Contrairement à un transfert simple qui s’achève dès l’arrivée, le chauffeur reste en veille permanente à proximité immédiate de chacun de vos rendez-vous, garde vos effets personnels et sacs de shopping en sécurité dans le coffre, et s’adapte instantanément à tout changement d’itinéraire sur simple appel ou message.",
-        "intro": "C’est la formule reine pour les journées denses mêlant rendez-vous d’affaires, shopping et déjeuners dans des arrondissements différents.",
+        "title": "Comment fonctionne une mise à disposition avec chauffeur privé ? Guide 2026",
+        "metaTitle": "Fonctionnement Mise à Disposition Chauffeur Privé Paris | Guide 2026",
+        "metaDescription": "Découvrez comment fonctionne la mise à disposition d’un chauffeur privé à Paris : flexibilité totale d’itinéraire, arrêts multiples, attente sur place et contact direct.",
+        "h1": "Comment fonctionne une mise à disposition avec chauffeur privé ?",
+        "heroAlt": "Chauffeur privé ouvrant la portière d’une berline de luxe pour son client lors d’une mise à disposition à Paris",
+        "directAnswer": "La mise à disposition est une formule d’accompagnement sur mesure où un véhicule de prestige (berline ou van Mercedes) et son chauffeur privé dédié vous sont exclusivement alloués pour une durée convenue (de quelques heures à plusieurs jours). Contrairement à un simple transfert de point A à B, vous conservez la liberté totale de votre itinéraire : vous enchaînez des arrêts multiples à volonté, modifiez vos destinations en temps réel et laissez vos affaires personnelles et achats en toute sécurité à bord. Pendant vos rendez-vous, déjeuners ou essayages, votre chauffeur patiente à proximité immédiate et réavance le véhicule devant la porte dès réception d’un simple message WhatsApp.",
+        "intro": "Qu’il s’agisse d’un roadshow financier, d’une journée de visites privées ou de la Fashion Week, la mise à disposition offre une liberté de mouvement inégalée dans Paris, en éliminant toute contrainte logistique.",
         "stepsWorkflow": [
           {
-            "stepNumber": "1",
-            "title": "Prise en charge à votre adresse",
-            "description": "Votre chauffeur se présente 15 minutes en avance au lieu convenu (votre hôtel, résidence privée ou bureau)."
+            "stepNumber": "01",
+            "title": "Définition du forfait",
+            "description": "Choix de la durée (4h, 8h, 12h) et de la catégorie de véhicule Mercedes."
           },
           {
-            "stepNumber": "2",
-            "title": "Arrêts multiples à votre convenance",
-            "description": "Enchaînez vos rendez-vous, boutiques de luxe ou restaurants. Vous indiquez vos étapes au fur et à mesure sans recalcul de commande."
+            "stepNumber": "02",
+            "title": "Mise en place 15 min avant",
+            "description": "Votre chauffeur se positionne à l’adresse de départ avec véhicule nettoyé et climatisé."
           },
           {
-            "stepNumber": "3",
-            "title": "Attente sécurisée et garde de vos effets",
-            "description": "Laissez vos manteaux, ordinateurs et sacs de shopping dans le véhicule verrouillé et climatisé pendant que vous êtes en rendez-vous."
+            "stepNumber": "03",
+            "title": "Itinéraire 100% libre",
+            "description": "Indiquez vos étapes successives au fur et à mesure de votre journée."
           },
           {
-            "stepNumber": "4",
-            "title": "Reprise immédiate sur simple message",
-            "description": "Lorsque vous êtes prêt à repartir, un simple SMS ou appel WhatsApp suffit pour que votre chauffeur se présente devant la porte."
+            "stepNumber": "04",
+            "title": "Attente sur place sécurisée",
+            "description": "Pendant vos activités, votre chauffeur reste en faction et veille sur vos effets."
+          },
+          {
+            "stepNumber": "05",
+            "title": "Rappel instantané par SMS",
+            "description": "Un SMS ou message WhatsApp suffit pour que votre chauffeur se présente devant la porte."
+          },
+          {
+            "stepNumber": "06",
+            "title": "Prolongation fluide possible",
+            "description": "Possibilité d’étendre la durée de la prestation en direct avec le régulateur."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "Pourquoi la mise à disposition surpasse la commande course par course",
+            "paragraphs": [
+              "En commandant des courses successives sur une application ou en cherchant des taxis dans la rue, vous perdez entre 15 et 30 minutes à chaque étape pour attendre un nouveau véhicule, avec le risque constant de refus ou de véhicule mal entretenu.",
+              "Avec un chauffeur en mise à disposition, votre véhicule reste le vôtre pour la journée : vous y laissez vos manteaux, vos ordinateurs et vos achats en toute confiance. C’est la continuité d’un salon privé mobile."
+            ]
           }
         ],
         "faq": [
           {
-            "q": "Puis-je changer d’itinéraire en cours de route ?",
-            "a": "Oui, c’est le principe même de la mise à disposition : vous pouvez modifier vos destinations, ajouter des arrêts imprévus ou décider d’un détour sans aucune contrainte."
+            "q": "Mes affaires personnelles sont-elles en sécurité à bord pendant mes rendez-vous ?",
+            "a": "Oui, le véhicule reste verrouillé sous la surveillance physique et constante de votre chauffeur professionnel."
+          },
+          {
+            "q": "Puis-je décider d’aller à Versailles ou en banlieue pendant ma mise à disposition ?",
+            "a": "Absolument, tant que le trajet s’inscrit dans le cadre du forfait horaire et du kilométrage alloué."
           }
         ],
         "cta": {
-          "title": "Profitez d’une liberté de mouvement absolue à Paris",
-          "subtitle": "Un chauffeur dédié à vos côtés pour toute la durée de votre choix.",
-          "buttonText": "Organiser ma mise à disposition",
+          "title": "Profitez d’une liberté totale de déplacement à Paris",
+          "subtitle": "Réservez votre chauffeur privé en mise à disposition horaire.",
+          "buttonText": "Réserver une mise à disposition",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
           "prix-mise-a-disposition-chauffeur-paris",
-          "reserver-chauffeur-prive-toute-une-journee-paris"
+          "peut-on-reserver-chauffeur-journee-complete-paris",
+          "comment-organiser-deplacements-dirigeant-visite-paris"
         ]
       },
       "en": {
-        "title": "How Does an Hourly Chauffeur Service Work in Paris?",
-        "metaTitle": "How Hourly Chauffeur Hire Works in Paris | Step-by-Step",
-        "metaDescription": "Understand how hourly chauffeur hire works in Paris: dedicated standby driver, unlimited stops, secure baggage storage, and seamless on-demand mobility.",
-        "h1": "How Does an Hourly Chauffeur Service Work?",
-        "heroAlt": "Dedicated chauffeur standing by executive vehicle in Paris",
-        "directAnswer": "With an hourly chauffeur service (mise à disposition), both the vehicle and driver are exclusively dedicated to you for a booked time block (e.g., 4h, 8h, or all day). Unlike a one-way transfer, your chauffeur remains parked nearby on standby at every stop, safeguards your shopping and personal items inside the vehicle, and adjusts instantly to spontaneous route adjustments upon your command.",
+        "title": "How Does an Hourly Chauffeur Service Work in Paris? 2026 Guide",
+        "metaTitle": "How Hourly Chauffeur Disposal Works in Paris | Step-by-Step 2026 Guide",
+        "metaDescription": "Complete guide to hourly as-directed private chauffeur service in Paris: total itinerary flexibility, multiple stops, vehicle standby, and WhatsApp coordination.",
+        "h1": "How Does an Hourly Private Chauffeur Service Work?",
+        "heroAlt": "Chauffeur opening door of executive Mercedes for passenger during hourly disposal service in Paris",
+        "directAnswer": "An hourly as-directed chauffeur service (mise à disposition) is a bespoke transportation model where an executive Mercedes vehicle and dedicated private chauffeur are assigned exclusively to you for a predetermined block of time (from 4 hours to multiple days). Unlike a simple point-to-point transfer, you enjoy 100% control over your schedule: you can add stops on the fly, adjust meeting locations, and leave garment bags, shopping totes, or laptops safely secured in the vehicle. While you dine or attend meetings, your chauffeur remains parked on dedicated standby nearby, returning to the curbside entrance within two minutes of a quick text or WhatsApp message.",
+        "intro": "Whether managing high-stakes corporate roadshows, private museum visits, or Paris Fashion Week show schedules, hourly disposal delivers fluid mobility across the French capital without parking delays or hailing stress.",
         "stepsWorkflow": [
           {
-            "stepNumber": "1",
-            "title": "Pickup at Your Location",
-            "description": "Your chauffeur arrives 15 minutes early at your hotel or residence."
+            "stepNumber": "01",
+            "title": "Select Hours & Vehicle",
+            "description": "Choose your desired time block (4h, 8h, 12h) and Mercedes class (E, S, or V)."
           },
           {
-            "stepNumber": "2",
-            "title": "Unlimited Flexible Stops",
-            "description": "Travel between boutiques, meetings, and restaurants at your own pace."
+            "stepNumber": "02",
+            "title": "Early Staging",
+            "description": "Your chauffeur arrives 15 minutes early with vehicle cleaned and climate set."
           },
           {
-            "stepNumber": "3",
-            "title": "Secure Onboard Storage",
-            "description": "Leave your coats, laptops, and shopping bags safely inside the locked cabin."
+            "stepNumber": "03",
+            "title": "Dynamic Route Freedom",
+            "description": "Direct your chauffeur to multiple stops spontaneously as your day unfolds."
           },
           {
-            "stepNumber": "4",
-            "title": "Instant Curbside Departure",
-            "description": "One quick text or WhatsApp message brings your car directly to the entrance."
+            "stepNumber": "04",
+            "title": "Dedicated Vehicle Standby",
+            "description": "Your chauffeur guards all personal belongings while remaining parked nearby."
+          },
+          {
+            "stepNumber": "05",
+            "title": "Instant Curbside Recall",
+            "description": "A quick WhatsApp message brings the vehicle right to the building entrance."
+          },
+          {
+            "stepNumber": "06",
+            "title": "Flexible Extensions",
+            "description": "Easily extend service hours directly with your chauffeur or dispatch team."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "Why hourly disposal outperforms booking individual rides",
+            "paragraphs": [
+              "Booking individual taxis or app rides between appointments wastes 15 to 30 minutes per stop waiting on street corners, with zero guarantee of vehicle cleanliness or model tier.",
+              "With hourly disposal, your vehicle remains your private sanctuary throughout the day: leave coats, presentation materials, and shopping bags safely onboard with total peace of mind."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are our belongings safe inside the vehicle during meetings?",
+            "a": "Yes, the vehicle remains locked under continuous physical supervision by your vetted professional chauffeur."
+          },
+          {
+            "q": "Can we travel outside Paris (such as Versailles) during the booking?",
+            "a": "Yes, regional trips throughout Île-de-France are fully permitted within your agreed hourly and mileage allowance."
           }
         ],
         "cta": {
-          "title": "Experience ultimate Parisian travel flexibility",
-          "subtitle": "Your personal chauffeur standing by throughout the day.",
-          "buttonText": "Book hourly chauffeur",
+          "title": "Enjoy complete freedom of movement in Paris",
+          "subtitle": "Reserve your hourly Mercedes chauffeur service with complete peace of mind.",
+          "buttonText": "Book Hourly Disposal",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "hourly-chauffeur-paris-cost",
-          "book-private-chauffeur-full-day-paris"
+          "hourly-chauffeur-service-cost-paris",
+          "can-you-book-chauffeur-full-day-paris",
+          "organize-vip-transport-executive-paris"
         ]
       },
       "es": {
-        "title": "¿Cómo funciona un servicio de chófer por horas en París?",
-        "metaTitle": "Cómo Funciona un Chófer por Horas en París | Guía",
-        "metaDescription": "Funcionamiento del servicio de chófer a disposición por horas: paradas ilimitadas, espera en el lugar, custodia de compras y máxima flexibilidad.",
-        "h1": "¿Cómo funciona un servicio de chófer por horas?",
-        "heroAlt": "Chófer privado de prestigio esperando a su cliente en París",
-        "directAnswer": "El servicio de chófer por horas le asigna un vehículo y un chófer en exclusiva durante el bloque de tiempo contratado: el conductor le espera cerca en cada una de sus paradas, custodia sus compras de lujo y equipaje en el coche, y se adapta al instante a cualquier cambio de planes.",
+        "title": "¿Cómo funciona un servicio de chófer privado por horas en París? 2026",
+        "metaTitle": "Cómo Funciona un Chófer a Disposición en París | Guía 2026",
+        "metaDescription": "Descubra cómo funciona el servicio de chófer privado a disposición en París: libertad total de paradas, espera en puerta y custodia de pertenencias.",
+        "h1": "¿Cómo funciona una puesta a disposición con chófer privado?",
+        "heroAlt": "Chófer privado abriendo la puerta a un cliente durante un servicio por horas en París",
+        "directAnswer": "La puesta a disposición es un servicio personalizado donde un vehículo Mercedes con chófer exclusivo queda a su entera disposición durante un bloque de horas (de 4 a 12 horas o varios días). Puede realizar cuantas paradas desee, cambiar de destino en cualquier momento y dejar sus compras y pertenencias a bordo con total seguridad. Mientras usted se encuentra en una reunión o restaurante, el chófer espera en las proximidades y acude a la puerta en cuanto le avisa por WhatsApp.",
+        "intro": "Disfrute de la máxima comodidad para encadenar citas en París sin preocuparse por el aparcamiento o el tráfico.",
+        "stepsWorkflow": [
+          {
+            "stepNumber": "01",
+            "title": "Reserva de horas",
+            "description": "Elija el tiempo y el vehículo Mercedes deseado."
+          },
+          {
+            "stepNumber": "02",
+            "title": "Llegada puntual",
+            "description": "El chófer espera 15 min antes en la dirección acordada."
+          },
+          {
+            "stepNumber": "03",
+            "title": "Itinerario flexible",
+            "description": "Visite múltiples destinos a su ritmo."
+          },
+          {
+            "stepNumber": "04",
+            "title": "Espera y custodia",
+            "description": "El chófer cuida de sus pertenencias en el coche."
+          },
+          {
+            "stepNumber": "05",
+            "title": "Recogida rápida",
+            "description": "Aviso por WhatsApp y llegada en 2 minutos a la puerta."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "Libertad total de horarios y destinos",
+            "paragraphs": [
+              "Evite esperar taxis tras cada reunión: su coche particular de lujo le espera siempre en la puerta."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "¿Están seguras mis compras en el coche?",
+            "a": "Sí, el vehículo permanece bajo la custodia permanente del chófer."
+          }
+        ],
         "cta": {
           "title": "Muévase por París con total libertad",
-          "subtitle": "Un chófer privado dedicado a su agenda.",
-          "buttonText": "Reservar servicio por horas",
+          "subtitle": "Reserve su servicio a disposición con chófer privado.",
+          "buttonText": "Reservar por horas",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
           "precio-chofer-por-horas-paris",
-          "como-reservar-chofer-privado-paris"
+          "se-puede-reservar-chofer-dia-completo-paris"
         ]
       },
       "ar": {
-        "title": "كيف تعمل خدمة السائق الخاص بالساعة في باريس؟",
-        "metaTitle": "كيف تعمل خدمة السائق تحت الطلب بالساعة في باريس؟",
-        "metaDescription": "دليل عملي لخدمة السائق الخاص بالساعة في باريس: توقفات غير محدودة، انتظار مستمر أمام المكان، حفظ المقتنيات والمشتريات بأمان.",
+        "title": "كيف تعمل خدمة السائق الخاص بالساعة في باريس؟ دليل 2026",
+        "metaTitle": "كيفية عمل خدمة السائق الخاص بالساعة في باريس | دليل الخطوات 2026",
+        "metaDescription": "تعرف على آلية خدمة السائق الخاص المخصص بالساعة في باريس: حرية مطلقة في المسارات ومحطات التوقف، بقاء السائق في الانتظار وحفظ المقتنيات بأمان.",
         "h1": "كيف تعمل خدمة السائق الخاص بالساعة في باريس؟",
-        "heroAlt": "سائق خاص ينتظر أمام متجر فاخر في باريس",
-        "directAnswer": "في خدمة السائق الخاص بالساعة (Mise à disposition)، يتم تخصيص السيارة والسائق بالكامل لخدمتكم لفترة زمنية محددة (مثل 4 ساعات أو 8 ساعات أو طوال اليوم): يبقى السائق بانتظاركم في الخارج بالقرب من كل موعد، ويحفظ حقائبكم ومشترياتكم الثمينة بأمان تام داخل السيارة، وينطلق فورياً إلى أي وجهة جديدة بمجرد خروجكم.",
+        "heroAlt": "سائق خاص يفتح باب سيارة مرسيدس فارهة لعميله أثناء خدمة التأجير بالساعة في باريس",
+        "directAnswer": "تعتبر خدمة التأجير بالساعة (سائق تحت تصرفك) خدمة مخصصة بالكامل يتم فيها تخصيص سيارة مرسيدس فاخرة وسائق خاص حصرياً لك لعدد محدد من الساعات (من 4 إلى 12 ساعة أو لعدة أيام متتالية). وبخلاف التوصيل العادي من نقطة إلى أخرى، تمنحك هذه الخدمة حرية مطلقة في مسارك: يمكنك التوقف في محطات متعددة، وتغيير وجهتك في أي لحظة، وترك حقائبك ومشترياتك بأمان تام داخل السيارة. وأثناء اجتماعاتك أو تسوقك، يبقى السائق في انتظارك بالقرب من الموقع، ويحضر إلى باب المبنى فور إرسال رسالة واتساب سريعة.",
+        "intro": "توفر لك هذه الخدمة مرونة فائقة للتنقل في العاصمة باريس بين المتاجر الراقية واجتماعات العمل دون أي قلق بشأن المواقف أو الازدحام.",
+        "stepsWorkflow": [
+          {
+            "stepNumber": "01",
+            "title": "تحديد عدد الساعات والسيارة",
+            "description": "اختيار مدة الحجز (4 أو 8 أو 12 ساعة) وفئة مرسيدس المطلوبة."
+          },
+          {
+            "stepNumber": "02",
+            "title": "حضور السائق مبكراً",
+            "description": "يتواجد السائق في موقع الانطلاق قبل 15 دقيقة بسيارة مجهزة بالكامل."
+          },
+          {
+            "stepNumber": "03",
+            "title": "حرية كاملة في المسار",
+            "description": "التنقل بين عدة محطات واجتماعات حسب جدولك الخاص."
+          },
+          {
+            "stepNumber": "04",
+            "title": "انتظار دائم وحراسة الأمتعة",
+            "description": "بقاء السائق في الانتظار وحراسة كافة مشترياتك ومتعلقاتك بأمان."
+          },
+          {
+            "stepNumber": "05",
+            "title": "استدعاء فوري بالواتساب",
+            "description": "رسالة سريعة تكفي لحضور السائق أمام باب المبنى خلال دقيقتين."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "لماذا تتفوق خدمة السائق المخصص بالساعة على طلب سيارة لكل مشوار؟",
+            "paragraphs": [
+              "طلب سيارة جديدة بعد كل اجتماع يهدر وقتاً ثميناً في الانتظار على الرصيف، بينما يمنحك السائق المخصص صالوناً متحركاً يحتفظ بأغراضك وملابسك بأمان تام."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "هل أغراضي آمنة داخل السيارة أثناء اجتماعاتي؟",
+            "a": "نعم بالتأكيد، تظل السيارة مقفلة تحت الحراسة المستمرة لسائقك المعتمد."
+          }
+        ],
         "cta": {
-          "title": "تمتع بحرية تنقل مطلقة في قلب باريس",
-          "subtitle": "سائقك الخاص بانتظارك طوال اليوم أينما ذهبت.",
-          "buttonText": "احجز بالساعة الآن",
+          "title": "تنقل في باريس بحرية مطلقة وراحة بال تامة",
+          "subtitle": "احجز سيارتك الفاخرة مع سائق خاص بالساعة وتمتع بأعلى درجات المرونة.",
+          "buttonText": "حجز سائق بالساعة",
           "link": "/paris/reserver?service=hourly"
         },
         "relatedSlugs": [
-          "taklifat-saeq-bil-saa-baris",
-          "kaif-tahjiz-saeq-khas-baris"
+          "taklifat-saeq-khas-bi-al-saa-baris",
+          "hal-yumkin-hajz-saeq-yawm-kamel-baris"
         ]
       }
     }
@@ -385,13 +595,13 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 9,
     "category": "mise-a-disposition",
-    "heroImage": "/voyages_hero.png",
+    "heroImage": "/chauffeur.png",
     "secondaryImages": [
-      "/champagne_vineyard.png",
-      "/versailles_chateau.png"
+      "/sclass_paris.png",
+      "/vclass-paris-luxury.jpg"
     ],
-    "readingTime": "6 min",
-    "publishedAt": "2026-03-28",
+    "readingTime": "9 min",
+    "publishedAt": "2026-03-09",
     "slugs": {
       "fr": "reserver-chauffeur-prive-toute-une-journee-paris",
       "en": "book-private-chauffeur-full-day-paris",
@@ -400,112 +610,281 @@ export const ARTICLES_MISE_A_DISPOSITION = [
     },
     "translations": {
       "fr": {
-        "title": "Peut-on réserver un chauffeur privé pour toute une journée à Paris ?",
-        "metaTitle": "Réserver un Chauffeur Privé pour Toute une Journée à Paris",
-        "metaDescription": "Organisation d’une journée complète avec chauffeur privé à Paris : déroulement type, réunions d’affaires, shopping, dîners et escapades à Versailles.",
-        "h1": "Peut-on réserver un chauffeur privé pour toute une journée à Paris ?",
-        "heroAlt": "Mercedes berline de prestige traversant la place de la Concorde à Paris lors d’une journée privée",
-        "directAnswer": "Oui, absolument. Réserver un chauffeur privé pour toute une journée (généralement sur un forfait de 8 à 12 heures) est l’une des prestations les plus demandées chez SELY Privé. Cela vous assure la présence continue du même chauffeur professionnel, un véhicule Mercedes réservé exclusivement à votre usage, la possibilité d’enchaîner une multitude de rendez-vous dans Paris et sa région (Versailles, aéroports, shopping, dîners), et une flexibilité totale jusqu’au terme de votre soirée.",
-        "intro": "Que vous soyez en voyage d’affaires avec un calendrier serré ou en visite touristique d’exception en famille, la journée complète est la garantie d’un confort sans interruption.",
+        "title": "Réserver un Chauffeur Privé pour Toute une Journée à Paris : Guide & Forfaits",
+        "metaTitle": "Chauffeur Privé Journée Complète Paris 2026 | Forfait 8h à 12h Luxe",
+        "metaDescription": "Réservez un chauffeur privé pour une journée complète à Paris (8h à 12h). Idéal pour roadshows d’affaires, shopping avenue Montaigne ou excursion à Versailles.",
+        "h1": "Réserver un chauffeur privé pour toute une journée à Paris",
+        "heroAlt": "Chauffeur privé élégant accueillant son passager devant un palace parisien pour une journée complète de mise à disposition",
+        "directAnswer": "Réserver un chauffeur privé pour toute une journée à Paris (forfait standard de 8 heures à 12 heures) offre une sérénité logistique totale : un véhicule haut de gamme Mercedes (Classe E, S ou van Classe V) et un chauffeur dédié en costume restent à votre service exclusif du matin au soir. Les tarifs d’un forfait journée complète débutent généralement autour de 700 € à 850 € en Mercedes Classe E, 900 € à 1 100 € en Mercedes Classe V, et 950 € à 1 400 € en Mercedes Classe S. Ce forfait englobe le carburant, les assurances passagers professionnelles, la mise en faction permanente, la garde sécurisée de vos effets personnels et un forfait kilométrique de 150 à 250 km.",
+        "intro": "Qu’il s’agisse d’un marathon de rendez-vous d’affaires (financial roadshow), d’une virée shopping haute couture entre la place Vendôme et l’avenue Montaigne, ou d’une escapade patrimoniale au Château de Versailles, disposer d’un chauffeur à la journée métamorphose votre séjour parisien.",
+        "comparisonTable": {
+          "headers": [
+            "Itinéraire Type Journée",
+            "Durée Conseillée",
+            "Véhicule Idéal",
+            "Points Clés & Prestations"
+          ],
+          "rows": [
+            [
+              "Financial Roadshow & Business",
+              "8h à 10h",
+              "Mercedes Classe S ou Classe E",
+              "Wi-Fi à bord, discrétion absolue, ponctualité minute à La Défense et Paris QCA."
+            ],
+            [
+              "Journée Shopping Triangle d’Or",
+              "6h à 8h",
+              "Mercedes Classe V ou Classe S",
+              "Prise en charge des sacs boutique par le chauffeur, coffre sécurisé, dépose devant chaque maison."
+            ],
+            [
+              "Excursion Versailles & Châteaux",
+              "8h à 10h",
+              "Mercedes Classe V (familles) ou S",
+              "Aller-retour fluide, attente durant la visite des jardins et du Grand Trianon, retour panoramique."
+            ],
+            [
+              "Escapade Champagne (Reims / Épernay)",
+              "10h à 12h",
+              "Mercedes Classe S ou Classe V",
+              "Trajet autoroutier 150 km, visites de caves de grandes maisons, dégustations sans risque au volant."
+            ]
+          ]
+        },
         "sections": [
           {
-            "h2": "Exemple d’une journée type avec chauffeur dédié",
-            "content": "Découvrez comment s’organise une journée fluide à Paris :",
-            "bulletPoints": [
-              "09h00 : Prise en charge au palace ou à la résidence et départ pour vos premières réunions d’affaires à La Défense.",
-              "12h30 : Conduite vers votre restaurant sur la Rive Gauche ; votre chauffeur patiente sur place pendant votre déjeuner.",
-              "14h30 : Après-midi shopping privé sur l’Avenue Montaigne et la Place Vendôme ; vos achats sont déposés en sécurité dans le coffre au fur et à mesure.",
-              "17h00 : Escapade pour un rendez-vous culturel ou une visite de galerie d’art dans le Marais.",
-              "20h00 : Dépose pour votre dîner gastronomique ou spectacle à l’Opéra Garnier, puis raccompagnement nocturne en toute quiétude."
+            "h2": "Les avantages exclusifs d’un forfait journée complète SELY Privé",
+            "paragraphs": [
+              "• Maîtrise budgétaire totale : aucun surcoût imprévu lié aux embouteillages du boulevard périphérique ou des quais de Seine.",
+              "• Un sanctuaire mobile : vos dossiers confidentiels, tablettes, valises et achats de luxe demeurent sous la surveillance constante de votre chauffeur assermenté.",
+              "• Liberté d’improvisation : modifiez l’ordre de vos rendez-vous, ajoutez un déjeuner improvisé dans le Marais ou un détour par la Fondation Louis Vuitton sans formalité.",
+              "• Ambiance sur mesure : température de climatisation réglée selon votre souhait, playlist musicale personnalisée et rafraîchissements premium à volonté."
+            ]
+          },
+          {
+            "h2": "Organisation pratique : comment se déroule votre journée ?",
+            "paragraphs": [
+              "Dès la veille au soir, les coordonnées directes de votre chauffeur vous sont confirmées par SMS ou WhatsApp. Le matin, votre véhicule vous attend 15 minutes avant l’heure convenue au pied de votre hôtel ou résidence.",
+              "Tout au long de la journée, vous communiquez directement avec votre chauffeur d’un simple message pour lui indiquer l’heure approximative de sortie de vos réunions ou boutiques."
             ]
           }
         ],
         "faq": [
           {
-            "q": "Le chauffeur peut-il nous conduire en dehors de Paris (Versailles, Champagne) ?",
-            "a": "Oui. Le forfait journée complète peut tout à fait inclure un aller-retour au Château de Versailles, une visite des caves en Champagne ou une journée shopping à La Vallée Village."
+            "q": "Peut-on prolonger la mise à disposition au-delà des 8 heures initiales ?",
+            "a": "Oui. Si votre dîner ou vos rendez-vous se prolongent, il vous suffit d’en informer votre chauffeur. Les heures supplémentaires sont facturées au tarif horaire standard défini au devis."
           },
           {
-            "q": "Y a-t-il des pauses obligatoires pour le chauffeur ?",
-            "a": "Conformément à la législation sur la sécurité routière, pour les prestations très longues excédant 10 heures consécutives, une pause repas est prévue ou un relais de chauffeur peut être organisé sans rupture de service pour le client."
+            "q": "Le repas du chauffeur est-il à la charge du client pour une journée entière ?",
+            "a": "Généralement, une indemnité repas modique (environ 25 € à 30 €) est prévue pour les journées continues de plus de 8 heures, ou prise en charge directement selon les termes du devis."
+          },
+          {
+            "q": "Peut-on sortir de Paris avec un forfait journée ?",
+            "a": "Absolument. Les excursions à Versailles, Giverny, Fontainebleau ou même en Champagne sont courantes. Un supplément kilométrique adapté est calculé pour les trajets longue distance hors Île-de-France."
           }
-        ],
-        "cta": {
-          "title": "Planifiez votre journée d’exception à Paris",
-          "subtitle": "Un chauffeur privé et un véhicule de prestige dédiés à votre seul emploi du temps.",
-          "buttonText": "Réserver ma journée complète",
-          "link": "/paris/reserver?service=hourly"
-        },
-        "relatedSlugs": [
-          "prix-mise-a-disposition-chauffeur-paris",
-          "comment-fonctionne-mise-a-disposition-chauffeur"
         ]
       },
       "en": {
-        "title": "Can You Book a Private Chauffeur for a Full Day in Paris?",
-        "metaTitle": "Book a Private Chauffeur for a Full Day in Paris | Daily Hire",
-        "metaDescription": "Discover full-day private chauffeur hire in Paris: 8 to 12-hour charters for business roadshows, luxury shopping, Versailles day trips, and fine dining.",
-        "h1": "Can You Book a Private Chauffeur for a Full Day in Paris?",
-        "heroAlt": "Black luxury Mercedes saloon driving along the Seine in Paris during full-day charter",
-        "directAnswer": "Yes, absolutely. Reserving a private chauffeur for an entire day (typically an 8 to 12-hour block) is one of SELY Privé’s most popular services. It ensures the unbroken presence of the same dedicated professional chauffeur, an exclusive Mercedes vehicle on standby, unlimited point-to-point transit across Paris and greater Île-de-France (including Versailles and airports), and complete schedule freedom until your evening concludes.",
+        "title": "Full-Day Private Chauffeur Service in Paris: Rates & Itineraries 2026",
+        "metaTitle": "Book Full-Day Private Chauffeur Paris 2026 | 8h to 12h Luxury Hire",
+        "metaDescription": "Hire an executive private chauffeur for a full day in Paris (8 to 12 hours). Perfect for corporate roadshows, luxury shopping, or Versailles palace excursions.",
+        "h1": "Book a Private Chauffeur for a Full Day in Paris",
+        "heroAlt": "Professional suited private chauffeur standing next to a Mercedes luxury vehicle in central Paris for a full-day booking",
+        "directAnswer": "Booking a private chauffeur for a full day in Paris (standard 8 to 12-hour package) provides complete peace of mind and flexibility: an executive Mercedes vehicle (E-Class, S-Class, or V-Class van) and a bilingual suited chauffeur remain at your exclusive beck and call throughout the day. Full-day daily rates generally range from €700 to €850 for a Mercedes E-Class, €900 to €1,100 for a VIP Mercedes V-Class, and €950 to €1,400 for a flagship Mercedes S-Class. The package includes fuel, commercial passenger insurance, unlimited curbside wait time, secure bag storage, and an inclusive mileage allowance of 150 to 250 km.",
+        "intro": "Whether conducting an intensive corporate roadshow across Paris business districts, indulging in luxury shopping from Place Vendôme to Avenue Montaigne, or visiting the Palace of Versailles, a dedicated full-day chauffeur elevates your travel experience.",
+        "comparisonTable": {
+          "headers": [
+            "Typical Full-Day Itinerary",
+            "Recommended Duration",
+            "Ideal Vehicle",
+            "Key Highlights"
+          ],
+          "rows": [
+            [
+              "Financial Roadshow & Business",
+              "8h to 10h",
+              "Mercedes S-Class or E-Class",
+              "High-speed onboard Wi-Fi, total confidentiality, punctuality in La Défense & central Paris."
+            ],
+            [
+              "Golden Triangle Shopping Tour",
+              "6h to 8h",
+              "Mercedes V-Class or S-Class",
+              "Boutique bags stored securely in the vehicle trunk; doorstep drop-offs at Chanel, Dior & Hermès."
+            ],
+            [
+              "Versailles & Royal Palaces Tour",
+              "8h to 10h",
+              "Mercedes V-Class or S-Class",
+              "Smooth highway commute, chauffeur waiting during palace and garden tours, panoramic return."
+            ],
+            [
+              "Champagne Day Trip (Reims / Épernay)",
+              "10h to 12h",
+              "Mercedes S-Class or V-Class",
+              "150 km outbound transfer, cellar visits at Moët & Chandon or Veuve Clicquot, carefree tasting."
+            ]
+          ]
+        },
         "sections": [
           {
-            "h2": "Sample itinerary of an executive full day in Paris",
-            "content": "How an 8-hour executive charter unfolds smoothly:",
-            "bulletPoints": [
-              "09:00 AM: Hotel pickup and direct transit to morning board meetings in La Défense business district.",
-              "12:30 PM: Transfer to private dining on the Left Bank; chauffeur remains parked on standby.",
-              "02:30 PM: Private afternoon shopping along Avenue Montaigne and Place Vendôme with secure in-car bag storage.",
-              "05:00 PM: Afternoon museum visit or private gallery viewing in Le Marais.",
-              "08:00 PM: Evening drop-off at the Opera Garnier or Michelin-starred restaurant with late-night return."
+            "h2": "Why book a full-day private chauffeur with SELY Privé?",
+            "paragraphs": [
+              "• Predictable fixed pricing: no surge pricing or meter anxiety during Paris traffic delays.",
+              "• Secure mobile private sanctuary: your personal belongings, laptops, luggage, and luxury purchases remain under the chauffeur’s constant supervision.",
+              "• Complete itinerary flexibility: change plans on the fly, add a last-minute business lunch in Le Marais, or take an impromptu detour.",
+              "• Premium comfort: chilled Evian water, refreshing wipes, multi-device fast chargers, and customizable climate control."
+            ]
+          },
+          {
+            "h2": "Operational workflow: how your day unfolds",
+            "paragraphs": [
+              "Your driver’s direct details and phone number are dispatched the evening prior via WhatsApp or SMS. On the morning of your booking, your chauffeur arrives 15 minutes ahead of schedule.",
+              "Throughout the day, coordinate effortlessly via WhatsApp message or call whenever you are ready to depart your meeting or boutique."
             ]
           }
         ],
-        "cta": {
-          "title": "Design your perfect full day in Paris",
-          "subtitle": "Continuous luxury transport tailored to your schedule.",
-          "buttonText": "Book full day chauffeur",
-          "link": "/paris/reserver?service=hourly"
-        },
-        "relatedSlugs": [
-          "hourly-chauffeur-paris-cost",
-          "how-hourly-chauffeur-service-works"
+        "faq": [
+          {
+            "q": "Can we extend our reservation beyond the initial 8 hours?",
+            "a": "Yes. If your meetings or dinner run late, simply notify your chauffeur. Extra hours are billed at the agreed baseline hourly rate."
+          },
+          {
+            "q": "Is driver meal allowance included in a full-day booking?",
+            "a": "A modest driver meal allowance (typically €25 to €30) applies for continuous bookings exceeding 8 hours, outlined transparently on your quote."
+          },
+          {
+            "q": "Can we travel outside Paris during a full-day hire?",
+            "a": "Yes, excursions to Versailles, Giverny, or the Champagne wine region are very common. Distance-adjusted packages are tailored to your itinerary."
+          }
         ]
       },
       "es": {
-        "title": "¿Se puede reservar un chófer privado para todo un día en París?",
-        "metaTitle": "Reservar un Chófer Privado para Todo el Día en París",
-        "metaDescription": "Alquiler de chófer privado por jornada completa en París: itinerarios de 8 a 12 horas, reuniones de empresa, compras y visitas a Versalles.",
-        "h1": "¿Se puede reservar un chófer privado para todo un día en París?",
-        "heroAlt": "Mercedes de lujo recorriendo París durante un servicio de día completo",
-        "directAnswer": "Sí, totalmente. Reservar un chófer privado para todo el día (paquetes de 8 a 12 horas) es ideal para disfrutar de la máxima comodidad: el mismo chófer profesional permanece a su disposición continua, permitiéndole enlazar reuniones, compras de lujo, restaurantes y excursiones a Versalles.",
-        "cta": {
-          "title": "Organice su día completo en París",
-          "subtitle": "Un chófer privado y un vehículo de lujo a su entera disposición.",
-          "buttonText": "Reservar jornada completa",
-          "link": "/paris/reserver?service=hourly"
+        "title": "Reservar un Chófer Privado Todo el Día en París: Tarifas y Rutas 2026",
+        "metaTitle": "Chófer Privado Día Completo París 2026 | Tarifas 8h a 12h",
+        "metaDescription": "Alquile un chófer privado por un día completo en París (8 a 12 horas). Ideal para negocios, compras de lujo en Rue Saint-Honoré o tour a Versalles.",
+        "h1": "Reservar un chófer privado para todo el día en París",
+        "heroAlt": "Chófer privado con traje elegante abriendo la puerta de un Mercedes de lujo en París",
+        "directAnswer": "Contratar un chófer privado por un día completo en París (paquete estándar de 8 a 12 horas) garantiza máxima libertad y tranquilidad: un vehículo Mercedes de lujo (Clase E, S o furgoneta Clase V) y un chófer profesional bilingüe permanecen a su entera disposición durante toda la jornada. Las tarifas de día completo oscilan entre 700 € y 850 € en Mercedes Clase E, 900 € y 1.100 € en Clase V, y 950 € y 1.400 € en Clase S. Incluye combustible, seguro profesional de pasajeros, esperas ilimitadas, custodia de equipajes y compras, y un paquete de 150 a 250 km incluidos.",
+        "intro": "Ya sea para una apretada agenda de negocios, un tour exclusivo de compras por la Avenue Montaigne o una excursión al Palacio de Versalles, contar con un chófer dedicado todo el día transforma su estancia en París.",
+        "comparisonTable": {
+          "headers": [
+            "Itinerario Típico de Día Completo",
+            "Duración Recomendada",
+            "Vehículo Recomendado",
+            "Puntos Clave"
+          ],
+          "rows": [
+            [
+              "Negocios y Roadshow Financiero",
+              "8h a 10h",
+              "Mercedes Clase S o Clase E",
+              "Wi-Fi de alta velocidad, máxima discreción, puntualidad en La Défense y París."
+            ],
+            [
+              "Día de Compras en el Triángulo de Oro",
+              "6h a 8h",
+              "Mercedes Clase V o Clase S",
+              "Bolsas de compras guardadas de forma segura en el maletero, recogida en puerta."
+            ],
+            [
+              "Excursión a Versalles y Palacios",
+              "8h a 10h",
+              "Mercedes Clase V o Clase S",
+              "Traslado fluido, el chófer espera durante la visita a los jardines y palacio."
+            ],
+            [
+              "Excursión a la Región de Champaña (Reims)",
+              "10h a 12h",
+              "Mercedes Clase S o Clase V",
+              "150 km de trayecto, visitas a prestigiosas bodegas sin preocupaciones de conducción."
+            ]
+          ]
         },
-        "relatedSlugs": [
-          "precio-chofer-por-horas-paris",
-          "como-funciona-chofer-por-horas-paris"
+        "sections": [
+          {
+            "h2": "Ventajas de un servicio de día completo con SELY Privé",
+            "paragraphs": [
+              "• Tarifa fija transparente sin sobrecostes por atascos urbanos.",
+              "• Seguridad absoluta para sus pertenencias, ordenadores y compras de lujo a bordo.",
+              "• Libertad para cambiar de planes o paradas en cualquier momento.",
+              "• Confort de primera clase: agua mineral, toallitas frescas y cargadores para sus dispositivos."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "¿Se puede prolongar el servicio más allá de las 8 horas?",
+            "a": "Sí, puede ampliar la jornada con solo avisar al chófer. Las horas extra se facturan según la tarifa horaria estipulada."
+          },
+          {
+            "q": "¿Se pueden realizar excursiones fuera de París?",
+            "a": "Por supuesto. Rutas a Versalles, Giverny, Fontainebleau o Champaña son habituales."
+          }
         ]
       },
       "ar": {
-        "title": "هل يمكن حجز سائق خاص ليوم كامل في باريس؟",
-        "metaTitle": "حجز سائق خاص ليوم كامل في باريس | باقة 8 إلى 12 ساعة",
-        "metaDescription": "تنظيم يوم كامل مع سائق خاص في باريس: مسارات العمل، رحلات التسوق في جادة مونتين، وزيارات قصر فرساي والمطاعم الفاخرة.",
-        "h1": "هل يمكن حجز سائق خاص ليوم كامل في باريس؟",
-        "heroAlt": "سيارة مرسيدس فخمة تجوب شوارع باريس خلال حجز يوم كامل",
-        "directAnswer": "نعم بالتأكيد. يعد حجز سائق خاص ليوم كامل (عادة لباقة من 8 إلى 12 ساعة) الخيار الأكثر طلباً لدى ضيوف SELY Privé في باريس. يضمن لكم بقاء نفس السائق المحترف والسيارة الفاخرة في خدمتكم طوال اليوم دون انقطاع، مما يتيح لكم التنقل بسلاسة بين الاجتماعات، والمطاعم، والتسوق، وزيارة المعالم مثل فرساي وحتى عودتكم ليلاً إلى الفندق.",
-        "cta": {
-          "title": "خطط ليوم استثنائي في باريس",
-          "subtitle": "سائق خاص وسيارة مرسيدس مكرسة بالكامل لجدول أعمالكم.",
-          "buttonText": "احجز يومك الكامل الآن",
-          "link": "/paris/reserver?service=hourly"
+        "title": "حجز سائق خاص ليوم كامل في باريس: الأسعار والجولات 2026",
+        "metaTitle": "حجز سائق خاص ليوم كامل في باريس 2026 | باقات 8 إلى 12 ساعة",
+        "metaDescription": "احجز سائقاً خاصاً ليوم كامل في باريس (من 8 إلى 12 ساعة). خدمة مثالية لجولات التسوق الفاخر، رجال الأعمال، ورحلات قصر فرساي.",
+        "h1": "حجز سائق خاص ليوم كامل في باريس",
+        "heroAlt": "سائق خاص أنيق يستقبل الركاب بسيارة مرسيدس فاخرة في باريس ليوم كامل",
+        "directAnswer": "يوفر حجز سائق خاص ليوم كامل في باريس (باقة قياسية من 8 إلى 12 ساعة) راحة بال وحرية تنقل مطلقة: سيارة مرسيدس فاخرة (الفئة E أو S أو فان الفئة V) وسائق خاص يرتدي بزة رسمية تحت خدمتكم الحصرية طوال اليوم. تتراوح أسعار باقة اليوم الكامل بين 700 و850 يورو لمرسيدس الفئة E، و900 إلى 1,100 يورو لفان الفئة V، و950 إلى 1,400 يورو لمرسيدس الفئة S الفاخرة. تشمل الباقة الوقود، التأمين الشامل للركاب، الانتظار الدائم، حفظ الأغراض والمشتريات بأمان، وباقة مسافة تتراوح بين 150 و250 كم.",
+        "intro": "سواء كنتم في زيارة عمل مكثفة، أو جولة تسوق في أفينيو مونتين وساحة فاندوم، أو في رحلة عائلية إلى قصر فرساي، فإن وجود سائق خاص رهن إشارتكم طوال اليوم يمنحكم أرقى درجات الراحة والخصوصية.",
+        "comparisonTable": {
+          "headers": [
+            "برنامج اليوم الكامل",
+            "المدة المقترحة",
+            "السيارة المثالية",
+            "المزايا"
+          ],
+          "rows": [
+            [
+              "جولة أعمال واجتماعات مالية",
+              "8 إلى 10 ساعات",
+              "مرسيدس الفئة S أو E",
+              "واي فاي سريع، سرية تامة، التزام دقيق بالمواعيد في لاديفانس ووسط باريس."
+            ],
+            [
+              "جولة تسوق في الماركات العالمية",
+              "6 إلى 8 ساعات",
+              "مرسيدس الفئة V أو S",
+              "حفظ أكياس التسوق بأمان داخل السيارة، والتوقف عند أبواب كبرى المتاجر."
+            ],
+            [
+              "رحلة سياحية إلى قصر فرساي",
+              "8 إلى 10 ساعات",
+              "مرسيدس الفئة V أو S",
+              "انتقال مريح مع انتظار السائق خلال جولتكم داخل القصر والحدائق الملكية."
+            ],
+            [
+              "رحلة إلى منطقة الشمبانيا (ريمس)",
+              "10 إلى 12 ساعة",
+              "مرسيدس الفئة S أو V",
+              "مسافة 150 كم، زيارة أعرق دور الإنتاج براحة وأمان دون عناء القيادة."
+            ]
+          ]
         },
-        "relatedSlugs": [
-          "taklifat-saeq-bil-saa-baris",
-          "kaif-yaamal-saeq-bil-saa-baris"
+        "sections": [
+          {
+            "h2": "مميزات حجز يوم كامل مع SELY Privé",
+            "paragraphs": [
+              "• أسعار ثابتة ومحددة مسبقاً دون أي مفاجآت بسبب الازدحام المروري.",
+              "• ملاذ آمن ومريح: تظل مقتنياتكم وحقائبكم وأجهزتكم تحت حراسة السائق الدائمة.",
+              "• مرونة تامة لتعديل خطة اليوم وإضافة وجهات جديدة في أي وقت.",
+              "• خدمات ضيافة متكاملة: مياه معدنية باردة، مناديل منعشة، وشواحن لكافة الهواتف."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "هل يمكن تمديد ساعات الخدمة أثناء اليوم؟",
+            "a": "نعم بالتأكيد، يكفي إبلاغ السائق مباشرة ويتم احتساب الساعات الإضافية وفق السعر المتفق عليه."
+          },
+          {
+            "q": "هل يمكن الذهاب خارج باريس خلال اليوم الكامل؟",
+            "a": "نعم، الرحلات إلى فرساي، جيفرني، فوندوم، أو ريمس متاحة ويتم احتساب الكيلومترات المناسبة لها."
+          }
         ]
       }
     }
@@ -513,13 +892,13 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 30,
     "category": "mise-a-disposition",
-    "heroImage": "/london_hourly_bg.jpg",
+    "heroImage": "/chauffeur.png",
     "secondaryImages": [
       "/sclass_paris.png",
-      "/paris_hero_vendome.jpg"
+      "/vclass-paris-luxury.jpg"
     ],
-    "readingTime": "6 min",
-    "publishedAt": "2026-03-27",
+    "readingTime": "9 min",
+    "publishedAt": "2026-03-30",
     "slugs": {
       "fr": "meme-chauffeur-plusieurs-jours-paris",
       "en": "same-chauffeur-multiple-days-paris",
@@ -528,95 +907,234 @@ export const ARTICLES_MISE_A_DISPOSITION = [
     },
     "translations": {
       "fr": {
-        "title": "Peut-on avoir le même chauffeur pendant plusieurs jours à Paris ?",
-        "metaTitle": "Avoir le Même Chauffeur Plusieurs Jours à Paris | Continuité VIP",
-        "metaDescription": "Réserver le même chauffeur privé dédié pour plusieurs jours ou semaines à Paris : avantages de la continuité, relation de confiance et discrétion absolue.",
-        "h1": "Peut-on avoir le même chauffeur pendant plusieurs jours à Paris ?",
-        "heroAlt": "Chauffeur privé fidèle saluant courtoisement son passager habituel devant un hôtel particulier parisien",
-        "directAnswer": "Oui, chez SELY Privé, vous pouvez privatiser le même chauffeur d’excellence et le même véhicule pour plusieurs jours consécutifs, une semaine ou toute la durée de votre séjour à Paris. Cette continuité de service élimine toute perte de temps : votre chauffeur connaît déjà vos préférences (température de l’habitacle, playlist, style de conduite, rafraîchissements favoris), maîtrise votre agenda et assure une confidentialité totale.",
-        "intro": "Pour les délégations internationales, les familles en villégiature, les personnalités publiques ou les dirigeants en tournée d’affaires, changer d’interlocuteur chaque matin est source d’inconfort. Avoir un chauffeur attitré transforme chaque déplacement en un moment familier et sécurisant.",
+        "title": "Peut-on avoir le même chauffeur privé pendant plusieurs jours à Paris ?",
+        "metaTitle": "Garder le Même Chauffeur Privé Plusieurs Jours Paris | SELY Privé",
+        "metaDescription": "Bénéficiez d’un chauffeur privé dédié et du même véhicule de luxe pendant plusieurs jours à Paris. Continuité de service, discrétion absolue et confiance totale.",
+        "h1": "Peut-on avoir le même chauffeur privé pendant plusieurs jours à Paris ?",
+        "heroAlt": "Chauffeur privé de confiance saluant chaleureusement son client régulier devant un grand hôtel parisien",
+        "directAnswer": "Oui, il est parfaitement possible et fortement recommandé de conserver le même chauffeur privé dédié tout au long de votre séjour de plusieurs jours à Paris (de 2 jours à plusieurs semaines). Chez SELY Privé, nous assignons un chauffeur attitré et un véhicule d’exception unique (Mercedes Classe E, Classe S ou van Classe V) pour l’intégralité de votre séjour. Cette continuité élimine le besoin de répéter vos consignes chaque matin : votre chauffeur connaît déjà vos préférences (température intérieure, itinéraire favori, boissons préférées, style de conduite), veille sur vos effets personnels et assure une discrétion absolue sous clause de confidentialité rigoureuse.",
+        "intro": "Pour les délégations internationales, les dirigeants en mission stratégique, les familles en vacances ou les personnalités durant la Fashion Week, la familiarité et la confiance mutuelle établies avec un chauffeur dédié apportent un confort psychologique et logistique irremplaçable.",
+        "comparisonTable": {
+          "headers": [
+            "Critères de Service",
+            "Même Chauffeur Dédié (SELY Privé)",
+            "Chauffeurs Aléatoires (Apps / VTC classique)"
+          ],
+          "rows": [
+            [
+              "Familiarité & Préférences",
+              "Anticipation immédiate : température, boissons, style de conduite et adresses mémorisées dès le 1er jour.",
+              "Consignes à réexpliquer à chaque trajet, aucun apprentissage de vos habitudes."
+            ],
+            [
+              "Confidentialité & Sécurité",
+              "Chauffeur sous accord strict de confidentialité (NDA), confiance totale pour laisser effets et ordinateurs à bord.",
+              "Inconnus successifs à chaque commande, risque pour la confidentialité de vos échanges."
+            ],
+            [
+              "Ponctualité & Réactivité",
+              "Liaison directe par WhatsApp ou téléphone, véhicule déjà en faction devant votre hôtel avant votre départ.",
+              "Délais d’attente imprévisibles, annulations de dernière minute ou véhicules mal adaptés."
+            ],
+            [
+              "Véhicule & Présentation",
+              "Même berline ou van Mercedes immaculé, nettoyé chaque soir, bouteilles d’eau et chargeurs prêts.",
+              "État et propreté variables selon le véhicule assigné de manière aléatoire."
+            ]
+          ]
+        },
         "sections": [
           {
-            "h2": "Les avantages majeurs d’un chauffeur dédié sur plusieurs jours",
-            "content": "La fidélisation d’un chauffeur personnel offre une expérience sur mesure incomparable :",
-            "bulletPoints": [
-              "Une confiance et une discrétion totales : secret professionnel garanti, parfait pour les conversations téléphoniques stratégiques.",
-              "Zéro répétition de consignes : votre chauffeur mémorise vos adresses régulières (hôtels, bureaux, restaurants, écoles).",
-              "Un vestiaire et espace personnel sécurisé : laissez vos effets, manteaux et dossiers dans le coffre jour après jour en toute sérénité.",
-              "Une coordination directe : ligne mobile et WhatsApp directes avec votre chauffeur sans passer par un standard intermédiaire."
+            "h2": "Pourquoi la continuité d’un chauffeur dédié fait toute la différence",
+            "paragraphs": [
+              "• Un lien de confiance authentique : vos enfants, votre conjoint ou vos invités sont accueillis avec déférence par un professionnel attentif qu’ils reconnaissent immédiatement.",
+              "• Sérénité des bagages et achats : vous pouvez laisser en toute quiétude vos manteaux, valises et emplettes de haute joaillerie dans le véhicule tout au long de la semaine.",
+              "• Une mémoire vivante de votre séjour : votre chauffeur retient vos restaurants favoris, l’accès privatif à votre bureau ou le hall spécifique de votre hôtel de prédilection.",
+              "• Gestion du repos légal : pour les missions très intenses (14h à 18h par jour sur plusieurs jours), SELY Privé peut organiser un binôme de chauffeurs dédiés pour respecter les temps de repos obligatoires tout en maintenant une qualité de service sans faille."
+            ]
+          },
+          {
+            "h2": "Comment réserver un chauffeur attitré pour plusieurs jours ?",
+            "paragraphs": [
+              "Il suffit d’indiquer les dates de votre séjour et vos amplitudes horaires prévisionnelles lors de votre demande de devis en ligne ou sur WhatsApp.",
+              "Un planning personnalisé vous est remis, et votre chauffeur attitré prend contact avec vous dès la veille de votre première arrivée pour valider le point de rendez-vous initial."
             ]
           }
         ],
         "faq": [
           {
-            "q": "Comment s’organisent les temps de repos du chauffeur sur plusieurs jours ?",
-            "a": "Conformément à la réglementation sur le transport de personnes, un chauffeur peut effectuer jusqu’à 10 à 12 heures d’amplitude journalière. Si votre séjour requiert une disponibilité 24h/24, nous mettons en place un binôme de deux chauffeurs coordonnés qui se relaient avec le même véhicule."
+            "q": "Que se passe-t-il si les journées dépassent l’amplitude maximale de conduite autorisée ?",
+            "a": "Pour garantir une vigilance optimale et respecter la réglementation du travail, nous pouvons mettre en place un relais avec un second chauffeur attitré parfaitement briefé sur vos habitudes."
+          },
+          {
+            "q": "Peut-on changer de véhicule pendant le séjour avec le même chauffeur ?",
+            "a": "Oui. Si vous avez besoin d’une berline Classe S pour vos rendez-vous professionnels et d’un van Classe V pour une virée shopping ou une sortie familiale le week-end, votre chauffeur peut être assigné aux deux véhicules successifs."
+          },
+          {
+            "q": "Y a-t-il des tarifs dégressifs pour les réservations de plusieurs jours ?",
+            "a": "Oui, les forfaits plurijournaliers ou à la semaine bénéficient de conditions tarifaires préférentielles par rapport aux réservations ponctuelles fractionnées."
           }
-        ],
-        "cta": {
-          "title": "Vous prévoyez un séjour de plusieurs jours à Paris ?",
-          "subtitle": "Bénéficiez de la sérénité d’un chauffeur attitré dédié à votre famille ou votre équipe.",
-          "buttonText": "Réserver mon chauffeur multi-jours",
-          "link": "/paris/reserver?service=hourly"
-        },
-        "relatedSlugs": [
-          "prix-mise-a-disposition-chauffeur-paris",
-          "comment-fonctionne-mise-a-disposition-chauffeur",
-          "reserver-chauffeur-journee-complete-paris"
         ]
       },
       "en": {
-        "title": "Can You Have the Same Chauffeur for Multiple Days in Paris?",
-        "metaTitle": "Dedicated Chauffeur for Multiple Days in Paris | VIP Continuity",
-        "metaDescription": "Book the same private chauffeur for multiple days or weeks in Paris: absolute discretion, familiar preferences, and seamless daily coordination.",
-        "h1": "Can You Have the Same Chauffeur for Multiple Days in Paris?",
-        "heroAlt": "Dedicated private chauffeur greeting client outside a Paris luxury hotel",
-        "directAnswer": "Yes, with SELY Privé, you can retain the same dedicated private chauffeur and vehicle for consecutive days, weeks, or your entire stay in Paris. This continuity guarantees a personalized experience: your chauffeur already knows your preferences (preferred cabin temperature, driving style, route favorites), understands your schedule, and provides uncompromised confidentiality.",
-        "cta": {
-          "title": "Planning a multi-day itinerary in Paris?",
-          "subtitle": "Enjoy the comfort and discretion of a trusted personal chauffeur.",
-          "buttonText": "Book Multi-Day Chauffeur",
-          "link": "/paris/reserver?service=hourly"
+        "title": "Can You Have the Same Private Chauffeur for Multiple Days in Paris?",
+        "metaTitle": "Dedicated Chauffeur for Multiple Days in Paris | SELY Privé 2026",
+        "metaDescription": "Keep the same private chauffeur and luxury Mercedes vehicle throughout your stay in Paris. Enjoy complete consistency, absolute trust, and discrete service.",
+        "h1": "Can You Have the Same Private Chauffeur for Multiple Days in Paris?",
+        "heroAlt": "Dedicated private chauffeur greeting a client with a warm welcome outside a Parisian luxury hotel",
+        "directAnswer": "Yes, it is entirely possible and highly recommended to book the same dedicated private chauffeur for multiple consecutive days or weeks in Paris. At SELY Privé, we assign a dedicated professional chauffeur and a specific luxury vehicle (Mercedes E-Class, S-Class, or V-Class van) for the entire span of your stay. This operational continuity ensures you never have to re-explain your preferences (cabin temperature, driving style, routes, preferred music, children’s car seats): your driver anticipates your needs, guards your belongings securely, and maintains strict confidentiality under signed non-disclosure agreements.",
+        "intro": "Whether attending Paris Fashion Week, hosting international executives, or enjoying an extended family holiday, keeping the same trusted chauffeur delivers unparalleled comfort, familiarity, and peace of mind.",
+        "comparisonTable": {
+          "headers": [
+            "Service Factor",
+            "Same Dedicated Chauffeur (SELY Privé)",
+            "Random Drivers (Ride-hail apps / standard VTC)"
+          ],
+          "rows": [
+            [
+              "Familiarity & Preferences",
+              "Learns your routine on Day 1: cabin climate, favorite routes, beverage choice, and music.",
+              "Must re-explain your instructions and schedule from scratch for every single ride."
+            ],
+            [
+              "Security & Confidentiality",
+              "Chauffeur bound by strict NDA; safe to leave laptops, shopping bags, and luggage in the car.",
+              "Strangers each trip; security risks for conversations and unattended valuables."
+            ],
+            [
+              "Direct Instant Contact",
+              "Instant direct coordination via WhatsApp/phone; driver already staged outside before you step out.",
+              "Unpredictable arrival delays, sudden trip cancellations, and surge pricing."
+            ],
+            [
+              "Vehicle Presentation",
+              "Same pristine Mercedes vehicle, fully detailed each evening with premium refreshments.",
+              "Varying vehicle conditions, unknown cleanliness standards, and inconsistent vehicle types."
+            ]
+          ]
         },
-        "relatedSlugs": [
-          "hourly-chauffeur-paris-cost",
-          "how-does-chauffeur-hire-work-paris"
+        "sections": [
+          {
+            "h2": "Key advantages of retaining a dedicated chauffeur",
+            "paragraphs": [
+              "• Genuine mutual trust: your family, children, and colleagues are greeted with warm professionalism by a chauffeur they recognize immediately.",
+              "• Complete baggage and shopping security: leave your coats, designer shopping bags, and luggage securely stored in the vehicle between appointments.",
+              "• Flawless coordination: your chauffeur memorizes your favorite entrance gates, palace courtyards, and concierge desks.",
+              "• Regulatory safety and relief teams: for intensive itineraries running 14 to 18 hours daily, we coordinate a seamless two-driver relay team so driving safety and legal rest requirements are strictly upheld without disrupting your schedule."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "What happens if my daily schedule exceeds legal driving hour limits?",
+            "a": "To guarantee alertness and comply with French road safety regulations, we deploy a designated second chauffeur fully briefed on your preferences."
+          },
+          {
+            "q": "Can we switch vehicle types mid-stay with the same driver?",
+            "a": "Yes. If you require a Mercedes S-Class for business and a V-Class van for weekend family excursions, your chauffeur can transition between vehicles effortlessly."
+          },
+          {
+            "q": "Are weekly or multi-day rates discounted?",
+            "a": "Yes, tailored multi-day and weekly packages provide advantageous daily rates compared to booking fragmented individual trips."
+          }
         ]
       },
       "es": {
-        "title": "¿Se puede tener el mismo chófer durante varios días en París?",
-        "metaTitle": "Mismo Chófer Privado Varios Días en París | Servicio Exclusivo",
-        "metaDescription": "Reserve el mismo chófer privado para varios días consecutivos o semanas en París: confianza absoluta, conocimiento de sus rutas y discreción.",
-        "h1": "¿Se puede tener el mismo chófer durante varios días en París?",
-        "heroAlt": "Chófer privado dedicado saludando a su cliente habitual en París",
-        "directAnswer": "Sí, en SELY Privé puede disponer del mismo chófer privado y vehículo durante varios días consecutivos en París. Esta continuidad asegura confianza absoluta, atención a sus gustos personales y máxima discreción sin tener que dar instrucciones cada mañana.",
-        "cta": {
-          "title": "¿Organiza una estancia de varios días en París?",
-          "subtitle": "Asegure su chófer exclusivo durante todo el viaje.",
-          "buttonText": "Reservar chófer por varios días",
-          "link": "/paris/reserver?service=hourly"
+        "title": "¿Se puede tener el mismo chófer privado durante varios días en París?",
+        "metaTitle": "Mismo Chófer Privado Varios Días en París | SELY Privé 2026",
+        "metaDescription": "Conserve el mismo chófer privado y vehículo de lujo durante toda su estancia en París. Confianza total, máxima discreción y servicio a medida.",
+        "h1": "¿Se puede tener el mismo chófer privado durante varios días en París?",
+        "heroAlt": "Chófer privado dedicado saludando cordialmente a su cliente en un hotel de lujo en París",
+        "directAnswer": "Sí, es perfectamente posible y muy recomendable contratar el mismo chófer privado durante varios días consecutivos o semanas en París. En SELY Privé asignamos un chófer profesional dedicado y un vehículo de lujo exclusivo (Mercedes Clase E, Clase S o van Clase V) para toda su estancia. Esto garantiza que no tendrá que repetir sus preferencias cada mañana: su chófer ya conoce sus gustos de climatización, sus rutas preferidas y cuida de sus pertenencias con total confidencialidad.",
+        "intro": "Tanto para estancias corporativas, vacaciones familiares o eventos de alta costura, contar con el mismo chófer de confianza proporciona una tranquilidad y comodidad incomparables.",
+        "comparisonTable": {
+          "headers": [
+            "Criterio de Servicio",
+            "Mismo Chófer Dedicado (SELY Privé)",
+            "Chóferes Aleatorios (Apps / VTC común)"
+          ],
+          "rows": [
+            [
+              "Familiaridad y Gustos",
+              "Conoce sus preferencias desde el primer día: música, temperatura y bebidas.",
+              "Debe explicar sus instrucciones en cada viaje a conductores diferentes."
+            ],
+            [
+              "Seguridad y Discreción",
+              "Acuerdo estricto de confidencialidad; total confianza para dejar equipaje a bordo.",
+              "Conductores desconocidos en cada trayecto; menor nivel de privacidad."
+            ],
+            [
+              "Comunicación Directa",
+              "Contacto inmediato por WhatsApp; el vehículo espera en la puerta con antelación.",
+              "Tiempos de espera inciertos y riesgo de cancelaciones imprevistas."
+            ]
+          ]
         },
-        "relatedSlugs": [
-          "precio-chofer-por-horas-paris",
-          "como-funciona-chofer-por-horas-paris"
+        "sections": [
+          {
+            "h2": "Beneficios de contar con un chófer exclusivo durante su estancia",
+            "paragraphs": [
+              "• Confianza y tranquilidad total para usted y sus acompañantes o familiares.",
+              "• Posibilidad de dejar compras de lujo y maletas en el vehículo durante todo el día.",
+              "• Gestión rigurosa de relevos para jornadas prolongadas cumpliendo las normativas de descanso."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "¿Se ofrecen tarifas especiales por estancias de una semana o más?",
+            "a": "Sí, disponemos de forfaits pluridiarios y semanales con tarifas preferenciales y kilometraje adaptado."
+          }
         ]
       },
       "ar": {
-        "title": "هل يمكن حجز نفس السائق الخاص لعدة أيام متتالية في باريس؟",
-        "metaTitle": "حجز نفس السائق لعدة أيام في باريس | استمرارية وخصوصية تامة",
-        "metaDescription": "احجز نفس السائق الخاص والسيارة الفاخرة لعدة أيام أو أسابيع في باريس: ثقة مطلقة، معرفة تامة بتفضيلاتك الشخصية وسرية مهنية رفيعة.",
-        "h1": "هل يمكن حجز نفس السائق الخاص لعدة أيام متتالية في باريس؟",
-        "heroAlt": "سائق خاص وفي يستقبل ضيفه المعتاد بأعلى درجات الاحترام والتقدير أمام فندق باريسي راقٍ",
-        "directAnswer": "نعم، مع شركة SELY Privé يمكنك حجز نفس السائق الخاص ونفس السيارة الفاخرة لعدة أيام متتالية أو طوال فترة إقامتك في باريس. تمنحك هذه الاستمرارية راحة بال استثنائية: فسائقك الخاص يعرف مسبقاً تفضيلاتك (درجة الحرارة، أسلوب القيادة المفضل، مشروباتك المفضلة)، ويدير جدول مواعيدك دون الحاجة لتكرار التعليمات كل صباح مع سرية مطلقة.",
-        "cta": {
-          "title": "هل تخطط لإقامة لعدة أيام أو أسابيع في باريس؟",
-          "subtitle": "تمتع براحة وجود سائق خاص مكرس لخدمتك أنت وعائلتك طوال فترة رحلتك.",
-          "buttonText": "حجز سائق لعدة أيام",
-          "link": "/paris/reserver?service=hourly"
+        "title": "هل يمكن الاحتفاظ بنفس السائق الخاص لعدة أيام في باريس؟",
+        "metaTitle": "نفس السائق الخاص لعدة أيام في باريس | SELY Privé 2026",
+        "metaDescription": "احصل على نفس السائق الخاص ونفس السيارة الفاخرة طوال فترة إقامتك في باريس. ثقة تامة، خصوصية مطلقة، وخدمة مخصصة بالكامل.",
+        "h1": "هل يمكن الاحتفاظ بنفس السائق الخاص لعدة أيام في باريس؟",
+        "heroAlt": "سائق خاص معتمد يرحب بعميله الدائم أمام فندق راقٍ في باريس",
+        "directAnswer": "نعم، من الممكن تماماً والمفضل جداً حجز نفس السائق الخاص طوال فترة إقامتكم لعدة أيام أو أسابيع في باريس. في SELY Privé، نخصص لكم سائقاً معتمداً وسيارة مرسيدس فاخرة ثابتة (الفئة E أو S أو فان الفئة V) طوال رحلتكم. هذا الاستقرار يغنيكم عن تكرار التعليمات كل صباح: فسائقكم يعرف مسبقاً تفضيلاتكم (درجة حرارة المقصورة، المشروبات المفضلة، المسارات، وأسلوب القيادة)، ويحرس مقتنياتكم بأمان تام مع التزام صارم بالسرية والخصوصية.",
+        "intro": "للرحلات العائلية الطويلة، أو زيارات كبار الشخصيات ورجال الأعمال، يوفر وجود سائق مألوف وموثوق راحة بال استثنائية وسلاسة لا تضاهى في كافة تنقلاتكم الباريسية.",
+        "comparisonTable": {
+          "headers": [
+            "معايير الخدمة",
+            "نفس السائق المخصص (SELY Privé)",
+            "سائقون عشوائيون (تطبيقات النقل التقليدية)"
+          ],
+          "rows": [
+            [
+              "الاعتياد على التفضيلات",
+              "يحفظ رغباتكم من اليوم الأول: التكييف، المشروبات، والموسيقى المفضلة.",
+              "تضطر لشرح متطلباتك من الصفر مع كل رحلة وسائق جديد."
+            ],
+            [
+              "الأمان والسرية التامة",
+              "اتفاقية سرية صارمة، وإمكانية ترك المشتريات والحقائب بالسيارة بثقة.",
+              "سائقون غرباء في كل طلب، وصعوبة ترك أي أغراض ثمينة في المركبة."
+            ],
+            [
+              "التواصل المباشر والسرعة",
+              "تواصل فوري عبر الواتساب، والسيارة في انتظارك قبل موعدك دائماً.",
+              "أوقات انتظار غير مؤكدة وإمكانية إلغاء الحجز بشكل مفاجئ."
+            ]
+          ]
         },
-        "relatedSlugs": [
-          "taklifat-saeq-bil-saa-baris",
-          "kayfiyat-amal-saeq-khas-bil-saa-baris"
+        "sections": [
+          {
+            "h2": "مزايا تخصيص سائق دائم لإقامتكم",
+            "paragraphs": [
+              "• ثقة متبادلة واطمئنان كامل لكافة أفراد العائلة أو الوفد المرافق.",
+              "• راحة الاحتفاظ بالمشتريات والحقائب داخل السيارة طوال اليوم دون الحاجة لحملها.",
+              "• تنسيق مسبق لتبديل السائقين بنظام التناوب المنظم في حال استمرار اليوم لأكثر من 14 ساعة لضمان أعلى معايير السلامة."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "هل توجد باقات مخفضة لحجوزات الأسبوع أو عدة أيام؟",
+            "a": "نعم، نقدم باقات يومية وأسبوعية بأسعار متميزة تتناسب مع مدة إقامتكم واحتياجاتكم."
+          }
         ]
       }
     }
