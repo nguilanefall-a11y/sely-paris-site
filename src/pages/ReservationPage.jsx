@@ -901,6 +901,52 @@ export default function ReservationPage() {
 
       if (res.ok) {
         setStatus('success');
+
+        const quoteRef = `SELY-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+        const quoteData = {
+          ref: quoteRef,
+          createdAt: new Date().toISOString(),
+          service: service,
+          serviceLabel: service === 'transfer'
+            ? 'Transfert Point A à Point B'
+            : (service === 'hourly'
+                ? `Mise à disposition (${scheduleDays.length} j · ${totalScheduleHours}h)`
+                : 'Demande Sur-Mesure & Événements'),
+          cityName: cityName,
+          vehicleName: selectedVehicleData?.name,
+          vehicleImage: selectedVehicleData?.image,
+          vehicleCategory: selectedVehicleData?.category,
+          pickup: pickup,
+          destination: service === 'transfer'
+            ? destination
+            : (hasLongDistance ? (longDistanceCities || 'Longue distance') : 'Local & Agglomération'),
+          date: service === 'hourly' ? (scheduleDays[0]?.date || date) : date,
+          time: service === 'hourly' ? (scheduleDays[0]?.startTime || time) : time,
+          scheduleDays: service === 'hourly' ? scheduleDays : null,
+          totalHours: service === 'hourly' ? totalScheduleHours : null,
+          passengers: selectedVehicleData?.maxPassengers,
+          luggage: selectedVehicleData?.maxLuggage,
+          flightNumber: isAirportTrip && flightNumber ? flightNumber : null,
+          driverInstructions: driverInstructions.length > 0
+            ? driverInstructions.map((id) => DRIVER_INSTRUCTIONS_LIST.find((item) => item.id === id)?.title || id)
+            : [],
+          specialRequests: specialRequests || null,
+          client: {
+            firstName,
+            lastName,
+            email,
+            phone,
+            company: company || '',
+          },
+          bespokeText: service === 'bespoke' ? bespokeText : null,
+          estimatedPrice: calculatedPrice?.totalPrice || null,
+        };
+
+        try {
+          sessionStorage.setItem('sely_latest_quote', JSON.stringify(quoteData));
+        } catch (err) {}
+
+        navigate(getCityPath('/reservation-succes'), { state: quoteData });
       } else {
         setStatus('error');
         setErrorMessage("Une erreur est survenue lors de l'envoi de votre réservation. Veuillez nous joindre directement par téléphone.");

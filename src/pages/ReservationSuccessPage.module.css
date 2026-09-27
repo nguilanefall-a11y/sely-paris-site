@@ -1,182 +1,525 @@
+/* ============================================================
+   ReservationSuccessPage – Luxury Confirmation & Quote Overview
+   Sely Privé Aesthetic: Obsidian, Warm Gold, Meticulous Detail
+   ============================================================ */
+
 .page {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 1.5rem;
-  background: #ffffff;
-  color: #0a0a0a;
-  font-family: var(--font-sans);
+  padding: 5rem 1.5rem 6rem;
+  background: #080808;
+  color: #f5f5f5;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  overflow-x: hidden;
 }
 
-.card {
-  max-width: 580px;
+.ambientGlow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.09) 0%, rgba(8, 8, 8, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
   width: 100%;
-  background: #fafafa;
-  border: 1px solid #e5e5e5;
-  border-radius: var(--radius-subtle, 6px);
-  padding: 3.5rem 2.5rem;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ── Header ── */
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  padding: 0 1rem;
 }
 
-.iconWrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-sm, 4px);
-  background: #0a0a0a;
-  border: 1px solid #0a0a0a;
+.iconCircle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1f1b12, #0d0c08);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.2);
 }
 
 .checkIcon {
-  color: #ffffff;
+  color: #d4af37;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: #ffffff;
-  color: #0a0a0a;
-  border: 1px solid #0a0a0a;
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-xs, 3px);
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 500;
+  gap: 0.45rem;
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  margin-bottom: 1.25rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
 }
 
 .title {
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(2rem, 4vw, 2.85rem);
   font-weight: 500;
   letter-spacing: -0.01em;
-  margin-bottom: 0.75rem;
-  color: #0a0a0a;
+  color: #ffffff;
+  margin: 0 0 0.85rem;
+  line-height: 1.15;
 }
 
 .subtitle {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  color: #555555;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  font-size: 0.98rem;
+  color: #a0a0a0;
+  line-height: 1.65;
+  max-width: 620px;
+  margin: 0 0 1.75rem;
   font-weight: 300;
-  max-width: 440px;
 }
 
-.bookingIdBox {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: var(--radius-xs, 3px);
-  padding: 0.85rem 1.25rem;
+/* Reference box */
+.refContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 2rem;
-  width: 100%;
+  align-items: center;
+  gap: 0.45rem;
 }
 
-.bookingIdLabel {
-  font-family: var(--font-sans);
+.refLabel {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #777777;
+  color: #888888;
   font-weight: 500;
 }
 
-.bookingIdValue {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 500;
-  color: #0a0a0a;
-  letter-spacing: 0.08em;
+.refBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: #121212;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.55rem 1.15rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-.detailsGrid {
+.refValue {
+  font-family: monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #e6c875;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cccccc;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  color: #ffffff;
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.copiedIcon {
+  color: #4ade80;
+}
+
+/* ── Summary Cards Grid ── */
+.summarySection {
+  width: 100%;
+}
+
+.summaryGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  width: 100%;
-  margin-bottom: 2.25rem;
-  text-align: left;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.25rem;
 }
 
-.detailItem {
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: var(--radius-xs, 3px);
-  padding: 1rem;
+.card {
+  background: #111111;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.25s ease;
 }
 
-.detailLabel {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #777777;
-  font-weight: 500;
+.card:hover {
+  border-color: rgba(212, 175, 55, 0.25);
 }
 
-.detailValue {
-  font-family: var(--font-sans);
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 0.75rem;
+}
+
+.cardHeader h3 {
   font-size: 0.88rem;
-  font-weight: 400;
-  color: #0a0a0a;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e0e0e0;
+  margin: 0;
 }
 
-.actions {
+.cardIcon {
+  color: #d4af37;
+}
+
+.vehiclePreview {
+  width: 100%;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.vehicleImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.cardRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.dataRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dataLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888888;
+}
+
+.inlineIcon {
+  color: #d4af37;
+}
+
+.dataValue {
+  font-size: 0.92rem;
+  color: #f0f0f0;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.dataValueHighlight {
+  font-size: 0.96rem;
+  color: #e6c875;
+  font-weight: 600;
+}
+
+.capacityRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.capacityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #cccccc;
+}
+
+.notesBlock {
+  background: #0c0c0c;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  padding: 0.85rem;
+  font-size: 0.88rem;
+  color: #cccccc;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Protocol Steps ── */
+.protocolSection {
+  background: #0d0d0d;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 8px;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.protocolTitle {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.stepItem {
   display: flex;
   gap: 1rem;
-  width: 100%;
-  flex-direction: column;
 }
 
-.homeBtn {
+.stepNumber {
+  font-family: monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #d4af37;
+  line-height: 1;
+}
+
+.stepContent h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin: 0 0 0.35rem;
+}
+
+.stepContent p {
+  font-size: 0.82rem;
+  color: #999999;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ── Action Buttons ── */
+.actionsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.whatsappActionBtn {
+  width: 100%;
+  max-width: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 1rem;
-  background: #0a0a0a;
+  gap: 0.85rem;
+  background: linear-gradient(135deg, #1f6443 0%, #154730 100%);
+  border: 1px solid #25d366;
   color: #ffffff;
-  border: 1px solid #0a0a0a;
-  border-radius: var(--radius-xs, 3px);
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  padding: 1.15rem 1.75rem;
+  border-radius: 6px;
   text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.2);
   transition: all 0.25s ease;
 }
 
-.homeBtn:hover {
-  background: #ffffff;
-  color: #0a0a0a;
+.whatsappActionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(37, 211, 102, 0.32);
+  background: linear-gradient(135deg, #23744e 0%, #175036 100%);
 }
 
-@media (max-width: 600px) {
-  .detailsGrid {
+.btnTextStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.mainBtnText {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.subBtnText {
+  font-size: 0.72rem;
+  opacity: 0.85;
+  font-weight: 300;
+}
+
+.secondaryActions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 540px;
+}
+
+.phoneActionBtn,
+.printActionBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #141414;
+  border: 1px solid #262626;
+  color: #cccccc;
+}
+
+.phoneActionBtn:hover,
+.printActionBtn:hover {
+  background: #1a1a1a;
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #ffffff;
+}
+
+.footerLinkRow {
+  margin-top: 0.5rem;
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #888888;
+  font-size: 0.82rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.homeLink:hover {
+  color: #d4af37;
+}
+
+.arrowIcon {
+  transition: transform 0.2s ease;
+}
+
+.homeLink:hover .arrowIcon {
+  transform: translateX(3px);
+}
+
+/* ── RTL Support ── */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .btnTextStack {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.rtl .cardHeader {
+  flex-direction: row-reverse;
+}
+
+.rtl .homeLink:hover .arrowIcon {
+  transform: translateX(-3px);
+}
+
+/* ── Print Media Query ── */
+@media print {
+  .page {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 1rem !important;
+  }
+
+  .ambientGlow,
+  .actionsGroup,
+  .copyBtn {
+    display: none !important;
+  }
+
+  .card,
+  .refBox,
+  .protocolSection {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .title,
+  .refValue,
+  .dataValue,
+  .dataValueHighlight,
+  .protocolTitle {
+    color: #000000 !important;
+  }
+}
+
+/* ── Responsive Mobile ── */
+@media (max-width: 680px) {
+  .page {
+    padding: 4rem 1rem 5rem;
+  }
+
+  .secondaryActions {
+    flex-direction: column;
+  }
+
+  .summaryGrid {
     grid-template-columns: 1fr;
   }
 
-  .card {
-    padding: 2.5rem 1.5rem;
+  .stepsGrid {
+    grid-template-columns: 1fr;
   }
 }

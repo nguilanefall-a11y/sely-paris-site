@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send, Zap, Mic, MicOff } from 'lucide-react';
@@ -8,7 +8,8 @@ import { useVoiceDictation } from '../hooks/useVoiceDictation';
 import styles from './SpecialRequestPage.module.css';
 
 export default function SpecialRequestPage() {
-  const { t, cityName, currentCity, i18n } = useCity();
+  const { t, cityName, currentCity, getCityPath, i18n } = useCity();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const initialType = searchParams.get('type') === 'rapide' ? 'rapide' : 'sur-mesure';
   const [requestType, setRequestType] = useState(initialType);
@@ -74,6 +75,32 @@ export default function SpecialRequestPage() {
 
       if (res.ok) {
         setStatus('success');
+
+        const quoteRef = `SELY-EXP-${Math.floor(10000 + Math.random() * 90000)}`;
+        const quoteData = {
+          ref: quoteRef,
+          createdAt: new Date().toISOString(),
+          service: isUrgent ? 'urgent' : 'bespoke',
+          serviceLabel: isUrgent ? 'Prise en charge rapide (< 3h ou Nuit)' : 'Demande Spécifique / Sur-mesure',
+          cityName: cityName || currentCity || 'Paris',
+          pickup: prefilledPickup || 'À définir avec le régisseur',
+          date: prefilledDate || new Date().toISOString().split('T')[0],
+          time: prefilledTime || 'Immédiat / Selon convenance',
+          client: {
+            firstName: form.firstName,
+            lastName: form.lastName,
+            email: form.email,
+            phone: form.phone,
+            company: form.company || '',
+          },
+          bespokeText: form.message,
+        };
+
+        try {
+          sessionStorage.setItem('sely_latest_quote', JSON.stringify(quoteData));
+        } catch (err) {}
+
+        navigate(getCityPath('/reservation-succes'), { state: quoteData });
       } else {
         setStatus('error');
       }

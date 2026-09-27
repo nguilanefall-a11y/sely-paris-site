@@ -57,6 +57,8 @@ function PublicSite() {
             <Route path="/reserver" element={<ReservationPage />} />
             <Route path="/demande-specifique" element={<SpecialRequestPage />} />
             <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
+            <Route path="/confirmation-devis" element={<ReservationSuccessPage />} />
+            <Route path="/devis-confirme" element={<ReservationSuccessPage />} />
             <Route path="/politique-de-confidentialite" element={<PrivacyPolicyPage />} />
             <Route path="/mentions-legales" element={<LegalPage />} />
             <Route path="/journal" element={<JournalHubPage />} />
