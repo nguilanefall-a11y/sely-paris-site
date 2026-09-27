@@ -59,91 +59,130 @@ import { getPopularDestinations } from '../lib/popularDestinations';
 import styles from './ReservationPage.module.css';
 
 /* ─── vehicle catalogue (reused directly) ─── */
-/* ─── Vehicle Classes Hierarchy (Business -> First -> XL -> VIP) ─── */
+/* ─── Vehicle Classes Hierarchy (Simplified & Elegant) ─── */
 const VEHICLE_CLASSES = [
   {
-    id: 'business',
-    title: 'Classe Business',
-    badge: 'ACCÈS AFFAIRES',
-    desc: 'Berlines exécutives pour vos transferts aéroports et rendez-vous professionnels.',
-    notice: 'Gamme optimale pour transferts fréquents, corporate et gares.',
+    id: 'berline',
+    title: 'Berlines',
+    desc: 'Mercedes Classe E, Classe S & berlines exécutives.',
   },
   {
-    id: 'first',
-    title: 'Classe First',
-    badge: 'GRANDE REMISE',
-    desc: 'L\'excellence du prestige automobile et le confort de palace.',
-    notice: 'La référence des dirigeants, diplomates et palaces internationaux.',
+    id: 'van',
+    title: 'Vans & Spacieux',
+    desc: 'Mercedes Classe V & minibus grand confort pour groupes et bagages.',
   },
   {
-    id: 'xl',
-    title: 'Classe XL',
-    badge: 'GRAND VOLUME',
-    desc: 'Vans & Grands volumes pour familles, groupes et délégations.',
-    notice: 'Espace spacieux jusqu\'à 19 passagers et grands bagages sans compromis.',
-  },
-  {
-    id: 'vip',
-    title: 'Classe VIP',
-    badge: 'HAUTE DISTINCTION',
-    desc: 'Haute couture automobile et salons privés d\'exception.',
-    notice: 'Prestations d\'apparat réservées aux cortèges officiels et personnalités d\'exception.',
+    id: 'prestige',
+    title: 'Prestige & SUV',
+    desc: 'Mercedes-Maybach, Range Rover & véhicules d’exception.',
   },
 ];
 
-/* ─── Vehicle Catalogue Ordered: Business -> First -> XL -> VIP ─── */
+/* ─── Vehicle Catalogue ─── */
 const VEHICLES = [
-  /* ─── 1. CLASSE BUSINESS ─── */
+  /* ─── 1. BERLINES ─── */
   {
     id: 'classe-e',
     name: 'Mercedes Classe E',
-    classId: 'business',
-    classTitle: 'Classe Business',
+    classId: 'berline',
+    classTitle: 'Berline',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 2,
-    categoryBadge: 'CLASSE BUSINESS',
-    desc: 'Élégance et efficacité, la référence pour vos déplacements professionnels et transferts aéroport.',
+    categoryBadge: 'Berline Business',
+    desc: 'Élégance et efficacité, idéale pour vos transferts gares, aéroports et rendez-vous professionnels.',
     image: '/eclass-paris-luxury.jpg',
   },
   {
     id: 'tesla-y',
     name: 'Tesla Model Y',
-    classId: 'business',
-    classTitle: 'Classe Business',
+    classId: 'berline',
+    classTitle: 'Berline',
     passengers: '4 passagers',
     maxPassengers: 4,
     maxLuggage: 3,
-    categoryBadge: 'CLASSE BUSINESS ÉCO',
-    desc: 'Mobilité électrique haut de gamme, silence absolu et modernité technologique.',
+    categoryBadge: 'Berline Électrique',
+    desc: 'Mobilité 100% électrique, confort moderne, silence de conduite et technologie embarquée.',
     image: '/tesla-y-paris-luxury.jpg',
   },
-
-  /* ─── 2. CLASSE FIRST ─── */
   {
     id: 'classe-s',
     name: 'Mercedes Classe S',
-    classId: 'first',
-    classTitle: 'Classe First',
+    classId: 'berline',
+    classTitle: 'Berline',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 3,
-    categoryBadge: 'CLASSE FIRST',
-    desc: 'Berline de prestige par excellence, confort absolu, insonorisation d\'art et élégance intemporelle.',
+    categoryBadge: 'Berline Première',
+    desc: 'La berline de référence mondiale, insonorisation d’art, sellerie d’exception et confort absolu.',
     image: '/sclass-main-new.jpg',
     rearImage: '/sclass_paris_hero.jpg',
     interiorImage: '/sclass-interior-white.jpg',
   },
+
+  /* ─── 2. VANS & SPACIEUX ─── */
+  {
+    id: 'classe-v',
+    name: 'Mercedes Classe V',
+    classId: 'van',
+    classTitle: 'Van',
+    passengers: '7 passagers',
+    maxPassengers: 7,
+    maxLuggage: 7,
+    categoryBadge: 'Van 7 places',
+    desc: 'Configuration salon face-à-face grand confort pour vos déplacements en famille et séjours d’équipe.',
+    image: '/vclass-paris-luxury.jpg',
+    rearImage: '/vclass-rear-luxury.jpg',
+    interiorImage: '/vclass_interior_vip_lounge.jpg',
+  },
+  {
+    id: 'sprinter-7-vip',
+    name: 'Mercedes Sprinter Lounge (7 places)',
+    classId: 'van',
+    classTitle: 'Van',
+    passengers: '7 passagers',
+    maxPassengers: 7,
+    maxLuggage: 10,
+    categoryBadge: 'Van Salon VIP',
+    desc: 'Salon First Class mobile en cuir nappa avec fauteuils individuels et espace de travail.',
+    image: '/minibus-7-vip-interior.jpg',
+  },
+  {
+    id: 'sprinter-14-vip',
+    name: 'Mercedes Sprinter (14 places)',
+    classId: 'van',
+    classTitle: 'Van',
+    passengers: '14 passagers',
+    maxPassengers: 14,
+    maxLuggage: 14,
+    categoryBadge: 'Minibus 14 places',
+    desc: 'Minibus grand confort pour délégations, mariages et transport de groupes d’affaires.',
+    image: '/minibus-14-vip-interior.jpg',
+  },
+  {
+    id: 'sprinter-19-standard',
+    name: 'Mercedes Sprinter (19 places)',
+    classId: 'van',
+    classTitle: 'Van',
+    passengers: '19 passagers',
+    maxPassengers: 19,
+    maxLuggage: 19,
+    categoryBadge: 'Minibus 19 places',
+    desc: 'Minibus grand tourisme 19 places avec plancher bois, idéal pour grands groupes et événements.',
+    image: '/minibus-19-standard-interior.jpg',
+  },
+
+  /* ─── 3. PRESTIGE & SUV ─── */
   {
     id: 'range-rover',
     name: 'Range Rover Autobiography',
-    classId: 'first',
-    classTitle: 'Classe First',
+    classId: 'prestige',
+    classTitle: 'Prestige',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 4,
-    categoryBadge: 'CLASSE FIRST SUV',
-    desc: 'Le SUV britannique d\'exception, position dominante majestueuse et sérénité royale.',
+    categoryBadge: 'SUV Prestige',
+    desc: 'SUV britannique emblématique, assise dominante majestueuse et sérénité de conduite.',
     image: '/range-rover-main.jpg',
     rearImage: '/range-rover-rear.jpg',
     interiorImage: '/range-rover-interior.jpg',
@@ -151,57 +190,27 @@ const VEHICLES = [
   {
     id: 'cadillac-escalade',
     name: 'Cadillac Escalade ESV',
-    classId: 'first',
-    classTitle: 'Classe First',
+    classId: 'prestige',
+    classTitle: 'Prestige',
     passengers: '6 passagers',
     maxPassengers: 6,
     maxLuggage: 6,
-    categoryBadge: 'CLASSE FIRST GRAND SUV',
-    desc: 'Le grand SUV américain par excellence, salon VIP spacieux et présence statutaire incomparable.',
+    categoryBadge: 'Grand SUV',
+    desc: 'Grand SUV américain spacieux, présence statutaire et habitacle généreux.',
     image: '/cadillac-escalade-main.jpg',
     rearImage: '/cadillac-escalade-rear.jpg',
     interiorImage: '/cadillac-escalade-interior.jpg',
   },
-
-  /* ─── 3. CLASSE XL ─── */
-  {
-    id: 'classe-v',
-    name: 'Mercedes Classe V Business',
-    classId: 'xl',
-    classTitle: 'Classe XL',
-    passengers: '7 passagers',
-    maxPassengers: 7,
-    maxLuggage: 7,
-    categoryBadge: 'CLASSE XL BUSINESS VAN',
-    desc: 'Salon mobile face-à-face grand confort pour vos déplacements en famille, séjours et équipes.',
-    image: '/vclass-paris-luxury.jpg',
-    rearImage: '/vclass-rear-luxury.jpg',
-    interiorImage: '/vclass_interior_vip_lounge.jpg',
-  },
-  {
-    id: 'sprinter-19-standard',
-    name: 'Mercedes Sprinter Standard (19 places)',
-    classId: 'xl',
-    classTitle: 'Classe XL',
-    passengers: '19 passagers',
-    maxPassengers: 19,
-    maxLuggage: 19,
-    categoryBadge: 'CLASSE XL MINIBUS',
-    desc: 'Minibus grand tourisme 19 places avec plancher bois, idéal pour groupes d\'affaires et événements.',
-    image: '/minibus-19-standard-interior.jpg',
-  },
-
-  /* ─── 4. CLASSE VIP ─── */
   {
     id: 'maybach',
     name: 'Mercedes-Maybach',
-    classId: 'vip',
-    classTitle: 'Classe VIP',
+    classId: 'prestige',
+    classTitle: 'Prestige',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 3,
-    categoryBadge: '★ CLASSE VIP MAYBACH',
-    desc: 'Le summum du luxe automobile, empattement long, flûtes argentées et confort d\'aviation privée.',
+    categoryBadge: 'Mercedes-Maybach',
+    desc: 'Le raffinement suprême, empattement long, flûtes argentées et salon de première classe.',
     image: '/maybach-paris-luxury.jpg',
     rearImage: '/maybach-rear-luxury.jpg',
     interiorImage: '/maybach-interior-first-class.jpg',
@@ -209,13 +218,13 @@ const VEHICLES = [
   {
     id: 'rolls-phantom',
     name: 'Rolls-Royce Phantom',
-    classId: 'vip',
-    classTitle: 'Classe VIP',
+    classId: 'prestige',
+    classTitle: 'Prestige',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 3,
-    categoryBadge: '★ CLASSE VIP PHANTOM',
-    desc: 'L\'incarnation ultime du prestige et de l\'aristocratie mondiale, portières antagonistes et tapis de laine.',
+    categoryBadge: 'Rolls-Royce Phantom',
+    desc: 'Prestance majestueuse, confort feutré incomparable et finitions d’exception.',
     image: '/rolls-phantom-main.jpg',
     rearImage: '/rolls-phantom-rear.jpg',
     interiorImage: '/rolls-phantom-interior.jpg',
@@ -223,40 +232,16 @@ const VEHICLES = [
   {
     id: 'rolls-cullinan',
     name: 'Rolls-Royce Cullinan',
-    classId: 'vip',
-    classTitle: 'Classe VIP',
+    classId: 'prestige',
+    classTitle: 'Prestige',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 4,
-    categoryBadge: '★ CLASSE VIP CULLINAN',
-    desc: 'Le SUV le plus prestigieux au monde, prestance impériale, silence absolu et confort d\'exception.',
+    categoryBadge: 'Rolls-Royce Cullinan',
+    desc: 'Le SUV le plus luxueux au monde, silence absolu et confort d’exception sur toutes distances.',
     image: '/rolls-cullinan-main.jpg',
     rearImage: '/rolls-cullinan-rear.jpg',
     interiorImage: '/rolls-cullinan-interior.jpg',
-  },
-  {
-    id: 'sprinter-7-vip',
-    name: 'Mercedes Sprinter VIP (7 places)',
-    classId: 'vip',
-    classTitle: 'Classe VIP',
-    passengers: '7 passagers',
-    maxPassengers: 7,
-    maxLuggage: 10,
-    categoryBadge: '★ CLASSE VIP PRIVATE JET',
-    desc: 'Salon First Class mobile en cuir blanc nappa, ciel étoilé, grand écran cinéma et bar privé.',
-    image: '/minibus-7-vip-interior.jpg',
-  },
-  {
-    id: 'sprinter-14-vip',
-    name: 'Mercedes Sprinter VIP (14 places)',
-    classId: 'vip',
-    classTitle: 'Classe VIP',
-    passengers: '14 passagers',
-    maxPassengers: 14,
-    maxLuggage: 14,
-    categoryBadge: '★ CLASSE VIP SALON CONFÉRENCE',
-    desc: 'Salon d\'affaires mobile 14 places avec tables laquées, cuir beige diamant et connectivité ultra-VIP.',
-    image: '/minibus-14-vip-interior.jpg',
   },
 ];
 
@@ -725,6 +710,66 @@ export default function ReservationPage() {
   const removeScheduleDay = (dayId) => {
     if (scheduleDays.length <= 1) return;
     setScheduleDays((prev) => prev.filter((d) => d.id !== dayId));
+  };
+
+  const setNumberOfDays = (count) => {
+    const targetCount = Math.max(1, Math.min(30, count));
+    setScheduleDays((prev) => {
+      if (prev.length === targetCount) return prev;
+      if (prev.length < targetCount) {
+        const newDays = [...prev];
+        const lastDay = prev[prev.length - 1];
+        const defaultHours = lastDay ? lastDay.hours : 8;
+        const defaultStartTime = lastDay ? lastDay.startTime : '09:00';
+        for (let i = prev.length; i < targetCount; i++) {
+          let nextDate = todayISO;
+          try {
+            const lastDate = newDays[newDays.length - 1]?.date || todayISO;
+            const d = new Date(lastDate);
+            d.setDate(d.getDate() + 1);
+            nextDate = d.toISOString().split('T')[0];
+          } catch (e) {
+            nextDate = todayISO;
+          }
+          newDays.push({
+            id: Date.now() + i,
+            date: nextDate,
+            startTime: defaultStartTime,
+            endTime: '17:00',
+            hours: defaultHours,
+            isFlexible: true,
+          });
+        }
+        return newDays;
+      } else {
+        return prev.slice(0, targetCount);
+      }
+    });
+  };
+
+  const getFallbackSuggestions = (text) => {
+    const query = (text || '').trim().toLowerCase();
+    if (!query) return LUXURY_SUGGESTIONS.slice(0, 6);
+    const popular = getPopularDestinations(currentCity, query).map((p) => ({
+      label: p.label,
+      category: p.subtitle || p.type || 'Lieu d’intérêt',
+    }));
+    const luxury = LUXURY_SUGGESTIONS.filter(
+      (item) =>
+        item.label.toLowerCase().includes(query) ||
+        (item.category && item.category.toLowerCase().includes(query))
+    );
+    const combined = [...popular, ...luxury];
+    const unique = [];
+    const seen = new Set();
+    for (const item of combined) {
+      const key = item.label.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(item);
+      }
+    }
+    return unique.length > 0 ? unique.slice(0, 6) : LUXURY_SUGGESTIONS.slice(0, 6);
   };
 
   const [selectedClassFilter, setSelectedClassFilter] = useState('all'); // 'all' | 'business' | 'first' | 'xl' | 'vip'
@@ -1237,7 +1282,7 @@ export default function ReservationPage() {
           {/* Pickup field */}
           <div className={styles.fieldBlock}>
             <label className={styles.fieldLabel}>
-              {service === 'hourly' ? t('tunnel.pickup_hourly_label', 'Point de rendez-vous') : t('tunnel.pickup_label', 'Lieu de prise en charge')}
+              {service === 'hourly' ? t('tunnel.pickup_hourly_label', 'Point de prise en charge') : t('tunnel.pickup_label', 'Lieu de prise en charge')}
             </label>
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <input
@@ -1264,31 +1309,64 @@ export default function ReservationPage() {
               )}
             </div>
 
-            {/* Pickup autocomplete dropdown */}
-            {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 && activeInputFocus === 'pickup' && (
-              <div className={styles.fieldSuggestionsDropdown}>
-                {pickupAutocomplete.suggestions.map((s, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      setPickup(s.label);
-                      if (s.coordinates) setPickupCoords(s.coordinates);
-                      pickupAutocomplete.setSuggestions([]);
-                      setActiveInputFocus(null);
-                    }}
-                    className={styles.fieldSuggestionItem}
-                  >
-                    <div className={styles.sugIconCircle}>
-                      <MapPin size={16} />
-                    </div>
-                    <div className={styles.sugDetails}>
-                      <span className={styles.sugMain}>{s.label}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+            {/* Pickup temporary autocomplete / suggestions dropdown */}
+            {activeInputFocus === 'pickup' && (
+              <>
+                <div
+                  style={{ position: 'fixed', inset: 0, zIndex: 140 }}
+                  onClick={() => setActiveInputFocus(null)}
+                />
+                <div className={styles.fieldSuggestionsDropdown}>
+                  {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 ? (
+                    pickupAutocomplete.suggestions.map((s, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setPickup(s.label);
+                          if (s.coordinates) setPickupCoords(s.coordinates);
+                          pickupAutocomplete.setSuggestions([]);
+                          setActiveInputFocus(null);
+                        }}
+                        className={styles.fieldSuggestionItem}
+                      >
+                        <div className={styles.sugIconCircle}>
+                          <MapPin size={16} />
+                        </div>
+                        <div className={styles.sugDetails}>
+                          <span className={styles.sugMain}>{s.label}</span>
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    getFallbackSuggestions(pickup).map((item, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setPickup(item.label);
+                          setActiveInputFocus(null);
+                        }}
+                        className={styles.fieldSuggestionItem}
+                      >
+                        <div className={styles.sugIconCircle}>
+                          {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
+                            <PlaneTakeoff size={16} />
+                          ) : (
+                            <MapPin size={16} />
+                          )}
+                        </div>
+                        <div className={styles.sugDetails}>
+                          <span className={styles.sugMain}>{item.label}</span>
+                          <span className={styles.sugSub}>{item.category}</span>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </>
             )}
           </div>
 
@@ -1333,104 +1411,209 @@ export default function ReservationPage() {
               )}
             </div>
 
-            {/* Destination autocomplete dropdown */}
-            {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 && activeInputFocus === 'destination' && (
-              <div className={styles.fieldSuggestionsDropdown}>
-                {destAutocomplete.suggestions.map((s, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      setDestination(s.label);
-                      if (s.coordinates) setDestCoords(s.coordinates);
-                      destAutocomplete.setSuggestions([]);
-                      setActiveInputFocus(null);
-                    }}
-                    className={styles.fieldSuggestionItem}
-                  >
-                    <div className={styles.sugIconCircle}>
-                      <MapPin size={16} />
-                    </div>
-                    <div className={styles.sugDetails}>
-                      <span className={styles.sugMain}>{s.label}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+            {/* Destination temporary autocomplete / suggestions dropdown */}
+            {activeInputFocus === 'destination' && (
+              <>
+                <div
+                  style={{ position: 'fixed', inset: 0, zIndex: 140 }}
+                  onClick={() => setActiveInputFocus(null)}
+                />
+                <div className={styles.fieldSuggestionsDropdown}>
+                  {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 ? (
+                    destAutocomplete.suggestions.map((s, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setDestination(s.label);
+                          if (s.coordinates) setDestCoords(s.coordinates);
+                          destAutocomplete.setSuggestions([]);
+                          setActiveInputFocus(null);
+                        }}
+                        className={styles.fieldSuggestionItem}
+                      >
+                        <div className={styles.sugIconCircle}>
+                          <MapPin size={16} />
+                        </div>
+                        <div className={styles.sugDetails}>
+                          <span className={styles.sugMain}>{s.label}</span>
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    getFallbackSuggestions(destination).map((item, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setDestination(item.label);
+                          setActiveInputFocus(null);
+                        }}
+                        className={styles.fieldSuggestionItem}
+                      >
+                        <div className={styles.sugIconCircle}>
+                          {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
+                            <PlaneTakeoff size={16} />
+                          ) : (
+                            <MapPin size={16} />
+                          )}
+                        </div>
+                        <div className={styles.sugDetails}>
+                          <span className={styles.sugMain}>{item.label}</span>
+                          <span className={styles.sugSub}>{item.category}</span>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>
 
-        {/* Section Suggérée */}
-        <div className={styles.suggestedSection}>
-          <h3 className={styles.suggestedHeaderTitle}>
-            {t('tunnel.suggested_title', 'Suggérée')}
-          </h3>
-          <p className={styles.suggestedHeaderText}>
-            {t('tunnel.suggested_desc', 'Des suggestions et vos lieux favoris apparaîtront ici lorsque vous utiliserez notre service.')}
-          </p>
-          <div className={styles.suggestedPlacesList}>
-            {LUXURY_SUGGESTIONS.slice(0, 6).map((item, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSelectSuggestion(item)}
-                className={styles.suggestedPlaceRow}
-              >
-                <div className={styles.sugIconCircle}>
-                  {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
-                    <PlaneTakeoff size={16} />
-                  ) : (
-                    <MapPin size={16} />
-                  )}
-                </div>
-                <div className={styles.sugDetails}>
-                  <span className={styles.sugMain}>{item.label}</span>
-                  <span className={styles.sugSub}>{item.category}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Date & Time selection */}
-        <div className={styles.datetimeSection}>
-          <LuxuryDateTimePicker
-            selectedDate={date}
-            onDateChange={setDate}
-            selectedTime={time}
-            onTimeChange={setTime}
-            isEn={i18n?.language === 'en'}
-            minDateISO={todayISO}
-          />
-        </div>
-
-        {/* If hourly: duration pills */}
-        {service === 'hourly' && (
-          <div style={{ marginBottom: '1.75rem' }}>
-            <label className={styles.fieldLabel} style={{ marginBottom: '0.65rem', display: 'block' }}>
-              {t('tunnel.hourly_duration_label', 'Durée de la mise à disposition')}
-            </label>
-            <div className={styles.durationScrollWrapper}>
-              <div className={styles.durationScrollStrip}>
-                {[3, 4, 5, 6, 8, 10, 12, 24].map((h) => (
-                  <button
-                    key={h}
-                    type="button"
-                    onClick={() => setDayPresetHours(scheduleDays[0]?.id || 1, h)}
-                    className={`${styles.durationScrollPill} ${(scheduleDays[0]?.hours || 8) === h ? styles.durationPillActive : ''}`}
-                  >
-                    <span className={styles.durationPillNumber}>{h}h</span>
-                    {h === 8 && <span className={styles.durationPillTag}>{t('tunnel.one_day', '1 jour')}</span>}
-                    {h === 4 && <span className={styles.durationPillTag}>{t('tunnel.half_day', '1/2 j')}</span>}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Transfer: Date & Time Picker */}
+        {service === 'transfer' && (
+          <div className={styles.datetimeSection}>
+            <LuxuryDateTimePicker
+              selectedDate={date}
+              onDateChange={setDate}
+              selectedTime={time}
+              onTimeChange={setTime}
+              isEn={i18n?.language === 'en'}
+              minDateISO={todayISO}
+            />
           </div>
         )}
 
+        {/* Hourly: Multi-Day & Schedule Selector */}
+        {service === 'hourly' && (
+          <div className={styles.hourlyDaysSection}>
+            {/* Number of days row */}
+            <div className={styles.daysStepperRow}>
+              <div>
+                <span className={styles.hourlySectionTitle}>Mise à disposition</span>
+                <p className={styles.hourlySectionSubtitle}>Choisissez le nombre de jours et vos horaires</p>
+              </div>
+
+              <div className={styles.stepperControl}>
+                <button
+                  type="button"
+                  className={styles.stepperBtn}
+                  onClick={() => setNumberOfDays(scheduleDays.length - 1)}
+                  disabled={scheduleDays.length <= 1}
+                  aria-label="Moins de jours"
+                >
+                  -
+                </button>
+                <span className={styles.stepperCount}>
+                  {scheduleDays.length} {scheduleDays.length > 1 ? 'jours' : 'jour'}
+                </span>
+                <button
+                  type="button"
+                  className={styles.stepperBtn}
+                  onClick={() => setNumberOfDays(scheduleDays.length + 1)}
+                  aria-label="Plus de jours"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Quick preset chips */}
+            <div className={styles.quickDaysPills}>
+              {[1, 2, 3, 5, 7].map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => setNumberOfDays(num)}
+                  className={`${styles.quickDayPill} ${scheduleDays.length === num ? styles.quickDayPillActive : ''}`}
+                >
+                  {num === 7 ? '1 semaine' : `${num} ${num > 1 ? 'jours' : 'jour'}`}
+                </button>
+              ))}
+            </div>
+
+            {/* Days list */}
+            <div className={styles.hourlyDaysList}>
+              {scheduleDays.map((d, index) => {
+                return (
+                  <div key={d.id} className={styles.hourlyDayCard}>
+                    <div className={styles.hourlyDayHeader}>
+                      <div className={styles.hourlyDayBadge}>
+                        <span>Jour {index + 1}</span>
+                        <span className={styles.hourlyDayDateDesc}>· {formatDayShort(d.date)}</span>
+                      </div>
+                      {scheduleDays.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeScheduleDay(d.id)}
+                          className={styles.removeDayMiniBtn}
+                        >
+                          <Trash2 size={13} />
+                          <span>Retirer</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Date and start time row */}
+                    <div className={styles.dayDateTimeRow}>
+                      <div className={styles.dayDateCol}>
+                        <label className={styles.miniFieldLabel}>Date du jour {index + 1}</label>
+                        <input
+                          type="date"
+                          min={todayISO}
+                          value={d.date}
+                          onChange={(e) => {
+                            if (e.target.value) updateDayDate(d.id, e.target.value);
+                          }}
+                          className={styles.nativeDateClean}
+                        />
+                      </div>
+                      <div className={styles.dayTimeCol}>
+                        <label className={styles.miniFieldLabel}>Heure de départ</label>
+                        <input
+                          type="time"
+                          value={d.startTime || '09:00'}
+                          onChange={(e) => updateDayStartTime(d.id, e.target.value)}
+                          className={styles.nativeTimeClean}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Hours pill selector */}
+                    <div className={styles.dayHoursRow}>
+                      <label className={styles.miniFieldLabel}>Durée de la journée</label>
+                      <div className={styles.durationScrollStrip}>
+                        {[3, 4, 6, 8, 10, 12, 24].map((h) => (
+                          <button
+                            key={h}
+                            type="button"
+                            onClick={() => setDayPresetHours(d.id, h)}
+                            className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
+                          >
+                            <span className={styles.durationPillNumber}>{h}h</span>
+                            {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
+                            {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Total summary banner */}
+            <div className={styles.hourlyTotalBanner}>
+              <Calendar size={16} />
+              <span>
+                Total : <strong>{scheduleDays.length} {scheduleDays.length > 1 ? 'jours' : 'jour'}</strong> · <strong>{totalScheduleHours}h</strong> de mise à disposition
+              </span>
+            </div>
+          </div>
+        )}
         {/* Action Button: Choisir mon véhicule */}
         <button
           type="button"
@@ -1865,200 +2048,163 @@ export default function ReservationPage() {
               className={styles.screenContainerLarge}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>{t('tunnel.step2_badge', 'FLOTTE DE PRESTIGE')}</span>
-                <h2 className={styles.screenTitle}>{t('tunnel.step2_title', 'Sélectionnez votre véhicule')}</h2>
-                <p className={styles.screenSubtitle}>{t('tunnel.step2_subtitle', 'Prestation de prestige tout inclus (carburant, péages, accueil chauffeur et accompagnement dédié).')}</p>
+                <span className={styles.microBadge}>NOTRE FLOTTE</span>
+                <h2 className={styles.screenTitle}>Sélectionnez votre véhicule</h2>
+                <p className={styles.screenSubtitle}>Prestation tout inclus (chauffeur dédié, carburant, péages et accueil personnalisé).</p>
               </div>
 
-              {/* Class Filter Quick Tabs */}
+              {/* Simplified Filter Tabs */}
               <div className={styles.classFilterTabs}>
                 <button
                   type="button"
                   onClick={() => setSelectedClassFilter('all')}
                   className={`${styles.classFilterTab} ${selectedClassFilter === 'all' ? styles.classFilterActive : ''}`}
                 >
-                  <span>{t('tunnel.fleet_all', 'Toute la flotte')}</span>
+                  <span>Toute la flotte</span>
                 </button>
                 {VEHICLE_CLASSES.map((cls) => (
                   <button
                     key={cls.id}
                     type="button"
                     onClick={() => setSelectedClassFilter(cls.id)}
-                    className={`${styles.classFilterTab} ${selectedClassFilter === cls.id ? styles.classFilterActive : ''} ${cls.id === 'vip' ? styles.classFilterVip : ''}`}
+                    className={`${styles.classFilterTab} ${selectedClassFilter === cls.id ? styles.classFilterActive : ''}`}
                   >
-                    {cls.id === 'business' && <Briefcase size={13} />}
-                    {cls.id === 'first' && <Award size={13} />}
-                    {cls.id === 'xl' && <Users size={13} />}
-                    {cls.id === 'vip' && <Sparkles size={13} />}
                     <span>{cls.title}</span>
                   </button>
                 ))}
               </div>
 
-              {/* Categorized Class Sections (Business -> First -> XL -> VIP) */}
-              <div className={styles.classesContainer}>
-                {VEHICLE_CLASSES.filter((cls) => selectedClassFilter === 'all' || selectedClassFilter === cls.id).map((cls) => {
-                  const classVehicles = VEHICLES.filter((v) => v.classId === cls.id);
-                  if (classVehicles.length === 0) return null;
+              {/* Clean Vehicles Grid */}
+              <div className={styles.vehiclesListGrid} style={{ marginTop: '1.25rem' }}>
+                {VEHICLES.filter((v) => selectedClassFilter === 'all' || v.classId === selectedClassFilter).map((v) => {
+                  const isSelected = selectedVehicle === v.id;
+                  const activeAngle = vehicleAngles[v.id] || 'front';
+                  const displayImg =
+                    activeAngle === 'rear' && v.rearImage
+                      ? v.rearImage
+                      : activeAngle === 'interior' && v.interiorImage
+                      ? v.interiorImage
+                      : v.image;
+                  const hasMultiAngles = Boolean(v.rearImage || v.interiorImage);
 
                   return (
-                    <div key={cls.id} className={styles.classSection} id={`class-section-${cls.id}`}>
-                      {/* Class Header Bar */}
-                      <div className={`${styles.classHeaderBar} ${cls.id === 'vip' ? styles.classHeaderVip : ''}`}>
-                        <div className={styles.classHeaderLeft}>
-                          <div className={`${styles.classIconPill} ${cls.id === 'vip' ? styles.classIconVip : ''}`}>
-                            {cls.id === 'business' && <Briefcase size={16} />}
-                            {cls.id === 'first' && <Award size={16} />}
-                            {cls.id === 'xl' && <Users size={16} />}
-                            {cls.id === 'vip' && <Sparkles size={16} />}
+                    <div
+                      key={v.id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
+                        setSelectedVehicle(v.id);
+                        goToNextStep();
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedVehicle(v.id);
+                          goToNextStep();
+                        }
+                      }}
+                      className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''}`}
+                    >
+                      <div className={styles.vehicleImgBox}>
+                        <img src={displayImg} alt={v.name} className={styles.vehicleImg} />
+                        {isSelected && (
+                          <div className={styles.vehicleCheckBadge}>
+                            <Check size={16} />
                           </div>
-                          <div className={styles.classHeaderTexts}>
-                            <div className={styles.classTitleRow}>
-                              <h3 className={styles.classSectionTitle}>{cls.title}</h3>
-                              <span className={styles.classSectionBadge}>{cls.badge}</span>
-                            </div>
-                            <p className={styles.classSectionDesc}>{cls.desc}</p>
+                        )}
+                        <span className={styles.vehicleBadgeOverlay}>
+                          {v.categoryBadge}
+                        </span>
+
+                        {hasMultiAngles && (
+                          <div
+                            className={styles.vehicleAnglePills}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <button
+                              type="button"
+                              className={`${styles.vehicleAngleBtn} ${activeAngle === 'front' ? styles.vehicleAngleBtnActive : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setVehicleAngles((prev) => ({ ...prev, [v.id]: 'front' }));
+                              }}
+                            >
+                              Devant
+                            </button>
+                            {v.rearImage && (
+                              <button
+                                type="button"
+                                className={`${styles.vehicleAngleBtn} ${activeAngle === 'rear' ? styles.vehicleAngleBtnActive : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setVehicleAngles((prev) => ({ ...prev, [v.id]: 'rear' }));
+                                }}
+                              >
+                                Arrière
+                              </button>
+                            )}
+                            {v.interiorImage && (
+                              <button
+                                type="button"
+                                className={`${styles.vehicleAngleBtn} ${activeAngle === 'interior' ? styles.vehicleAngleBtnActive : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setVehicleAngles((prev) => ({ ...prev, [v.id]: 'interior' }));
+                                }}
+                              >
+                                Intérieur
+                              </button>
+                            )}
                           </div>
-                        </div>
-                        <div className={styles.classHeaderNotice}>
-                          <span>{cls.notice}</span>
-                        </div>
+                        )}
                       </div>
 
-                      {/* Vehicles in this class */}
-                      <div className={styles.vehiclesListGrid}>
-                        {classVehicles.map((v) => {
-                          const isSelected = selectedVehicle === v.id;
-                          const activeAngle = vehicleAngles[v.id] || 'front';
-                          const displayImg =
-                            activeAngle === 'rear' && v.rearImage
-                              ? v.rearImage
-                              : activeAngle === 'interior' && v.interiorImage
-                              ? v.interiorImage
-                              : v.image;
-                          const hasMultiAngles = Boolean(v.rearImage || v.interiorImage);
-
-                          return (
-                            <div
-                              key={v.id}
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => {
-                                setSelectedVehicle(v.id);
-                                goToNextStep();
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault();
-                                  setSelectedVehicle(v.id);
-                                  goToNextStep();
-                                }
-                              }}
-                              className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''} ${v.classId === 'vip' ? styles.vehicleCardVip : ''}`}
-                            >
-                              <div className={styles.vehicleImgBox}>
-                                <img src={displayImg} alt={v.name} className={styles.vehicleImg} />
-                                {isSelected && (
-                                  <div className={styles.vehicleCheckBadge}>
-                                    <Check size={16} />
-                                  </div>
-                                )}
-                                <span className={`${styles.vehicleBadgeOverlay} ${v.classId === 'vip' ? styles.vehicleBadgeVip : ''}`}>
-                                  {v.categoryBadge}
-                                </span>
-
-                                {hasMultiAngles && (
-                                  <div
-                                    className={styles.vehicleAnglePills}
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    <button
-                                      type="button"
-                                      className={`${styles.vehicleAngleBtn} ${activeAngle === 'front' ? styles.vehicleAngleBtnActive : ''}`}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setVehicleAngles((prev) => ({ ...prev, [v.id]: 'front' }));
-                                      }}
-                                    >
-                                      Devant
-                                    </button>
-                                    {v.rearImage && (
-                                      <button
-                                        type="button"
-                                        className={`${styles.vehicleAngleBtn} ${activeAngle === 'rear' ? styles.vehicleAngleBtnActive : ''}`}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setVehicleAngles((prev) => ({ ...prev, [v.id]: 'rear' }));
-                                        }}
-                                      >
-                                        Arrière
-                                      </button>
-                                    )}
-                                    {v.interiorImage && (
-                                      <button
-                                        type="button"
-                                        className={`${styles.vehicleAngleBtn} ${activeAngle === 'interior' ? styles.vehicleAngleBtnActive : ''}`}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setVehicleAngles((prev) => ({ ...prev, [v.id]: 'interior' }));
-                                        }}
-                                      >
-                                        Intérieur
-                                      </button>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <div className={styles.vehicleInfoBox}>
-                                <div className={styles.vehicleTopRow}>
-                                  <div className={styles.vehicleTitleGroup}>
-                                    <div className={styles.vehicleClassMiniTag}>
-                                      {v.classTitle}
-                                    </div>
-                                    <h4 className={styles.vehicleName}>{v.name}</h4>
-                                    {service === 'hourly' && (
-                                      <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.15rem' }}>
-                                        Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total{hasLongDistance ? ' · Longue distance' : ''}
-                                      </div>
-                                    )}
-                                    <div className={styles.vehicleCapacityRow}>
-                                      <span className={styles.vehicleCapacityBadge}>
-                                        <Users size={12} strokeWidth={2} />
-                                        <span>Jusqu'à {v.maxPassengers} passagers max</span>
-                                      </span>
-                                      <span className={styles.vehicleCapacityBadge}>
-                                        <Luggage size={12} strokeWidth={2} />
-                                        <span>{v.maxLuggage} valises max</span>
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className={styles.vehicleQuoteBox}>
-                                    <span className={styles.vehiclePrice}>
-                                      Sur devis
-                                    </span>
-                                    <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
-                                  </div>
-                                </div>
-
-                                <p className={styles.vehicleDesc}>{v.desc}</p>
-
-                                <div className={styles.vehicleQuotePills}>
-                                  <span className={styles.quotePill}>Devis sur-mesure</span>
-                                  <span className={styles.quotePill}>Péages & carburant inclus</span>
-                                  <span className={styles.quotePill}>Attente offerte</span>
-                                  <span className={styles.quotePill}>Wi-Fi & Eau fraîche</span>
-                                </div>
-
-                                <div className={styles.vehicleSelectCtaRow}>
-                                  <span className={styles.vehicleSelectText}>
-                                    {isSelected ? t('tunnel.vehicle_selected', 'Véhicule sélectionné') : t('tunnel.choose_this_vehicle', 'Choisir ce véhicule')}
-                                  </span>
-                                  <ArrowRight size={14} />
-                                </div>
-                              </div>
+                      <div className={styles.vehicleInfoBox}>
+                        <div className={styles.vehicleTopRow}>
+                          <div className={styles.vehicleTitleGroup}>
+                            <div className={styles.vehicleClassMiniTag}>
+                              {v.classTitle}
                             </div>
-                          );
-                        })}
+                            <h4 className={styles.vehicleName}>{v.name}</h4>
+                            {service === 'hourly' && (
+                              <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.15rem' }}>
+                                Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total{hasLongDistance ? ' · Longue distance' : ''}
+                              </div>
+                            )}
+                            <div className={styles.vehicleCapacityRow}>
+                              <span className={styles.vehicleCapacityBadge}>
+                                <Users size={12} strokeWidth={2} />
+                                <span>Jusqu'à {v.maxPassengers} passagers</span>
+                              </span>
+                              <span className={styles.vehicleCapacityBadge}>
+                                <Luggage size={12} strokeWidth={2} />
+                                <span>{v.maxLuggage} valises max</span>
+                              </span>
+                            </div>
+                          </div>
+                          <div className={styles.vehicleQuoteBox}>
+                            <span className={styles.vehiclePrice}>
+                              Sur devis
+                            </span>
+                            <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                          </div>
+                        </div>
+
+                        <p className={styles.vehicleDesc}>{v.desc}</p>
+
+                        <div className={styles.vehicleQuotePills}>
+                          <span className={styles.quotePill}>Devis sur-mesure</span>
+                          <span className={styles.quotePill}>Péages & carburant inclus</span>
+                          <span className={styles.quotePill}>Attente offerte</span>
+                          <span className={styles.quotePill}>Wi-Fi & Eau fraîche</span>
+                        </div>
+
+                        <div className={styles.vehicleSelectCtaRow}>
+                          <span className={styles.vehicleSelectText}>
+                            {isSelected ? 'Véhicule sélectionné' : 'Sélectionner ce véhicule'}
+                          </span>
+                          <ArrowRight size={14} />
+                        </div>
                       </div>
                     </div>
                   );

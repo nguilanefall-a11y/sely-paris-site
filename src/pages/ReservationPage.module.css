@@ -4204,3 +4204,185 @@
   text-decoration: underline;
   padding: 0.35rem 0;
 }
+
+/* ── Hourly Multi-Day Section ── */
+.hourlyDaysSection {
+  background: #ffffff;
+  border: 1px solid #ebe7e1;
+  border-radius: 16px;
+  padding: 1.15rem;
+  margin-bottom: 1.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.daysStepperRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hourlySectionTitle {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111111;
+  display: block;
+}
+
+.hourlySectionSubtitle {
+  font-size: 0.78rem;
+  color: #666666;
+  margin: 0.15rem 0 0 0;
+}
+
+.stepperControl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f7f5f1;
+  border: 1px solid #e5e2dc;
+  border-radius: 9999px;
+  padding: 3px 6px;
+}
+
+.stepperBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #ded9d0;
+  color: #111111;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stepperBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepperCount {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #111111;
+  padding: 0 0.35rem;
+  white-space: nowrap;
+}
+
+.quickDaysPills {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.quickDaysPills::-webkit-scrollbar {
+  display: none;
+}
+
+.quickDayPill {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  background: #fbf9f6;
+  border: 1px solid #e5e2dc;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quickDayPillActive {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-color: #111111 !important;
+}
+
+.hourlyDaysList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.hourlyDayCard {
+  background: #faf8f5;
+  border: 1px solid #ebe7e1;
+  border-radius: 12px;
+  padding: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hourlyDayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hourlyDayBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.hourlyDayDateDesc {
+  color: #666666;
+  font-weight: 400;
+}
+
+.dayDateTimeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.miniFieldLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #666666;
+  margin-bottom: 0.25rem;
+}
+
+.nativeDateClean,
+.nativeTimeClean {
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #dcd7cf;
+  background: #ffffff;
+  font-size: 15px;
+  color: #111111;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.hourlyTotalBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: #111111;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+}
+
+.hourlyTotalBanner strong {
+  color: #e5c378;
+}
