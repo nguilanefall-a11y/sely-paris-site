@@ -67,9 +67,11 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
               // Country
               if (props.country) parts.push(props.country);
 
+              const label = parts.join(', ');
               return {
                 id: `${props.osm_id || Math.random()}-${props.osm_type || 'node'}`,
-                label: parts.join(', '),
+                label,
+                description: label,
                 coordinates: f.geometry && f.geometry.coordinates ? f.geometry.coordinates : null, // [lon, lat]
               };
             });
@@ -97,6 +99,16 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
     return () => clearTimeout(timer);
   }, [query, city]);
 
+  const selectSuggestion = (suggestion) => {
+    if (!suggestion) return;
+    const label = suggestion.label || suggestion.description || '';
+    setQuery(label);
+    if (suggestion.coordinates) {
+      setSelectedCoords(suggestion.coordinates);
+    }
+    setSuggestions([]);
+  };
+
   return {
     query,
     setQuery,
@@ -104,6 +116,7 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
     setSuggestions,
     selectedCoords,
     setSelectedCoords,
+    selectSuggestion,
     isLoading,
   };
 }

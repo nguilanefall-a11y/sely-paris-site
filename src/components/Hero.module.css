@@ -8,7 +8,7 @@
   justify-content: flex-end;
   overflow: hidden;
   background-color: #050505;
-  padding: 6rem 2rem 7rem;
+  padding: max(env(safe-area-inset-top, 24px) + 60px, 80px) 1.5rem max(env(safe-area-inset-bottom, 20px) + 75px, 95px);
 }
 
 .bgImage {
@@ -25,29 +25,13 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.7) 0%,
-    rgba(0, 0, 0, 0.15) 28%,
-    rgba(0, 0, 0, 0.45) 55%,
-    rgba(0, 0, 0, 0.95) 100%
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.05) 30%,
+    rgba(0, 0, 0, 0.35) 55%,
+    rgba(0, 0, 0, 0.92) 100%
   );
   z-index: 2;
   pointer-events: none;
-}
-
-.topBar {
-  position: absolute;
-  top: 5.5rem;
-  left: 2rem;
-  z-index: 10;
-}
-
-.welcomeText {
-  color: #ffffff;
-  font-size: 1.35rem;
-  font-weight: 500;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
-  letter-spacing: -0.01em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .mainContent {
@@ -58,29 +42,40 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.15rem;
 }
 
 .heroTitle {
   font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
-  font-size: clamp(2.35rem, 6.2vw, 3.5rem);
+  font-size: clamp(2.4rem, 7.5vw, 3.6rem);
   font-weight: 400;
   color: #ffffff;
   line-height: 1.12;
   letter-spacing: -0.01em;
   margin: 0;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  max-width: 360px;
+}
+
+.destinationContainer {
+  position: relative;
+  width: 100%;
 }
 
 .destinationLineWrapper {
   position: relative;
   width: 100%;
   border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.55rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  transition: border-bottom-color 0.2s ease;
+}
+
+.destinationLineWrapperFocused {
+  border-bottom-color: #ffffff;
 }
 
 .destinationUnderlineInput {
@@ -89,7 +84,7 @@
   outline: none;
   color: #ffffff;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 400;
   width: 100%;
   padding: 0;
@@ -98,6 +93,23 @@
 .destinationUnderlineInput::placeholder {
   color: rgba(255, 255, 255, 0.75);
   font-weight: 300;
+}
+
+.destLoadingSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.35rem;
+}
+
+.spinnerIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .destSubmitArrowBtn {
@@ -118,18 +130,97 @@
   opacity: 0.85;
 }
 
+/* ── Live Suggestions Popover attached above input (visible above mobile keyboard) ── */
+.destSuggestionsDropdown {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  background: rgba(18, 20, 26, 0.97);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.8);
+  max-height: 280px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 999;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.destSuggestionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+}
+
+.destSuggestionItem:hover,
+.destSuggestionItem:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.suggestionIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #dfba60;
+  flex-shrink: 0;
+}
+
+.suggestionTextWrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+}
+
+.suggestionMainText {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestionSubText {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .exploreServicesBtn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.9);
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
-  font-size: 0.95rem;
+  font-size: 0.94rem;
   font-weight: 400;
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   cursor: pointer;
-  padding: 0.75rem 0 0.25rem;
+  padding: 0.4rem 0 0.1rem;
   align-self: flex-start;
   transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -139,23 +230,25 @@
   transform: translateY(1px);
 }
 
-/* ── Floating Capsule Nav ── */
+/* ── Floating Capsule Nav matching reference screenshot ── */
 .floatingCapsuleNav {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: max(env(safe-area-inset-bottom, 16px), 20px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  background: rgba(45, 45, 45, 0.68);
+  background: rgba(220, 226, 232, 0.75);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 9999px;
-  padding: 0.35rem 0.5rem;
+  padding: 0.32rem 0.4rem;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+  justify-content: space-between;
+  width: calc(100% - 44px);
+  max-width: 320px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
 }
 
 .capsuleNavBtn {
@@ -164,25 +257,38 @@
   align-items: center;
   justify-content: center;
   gap: 0.18rem;
-  padding: 0.45rem 1.4rem;
+  padding: 0.35rem 0.6rem;
   border-radius: 9999px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: #2b3038;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex: 1;
 }
 
 .capsuleNavBtn:hover {
-  color: #ffffff;
+  color: #000000;
+}
+
+.activePillBackground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  background: rgba(115, 138, 160, 0.38);
+  border-radius: 9999px;
+  padding: 0.35rem 1.1rem;
+  color: #1a4f80;
+  font-weight: 600;
 }
 
 .capsuleNavBtnActive {
-  background: rgba(255, 255, 255, 0.24);
-  color: #8bb2ff;
+  color: #1a4f80;
 }
 
 /* ── Modal ── */
@@ -271,23 +377,12 @@
 
 @media (max-width: 600px) {
   .heroSection {
-    padding: 5rem 1.25rem 6.5rem;
-  }
-
-  .topBar {
-    left: 1.25rem;
-    top: 5rem;
+    padding: max(env(safe-area-inset-top, 24px) + 55px, 75px) 1.25rem max(env(safe-area-inset-bottom, 20px) + 70px, 90px);
   }
 
   .floatingCapsuleNav {
-    bottom: 1.15rem;
-    width: 90%;
-    max-width: 360px;
-    justify-content: space-around;
-  }
-
-  .capsuleNavBtn {
-    padding: 0.4rem 0.85rem;
-    flex: 1;
+    bottom: max(env(safe-area-inset-bottom, 16px), 16px);
+    width: calc(100% - 36px);
+    max-width: 320px;
   }
 }

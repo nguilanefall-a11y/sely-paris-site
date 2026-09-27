@@ -53,6 +53,7 @@ import { calculateTripPrice, getDrivingDistanceKm } from '../lib/pricingEngine';
 import { useBookingsStore } from '../admin/store/useBookingsStore';
 import LuxuryDateTimePicker from '../components/LuxuryDateTimePicker';
 import { useVoiceDictation } from '../hooks/useVoiceDictation';
+import { getPopularDestinations } from '../lib/popularDestinations';
 import styles from './ReservationPage.module.css';
 
 /* ─── vehicle catalogue (reused directly) ─── */
@@ -548,6 +549,7 @@ export default function ReservationPage() {
   const setPickup = pickupAutocomplete.setQuery;
   const destination = destAutocomplete.query;
   const setDestination = destAutocomplete.setQuery;
+  const [destScreen0Open, setDestScreen0Open] = useState(false);
 
   const [pickupCoords, setPickupCoords] = useState(null);
   const [destCoords, setDestCoords] = useState(null);
@@ -1139,7 +1141,11 @@ export default function ReservationPage() {
               className={styles.destinationUnderlineInput}
               placeholder={welcomeT.destinationPlaceholder}
               value={destAutocomplete.query}
-              onChange={(e) => destAutocomplete.setQuery(e.target.value)}
+              onChange={(e) => {
+                destAutocomplete.setQuery(e.target.value);
+                setDestScreen0Open(true);
+              }}
+              onFocus={() => setDestScreen0Open(true)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
@@ -1148,6 +1154,7 @@ export default function ReservationPage() {
                 }
               }}
               aria-label={welcomeT.destinationPlaceholder}
+              autoComplete="off"
             />
 
             <button
@@ -1162,24 +1169,57 @@ export default function ReservationPage() {
               <ArrowRight size={20} strokeWidth={1.8} />
             </button>
 
-            {/* Suggestions dropdown if user is typing */}
-            {destAutocomplete.suggestions.length > 0 && (
+            {/* Suggestions dropdown: live Photon API or instant popular destinations */}
+            {destScreen0Open && (
               <div className={styles.destSuggestionsPopup}>
-                {destAutocomplete.suggestions.map((sug, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    className={styles.destSuggestionItem}
-                    onClick={() => {
-                      destAutocomplete.selectSuggestion(sug);
-                      selectService('transfer');
-                      setStep(1);
-                    }}
-                  >
-                    <MapPin size={14} className={styles.suggestionIcon} />
-                    <span>{sug.description}</span>
-                  </button>
-                ))}
+                {(destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0
+                  ? destAutocomplete.suggestions
+                  : getPopularDestinations(currentCity, destAutocomplete.query)
+                ).map((sug, i) => {
+                  const lbl = sug.label || sug.description || '';
+                  const isAirport =
+                    sug.type === 'airport' ||
+                    lbl.toLowerCase().includes('aéroport') ||
+                    lbl.toLowerCase().includes('airport') ||
+                    lbl.includes('CDG') ||
+                    lbl.includes('ORY');
+                  const isStation =
+                    sug.type === 'station' ||
+                    lbl.toLowerCase().includes('gare') ||
+                    lbl.toLowerCase().includes('station');
+
+                  return (
+                    <button
+                      key={sug.id || i}
+                      type="button"
+                      className={styles.destSuggestionItem}
+                      onClick={() => {
+                        destAutocomplete.setQuery(lbl);
+                        setDestScreen0Open(false);
+                        selectService('transfer');
+                        setStep(1);
+                      }}
+                    >
+                      {isAirport ? (
+                        <PlaneTakeoff size={15} className={styles.suggestionIcon} />
+                      ) : isStation ? (
+                        <Route size={15} className={styles.suggestionIcon} />
+                      ) : (
+                        <MapPin size={15} className={styles.suggestionIcon} />
+                      )}
+                      <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 500, color: '#ffffff', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                          {lbl}
+                        </span>
+                        {sug.subtitle && (
+                          <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {sug.subtitle}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </motion.div>
