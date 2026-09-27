@@ -4,8 +4,6 @@ import About from '../components/About';
 import HowItWorks from '../components/HowItWorks';
 import Services from '../components/Services';
 import Vehicle from '../components/Vehicle';
-import Experiences from '../components/Experiences';
-import WineTours from '../components/WineTours';
 import Booking from '../components/Booking';
 import SectionDivider from '../components/SectionDivider';
 
@@ -20,10 +18,6 @@ export default function HomePage() {
       <HowItWorks />
       <SectionDivider />
       <Services />
-      <SectionDivider />
-      <Experiences />
-      <SectionDivider />
-      <WineTours />
       <SectionDivider />
       <Booking />
     </>

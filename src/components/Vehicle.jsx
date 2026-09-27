@@ -531,7 +531,7 @@ export default function Vehicle() {
 
           <div className={styles.titleRow}>
             <h2 className={styles.title}>
-              Prestige &amp; <span className={styles.titleItalic}>Haute Mobilité.</span>
+              Prestige &amp; <span className={styles.titleItalic}>{isEn ? 'Private Travel.' : 'Haute Mobilité.'}</span>
             </h2>
             <p className={styles.subtitle}>
               {isEn 
@@ -544,7 +544,7 @@ export default function Vehicle() {
           <div className={styles.filterTabs}>
             {[
               { id: 'all', label: isEn ? 'ALL FLEET' : 'TOUTE LA FLOTTE' },
-              { id: 'berlines', label: isEn ? 'BERLINES D\'ÉTAT' : 'BERLINES D\'ÉTAT' },
+              { id: 'berlines', label: isEn ? 'PRESTIGE SALOONS' : 'BERLINES D\'ÉTAT' },
               { id: 'prestige', label: isEn ? 'HAUTE COUTURE' : 'HAUTE COUTURE' },
               { id: 'suv', label: isEn ? 'PREMIUM SUVS' : 'SUVS PRESTIGE' },
               { id: 'vans', label: isEn ? 'PALACE VANS' : 'VANS' },
@@ -795,7 +795,7 @@ export default function Vehicle() {
           <div className={styles.stripHeader}>
             <div className={styles.stripHeaderLeft}>
               <span className={styles.stripTitle}>
-                {isEn ? 'CATALOGUE SCÉNIQUE DE LA FLOTTE' : 'SÉLECTEUR RAPIDE DE LA FLOTTE'}
+                {isEn ? 'EXPLORE THE FLEET' : 'SÉLECTEUR RAPIDE DE LA FLOTTE'}
               </span>
               <span className={styles.stripSubtitle}>
                 {isEn ? 'Explore each bespoke model in the collection' : 'Parcourez les 12 modèles de notre flotte'}
@@ -826,7 +826,7 @@ export default function Vehicle() {
                       <span className={styles.stripCardBadge}>{veh.passengers}p</span>
                     </div>
                     <span className={styles.stripCardName}>{veh.name}</span>
-                    <span className={styles.stripCardCat}>{veh.category}</span>
+                    <span className={styles.stripCardCat}>{isEn ? veh.categoryEn : veh.category}</span>
                   </div>
                   {isActive && <div className={styles.stripActiveIndicator} />}
                 </button>

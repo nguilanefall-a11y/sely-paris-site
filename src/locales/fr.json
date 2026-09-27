@@ -74,7 +74,20 @@
     "error_past_datetime": "Veuillez sélectionner une date et une heure dans le futur.",
     "error_min_notice_3h": "Les réservations en ligne nécessitent un délai d'au moins 3 heures.",
     "error_night_before_8am": "Les réservations de nuit ou matinales ne sont pas disponibles avant 08h00 en ligne.",
-    "urgent_cta": "Prise en charge rapide"
+    "urgent_cta": "Prise en charge rapide",
+    "house_label": "MAISON DE CHAUFFEUR PRIVÉ",
+    "subheadline": "Votre chauffeur privé pour vos transferts, rendez-vous et journées à Paris.",
+    "cta_btn": "Obtenir un devis",
+    "operates_in": "Nos destinations :",
+    "booking_steps": "1. Votre trajet · 2. Votre véhicule · 3. Vos coordonnées · 4. Récapitulatif",
+    "territories": {
+      "france": "France",
+      "angleterre": "Angleterre",
+      "suisse": "Suisse",
+      "usa": "États-Unis",
+      "italie": "Italie",
+      "uae": "Émirats arabes unis"
+    }
   },
   "philosophy": {
     "quote": "\"L'excellence n'est pas une option, c'est une exigence. Notre mission est de transformer chacun de vos trajets à Paris en un moment de quiétude absolue.\"",
@@ -217,7 +230,19 @@
       "submit": "Envoyer la demande",
       "sending": "Envoi en cours...",
       "error": "Une erreur est survenue lors de l'envoi. Veuillez réessayer."
-    }
+    },
+    "reserve_tab": "Réserver un service",
+    "specific_tab": "Demande spécifique",
+    "service_badge": "SERVICE PRIVÉ AVEC CHAUFFEUR",
+    "help_now": "Besoin d’aide immédiate ?",
+    "specific_badge": "SUR-MESURE & ÉVÉNEMENTS",
+    "specific_title": "Demande spécifique & sur-mesure",
+    "specific_desc": "Événements officiels, délégations, transferts urgents (moins de 3 h), convois multi-véhicules ou demandes particulières.",
+    "specific_cta": "Décrire ma demande",
+    "specific_hint": "Une proposition adaptée à votre déplacement",
+    "priority_phone": "Ligne directe :",
+    "book_title": "Votre déplacement commence ici",
+    "book_subtitle": "Précisez votre trajet, choisissez votre véhicule, puis renseignez vos coordonnées."
   },
   "pricing": {
     "title": "Prestations Sur-Mesure",
@@ -299,7 +324,6 @@
     "rights": "SELY Privé. Tous droits réservés.",
     "privacy_policy": "Politique de confidentialité"
   },
-
   "page_experience": {
     "title": "L'Expérience",
     "subtitle": "Plus qu'un simple trajet, un moment de grâce hors du temps.",

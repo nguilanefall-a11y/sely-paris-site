@@ -74,7 +74,20 @@
     "error_past_datetime": "Please select a date and time in the future.",
     "error_min_notice_3h": "Online reservations require at least 3 hours advance notice.",
     "error_night_before_8am": "Night or early morning departures cannot be booked online before 08:00 AM.",
-    "urgent_cta": "Urgent dispatch"
+    "urgent_cta": "Urgent dispatch",
+    "house_label": "PRIVATE CHAUFFEUR SERVICE",
+    "subheadline": "Your private chauffeur for transfers, appointments and days out in Paris.",
+    "cta_btn": "Get a quote",
+    "operates_in": "Our destinations:",
+    "booking_steps": "1. Your journey · 2. Your vehicle · 3. Your details · 4. Summary",
+    "territories": {
+      "france": "France",
+      "angleterre": "England",
+      "suisse": "Switzerland",
+      "usa": "USA",
+      "italie": "Italy",
+      "uae": "UAE"
+    }
   },
   "philosophy": {
     "quote": "\"Excellence is not an option, it is a requirement. Our mission is to transform every journey in Paris into a moment of absolute tranquility.\"",
@@ -217,7 +230,19 @@
       "submit": "Send Request",
       "sending": "Sending...",
       "error": "An error occurred while sending. Please try again."
-    }
+    },
+    "reserve_tab": "Book a service",
+    "specific_tab": "Bespoke request",
+    "service_badge": "PRIVATE CHAUFFEUR SERVICE",
+    "help_now": "Need help now?",
+    "specific_badge": "BESPOKE & EVENTS",
+    "specific_title": "Plan your bespoke journey",
+    "specific_desc": "Official events, delegations, urgent transfers (under 3 hours), multi-vehicle journeys or special requests.",
+    "specific_cta": "Tell us what you need",
+    "specific_hint": "A proposal tailored to your journey",
+    "priority_phone": "Direct line:",
+    "book_title": "Your journey starts here",
+    "book_subtitle": "Enter your journey, choose your vehicle, then add your contact details."
   },
   "pricing": {
     "title": "Tailor-Made Services",
@@ -299,7 +324,6 @@
     "rights": "SELY Privé. All rights reserved.",
     "privacy_policy": "Privacy Policy"
   },
-
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",

@@ -74,7 +74,7 @@ export default function Booking() {
                   id="contact-tab-reservation"
                 >
                   <Compass size={15} />
-                  <span>Réserver un service</span>
+                  <span>{t('booking.reserve_tab')}</span>
                 </button>
                 <button
                   type="button"
@@ -83,7 +83,7 @@ export default function Booking() {
                   id="contact-tab-demande-specifique"
                 >
                   <SlidersHorizontal size={15} />
-                  <span>Demande spécifique</span>
+                  <span>{t('booking.specific_tab')}</span>
                 </button>
               </div>
 
@@ -97,7 +97,7 @@ export default function Booking() {
                     transition={{ duration: 0.25 }}
                   >
                     <div className={styles.tabBadge}>
-                      <span>SERVICE PRIVÉ AVEC CHAUFFEUR</span>
+                      <span>{t('booking.service_badge')}</span>
                     </div>
                     <h3 className={styles.formTitle}>
                       {t('booking.book_title', 'Votre déplacement d\'exception commence ici')}
@@ -127,7 +127,7 @@ export default function Booking() {
                     </div>
 
                     <div className={styles.quickLine}>
-                      <span>Besoin d'aide immédiate ?</span>
+                      <span>{t('booking.help_now')}</span>
                       <a href={t('footer.phone_link', 'tel:+33184805676')} className={styles.quickLineLink}>
                         <Phone size={13} />
                         <span>{t('footer.phone', '+33 1 84 80 56 76')}</span>
@@ -143,11 +143,11 @@ export default function Booking() {
                     transition={{ duration: 0.25 }}
                   >
                     <div className={styles.tabBadge}>
-                      <span>SUR-MESURE & ÉVÉNEMENTS</span>
+                      <span>{t('booking.specific_badge')}</span>
                     </div>
-                    <h3 className={styles.formTitle}>Demande spécifique & sur-mesure</h3>
+                    <h3 className={styles.formTitle}>{t('booking.specific_title')}</h3>
                     <p className={styles.formSubtitle}>
-                      Événements officiels, délégations, transferts urgents (&lt; 3h), convois multi-véhicules ou demandes particulières.
+                      {t('booking.specific_desc')}
                     </p>
                     
                     <div className={styles.buttonsContainer}>
@@ -160,8 +160,8 @@ export default function Booking() {
                           <SlidersHorizontal size={22} strokeWidth={1.5} />
                         </div>
                         <div className={styles.btnTextWrapper}>
-                          <span className={styles.btnTitle}>Accéder au formulaire Demande Spécifique</span>
-                          <span className={styles.btnDesc}>Traitement prioritaire par notre direction sous 1h</span>
+                          <span className={styles.btnTitle}>{t('booking.specific_cta')}</span>
+                          <span className={styles.btnDesc}>{t('booking.specific_hint')}</span>
                         </div>
                         <svg className={styles.btnArrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -171,7 +171,7 @@ export default function Booking() {
                     </div>
 
                     <div className={styles.quickLine}>
-                      <span>Ligne directe prioritaire :</span>
+                      <span>{t('booking.priority_phone')}</span>
                       <a href={t('footer.phone_link', 'tel:+33184805676')} className={styles.quickLineLink}>
                         <Phone size={13} />
                         <span>{t('footer.phone', '+33 1 84 80 56 76')}</span>

@@ -44,7 +44,7 @@ export default function Hero() {
   const handleSubmit = useCallback((e) => {
     if (e) e.preventDefault();
     const cityPath = city && city !== 'paris' ? city : 'paris';
-    const params = new URLSearchParams({ step: '0', service: 'transfer' });
+    const params = new URLSearchParams({ step: '1', service: 'transfer' });
     if (pickupValue.trim()) params.set('pickup', pickupValue.trim());
     navigate(`/${cityPath}/reserver?${params.toString()}`);
   }, [city, navigate, pickupValue]);
@@ -53,7 +53,7 @@ export default function Hero() {
     setPickupValue(suggestion);
     setShowSuggestions(false);
     const cityPath = city && city !== 'paris' ? city : 'paris';
-    const params = new URLSearchParams({ step: '0', service: 'transfer', pickup: suggestion });
+    const params = new URLSearchParams({ step: '1', service: 'transfer', pickup: suggestion });
     navigate(`/${cityPath}/reserver?${params.toString()}`);
   }, [city, navigate]);
 
@@ -84,7 +84,7 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  const filteredSuggestions = PICKUP_SUGGESTIONS.filter(s =>
+  const filteredSuggestions = (city === 'paris' ? PICKUP_SUGGESTIONS : []).filter(s =>
     !pickupValue || s.toLowerCase().includes(pickupValue.toLowerCase())
   );
 
@@ -126,7 +126,7 @@ export default function Hero() {
                 london: 'LONDRES', suisse: 'SUISSE', usa: 'ÉTATS-UNIS',
                 italie: 'ITALIE', uae: 'ÉMIRATS ARABES UNIS',
               };
-              return `MAISON DE CHAUFFEUR PRIVÉ — ${labels[city] || 'PARIS'}`;
+              return `${t('hero.house_label')} — ${labels[city] || 'PARIS'}`;
             })())}
           </span>
           <h1
@@ -148,7 +148,7 @@ export default function Hero() {
                 <span className={styles.dockDot} />
                 <span className={styles.dockDotRing} />
               </div>
-              <span className={styles.dockTag}>DEVIS IMMÉDIAT</span>
+              <span className={styles.dockTag}>{t('hero.quote_badge')}</span>
             </div>
 
             <div className={styles.widgetInputRow}>
@@ -163,7 +163,7 @@ export default function Hero() {
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                   placeholder={t('hero.pickup_placeholder', "D'où partez-vous ? (aéroport, hôtel, adresse...)")}
                   className={styles.widgetInput}
-                  aria-label="Adresse de départ"
+                  aria-label={t('hero.pickup_label')}
                 />
               </div>
               <button type="submit" className={styles.widgetCta}>
@@ -179,7 +179,8 @@ export default function Hero() {
                     key={i}
                     type="button"
                     className={styles.widgetSuggestionItem}
-                    onMouseDown={() => handleSuggestionClick(s)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleSuggestionClick(s)}
                   >
                     <MapPin size={13} className={styles.sugItemIcon} />
                     <span>{s}</span>
@@ -188,6 +189,8 @@ export default function Hero() {
               </div>
             )}
           </form>
+
+          <p className={styles.bookingSteps}>{t('hero.booking_steps')}</p>
 
           {/* Countries — discreet trust line */}
           <div className={styles.operatesInRow}>
@@ -199,7 +202,7 @@ export default function Hero() {
                   className={styles.operatesInCountry}
                   onClick={() => navigate(`${terr.path}/reserver?step=0`)}
                 >
-                  {terr.name}
+                  {t(`hero.territories.${terr.id}`, terr.name)}
                 </button>
                 {i < HERO_TERRITORIES.length - 1 && (
                   <span className={styles.operatesInDot}> · </span>
