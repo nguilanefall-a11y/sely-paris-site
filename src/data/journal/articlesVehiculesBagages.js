@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : FLOTTE, VÉHICULES & BAGAGES (Sujets 10, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 10,
     "category": "vehicules-bagages",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_10.jpg",
     "secondaryImages": [
       "/vclass-paris-luxury.jpg",
       "/interior-1.jpg"
@@ -321,7 +321,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 18,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_18.jpg",
     "secondaryImages": [
       "/chauffeur_transfer.png",
       "/sclass_paris.png"
@@ -630,7 +630,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 19,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_19.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur_transfer.png"
@@ -938,7 +938,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 20,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_20.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur_transfer.png"
@@ -1241,7 +1241,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 21,
     "category": "vehicules-bagages",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_21.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur.png"
@@ -1557,7 +1557,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 22,
     "category": "vehicules-bagages",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_22.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur.png"
@@ -1868,7 +1868,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 23,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_23.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/chauffeur.png"
@@ -2147,7 +2147,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 24,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_24.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur_transfer.png"
@@ -2428,7 +2428,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 25,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_25.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur_transfer.png"
@@ -2691,7 +2691,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 26,
     "category": "vehicules-bagages",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_26.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur_transfer.png"
@@ -2960,7 +2960,7 @@ export const ARTICLES_VEHICULES_BAGAGES = [
   {
     "id": 27,
     "category": "vehicules-bagages",
-    "heroImage": "/vclass-paris-luxury.jpg",
+    "heroImage": "/journal/journal_topic_27.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/chauffeur.png"

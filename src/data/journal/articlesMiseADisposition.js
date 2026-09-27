@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : MISE À DISPOSITION (Sujets 7, 8, 9, 30) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 7,
     "category": "mise-a-disposition",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_07.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/interior-1.jpg"
@@ -314,7 +314,7 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 8,
     "category": "mise-a-disposition",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_08.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/interior-1.jpg"
@@ -595,7 +595,7 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 9,
     "category": "mise-a-disposition",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_09.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -892,7 +892,7 @@ export const ARTICLES_MISE_A_DISPOSITION = [
   {
     "id": 30,
     "category": "mise-a-disposition",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_30.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"

@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : BUSINESS & INTERNATIONAL (Sujets 37, 38) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_BUSINESS_INTERNATIONAL = [
   {
     "id": 37,
     "category": "business-international",
-    "heroImage": "/maybach_chauffeur.png",
+    "heroImage": "/journal/journal_topic_37.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -259,7 +259,7 @@ export const ARTICLES_BUSINESS_INTERNATIONAL = [
   {
     "id": 38,
     "category": "business-international",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_38.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/interior-1.jpg"

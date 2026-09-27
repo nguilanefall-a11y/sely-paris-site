@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : FASHION WEEK & ÉVÉNEMENTS (Sujets 31, 32, 33, 34, 35, 36) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 31,
     "category": "fashion-week-evenements",
-    "heroImage": "/maybach_chauffeur.png",
+    "heroImage": "/journal/journal_topic_31.jpg",
     "secondaryImages": [
       "/vclass-paris-luxury.jpg",
       "/interior-1.jpg"
@@ -246,7 +246,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 32,
     "category": "fashion-week-evenements",
-    "heroImage": "/maybach_chauffeur.png",
+    "heroImage": "/journal/journal_topic_32.jpg",
     "secondaryImages": [
       "/vclass-paris-luxury.jpg",
       "/sclass_paris.png"
@@ -483,7 +483,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 33,
     "category": "fashion-week-evenements",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_33.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -720,7 +720,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 34,
     "category": "fashion-week-evenements",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_34.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -963,7 +963,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 35,
     "category": "fashion-week-evenements",
-    "heroImage": "/maybach_chauffeur.png",
+    "heroImage": "/journal/journal_topic_35.jpg",
     "secondaryImages": [
       "/vclass-paris-luxury.jpg",
       "/sclass_paris.png"
@@ -1202,7 +1202,7 @@ export const ARTICLES_FASHION_WEEK_EVENTS = [
   {
     "id": 36,
     "category": "fashion-week-evenements",
-    "heroImage": "/maybach_chauffeur.png",
+    "heroImage": "/journal/journal_topic_36.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"

@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : AÉROPORTS & TRANSFERTS (Sujets 11, 12, 13, 14, 15, 16, 17, 28, 29) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_AEROPORTS = [
   {
     "id": 11,
     "category": "aeroports",
-    "heroImage": "/transfert_aeroport_paris.png",
+    "heroImage": "/journal/journal_topic_11.jpg",
     "secondaryImages": [
       "/airport_transfer_luxury.png",
       "/sclass_paris_hero.jpg"
@@ -513,7 +513,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 12,
     "category": "aeroports",
-    "heroImage": "/transfert_aeroport_paris.png",
+    "heroImage": "/journal/journal_topic_12.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/chauffeur.png"
@@ -986,7 +986,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 13,
     "category": "aeroports",
-    "heroImage": "/chauffeur_transfer.png",
+    "heroImage": "/journal/journal_topic_13.jpg",
     "secondaryImages": [
       "/transfert_aeroport_paris.png",
       "/sclass_paris_hero.jpg"
@@ -1341,7 +1341,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 14,
     "category": "aeroports",
-    "heroImage": "/chauffeur_transfer.png",
+    "heroImage": "/journal/journal_topic_14.jpg",
     "secondaryImages": [
       "/transfert_aeroport_paris.png",
       "/sclass_paris.png"
@@ -1780,7 +1780,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 15,
     "category": "aeroports",
-    "heroImage": "/transfert_airport_van.png",
+    "heroImage": "/journal/journal_topic_15.jpg",
     "secondaryImages": [
       "/transfert_aeroport_paris.png",
       "/sclass_paris_hero.jpg"
@@ -2181,7 +2181,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 16,
     "category": "aeroports",
-    "heroImage": "/transfert_aeroport_paris.png",
+    "heroImage": "/journal/journal_topic_16.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -2602,7 +2602,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 17,
     "category": "aeroports",
-    "heroImage": "/chauffeur_transfer.png",
+    "heroImage": "/journal/journal_topic_17.jpg",
     "secondaryImages": [
       "/interior-1.jpg",
       "/chauffeur.png",
@@ -3176,7 +3176,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 28,
     "category": "aeroports",
-    "heroImage": "/chauffeur_transfer.png",
+    "heroImage": "/journal/journal_topic_28.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/vclass-paris-luxury.jpg"
@@ -3585,7 +3585,7 @@ export const ARTICLES_AEROPORTS = [
   {
     "id": 29,
     "category": "aeroports",
-    "heroImage": "/chauffeur_transfer.png",
+    "heroImage": "/journal/journal_topic_29.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/chauffeur.png"

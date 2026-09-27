@@ -1,10 +1,10 @@
-// ─── ARTICLES DE LA CATÉGORIE : CHAUFFEUR PRIVÉ & COMPARATIFS (Sujets 1, 2, 3, 4, 5, 6, 39, 40) ───
+// ─── ARTICLES DE LA CATÉGORIE ───
 
 export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 1,
     "category": "chauffeur-prive",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_01.jpg",
     "secondaryImages": [
       "/chauffeur.png",
       "/transfert_aeroport_paris.png"
@@ -459,7 +459,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 2,
     "category": "chauffeur-prive",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_02.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/transfert_aeroport_paris.png"
@@ -798,7 +798,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 3,
     "category": "chauffeur-prive",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_03.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/transfert_aeroport_paris.png"
@@ -1166,7 +1166,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 4,
     "category": "chauffeur-prive",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_04.jpg",
     "secondaryImages": [
       "/chauffeur_transfer.png",
       "/chauffeur.png"
@@ -1519,7 +1519,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 5,
     "category": "chauffeur-prive",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_05.jpg",
     "secondaryImages": [
       "/chauffeur.png",
       "/transfert_aeroport_paris.png"
@@ -1860,7 +1860,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 6,
     "category": "chauffeur-prive",
-    "heroImage": "/sclass_paris.png",
+    "heroImage": "/journal/journal_topic_06.jpg",
     "secondaryImages": [
       "/chauffeur.png",
       "/transfert_aeroport_paris.png"
@@ -2047,7 +2047,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 39,
     "category": "chauffeur-prive",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_39.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/chauffeur_transfer.png"
@@ -2236,7 +2236,7 @@ export const ARTICLES_CHAUFFEUR_PRIVE = [
   {
     "id": 40,
     "category": "chauffeur-prive",
-    "heroImage": "/chauffeur.png",
+    "heroImage": "/journal/journal_topic_40.jpg",
     "secondaryImages": [
       "/sclass_paris.png",
       "/transfert_aeroport_paris.png"
