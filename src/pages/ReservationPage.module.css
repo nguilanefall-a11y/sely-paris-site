@@ -3194,3 +3194,528 @@
     font-size: 0.68rem !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCREEN 0 : LUXURY IMMERSIVE WELCOME SCREEN (Matches Mobile Reference)
+   ══════════════════════════════════════════════════════════════════════════ */
+.screen0Wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 999;
+  background-color: #050505;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen0Bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/sclass_paris.png');
+  background-size: cover;
+  background-position: center center;
+  transform: scale(1.02);
+  transition: transform 1.2s ease-out;
+}
+
+.screen0Vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.15) 28%,
+    rgba(0, 0, 0, 0.42) 55%,
+    rgba(0, 0, 0, 0.94) 100%
+  );
+  pointer-events: none;
+}
+
+.screen0TopBar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 2rem;
+  width: 100%;
+}
+
+.welcomeHeading {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.hamburgerBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hamburgerBtn:hover {
+  opacity: 0.85;
+  transform: scale(1.06);
+}
+
+.screen0MainContent {
+  position: absolute;
+  bottom: 6.8rem;
+  left: 0;
+  right: 0;
+  padding: 0 2rem;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.heroSerifTitle {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(2.35rem, 6.2vw, 3.5rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.5rem 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.destinationLineWrapper {
+  position: relative;
+  width: 100%;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
+  padding-bottom: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.destinationUnderlineInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  width: 100%;
+  padding: 0;
+}
+
+.destinationUnderlineInput::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 300;
+}
+
+.destSubmitArrowBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 4px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.destSubmitArrowBtn:hover {
+  transform: translateX(3px);
+  opacity: 0.85;
+}
+
+.destSuggestionsPopup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: rgba(18, 18, 18, 0.96);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  padding: 0.4rem 0;
+}
+
+.destSuggestionItem {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1rem;
+  color: #f0f0f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: background 0.15s ease;
+}
+
+.destSuggestionItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e6c875;
+}
+
+.suggestionIcon {
+  color: #d4af37;
+  flex-shrink: 0;
+}
+
+.exploreServicesLinkBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  padding: 0.85rem 0 0.25rem;
+  margin-top: 0.4rem;
+  align-self: flex-start;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.exploreServicesLinkBtn:hover {
+  color: #ffffff;
+  transform: translateY(1px);
+}
+
+/* ── Bottom Floating Capsule Nav ── */
+.floatingCapsuleNav {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(45, 45, 45, 0.68);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 0.35rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.capsuleNavBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  padding: 0.45rem 1.4rem;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.capsuleNavBtn:hover {
+  color: #ffffff;
+}
+
+.capsuleNavBtnActive {
+  background: rgba(255, 255, 255, 0.24);
+  color: #8bb2ff;
+}
+
+/* ── Side Menu Drawer ── */
+.sideDrawerBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+.sideDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background: #0d0d0d;
+  border-left: 1px solid #222222;
+  padding: 2rem 1.75rem;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.7);
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 1rem;
+}
+
+.drawerBrand {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #e6c875;
+  text-transform: uppercase;
+}
+
+.drawerCloseBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.drawerLanguage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.drawerSectionLabel {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #888888;
+}
+
+.drawerNavLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.drawerLink {
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.drawerLink:hover {
+  color: #d4af37;
+}
+
+.drawerFooter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.drawerPhoneBtn,
+.drawerWhatsappBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.drawerPhoneBtn {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  color: #ffffff;
+}
+
+.drawerWhatsappBtn {
+  background: #1f6443;
+  color: #ffffff;
+}
+
+/* ── Services Bottom Sheet ── */
+.servicesBottomSheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #111111;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 20px 20px 0 0;
+  padding: 1.5rem 1.75rem 3rem;
+  z-index: 1001;
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bottomSheetHandle {
+  width: 44px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 auto;
+}
+
+.bottomSheetHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bottomSheetTitle {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+}
+
+.bottomSheetSubtitle {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  margin: 0;
+  font-weight: 300;
+}
+
+.bottomSheetCloseBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+}
+
+/* ── Quick Help Modal ── */
+.helpModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 440px;
+  background: #141414;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  z-index: 1001;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.helpModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.helpModalHeader h3 {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.helpModalSubtitle {
+  font-size: 0.88rem;
+  color: #999999;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+}
+
+.helpModalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── RTL Support ── */
+.rtl .screen0TopBar {
+  flex-direction: row-reverse;
+}
+
+.rtl .screen0MainContent {
+  text-align: right;
+}
+
+.rtl .exploreServicesLinkBtn {
+  align-self: flex-end;
+}
+
+.rtl .destSuggestionItem {
+  text-align: right;
+}
+
+.rtl .sideDrawer {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid #222222;
+}
+
+@media (max-width: 600px) {
+  .screen0TopBar {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .screen0MainContent {
+    padding: 0 1.25rem;
+    bottom: 6.2rem;
+  }
+
+  .floatingCapsuleNav {
+    bottom: 1.15rem;
+    width: 90%;
+    max-width: 360px;
+    justify-content: space-around;
+  }
+
+  .capsuleNavBtn {
+    padding: 0.4rem 0.85rem;
+    flex: 1;
+  }
+}

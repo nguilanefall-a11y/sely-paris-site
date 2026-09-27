@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAddressAutocomplete } from '../hooks/useAddressAutocomplete';
@@ -41,6 +41,10 @@ import {
   Route,
   CalendarRange,
   Sparkles,
+  Menu,
+  Home,
+  Compass,
+  ArrowDown,
 } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
 import LanguageSelector from '../components/LanguageSelector';
@@ -361,10 +365,110 @@ const DRIVER_INSTRUCTIONS_LIST = [
   },
 ];
 
+const WELCOME_TEXTS = {
+  fr: {
+    welcome: 'Bienvenue',
+    heroTitle: 'Commencez votre voyage',
+    destinationPlaceholder: 'Saisissez votre destination',
+    exploreServices: '↓ Explorez les voyages et les services',
+    navHome: 'Accueil',
+    navJourneys: 'Voyages',
+    navHelp: 'Aide',
+    servicesTitle: 'Explorez nos formules de voyage',
+    servicesSubtitle: 'Sélectionnez la prestation adaptée à vos exigences de mobilité.',
+    helpTitle: 'Assistance & Conciergerie VIP',
+    helpSubtitle: 'Notre régie opérationnelle est à votre disposition 24h/24 et 7j/7.',
+    helpWhatsapp: 'Échanger directement sur WhatsApp',
+    helpPhone: 'Appeler la permanence (+33 1 84 80 56 76)',
+    close: 'Fermer',
+  },
+  en: {
+    welcome: 'Welcome',
+    heroTitle: 'Start your journey',
+    destinationPlaceholder: 'Where to? Enter destination',
+    exploreServices: '↓ Explore journeys & services',
+    navHome: 'Home',
+    navJourneys: 'Journeys',
+    navHelp: 'Help',
+    servicesTitle: 'Explore our mobility services',
+    servicesSubtitle: 'Select the bespoke private chauffeur service tailored to your needs.',
+    helpTitle: 'VIP Concierge & Assistance',
+    helpSubtitle: 'Our dispatch team is available 24/7.',
+    helpWhatsapp: 'Chat directly on WhatsApp',
+    helpPhone: 'Call dispatch hotline (+33 1 84 80 56 76)',
+    close: 'Close',
+  },
+  es: {
+    welcome: 'Bienvenido',
+    heroTitle: 'Comience su viaje',
+    destinationPlaceholder: 'Ingrese su destino',
+    exploreServices: '↓ Explorar viajes y servicios',
+    navHome: 'Inicio',
+    navJourneys: 'Viajes',
+    navHelp: 'Ayuda',
+    servicesTitle: 'Explore nuestros servicios',
+    servicesSubtitle: 'Seleccione el servicio de chófer privado adaptado a sus desplazamientos.',
+    helpTitle: 'Asistencia y Conserjería VIP',
+    helpSubtitle: 'Nuestra oficina de operaciones está disponible 24/7.',
+    helpWhatsapp: 'Contactar por WhatsApp',
+    helpPhone: 'Llamar al servicio 24/7 (+33 1 84 80 56 76)',
+    close: 'Cerrar',
+  },
+  ar: {
+    welcome: 'مرحباً بكم',
+    heroTitle: 'ابدأ رحلتك',
+    destinationPlaceholder: 'أدخل وجهتك',
+    exploreServices: '↓ استكشف الرحلات والخدمات',
+    navHome: 'الرئيسية',
+    navJourneys: 'الرحلات',
+    navHelp: 'المساعدة',
+    servicesTitle: 'استكشف خدمات التنقل الفاخرة',
+    servicesSubtitle: 'اختر الخدمة المناسبة لاحتياجات تنقلكم.',
+    helpTitle: 'المساعدة وخدمة كبار الشخصيات',
+    helpSubtitle: 'فريق العمليات متاح لخدمتكم على مدار الساعة 24/7.',
+    helpWhatsapp: 'تواصل مباشر عبر واتساب',
+    helpPhone: 'الاتصال بالخط الساخن (+33 1 84 80 56 76)',
+    close: 'إغلاق',
+  },
+  zh: {
+    welcome: '欢迎',
+    heroTitle: '开启您的尊享旅程',
+    destinationPlaceholder: '输入您的目的地',
+    exploreServices: '↓ 探索专属行程与服务',
+    navHome: '首页',
+    navJourneys: '行程',
+    navHelp: '帮助',
+    servicesTitle: '探索我们的尊享出行服务',
+    servicesSubtitle: '选择符合您出行期望的专属私享司机方案。',
+    helpTitle: '贵宾礼宾与即时协助',
+    helpSubtitle: '我们的调度中心 24/7 全天候在线为您服务。',
+    helpWhatsapp: '通过 WhatsApp 直联',
+    helpPhone: '致电 24/7 热线 (+33 1 84 80 56 76)',
+    close: '关闭',
+  },
+};
+
 export default function ReservationPage() {
   const { t, city: currentCity, getCityPath, i18n } = useCity();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const langKey = i18n?.language?.startsWith('en')
+    ? 'en'
+    : i18n?.language?.startsWith('es')
+    ? 'es'
+    : i18n?.language?.startsWith('ar')
+    ? 'ar'
+    : i18n?.language?.startsWith('zh')
+    ? 'zh'
+    : 'fr';
+
+  const welcomeT = WELCOME_TEXTS[langKey] || WELCOME_TEXTS.fr;
+  const isRtl = langKey === 'ar';
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showServicesSheet, setShowServicesSheet] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const cityToTerritory = {
     paris: 'france',
@@ -993,6 +1097,370 @@ export default function ReservationPage() {
     }),
   };
 
+  if (step === 0) {
+    return (
+      <div className={`${styles.screen0Wrapper} ${isRtl ? styles.rtl : ''}`}>
+        <div className={styles.screen0Bg} />
+        <div className={styles.screen0Vignette} />
+
+        {/* Top bar: Bienvenue on left, hamburger menu on right */}
+        <header className={styles.screen0TopBar}>
+          <h1 className={styles.welcomeHeading}>{welcomeT.welcome}</h1>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className={styles.hamburgerBtn}
+            aria-label="Menu"
+          >
+            <Menu size={26} strokeWidth={1.8} />
+          </button>
+        </header>
+
+        {/* Lower Third: Hero Title + Destination Input + Explore Link */}
+        <div className={styles.screen0MainContent}>
+          <motion.h2
+            className={styles.heroSerifTitle}
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.1 }}
+          >
+            {welcomeT.heroTitle}
+          </motion.h2>
+
+          {/* Saisissez votre destination input line */}
+          <motion.div
+            className={styles.destinationLineWrapper}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.2 }}
+          >
+            <input
+              type="text"
+              className={styles.destinationUnderlineInput}
+              placeholder={welcomeT.destinationPlaceholder}
+              value={destAutocomplete.query}
+              onChange={(e) => destAutocomplete.setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  selectService('transfer');
+                  setStep(1);
+                }
+              }}
+              aria-label={welcomeT.destinationPlaceholder}
+            />
+
+            <button
+              type="button"
+              className={styles.destSubmitArrowBtn}
+              onClick={() => {
+                selectService('transfer');
+                setStep(1);
+              }}
+              aria-label="Valider la destination"
+            >
+              <ArrowRight size={20} strokeWidth={1.8} />
+            </button>
+
+            {/* Suggestions dropdown if user is typing */}
+            {destAutocomplete.suggestions.length > 0 && (
+              <div className={styles.destSuggestionsPopup}>
+                {destAutocomplete.suggestions.map((sug, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={styles.destSuggestionItem}
+                    onClick={() => {
+                      destAutocomplete.selectSuggestion(sug);
+                      selectService('transfer');
+                      setStep(1);
+                    }}
+                  >
+                    <MapPin size={14} className={styles.suggestionIcon} />
+                    <span>{sug.description}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Underneath: ↓ Explorez les voyages et les services */}
+          <motion.button
+            type="button"
+            className={styles.exploreServicesLinkBtn}
+            onClick={() => setShowServicesSheet(true)}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <span>{welcomeT.exploreServices}</span>
+          </motion.button>
+        </div>
+
+        {/* Bottom Floating Navigation Capsule */}
+        <nav className={styles.floatingCapsuleNav} aria-label="Navigation principale">
+          <button
+            type="button"
+            className={`${styles.capsuleNavBtn} ${styles.capsuleNavBtnActive}`}
+            onClick={() => navigate(getCityPath('/'))}
+          >
+            <Home size={19} strokeWidth={1.8} />
+            <span>{welcomeT.navHome}</span>
+          </button>
+
+          <button
+            type="button"
+            className={styles.capsuleNavBtn}
+            onClick={() => setShowServicesSheet(true)}
+          >
+            <Compass size={19} strokeWidth={1.8} />
+            <span>{welcomeT.navJourneys}</span>
+          </button>
+
+          <button
+            type="button"
+            className={styles.capsuleNavBtn}
+            onClick={() => setHelpOpen(true)}
+          >
+            <MessageSquare size={19} strokeWidth={1.8} />
+            <span>{welcomeT.navHelp}</span>
+          </button>
+        </nav>
+
+        {/* Side Menu Drawer */}
+        <AnimatePresence>
+          {menuOpen && (
+            <>
+              <motion.div
+                className={styles.sideDrawerBackdrop}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setMenuOpen(false)}
+              />
+              <motion.div
+                className={styles.sideDrawer}
+                initial={{ x: isRtl ? '-100%' : '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: isRtl ? '-100%' : '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              >
+                <div className={styles.drawerHeader}>
+                  <span className={styles.drawerBrand}>SELY PRIVÉ</span>
+                  <button
+                    type="button"
+                    onClick={() => setMenuOpen(false)}
+                    className={styles.drawerCloseBtn}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className={styles.drawerLanguage}>
+                  <span className={styles.drawerSectionLabel}>Langue / Language</span>
+                  <LanguageSelector variant="tunnel" />
+                </div>
+
+                <div className={styles.drawerNavLinks}>
+                  <Link to={getCityPath('/')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
+                    Accueil
+                  </Link>
+                  <Link to={getCityPath('/vehicules')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
+                    Flotte de Prestige
+                  </Link>
+                  <Link to={getCityPath('/excellence')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
+                    L'Excellence & Services
+                  </Link>
+                  <Link to={getCityPath('/contact')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
+                    Contact & Conciergerie
+                  </Link>
+                  <Link to={getCityPath('/demande-specifique')} className={styles.drawerLink} onClick={() => setMenuOpen(false)}>
+                    Demande Sur-Mesure
+                  </Link>
+                </div>
+
+                <div className={styles.drawerFooter}>
+                  <a href="tel:+33184805676" className={styles.drawerPhoneBtn}>
+                    <Phone size={15} />
+                    <span>+33 1 84 80 56 76</span>
+                  </a>
+                  <a
+                    href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.drawerWhatsappBtn}
+                  >
+                    <MessageSquare size={15} />
+                    <span>WhatsApp Conciergerie</span>
+                  </a>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Services Bottom Sheet (when user clicks Explorez les services or Voyages) */}
+        <AnimatePresence>
+          {showServicesSheet && (
+            <>
+              <motion.div
+                className={styles.sideDrawerBackdrop}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowServicesSheet(false)}
+              />
+              <motion.div
+                className={styles.servicesBottomSheet}
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+              >
+                <div className={styles.bottomSheetHandle} />
+                <div className={styles.bottomSheetHeader}>
+                  <div>
+                    <h3 className={styles.bottomSheetTitle}>{welcomeT.servicesTitle}</h3>
+                    <p className={styles.bottomSheetSubtitle}>{welcomeT.servicesSubtitle}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowServicesSheet(false)}
+                    className={styles.bottomSheetCloseBtn}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className={styles.serviceCardsGrid}>
+                  {/* 1. Transfert */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectService('transfer');
+                      setShowServicesSheet(false);
+                      setStep(1);
+                    }}
+                    className={styles.serviceChoiceCard}
+                  >
+                    <div className={styles.serviceChoiceIcon}>
+                      <Navigation size={22} strokeWidth={1.5} />
+                    </div>
+                    <div className={styles.serviceChoiceBody}>
+                      <div className={styles.serviceChoiceBadge}>{t('tunnel.transfer_badge', 'POINT A À POINT B')}</div>
+                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.transfer_title', 'Transfert')}</h4>
+                      <p className={styles.serviceChoiceDesc}>{t('tunnel.transfer_desc', "Liaisons directes d'adresse à adresse, aéroports, gares parisiennes et trajets intercités.")}</p>
+                    </div>
+                    <div className={styles.serviceChoiceCta}>
+                      <span>Sélectionner</span>
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </div>
+                  </button>
+
+                  {/* 2. Chauffeur à la journée */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectService('hourly');
+                      setShowServicesSheet(false);
+                      setStep(1);
+                    }}
+                    className={styles.serviceChoiceCard}
+                  >
+                    <div className={styles.serviceChoiceIcon}>
+                      <Clock size={22} strokeWidth={1.5} />
+                    </div>
+                    <div className={styles.serviceChoiceBody}>
+                      <div className={styles.serviceChoiceBadge}>{t('tunnel.hourly_badge', 'CHAUFFEUR DÉDIÉ')}</div>
+                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.hourly_title', 'Chauffeur à la journée')}</h4>
+                      <p className={styles.serviceChoiceDesc}>{t('tunnel.hourly_desc', "Berline et chauffeur privé réservés à l'heure ou pour la journée complète.")}</p>
+                    </div>
+                    <div className={styles.serviceChoiceCta}>
+                      <span>Sélectionner</span>
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </div>
+                  </button>
+
+                  {/* 3. Sur-mesure */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectService('bespoke');
+                      setShowServicesSheet(false);
+                      setStep(1);
+                    }}
+                    className={styles.serviceChoiceCard}
+                  >
+                    <div className={styles.serviceChoiceIcon}>
+                      <SlidersHorizontal size={22} strokeWidth={1.5} />
+                    </div>
+                    <div className={styles.serviceChoiceBody}>
+                      <div className={styles.serviceChoiceBadge}>{t('tunnel.bespoke_badge', 'SUR-MESURE & ÉVÉNEMENTS')}</div>
+                      <h4 className={styles.serviceChoiceTitle}>{t('tunnel.bespoke_title', 'Demande sur mesure')}</h4>
+                      <p className={styles.serviceChoiceDesc}>{t('tunnel.bespoke_desc', 'Fashion Week, délégations diplomatiques, convois officiels, mariages ou exigences exclusives.')}</p>
+                    </div>
+                    <div className={styles.serviceChoiceCta}>
+                      <span>Sélectionner</span>
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </div>
+                  </button>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Quick Help Modal */}
+        <AnimatePresence>
+          {helpOpen && (
+            <>
+              <motion.div
+                className={styles.sideDrawerBackdrop}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setHelpOpen(false)}
+              />
+              <motion.div
+                className={styles.helpModal}
+                initial={{ scale: 0.94, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.94, opacity: 0 }}
+              >
+                <div className={styles.helpModalHeader}>
+                  <h3>{welcomeT.helpTitle}</h3>
+                  <button
+                    type="button"
+                    onClick={() => setHelpOpen(false)}
+                    className={styles.drawerCloseBtn}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <p className={styles.helpModalSubtitle}>{welcomeT.helpSubtitle}</p>
+                <div className={styles.helpModalActions}>
+                  <a
+                    href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20j'ai%20besoin%20d'aide%20pour%20une%20réservation."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.drawerWhatsappBtn}
+                  >
+                    <MessageSquare size={16} />
+                    <span>{welcomeT.helpWhatsapp}</span>
+                  </a>
+                  <a href="tel:+33184805676" className={styles.drawerPhoneBtn}>
+                    <Phone size={16} />
+                    <span>{welcomeT.helpPhone}</span>
+                  </a>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.funnelOverlay}>
       {/* Top thin progress bar */}
@@ -1034,7 +1502,7 @@ export default function ReservationPage() {
           </div>
         )}
 
-                <div className={styles.headerRight}>
+        <div className={styles.headerRight}>
           <LanguageSelector variant="tunnel" />
           <button
             type="button"
@@ -1050,97 +1518,6 @@ export default function ReservationPage() {
       {/* Main Multi-Step Content Area */}
       <main className={styles.funnelMain}>
         <AnimatePresence mode="wait" custom={direction}>
-          {/* ══════════════════════════════════════════════════════════════════════════
-              SCREEN 0 : SERVICE SELECTION
-              ══════════════════════════════════════════════════════════════════════════ */}
-          {step === 0 && (
-            <motion.div
-              key="step-0-service"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className={styles.screenContainer}
-            >
-              <div className={styles.screenIntro}>
-                <div className={styles.territoryPillRow}>
-                  <span className={styles.microBadge}>{t('tunnel.step0_badge', 'SÉLECTION DU SERVICE')}</span>
-                  <span className={styles.territoryIndicatorBadge}>
-                    <span className={styles.territoryIndicatorDot} />
-                    {activeTerritory.name.toUpperCase()} · {activeTerritory.hubs}
-                  </span>
-                </div>
-                <h1 className={styles.screenTitle}>{t('tunnel.step0_title', 'Comment souhaitez-vous voyager ?')}</h1>
-                <p className={styles.screenSubtitle}>{t('tunnel.step0_subtitle', 'Choisissez la formule adaptée à votre déplacement.')}</p>
-              </div>
-
-              <div className={styles.serviceCardsGrid}>
-                {/* 1. Transfert */}
-                <button
-                  type="button"
-                  onClick={() => selectService('transfer')}
-                  className={styles.serviceChoiceCard}
-                  id="choice-transfer-btn"
-                >
-                  <div className={styles.serviceChoiceIcon}>
-                    <Navigation size={22} strokeWidth={1.5} />
-                  </div>
-                  <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>{t('tunnel.transfer_badge', 'POINT A À POINT B')}</div>
-                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.transfer_title', 'Transfert')}</h3>
-                    <p className={styles.serviceChoiceDesc}>{t('tunnel.transfer_desc', "Liaisons directes d'adresse à adresse, aéroports, gares parisiennes et trajets intercités.")}</p>
-                  </div>
-                  <div className={styles.serviceChoiceCta}>
-                    <span>Sélectionner</span>
-                    <ArrowRight size={15} strokeWidth={1.5} />
-                  </div>
-                </button>
-
-                {/* 2. Chauffeur à la journée */}
-                <button
-                  type="button"
-                  onClick={() => selectService('hourly')}
-                  className={styles.serviceChoiceCard}
-                  id="choice-hourly-btn"
-                >
-                  <div className={styles.serviceChoiceIcon}>
-                    <Clock size={22} strokeWidth={1.5} />
-                  </div>
-                  <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>{t('tunnel.hourly_badge', 'CHAUFFEUR DÉDIÉ')}</div>
-                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.hourly_title', 'Chauffeur à la journée')}</h3>
-                    <p className={styles.serviceChoiceDesc}>{t('tunnel.hourly_desc', "Berline et chauffeur privé réservés à l'heure ou pour la journée complète.")}</p>
-                  </div>
-                  <div className={styles.serviceChoiceCta}>
-                    <span>Sélectionner</span>
-                    <ArrowRight size={15} strokeWidth={1.5} />
-                  </div>
-                </button>
-
-                {/* 3. Demande sur-mesure */}
-                <button
-                  type="button"
-                  onClick={() => selectService('bespoke')}
-                  className={styles.serviceChoiceCard}
-                  id="choice-bespoke-btn"
-                >
-                  <div className={styles.serviceChoiceIcon}>
-                    <SlidersHorizontal size={22} strokeWidth={1.5} />
-                  </div>
-                  <div className={styles.serviceChoiceBody}>
-                    <div className={styles.serviceChoiceBadge}>{t('tunnel.bespoke_badge', 'SUR-MESURE & ÉVÉNEMENTS')}</div>
-                    <h3 className={styles.serviceChoiceTitle}>{t('tunnel.bespoke_title', 'Demande sur mesure')}</h3>
-                    <p className={styles.serviceChoiceDesc}>{t('tunnel.bespoke_desc', 'Fashion Week, délégations diplomatiques, convois officiels, mariages ou exigences exclusives.')}</p>
-                  </div>
-                  <div className={styles.serviceChoiceCta}>
-                    <span>Sélectionner</span>
-                    <ArrowRight size={15} strokeWidth={1.5} />
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-          )}
 
           {/* ══════════════════════════════════════════════════════════════════════════
               STEP 1 : ITINÉRAIRE + DATE (ALL-IN-ONE)
