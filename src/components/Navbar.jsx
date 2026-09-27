@@ -42,43 +42,71 @@ export default function Navbar({ isHome }) {
     return c.toUpperCase();
   };
 
+  const isHomeTop = isHome && !scrolled && !mobileMenuOpen;
+
   return (
     <>
-      <header className={navClass}>
-        <div className={styles.logoContainer}>
-          <Link to={getCityPath('/')} className={styles.logoLink}>
-            <span className={styles.logoMark}>S</span>
-            <div className={styles.logoText}>
-              SELY<br/><span>{getCityLogoLabel(city)}</span>
+      <header className={`${navClass} ${isHomeTop ? styles.homeTop : ''}`}>
+        {isHomeTop ? (
+          <div className={styles.homeTopBar}>
+            <span className={styles.homeWelcomeText}>
+              {i18n.language.startsWith('en')
+                ? 'Welcome'
+                : i18n.language.startsWith('es')
+                ? 'Bienvenido'
+                : i18n.language.startsWith('ar')
+                ? 'مرحباً بكم'
+                : i18n.language.startsWith('zh')
+                ? '欢迎'
+                : 'Bienvenue'}
+            </span>
+            <button
+              type="button"
+              aria-label="Ouvrir le menu"
+              className={styles.mobileMenuToggleHome}
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu size={26} strokeWidth={1.8} color="#ffffff" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className={styles.logoContainer}>
+              <Link to={getCityPath('/')} className={styles.logoLink}>
+                <span className={styles.logoMark}>S</span>
+                <div className={styles.logoText}>
+                  SELY<br/><span>{getCityLogoLabel(city)}</span>
+                </div>
+              </Link>
             </div>
-          </Link>
-        </div>
 
-        <a href={t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'))} className={styles.phoneBadge}>
-          <Phone size={14} />
-          <span>{t('footer.phone', t('contact.phone', '+33 1 84 80 56 76'))}</span>
-        </a>
+            <a href={t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'))} className={styles.phoneBadge}>
+              <Phone size={14} />
+              <span>{t('footer.phone', t('contact.phone', '+33 1 84 80 56 76'))}</span>
+            </a>
 
-        <nav className={styles.nav}>
-          {links.map((link) => (
-            <Link key={link.to} to={link.to} className={location.pathname === link.to ? styles.active : ''}>
-              {link.label}
-            </Link>
-          ))}
-          <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book_service', 'Réservez votre service')}</Link>
-          <CitySelector />
-          <LanguageSelector />
-        </nav>
+            <nav className={styles.nav}>
+              {links.map((link) => (
+                <Link key={link.to} to={link.to} className={location.pathname === link.to ? styles.active : ''}>
+                  {link.label}
+                </Link>
+              ))}
+              <Link to={getCityPath('/reserver')} className={styles.ctaButtonSolid}>{t('nav.book_service', 'Réservez votre service')}</Link>
+              <CitySelector />
+              <LanguageSelector />
+            </nav>
 
-        <button
-          type="button"
-          aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-          aria-expanded={mobileMenuOpen}
-          className={styles.mobileMenuToggle}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+            <button
+              type="button"
+              aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={mobileMenuOpen}
+              className={styles.mobileMenuToggle}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </>
+        )}
       </header>
 
       <AnimatePresence>

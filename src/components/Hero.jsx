@@ -1,228 +1,201 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useCity } from '../hooks/useCity';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, MapPin } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowRight, Compass, MessageSquare, Home, X, Phone } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Hero.module.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const HERO_TERRITORIES = [
-  { id: 'france', name: 'France', path: '/paris' },
-  { id: 'angleterre', name: 'Angleterre', path: '/london' },
-  { id: 'suisse', name: 'Suisse', path: '/suisse' },
-  { id: 'usa', name: 'USA', path: '/usa' },
-  { id: 'italie', name: 'Italie', path: '/italie' },
-  { id: 'uae', name: 'UAE', path: '/uae' },
-];
-
-const PICKUP_SUGGESTIONS = [
-  'Aéroport Charles de Gaulle (CDG)',
-  'Aéroport Paris-Orly',
-  'Hôtel Ritz Paris — Place Vendôme',
-  'Tour Eiffel — Champ de Mars',
-  'Gare du Nord',
-  'Four Seasons George V — Paris',
-];
+const HERO_TEXTS = {
+  fr: {
+    welcome: 'Bienvenue',
+    heroTitle: 'Commencez votre voyage',
+    destinationPlaceholder: 'Saisissez votre destination',
+    exploreServices: '↓ Explorez les voyages et les services',
+    navHome: 'Accueil',
+    navJourneys: 'Voyages',
+    navHelp: 'Aide',
+  },
+  en: {
+    welcome: 'Welcome',
+    heroTitle: 'Start your journey',
+    destinationPlaceholder: 'Where to? Enter destination',
+    exploreServices: '↓ Explore journeys & services',
+    navHome: 'Home',
+    navJourneys: 'Journeys',
+    navHelp: 'Help',
+  },
+  es: {
+    welcome: 'Bienvenido',
+    heroTitle: 'Comience su viaje',
+    destinationPlaceholder: 'Ingrese su destino',
+    exploreServices: '↓ Explorar viajes y servicios',
+    navHome: 'Inicio',
+    navJourneys: 'Viajes',
+    navHelp: 'Ayuda',
+  },
+  ar: {
+    welcome: 'مرحباً بكم',
+    heroTitle: 'ابدأ رحلتك',
+    destinationPlaceholder: 'أدخل وجهتك',
+    exploreServices: '↓ استكشف الرحلات والخدمات',
+    navHome: 'الرئيسية',
+    navJourneys: 'الرحلات',
+    navHelp: 'المساعدة',
+  },
+  zh: {
+    welcome: '欢迎',
+    heroTitle: '开启您的尊享旅程',
+    destinationPlaceholder: '输入您的目的地',
+    exploreServices: '↓ 探索专属行程与服务',
+    navHome: '首页',
+    navJourneys: '行程',
+    navHelp: '帮助',
+  },
+};
 
 export default function Hero() {
-  const { city, t } = useCity();
-  const bgMedia = t('hero.video', '/hero-video-nb.mp4');
-  const isVideo = !bgMedia.endsWith('.jpg') && !bgMedia.endsWith('.png') && !bgMedia.endsWith('.webp') && !bgMedia.endsWith('.jpeg');
+  const { city, i18n } = useCity();
   const navigate = useNavigate();
 
-  const [pickupValue, setPickupValue] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const inputRef = useRef(null);
+  const [destinationValue, setDestinationValue] = useState('');
+  const [helpOpen, setHelpOpen] = useState(false);
 
-  const sectionRef = useRef(null);
-  const titleRef = useRef(null);
-  const videoRef = useRef(null);
-  const heroLineRef = useRef(null);
+  const langKey = i18n?.language?.startsWith('en')
+    ? 'en'
+    : i18n?.language?.startsWith('es')
+    ? 'es'
+    : i18n?.language?.startsWith('ar')
+    ? 'ar'
+    : i18n?.language?.startsWith('zh')
+    ? 'zh'
+    : 'fr';
+
+  const ht = HERO_TEXTS[langKey] || HERO_TEXTS.fr;
 
   const handleSubmit = useCallback((e) => {
     if (e) e.preventDefault();
     const cityPath = city && city !== 'paris' ? city : 'paris';
-    if (!pickupValue.trim()) {
+    if (!destinationValue.trim()) {
       navigate(`/${cityPath}/reserver`);
       return;
     }
-    const params = new URLSearchParams({ step: '1', service: 'transfer', pickup: pickupValue.trim() });
+    const params = new URLSearchParams({ step: '1', service: 'transfer', destination: destinationValue.trim() });
     navigate(`/${cityPath}/reserver?${params.toString()}`);
-  }, [city, navigate, pickupValue]);
+  }, [city, navigate, destinationValue]);
 
-  const handleSuggestionClick = useCallback((suggestion) => {
-    setPickupValue(suggestion);
-    setShowSuggestions(false);
-    const cityPath = city && city !== 'paris' ? city : 'paris';
-    const params = new URLSearchParams({ step: '1', service: 'transfer', pickup: suggestion });
-    navigate(`/${cityPath}/reserver?${params.toString()}`);
-  }, [city, navigate]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 768px)", () => {
-        if (videoRef.current && sectionRef.current) {
-          gsap.to(videoRef.current, {
-            y: 60,
-            scale: 1.05,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: 0.6,
-            },
-          });
-        }
-      });
-      if (heroLineRef.current) {
-        gsap.fromTo(heroLineRef.current,
-          { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.3 }
-        );
-      }
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
-
-  const filteredSuggestions = (city === 'paris' ? PICKUP_SUGGESTIONS : []).filter(s =>
-    !pickupValue || s.toLowerCase().includes(pickupValue.toLowerCase())
-  );
+  const scrollToServices = () => {
+    const el = document.getElementById('vehicules') || document.querySelector('section:nth-of-type(2)');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section ref={sectionRef} className={styles.heroSection}>
-      {isVideo ? (
-        <video
-          ref={videoRef}
-          src={bgMedia}
-          autoPlay loop muted playsInline
-          className={styles.videoBackground}
-          style={{
-            objectPosition: t('hero.video_position', 'center'),
-            filter: t('hero.video_filter', 'none')
-          }}
-        />
-      ) : (
-        <img
-          src={bgMedia}
-          alt={t('hero.media_alt', 'SELY Chauffeur Privé')}
-          className={styles.videoBackground}
-          style={{
-            objectFit: 'cover', width: '100%', height: '100%',
-            objectPosition: t('hero.video_position', 'center'),
-            filter: t('hero.video_filter', 'none')
-          }}
-        />
-      )}
-      <div className={styles.videoOverlay} />
-      <div ref={heroLineRef} className={styles.heroLine} />
+    <section className={styles.heroSection}>
+      <div className={styles.bgImage} />
+      <div className={styles.vignetteOverlay} />
 
-      <div className={styles.heroContentWrapper}>
-        {/* Headline */}
-        <div className={styles.heroCenter}>
-          <span className={styles.heroPreTitle}>
-            {t('hero.pretitle', (() => {
-              const labels = {
-                paris: 'PARIS', bordeaux: 'BORDEAUX', 'french-riviera': 'FRENCH RIVIERA',
-                london: 'LONDRES', suisse: 'SUISSE', usa: 'ÉTATS-UNIS',
-                italie: 'ITALIE', uae: 'ÉMIRATS ARABES UNIS',
-              };
-              return `${t('hero.house_label')} — ${labels[city] || 'PARIS'}`;
-            })())}
-          </span>
-          <h1
-            ref={titleRef}
-            className={styles.heroTitle}
-            dangerouslySetInnerHTML={{ __html: t('hero.headline', "L'art du <em>déplacement</em>.") }}
+
+      {/* Main Lower Third */}
+      <div className={styles.mainContent}>
+        <h1 className={styles.heroTitle}>
+          {ht.heroTitle}
+        </h1>
+
+        <form className={styles.destinationLineWrapper} onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className={styles.destinationUnderlineInput}
+            placeholder={ht.destinationPlaceholder}
+            value={destinationValue}
+            onChange={(e) => setDestinationValue(e.target.value)}
+            aria-label={ht.destinationPlaceholder}
           />
-          <p className={styles.heroSubhead}>
-            {t('hero.subheadline', 'Excellence, discrétion absolue et berlines de prestige avec chauffeur dédié.')}
-          </p>
-        </div>
+          <button type="submit" className={styles.destSubmitArrowBtn} aria-label="Valider la destination">
+            <ArrowRight size={20} strokeWidth={1.8} />
+          </button>
+        </form>
 
-        {/* ── Booking Widget ── */}
-        <div className={styles.heroCtaContainer}>
-          <form className={styles.bookingWidget} onSubmit={handleSubmit} autoComplete="off">
-
-            <div className={styles.widgetBadge}>
-              <div className={styles.dockPulseDotWrapper}>
-                <span className={styles.dockDot} />
-                <span className={styles.dockDotRing} />
-              </div>
-              <span className={styles.dockTag}>{t('hero.quote_badge')}</span>
-            </div>
-
-            <div className={styles.widgetInputRow}>
-              <div className={styles.widgetInputWrapper}>
-                <MapPin size={18} className={styles.widgetInputIcon} />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={pickupValue}
-                  onChange={(e) => { setPickupValue(e.target.value); setShowSuggestions(true); }}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                  placeholder={t('hero.pickup_placeholder', "D'où partez-vous ? (aéroport, hôtel, adresse...)")}
-                  className={styles.widgetInput}
-                  aria-label={t('hero.pickup_label')}
-                />
-              </div>
-              <button type="submit" className={styles.widgetCta}>
-                <span>{t('hero.cta_btn', 'Obtenir un devis')}</span>
-                <ArrowRight size={16} strokeWidth={2} />
-              </button>
-            </div>
-
-            {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className={styles.widgetSuggestions}>
-                {filteredSuggestions.slice(0, 5).map((s, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    className={styles.widgetSuggestionItem}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => handleSuggestionClick(s)}
-                  >
-                    <MapPin size={13} className={styles.sugItemIcon} />
-                    <span>{s}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </form>
-
-          <p className={styles.bookingSteps}>{t('hero.booking_steps')}</p>
-
-          {/* Countries — discreet trust line */}
-          <div className={styles.operatesInRow}>
-            <span className={styles.operatesInLabel}>{t('hero.operates_in', 'Nous opérons en :')}</span>
-            {HERO_TERRITORIES.map((terr, i) => (
-              <span key={terr.id}>
-                <button
-                  type="button"
-                  className={styles.operatesInCountry}
-                  onClick={() => navigate(`${terr.path}/reserver?step=0`)}
-                >
-                  {t(`hero.territories.${terr.id}`, terr.name)}
-                </button>
-                {i < HERO_TERRITORIES.length - 1 && (
-                  <span className={styles.operatesInDot}> · </span>
-                )}
-              </span>
-            ))}
-          </div>
-
-          {/* Social Proof — Google VIP Reviews */}
-          <div className={styles.heroTrustBadge}>
-            <span className={styles.stars}>★★★★★</span>
-            <span className={styles.ratingText}>
-              <strong>5.0 / 5</strong> · {t('testimonials.google_reviews_count', '409 avis vérifiés sur Google')}
-            </span>
-          </div>
-        </div>
+        <button type="button" className={styles.exploreServicesBtn} onClick={scrollToServices}>
+          <span>{ht.exploreServices}</span>
+        </button>
       </div>
+
+      {/* Floating Bottom Capsule Nav */}
+      <nav className={styles.floatingCapsuleNav} aria-label="Navigation">
+        <button
+          type="button"
+          className={`${styles.capsuleNavBtn} ${styles.capsuleNavBtnActive}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <Home size={18} strokeWidth={1.8} />
+          <span>{ht.navHome}</span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.capsuleNavBtn}
+          onClick={scrollToServices}
+        >
+          <Compass size={18} strokeWidth={1.8} />
+          <span>{ht.navJourneys}</span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.capsuleNavBtn}
+          onClick={() => setHelpOpen(true)}
+        >
+          <MessageSquare size={18} strokeWidth={1.8} />
+          <span>{ht.navHelp}</span>
+        </button>
+      </nav>
+
+      {/* Help Modal */}
+      <AnimatePresence>
+        {helpOpen && (
+          <>
+            <motion.div
+              className={styles.modalBackdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setHelpOpen(false)}
+            />
+            <motion.div
+              className={styles.helpModal}
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.94, opacity: 0 }}
+            >
+              <div className={styles.helpHeader}>
+                <h3>Assistance & Conciergerie VIP</h3>
+                <button type="button" onClick={() => setHelpOpen(false)} className={styles.closeBtn}>
+                  <X size={20} />
+                </button>
+              </div>
+              <p className={styles.helpText}>Notre direction des opérations est à votre écoute 24h/24 et 7j/7.</p>
+              <div className={styles.helpActions}>
+                <a
+                  href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.whatsappBtn}
+                >
+                  <MessageSquare size={16} />
+                  <span>Échanger sur WhatsApp</span>
+                </a>
+                <a href="tel:+33184805676" className={styles.phoneBtn}>
+                  <Phone size={16} />
+                  <span>+33 1 84 80 56 76</span>
+                </a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

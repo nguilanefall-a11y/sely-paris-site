@@ -1,404 +1,293 @@
-/* ── Hero Section ── */
 .heroSection {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   overflow: hidden;
-  padding: 7rem 1.5rem 4rem;
-  background-color: #0c0d0e;
+  background-color: #050505;
+  padding: 6rem 2rem 7rem;
 }
 
-.videoBackground {
+.bgImage {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
+  inset: 0;
+  background-image: url('/sclass_paris.png');
+  background-size: cover;
+  background-position: center center;
   z-index: 1;
-  pointer-events: none;
 }
 
-.videoOverlay {
+.vignetteOverlay {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  inset: 0;
   background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.45) 0%,
-    rgba(0,0,0,0.58) 40%,
-    rgba(0,0,0,0.6) 80%,
-    rgba(0,0,0,0.85) 100%
+    180deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.15) 28%,
+    rgba(0, 0, 0, 0.45) 55%,
+    rgba(0, 0, 0, 0.95) 100%
   );
   z-index: 2;
   pointer-events: none;
 }
 
-.heroLine {
+.topBar {
   position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 1px;
-  background: rgba(255,255,255,0.15);
-  z-index: 5;
-  transform-origin: left;
+  top: 5.5rem;
+  left: 2rem;
+  z-index: 10;
 }
 
-.heroContentWrapper {
+.welcomeText {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 500;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.mainContent {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1080px;
+  max-width: 580px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2.25rem;
-}
-
-.heroCenter {
-  text-align: center;
-  width: 100%;
-  max-width: 860px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.heroPreTitle {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  gap: 1.25rem;
 }
 
 .heroTitle {
-  font-family: var(--font-serif);
-  font-size: clamp(3rem, 6vw, 5.2rem);
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(2.35rem, 6.2vw, 3.5rem);
   font-weight: 400;
+  color: #ffffff;
+  line-height: 1.12;
   letter-spacing: -0.01em;
-  line-height: 1.1;
-  color: #ffffff;
-  margin: 0 0 1.25rem;
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
-.heroTitle em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: #ffffff;
-}
-
-.heroSubhead {
-  font-family: var(--font-sans);
-  font-size: 1.05rem;
-  font-weight: 400;
-  color: #fff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-  max-width: 620px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-/* ─── Hero CTA Container ─── */
-.heroCtaContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
+.destinationLineWrapper {
+  position: relative;
   width: 100%;
-  max-width: 660px;
-}
-
-/* ─── Booking Widget ─── */
-.bookingWidget {
-  width: 100%;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 16px 16px 16px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow:
-    0 22px 65px rgba(0,0,0,0.45),
-    0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid rgba(255,255,255,0.95);
-  position: relative;
-}
-
-.widgetBadge {
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
+  padding-bottom: 0.65rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
-.dockPulseDotWrapper {
-  position: relative;
-  width: 10px; height: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dockDot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #0d0d0f;
-  position: relative;
-  z-index: 2;
-}
-
-.dockDotRing {
-  position: absolute;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(13,13,15,0.35);
-  animation: ringPulse 2s cubic-bezier(0.2,0.8,0.2,1) infinite;
-}
-
-@keyframes ringPulse {
-  0%   { transform: scale(0.5); opacity: 0.9; }
-  100% { transform: scale(1.6); opacity: 0; }
-}
-
-.dockTag {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #0d0d0f;
-}
-
-.widgetInputRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.widgetInputWrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f7f7f8;
-  border-radius: 12px;
-  padding: 12px 16px;
-  border: 1.5px solid #e8e8e8;
-  transition: border-color 0.2s ease;
-  min-width: 0;
-}
-
-.widgetInputWrapper:focus-within {
-  border-color: #0a0a0a;
-}
-
-.widgetInputIcon {
-  color: #888;
-  flex-shrink: 0;
-}
-
-.widgetInput {
-  flex: 1;
+.destinationUnderlineInput {
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  color: #0a0a0a;
-  min-width: 0;
+  color: #ffffff;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  width: 100%;
+  padding: 0;
 }
 
-.widgetInput::placeholder { color: #666; }
+.destinationUnderlineInput::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 300;
+}
 
-.widgetCta {
+.destSubmitArrowBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #0a0a0a;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  padding: 13px 20px;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s ease, transform 0.15s ease;
-  flex-shrink: 0;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 4px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.widgetCta:hover  { background: #222; transform: translateY(-1px); }
-.widgetCta:active { transform: scale(0.97); }
+.destSubmitArrowBtn:hover {
+  transform: translateX(3px);
+  opacity: 0.85;
+}
 
-/* Suggestions dropdown */
-.widgetSuggestions {
-  border-top: 1px solid #f0f0f0;
-  padding-top: 8px;
+.exploreServicesBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  padding: 0.75rem 0 0.25rem;
+  align-self: flex-start;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.exploreServicesBtn:hover {
+  color: #ffffff;
+  transform: translateY(1px);
+}
+
+/* ── Floating Capsule Nav ── */
+.floatingCapsuleNav {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(45, 45, 45, 0.68);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 0.35rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.capsuleNavBtn {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.widgetSuggestionItem {
-  display: flex;
   align-items: center;
-  gap: 10px;
-  background: transparent;
-  border: none;
-  padding: 8px 6px;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 0.86rem;
-  color: #333;
-  transition: background 0.15s ease;
-  width: 100%;
-}
-
-.widgetSuggestionItem:hover { background: #f5f5f5; }
-
-.sugItemIcon { color: #999; flex-shrink: 0; }
-
-/* ─── Countries trust line ─── */
-.operatesInRow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 6px;
   justify-content: center;
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-}
-
-.operatesInLabel {
-  color: #f0f0f0;
-  text-transform: uppercase;
-}
-
-.operatesInCountry {
+  gap: 0.18rem;
+  padding: 0.45rem 1.4rem;
+  border-radius: 9999px;
   background: transparent;
   border: none;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 500;
   cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0;
-  text-decoration: underline;
-  text-decoration-color: rgba(255,255,255,0.2);
-  text-underline-offset: 3px;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.operatesInCountry:hover { color: #fff; }
+.capsuleNavBtn:hover {
+  color: #ffffff;
+}
 
-.operatesInDot { color: rgba(255,255,255,0.3); }
+.capsuleNavBtnActive {
+  background: rgba(255, 255, 255, 0.24);
+  color: #8bb2ff;
+}
 
-/* ─── Hero Trust Badge (Google 5/5) ─── */
-.heroTrustBadge {
+/* ── Modal ── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+.helpModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 440px;
+  background: #141414;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  z-index: 1001;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.helpHeader {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 9999px;
-  padding: 6px 16px;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.95);
-  margin-top: 0.2rem;
+  justify-content: space-between;
 }
 
-.stars {
-  color: #fbbf24;
-  letter-spacing: 2px;
-  font-size: 0.8rem;
-}
-
-.ratingText strong {
+.helpHeader h3 {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.35rem;
   color: #ffffff;
-  font-weight: 700;
+  margin: 0;
 }
 
-/* ─── Mobile ─── */
-@media (max-width: 640px) {
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.35rem;
+}
+
+.helpText {
+  font-size: 0.88rem;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+.helpActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.whatsappBtn,
+.phoneBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.whatsappBtn {
+  background: #1f6443;
+  color: #ffffff;
+}
+
+.phoneBtn {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
   .heroSection {
-    min-height: 100vh;
-    min-height: 100svh;
-    padding: 5.5rem 1rem 3rem;
+    padding: 5rem 1.25rem 6.5rem;
   }
 
-  .heroTitle {
-    font-size: clamp(2.2rem, 7.5vw, 4.2rem);
-    margin-bottom: 0.95rem;
+  .topBar {
+    left: 1.25rem;
+    top: 5rem;
   }
 
-  .heroSubhead {
-    font-size: 0.9rem;
-    line-height: 1.45;
+  .floatingCapsuleNav {
+    bottom: 1.15rem;
+    width: 90%;
+    max-width: 360px;
+    justify-content: space-around;
   }
 
-  .heroContentWrapper {
-    gap: 1.75rem;
-  }
-
-  .heroCtaContainer {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .bookingWidget {
-    padding: 1.15rem 1rem;
-    border-radius: 16px;
-  }
-
-  .widgetInputRow {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .widgetInput {
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: #f7f7f8;
-  }
-
-  .widgetCta {
-    justify-content: center;
-    padding: 14px 20px;
-    font-size: 0.9rem;
-    border-radius: 10px;
-    width: 100%;
-  }
-
-  .operatesInRow {
-    font-size: 0.68rem;
-    gap: 3px 6px;
-  }
-
-  .heroTrustBadge {
-    padding: 5px 12px;
-    font-size: 0.68rem;
+  .capsuleNavBtn {
+    padding: 0.4rem 0.85rem;
+    flex: 1;
   }
 }
-
-.bookingSteps { color: #fff; text-align: center; font-size: 0.85rem; line-height: 1.6; margin: 0; text-shadow: 0 2px 8px #000; }
-.operatesInCountry { min-height: 32px; }
-.widgetCta:focus-visible, .operatesInCountry:focus-visible, .widgetSuggestionItem:focus-visible { outline: 3px solid #b38a44; outline-offset: 4px; }

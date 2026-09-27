@@ -12,23 +12,38 @@ import styles from "./PageLoader.module.css";
  * - 0.7s smooth upward curtain slide-out
  */
 export default function PageLoader() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    // Only show once per session so refreshing during review directly shows the page
+    if (typeof window !== 'undefined' && sessionStorage.getItem('sely_loader_seen')) {
+      return false;
+    }
+    return true;
+  });
 
   useEffect(() => {
-    // 1.2 seconds sleek intro timing with immediate click responsiveness
-    const timer = setTimeout(() => setIsLoading(false), 1200);
+    if (!isLoading) return;
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      try {
+        sessionStorage.setItem('sely_loader_seen', '1');
+      } catch (e) {}
+    }, 900);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isLoading]);
 
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
           className={styles.overlay}
+          onClick={() => {
+            setIsLoading(false);
+            try { sessionStorage.setItem('sely_loader_seen', '1'); } catch (e) {}
+          }}
           initial={{ y: 0 }}
           exit={{ y: "-100%", pointerEvents: "none" }}
           transition={{
-            duration: 0.5,
+            duration: 0.45,
             ease: [0.76, 0, 0.24, 1], /* cubic-bezier – smooth luxury curtain slide-up */
           }}
           key="page-loader"

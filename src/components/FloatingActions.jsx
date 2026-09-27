@@ -15,6 +15,18 @@ export default function FloatingActions() {
   const { t } = useCity();
   const location = useLocation();
 
+  const [scrolled, setScrolled] = React.useState(false);
+  const isHome = location.pathname === '/' || location.pathname === '/paris';
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 120);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Hide on booking tunnel and specific pages to avoid obstructing the form buttons
   const isTunnelPage =
     location.pathname.includes('/reserver') ||
@@ -22,6 +34,7 @@ export default function FloatingActions() {
     location.pathname.includes('/reservation-succes');
 
   if (isTunnelPage) return null;
+  if (isHome && !scrolled) return null;
 
   const whatsappLink = t('contact.whatsapp_link', 'https://wa.me/33605827497');
   const phoneLink = t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'));

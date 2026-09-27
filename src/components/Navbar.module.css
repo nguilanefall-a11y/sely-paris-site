@@ -22,6 +22,46 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
+.header.homeTop {
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 1.25rem 2rem;
+}
+
+.homeTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.homeWelcomeText {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.85rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.mobileMenuToggleHome {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.mobileMenuToggleHome:hover {
+  transform: scale(1.08);
+}
+
 .header.solid {
   background: #ffffff;
   border-bottom: 1px solid #e5e5e5;
