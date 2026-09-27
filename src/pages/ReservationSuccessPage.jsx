@@ -26,39 +26,39 @@ import styles from './ReservationSuccessPage.module.css';
 
 const TEXTS = {
   fr: {
-    badge: 'Demande de Devis Transmise',
-    title: 'Votre demande de devis est confirmée',
-    subtitle: 'Nous vous remercions de votre confiance. Notre direction opérationnelle étudie votre itinéraire et vous transmet votre devis ferme sous 15 minutes.',
-    refLabel: 'Référence dossier',
-    copyRef: 'Copier la référence',
+    badge: 'Demande de devis transmise',
+    title: 'Votre demande a bien été transmise',
+    subtitle: 'Nous vous remercions de votre confiance. Notre équipe étudie votre demande et vous transmet votre devis officiel sous 30 minutes.',
+    refLabel: 'Référence du dossier',
+    copyRef: 'Copier',
     copied: 'Copié !',
     serviceLabel: 'Prestation',
     vehicleLabel: 'Véhicule',
     itineraryLabel: 'Itinéraire & Horaires',
     pickupLabel: 'Prise en charge',
-    dropoffLabel: 'Destination / Rayon',
+    dropoffLabel: 'Destination',
     dateTimeLabel: 'Date & Heure',
     flightLabel: 'Numéro de vol / train',
     durationLabel: 'Durée de mise à disposition',
-    clientLabel: 'Passager & Contact',
+    clientLabel: 'Vos coordonnées',
     phoneLabel: 'Téléphone',
     emailLabel: 'Email',
     companyLabel: 'Société',
     notesLabel: 'Précisions & Instructions',
-    bespokeLabel: 'Programme de mobilité',
-    priceEstimate: 'Tarification indicative',
-    priceNotice: 'Devis officiel transmis sous 15 min',
-    stepsTitle: 'Protocole de prise en charge SELY Privé',
-    step1Title: '1. Étude opérationnelle immédiate (< 15 min)',
-    step1Desc: 'Vérification télémétrique des temps de trajet, des accès réservés et calcul de la tarification officielle garantie sans supplément caché.',
-    step2Title: '2. Transmission du devis ferme & Fiche chauffeur',
-    step2Desc: 'Réception de votre récapitulatif par email et SMS, avec lien de confirmation et coordonnées directes de votre chauffeur dédié.',
-    step3Title: '3. Prise en charge d’Excellence & Accueil VIP',
-    step3Desc: 'Suivi des arrivées en temps réel (attente offerte en cas de retard), accueil personnalisé avec pancarte nominative et port des bagages.',
-    whatsappBtn: 'Confirmer et échanger sur WhatsApp',
-    whatsappSub: 'Réponse prioritaire instantanée par notre équipe opérationnelle',
-    phoneBtn: 'Assistance VIP 24/7 : +33 1 84 80 56 76',
-    printBtn: 'Imprimer / Sauvegarder le récapitulatif',
+    bespokeLabel: 'Demande personnalisée',
+    priceEstimate: 'Tarification',
+    priceNotice: 'Devis officiel transmis sous 30 min',
+    stepsTitle: 'Prochaines étapes de votre réservation',
+    step1Title: '1. Étude de votre itinéraire (< 30 min)',
+    step1Desc: 'Notre équipe vérifie les disponibilités et valide le tarif garanti tout inclus, sans surprise.',
+    step2Title: '2. Envoi de votre devis officiel',
+    step2Desc: 'Vous recevez votre confirmation complète par email et SMS, avec les coordonnées de votre chauffeur dédié.',
+    step3Title: '3. Accueil & Prise en charge le jour J',
+    step3Desc: 'Votre chauffeur vous attend à l’heure convenue avec pancarte nominative et prise en charge attentionnée de vos bagages.',
+    whatsappBtn: 'Échanger directement sur WhatsApp',
+    whatsappSub: 'Réponse rapide par notre équipe opérationnelle',
+    phoneBtn: 'Permanence téléphonique : +33 1 84 80 56 76',
+    printBtn: 'Imprimer / Sauvegarder',
     backHome: 'Retourner à l’accueil SELY',
   },
   en: {
@@ -272,8 +272,6 @@ export default function ReservationSuccessPage() {
 
   return (
     <div className={`${styles.page} ${isRtl ? styles.rtl : ''}`}>
-      <div className={styles.ambientGlow} />
-
       <motion.div
         className={styles.container}
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
@@ -545,7 +543,7 @@ export default function ReservationSuccessPage() {
             rel="noopener noreferrer"
             className={styles.whatsappActionBtn}
           >
-            <MessageSquare size={18} />
+            <MessageSquare size={18} style={{ color: '#25d366' }} />
             <div className={styles.btnTextStack}>
               <span className={styles.mainBtnText}>{t.whatsappBtn}</span>
               <span className={styles.subBtnText}>{t.whatsappSub}</span>
