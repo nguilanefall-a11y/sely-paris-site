@@ -50,6 +50,16 @@ html {
   scroll-behavior: smooth;
   width: 100%;
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 @media (max-width: 768px) {
