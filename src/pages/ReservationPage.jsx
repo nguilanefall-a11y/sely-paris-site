@@ -58,190 +58,212 @@ import { useVoiceDictation } from '../hooks/useVoiceDictation';
 import { getPopularDestinations } from '../lib/popularDestinations';
 import styles from './ReservationPage.module.css';
 
-/* ─── vehicle catalogue (reused directly) ─── */
-/* ─── Vehicle Classes Hierarchy (Simplified & Elegant) ─── */
-const VEHICLE_CLASSES = [
-  {
-    id: 'berline',
-    title: 'Berlines',
-    desc: 'Mercedes Classe E, Classe S & berlines exécutives.',
-  },
-  {
-    id: 'van',
-    title: 'Vans & Spacieux',
-    desc: 'Mercedes Classe V & minibus grand confort pour groupes et bagages.',
-  },
-  {
-    id: 'prestige',
-    title: 'Prestige & SUV',
-    desc: 'Mercedes-Maybach, Range Rover & véhicules d’exception.',
-  },
-];
+/* ─── Vehicle Catalogue & Quote Classes (Simplified & Blacklane UX Logic) ─── */
 
-/* ─── Vehicle Catalogue ─── */
-const VEHICLES = [
-  /* ─── 1. BERLINES ─── */
+export const QUOTE_CLASSES = [
   {
-    id: 'classe-e',
-    name: 'Mercedes Classe E',
-    classId: 'berline',
-    classTitle: 'Berline',
-    passengers: '3 passagers',
+    id: 'business-class',
+    classCategory: 'standard',
+    name: 'Business Class',
+    subtitle: 'Classe E, EQE, Tesla Model Y ou similaire',
+    vehicleTag: 'Business Class',
+    passengers: 'Jusqu’à 3 passagers',
     maxPassengers: 3,
     maxLuggage: 2,
-    categoryBadge: 'Berline Business',
-    desc: 'Élégance et efficacité, idéale pour vos transferts gares, aéroports et rendez-vous professionnels.',
+    luggage: '2 valises max',
+    desc: 'Berlines exécutives haut de gamme pour vos transferts aéroports, gares et rendez-vous professionnels.',
     image: '/eclass-paris-luxury.jpg',
+    models: ['Mercedes Classe E', 'Mercedes EQE', 'Tesla Model Y'],
   },
   {
-    id: 'tesla-y',
-    name: 'Tesla Model Y',
-    classId: 'berline',
-    classTitle: 'Berline',
-    passengers: '4 passagers',
-    maxPassengers: 4,
-    maxLuggage: 3,
-    categoryBadge: 'Berline Électrique',
-    desc: 'Mobilité 100% électrique, confort moderne, silence de conduite et technologie embarquée.',
-    image: '/tesla-y-paris-luxury.jpg',
-  },
-  {
-    id: 'classe-s',
-    name: 'Mercedes Classe S',
-    classId: 'berline',
-    classTitle: 'Berline',
-    passengers: '3 passagers',
-    maxPassengers: 3,
-    maxLuggage: 3,
-    categoryBadge: 'Berline Première',
-    desc: 'La berline de référence mondiale, insonorisation d’art, sellerie d’exception et confort absolu.',
-    image: '/sclass-main-new.jpg',
-    rearImage: '/sclass_paris_hero.jpg',
-    interiorImage: '/sclass-interior-white.jpg',
-  },
-
-  /* ─── 2. VANS & SPACIEUX ─── */
-  {
-    id: 'classe-v',
-    name: 'Mercedes Classe V',
-    classId: 'van',
-    classTitle: 'Van',
-    passengers: '7 passagers',
+    id: 'business-van',
+    classCategory: 'standard',
+    name: 'Business Van',
+    subtitle: 'Classe V ou similaire',
+    vehicleTag: 'Business Van',
+    passengers: 'Jusqu’à 7 passagers',
     maxPassengers: 7,
     maxLuggage: 7,
-    categoryBadge: 'Van 7 places',
-    desc: 'Configuration salon face-à-face grand confort pour vos déplacements en famille et séjours d’équipe.',
+    luggage: '7 valises max',
+    desc: 'Salon face-à-face grand confort pour délégations professionnelles, familles et bagages volumineux.',
     image: '/vclass-paris-luxury.jpg',
     rearImage: '/vclass-rear-luxury.jpg',
     interiorImage: '/vclass_interior_vip_lounge.jpg',
+    models: ['Mercedes Classe V'],
   },
   {
+    id: 'first-class',
+    classCategory: 'standard',
+    name: 'First Class',
+    subtitle: 'Classe S ou similaire',
+    vehicleTag: 'First Class',
+    passengers: 'Jusqu’à 3 passagers',
+    maxPassengers: 3,
+    maxLuggage: 3,
+    luggage: '3 valises max',
+    desc: 'La quintessence du prestige automobile mondial, insonorisation d’art et confort absolu de palace.',
+    image: '/sclass-main-new.jpg',
+    rearImage: '/sclass_paris_hero.jpg',
+    interiorImage: '/sclass-interior-white.jpg',
+    models: ['Mercedes Classe S'],
+  },
+];
+
+export const LARGE_GROUPS_VEHICLES = [
+  {
     id: 'sprinter-7-vip',
+    classCategory: 'large-groups',
+    capacityTag: '7 places',
     name: 'Mercedes Sprinter Lounge (7 places)',
-    classId: 'van',
-    classTitle: 'Van',
+    subtitle: 'Salon VIP Privé First Class',
     passengers: '7 passagers',
     maxPassengers: 7,
     maxLuggage: 10,
-    categoryBadge: 'Van Salon VIP',
-    desc: 'Salon First Class mobile en cuir nappa avec fauteuils individuels et espace de travail.',
+    luggage: '10 valises max',
+    desc: 'Fauteuils club individuels en cuir nappa, espace de travail modulable et confort haut de gamme.',
     image: '/minibus-7-vip-interior.jpg',
   },
   {
     id: 'sprinter-14-vip',
+    classCategory: 'large-groups',
+    capacityTag: '14 places',
     name: 'Mercedes Sprinter (14 places)',
-    classId: 'van',
-    classTitle: 'Van',
+    subtitle: 'Minibus Affaires & Événements',
     passengers: '14 passagers',
     maxPassengers: 14,
     maxLuggage: 14,
-    categoryBadge: 'Minibus 14 places',
-    desc: 'Minibus grand confort pour délégations, mariages et transport de groupes d’affaires.',
+    luggage: '14 valises max',
+    desc: 'Minibus grand confort dédié aux délégations d’affaires, mariages et transferts de groupes.',
     image: '/minibus-14-vip-interior.jpg',
   },
   {
     id: 'sprinter-19-standard',
+    classCategory: 'large-groups',
+    capacityTag: '19 places',
     name: 'Mercedes Sprinter (19 places)',
-    classId: 'van',
-    classTitle: 'Van',
+    subtitle: 'Grand Tourisme & Congrès',
     passengers: '19 passagers',
     maxPassengers: 19,
     maxLuggage: 19,
-    categoryBadge: 'Minibus 19 places',
-    desc: 'Minibus grand tourisme 19 places avec plancher bois, idéal pour grands groupes et événements.',
+    luggage: '19 valises max',
+    desc: 'Minibus 19 places grand tourisme avec plancher bois, idéal pour grands groupes et événements.',
     image: '/minibus-19-standard-interior.jpg',
   },
+];
 
-  /* ─── 3. PRESTIGE & SUV ─── */
-  {
-    id: 'range-rover',
-    name: 'Range Rover Autobiography',
-    classId: 'prestige',
-    classTitle: 'Prestige',
-    passengers: '3 passagers',
-    maxPassengers: 3,
-    maxLuggage: 4,
-    categoryBadge: 'SUV Prestige',
-    desc: 'SUV britannique emblématique, assise dominante majestueuse et sérénité de conduite.',
-    image: '/range-rover-main.jpg',
-    rearImage: '/range-rover-rear.jpg',
-    interiorImage: '/range-rover-interior.jpg',
-  },
-  {
-    id: 'cadillac-escalade',
-    name: 'Cadillac Escalade ESV',
-    classId: 'prestige',
-    classTitle: 'Prestige',
-    passengers: '6 passagers',
-    maxPassengers: 6,
-    maxLuggage: 6,
-    categoryBadge: 'Grand SUV',
-    desc: 'Grand SUV américain spacieux, présence statutaire et habitacle généreux.',
-    image: '/cadillac-escalade-main.jpg',
-    rearImage: '/cadillac-escalade-rear.jpg',
-    interiorImage: '/cadillac-escalade-interior.jpg',
-  },
+export const PRESTIGE_VEHICLES = [
   {
     id: 'maybach',
+    classCategory: 'prestige',
     name: 'Mercedes-Maybach',
-    classId: 'prestige',
-    classTitle: 'Prestige',
+    subtitle: 'Salon Première Classe & Flûtes',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 3,
-    categoryBadge: 'Mercedes-Maybach',
-    desc: 'Le raffinement suprême, empattement long, flûtes argentées et salon de première classe.',
+    luggage: '3 valises max',
+    desc: 'Le summum du luxe automobile, empattement long, flûtes argentées et confort d’aviation privée.',
     image: '/maybach-paris-luxury.jpg',
     rearImage: '/maybach-rear-luxury.jpg',
     interiorImage: '/maybach-interior-first-class.jpg',
   },
   {
     id: 'rolls-phantom',
+    classCategory: 'prestige',
     name: 'Rolls-Royce Phantom',
-    classId: 'prestige',
-    classTitle: 'Prestige',
+    subtitle: 'Prestance Majestueuse & Portes Antagonistes',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 3,
-    categoryBadge: 'Rolls-Royce Phantom',
-    desc: 'Prestance majestueuse, confort feutré incomparable et finitions d’exception.',
+    luggage: '3 valises max',
+    desc: 'L’incarnation ultime de l’aristocratie automobile, silence feutré royal et finitions d’exception.',
     image: '/rolls-phantom-main.jpg',
     rearImage: '/rolls-phantom-rear.jpg',
     interiorImage: '/rolls-phantom-interior.jpg',
   },
   {
     id: 'rolls-cullinan',
+    classCategory: 'prestige',
     name: 'Rolls-Royce Cullinan',
-    classId: 'prestige',
-    classTitle: 'Prestige',
+    subtitle: 'SUV de Prestige Suprême',
     passengers: '3 passagers',
     maxPassengers: 3,
     maxLuggage: 4,
-    categoryBadge: 'Rolls-Royce Cullinan',
-    desc: 'Le SUV le plus luxueux au monde, silence absolu et confort d’exception sur toutes distances.',
+    luggage: '4 valises max',
+    desc: 'Le SUV le plus luxueux au monde, prestance souveraine et confort absolu sur toutes distances.',
     image: '/rolls-cullinan-main.jpg',
     rearImage: '/rolls-cullinan-rear.jpg',
     interiorImage: '/rolls-cullinan-interior.jpg',
+  },
+  {
+    id: 'cadillac-escalade',
+    classCategory: 'prestige',
+    name: 'Cadillac Escalade ESV',
+    subtitle: 'Grand SUV Américain Statutaire',
+    passengers: '6 passagers',
+    maxPassengers: 6,
+    maxLuggage: 6,
+    luggage: '6 valises max',
+    desc: 'Le grand SUV américain d’exception, salon spacieux et présence statutaire incomparable.',
+    image: '/cadillac-escalade-main.jpg',
+    rearImage: '/cadillac-escalade-rear.jpg',
+    interiorImage: '/cadillac-escalade-interior.jpg',
+  },
+  {
+    id: 'range-rover',
+    classCategory: 'prestige',
+    name: 'Range Rover Autobiography',
+    subtitle: 'SUV Britannique de Référence',
+    passengers: '3 passagers',
+    maxPassengers: 3,
+    maxLuggage: 4,
+    luggage: '4 valises max',
+    desc: 'SUV britannique emblématique, assise dominante majestueuse et sérénité de conduite.',
+    image: '/range-rover-main.jpg',
+    rearImage: '/range-rover-rear.jpg',
+    interiorImage: '/range-rover-interior.jpg',
+  },
+];
+
+const VEHICLES = [
+  ...QUOTE_CLASSES,
+  ...LARGE_GROUPS_VEHICLES,
+  ...PRESTIGE_VEHICLES,
+  // Backward compatibility aliases
+  {
+    id: 'classe-e',
+    name: 'Mercedes Classe E',
+    aliasOf: 'business-class',
+    passengers: '3 passagers',
+    maxPassengers: 3,
+    maxLuggage: 2,
+    image: '/eclass-paris-luxury.jpg',
+  },
+  {
+    id: 'tesla-y',
+    name: 'Tesla Model Y',
+    aliasOf: 'business-class',
+    passengers: '4 passagers',
+    maxPassengers: 4,
+    maxLuggage: 3,
+    image: '/tesla-y-paris-luxury.jpg',
+  },
+  {
+    id: 'classe-s',
+    name: 'Mercedes Classe S',
+    aliasOf: 'first-class',
+    passengers: '3 passagers',
+    maxPassengers: 3,
+    maxLuggage: 3,
+    image: '/sclass-main-new.jpg',
+  },
+  {
+    id: 'classe-v',
+    name: 'Mercedes Classe V',
+    aliasOf: 'business-van',
+    passengers: '7 passagers',
+    maxPassengers: 7,
+    maxLuggage: 7,
+    image: '/vclass-paris-luxury.jpg',
   },
 ];
 
@@ -772,11 +794,25 @@ export default function ReservationPage() {
     return unique.length > 0 ? unique.slice(0, 6) : LUXURY_SUGGESTIONS.slice(0, 6);
   };
 
-  const [selectedClassFilter, setSelectedClassFilter] = useState('all'); // 'all' | 'business' | 'first' | 'xl' | 'vip'
+  const [fleetMode, setFleetMode] = useState(() => {
+    const fromUrl = searchParams.get('vehicle');
+    if (fromUrl) {
+      if (LARGE_GROUPS_VEHICLES.some((v) => v.id === fromUrl)) return 'large-groups';
+      if (PRESTIGE_VEHICLES.some((v) => v.id === fromUrl)) return 'prestige';
+    }
+    return 'standard';
+  });
+  const [largeGroupCapacity, setLargeGroupCapacity] = useState('all');
+
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
     const fromUrl = searchParams.get('vehicle');
-    if (fromUrl && VEHICLES.some((v) => v.id === fromUrl)) return fromUrl;
-    return 'classe-e';
+    if (fromUrl) {
+      if (fromUrl === 'classe-e' || fromUrl === 'tesla-y') return 'business-class';
+      if (fromUrl === 'classe-v') return 'business-van';
+      if (fromUrl === 'classe-s') return 'first-class';
+      if (VEHICLES.some((v) => v.id === fromUrl)) return fromUrl;
+    }
+    return 'business-class';
   });
   const [vehicleAngles, setVehicleAngles] = useState({});
 
@@ -861,10 +897,16 @@ export default function ReservationPage() {
   );
 
   // Selected vehicle object
-  const selectedVehicleData = useMemo(
-    () => VEHICLES.find((v) => v.id === selectedVehicle) || VEHICLES[1],
-    [selectedVehicle]
-  );
+  const selectedVehicleData = useMemo(() => {
+    let match = VEHICLES.find((v) => v.id === selectedVehicle);
+    if (!match && selectedVehicle) {
+      match = VEHICLES.find((v) => v.aliasOf === selectedVehicle);
+    }
+    if (match && match.aliasOf) {
+      match = VEHICLES.find((v) => v.id === match.aliasOf) || match;
+    }
+    return match || QUOTE_CLASSES[0];
+  }, [selectedVehicle]);
 
   // Pricing calculation
   const calculatedPrice = useMemo(() => {
@@ -2039,177 +2081,473 @@ export default function ReservationPage() {
               ══════════════════════════════════════════════════════════════════════════ */}
           {((service === 'transfer' && step === 2) || (service === 'hourly' && step === 2)) && (
             <motion.div
-              key="vehicle-step-2"
+              key="step2-vehicles"
               custom={direction}
               variants={slideVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              className={styles.screenContainerLarge}
+              className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>NOTRE FLOTTE</span>
+                <span className={styles.microBadge}>NOTRE FLOTTE DEVIS</span>
                 <h2 className={styles.screenTitle}>Sélectionnez votre véhicule</h2>
                 <p className={styles.screenSubtitle}>Prestation tout inclus (chauffeur dédié, carburant, péages et accueil personnalisé).</p>
               </div>
 
-              {/* Simplified Filter Tabs */}
+              {/* Category Filter Tabs */}
               <div className={styles.classFilterTabs}>
                 <button
                   type="button"
-                  onClick={() => setSelectedClassFilter('all')}
-                  className={`${styles.classFilterTab} ${selectedClassFilter === 'all' ? styles.classFilterActive : ''}`}
+                  onClick={() => setFleetMode('standard')}
+                  className={`${styles.classFilterTab} ${fleetMode === 'standard' ? styles.classFilterActive : ''}`}
                 >
-                  <span>Toute la flotte</span>
+                  <span>Formules Devis (3)</span>
                 </button>
-                {VEHICLE_CLASSES.map((cls) => (
-                  <button
-                    key={cls.id}
-                    type="button"
-                    onClick={() => setSelectedClassFilter(cls.id)}
-                    className={`${styles.classFilterTab} ${selectedClassFilter === cls.id ? styles.classFilterActive : ''}`}
-                  >
-                    <span>{cls.title}</span>
-                  </button>
-                ))}
+                <button
+                  type="button"
+                  onClick={() => setFleetMode('large-groups')}
+                  className={`${styles.classFilterTab} ${fleetMode === 'large-groups' ? styles.classFilterActive : ''}`}
+                >
+                  <span>Large Groups (7-19)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFleetMode('prestige')}
+                  className={`${styles.classFilterTab} ${fleetMode === 'prestige' ? styles.classFilterActive : ''}`}
+                >
+                  <span>Prestige Collection</span>
+                </button>
               </div>
 
-              {/* Clean Vehicles Grid */}
-              <div className={styles.vehiclesListGrid} style={{ marginTop: '1.25rem' }}>
-                {VEHICLES.filter((v) => selectedClassFilter === 'all' || v.classId === selectedClassFilter).map((v) => {
-                  const isSelected = selectedVehicle === v.id;
-                  const activeAngle = vehicleAngles[v.id] || 'front';
-                  const displayImg =
-                    activeAngle === 'rear' && v.rearImage
-                      ? v.rearImage
-                      : activeAngle === 'interior' && v.interiorImage
-                      ? v.interiorImage
-                      : v.image;
-                  const hasMultiAngles = Boolean(v.rearImage || v.interiorImage);
-
-                  return (
-                    <div
-                      key={v.id}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        setSelectedVehicle(v.id);
-                        goToNextStep();
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setSelectedVehicle(v.id);
-                          goToNextStep();
-                        }
-                      }}
-                      className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''}`}
-                    >
-                      <div className={styles.vehicleImgBox}>
-                        <img src={displayImg} alt={v.name} className={styles.vehicleImg} />
-                        {isSelected && (
-                          <div className={styles.vehicleCheckBadge}>
-                            <Check size={16} />
-                          </div>
-                        )}
-                        <span className={styles.vehicleBadgeOverlay}>
-                          {v.categoryBadge}
-                        </span>
-
-                        {hasMultiAngles && (
-                          <div
-                            className={styles.vehicleAnglePills}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <button
-                              type="button"
-                              className={`${styles.vehicleAngleBtn} ${activeAngle === 'front' ? styles.vehicleAngleBtnActive : ''}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setVehicleAngles((prev) => ({ ...prev, [v.id]: 'front' }));
-                              }}
-                            >
-                              Devant
-                            </button>
-                            {v.rearImage && (
-                              <button
-                                type="button"
-                                className={`${styles.vehicleAngleBtn} ${activeAngle === 'rear' ? styles.vehicleAngleBtnActive : ''}`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setVehicleAngles((prev) => ({ ...prev, [v.id]: 'rear' }));
-                                }}
-                              >
-                                Arrière
-                              </button>
-                            )}
-                            {v.interiorImage && (
-                              <button
-                                type="button"
-                                className={`${styles.vehicleAngleBtn} ${activeAngle === 'interior' ? styles.vehicleAngleBtnActive : ''}`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setVehicleAngles((prev) => ({ ...prev, [v.id]: 'interior' }));
-                                }}
-                              >
-                                Intérieur
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className={styles.vehicleInfoBox}>
-                        <div className={styles.vehicleTopRow}>
-                          <div className={styles.vehicleTitleGroup}>
-                            <div className={styles.vehicleClassMiniTag}>
-                              {v.classTitle}
-                            </div>
-                            <h4 className={styles.vehicleName}>{v.name}</h4>
-                            {service === 'hourly' && (
-                              <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.15rem' }}>
-                                Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total{hasLongDistance ? ' · Longue distance' : ''}
+              {/* ── MODE 1: STANDARD 3 QUOTE CLASSES (Blacklane UX Logic) ── */}
+              {fleetMode === 'standard' && (
+                <div style={{ marginTop: '1.25rem' }}>
+                  <div className={styles.vehiclesListGrid}>
+                    {QUOTE_CLASSES.map((qc) => {
+                      const isSelected = selectedVehicle === qc.id || (selectedVehicleData && selectedVehicleData.id === qc.id);
+                      return (
+                        <div
+                          key={qc.id}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setSelectedVehicle(qc.id);
+                            goToNextStep();
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedVehicle(qc.id);
+                              goToNextStep();
+                            }
+                          }}
+                          className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''}`}
+                        >
+                          <div className={styles.vehicleImgBox}>
+                            <img src={qc.image} alt={qc.name} className={styles.vehicleImg} />
+                            {isSelected && (
+                              <div className={styles.vehicleCheckBadge}>
+                                <Check size={16} />
                               </div>
                             )}
-                            <div className={styles.vehicleCapacityRow}>
-                              <span className={styles.vehicleCapacityBadge}>
-                                <Users size={12} strokeWidth={2} />
-                                <span>Jusqu'à {v.maxPassengers} passagers</span>
-                              </span>
-                              <span className={styles.vehicleCapacityBadge}>
-                                <Luggage size={12} strokeWidth={2} />
-                                <span>{v.maxLuggage} valises max</span>
-                              </span>
-                            </div>
-                          </div>
-                          <div className={styles.vehicleQuoteBox}>
-                            <span className={styles.vehiclePrice}>
-                              Sur devis
+                            <span className={styles.vehicleBadgeOverlay}>
+                              {qc.vehicleTag}
                             </span>
-                            <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                          </div>
+
+                          <div className={styles.vehicleInfoBox}>
+                            <div className={styles.vehicleTopRow}>
+                              <div className={styles.vehicleTitleGroup}>
+                                <h4 className={styles.vehicleName} style={{ fontSize: '1.22rem', fontWeight: 600 }}>{qc.name}</h4>
+                                <div className={styles.categorySubtitleLine}>
+                                  {qc.subtitle}
+                                </div>
+                                {service === 'hourly' && (
+                                  <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.2rem' }}>
+                                    Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total
+                                  </div>
+                                )}
+                                <div className={styles.vehicleCapacityRow} style={{ marginTop: '0.45rem' }}>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Users size={13} strokeWidth={2} />
+                                    <span>{qc.passengers}</span>
+                                  </span>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Luggage size={13} strokeWidth={2} />
+                                    <span>{qc.luggage}</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className={styles.vehicleQuoteBox}>
+                                <span className={styles.vehiclePrice}>
+                                  Sur devis
+                                </span>
+                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                              </div>
+                            </div>
+
+                            <p className={styles.vehicleDesc}>{qc.desc}</p>
+
+                            <div className={styles.vehicleQuotePills}>
+                              <span className={styles.quotePill}>Devis sous 30 min</span>
+                              <span className={styles.quotePill}>Chauffeur dédié</span>
+                              <span className={styles.quotePill}>Wi-Fi & Rafraîchissements</span>
+                            </div>
+
+                            <button
+                              type="button"
+                              className={styles.chooseVehiclePrimaryBtn}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedVehicle(qc.id);
+                                goToNextStep();
+                              }}
+                            >
+                              <span>Choisir {qc.name}</span>
+                              <ArrowRight size={15} />
+                            </button>
                           </div>
                         </div>
+                      );
+                    })}
+                  </div>
 
-                        <p className={styles.vehicleDesc}>{v.desc}</p>
+                  {/* Two Special Categories Discovery Banners */}
+                  <div className={styles.specialCategoriesSection}>
+                    <div className={styles.specialCategoryDivider}>
+                      <span>Ou découvrez nos catégories spéciales</span>
+                    </div>
 
-                        <div className={styles.vehicleQuotePills}>
-                          <span className={styles.quotePill}>Devis sur-mesure</span>
-                          <span className={styles.quotePill}>Péages & carburant inclus</span>
-                          <span className={styles.quotePill}>Attente offerte</span>
-                          <span className={styles.quotePill}>Wi-Fi & Eau fraîche</span>
+                    <div className={styles.specialCategoriesGrid}>
+                      {/* Large Groups Card */}
+                      <div
+                        className={styles.specialCategoryCard}
+                        onClick={() => setFleetMode('large-groups')}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className={styles.specialCategoryHeader}>
+                          <div className={styles.specialCategoryIconBox}>
+                            <Users size={20} />
+                          </div>
+                          <div>
+                            <span className={styles.specialCategoryTag}>Catégorie Spéciale</span>
+                            <h4 className={styles.specialCategoryTitle}>Large Groups (7 à 19 places)</h4>
+                          </div>
                         </div>
+                        <p className={styles.specialCategoryDesc}>
+                          Mercedes Sprinter de 7 à 19 places pour délégations, mariages et transport d’équipes. Choisissez précisément la capacité souhaitée.
+                        </p>
+                        <div className={styles.specialCapacityPills}>
+                          <span>7 places Lounge VIP</span>
+                          <span>14 places Minibus</span>
+                          <span>19 places Tourisme</span>
+                        </div>
+                        <div className={styles.specialCategoryCta}>
+                          <span>Choisir selon la capacité (7 à 19 pl.)</span>
+                          <ArrowRight size={14} />
+                        </div>
+                      </div>
 
-                        <div className={styles.vehicleSelectCtaRow}>
-                          <span className={styles.vehicleSelectText}>
-                            {isSelected ? 'Véhicule sélectionné' : 'Sélectionner ce véhicule'}
-                          </span>
+                      {/* Prestige Collection Card */}
+                      <div
+                        className={styles.specialCategoryCard}
+                        onClick={() => setFleetMode('prestige')}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className={styles.specialCategoryHeader}>
+                          <div className={styles.specialCategoryIconBox}>
+                            <Sparkles size={20} style={{ color: '#b8903c' }} />
+                          </div>
+                          <div>
+                            <span className={styles.specialCategoryTag} style={{ color: '#b8903c' }}>Catégorie Spéciale</span>
+                            <h4 className={styles.specialCategoryTitle}>Prestige Collection</h4>
+                          </div>
+                        </div>
+                        <p className={styles.specialCategoryDesc}>
+                          Mercedes-Maybach, Rolls-Royce Phantom & Cullinan, Cadillac Escalade ESV, Range Rover. Sélectionnez votre véhicule d’exception précis.
+                        </p>
+                        <div className={styles.specialCapacityPills}>
+                          <span>Mercedes-Maybach</span>
+                          <span>Rolls-Royce</span>
+                          <span>Escalade</span>
+                          <span>Range Rover</span>
+                        </div>
+                        <div className={styles.specialCategoryCta}>
+                          <span>Choisir précisément le véhicule</span>
                           <ArrowRight size={14} />
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── MODE 2: LARGE GROUPS (7 à 19 places) ── */}
+              {fleetMode === 'large-groups' && (
+                <div style={{ marginTop: '1.25rem' }}>
+                  <div className={styles.specialHeaderBanner}>
+                    <button
+                      type="button"
+                      className={styles.backToStandardBtn}
+                      onClick={() => setFleetMode('standard')}
+                    >
+                      ← Retour aux 3 formules principales
+                    </button>
+                    <h3 className={styles.specialSectionTitle}>Large Groups : Sprinter de 7 à 19 places</h3>
+                    <p className={styles.specialSectionSub}>
+                      Sélectionnez la configuration adaptée à la taille de votre groupe et au volume de vos bagages.
+                    </p>
+
+                    <div className={styles.capacityFilterBar}>
+                      <button
+                        type="button"
+                        onClick={() => setLargeGroupCapacity('all')}
+                        className={`${styles.capacityFilterBtn} ${largeGroupCapacity === 'all' ? styles.capacityFilterBtnActive : ''}`}
+                      >
+                        Toutes les capacités
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setLargeGroupCapacity('7')}
+                        className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '7' ? styles.capacityFilterBtnActive : ''}`}
+                      >
+                        7 places (Lounge VIP)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setLargeGroupCapacity('14')}
+                        className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '14' ? styles.capacityFilterBtnActive : ''}`}
+                      >
+                        14 places (Minibus Affaires)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setLargeGroupCapacity('19')}
+                        className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '19' ? styles.capacityFilterBtnActive : ''}`}
+                      >
+                        19 places (Grand Tourisme)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.vehiclesListGrid}>
+                    {LARGE_GROUPS_VEHICLES.filter(v => largeGroupCapacity === 'all' || v.capacityTag.includes(largeGroupCapacity)).map((v) => {
+                      const isSelected = selectedVehicle === v.id;
+                      return (
+                        <div
+                          key={v.id}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setSelectedVehicle(v.id);
+                            goToNextStep();
+                          }}
+                          className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''}`}
+                        >
+                          <div className={styles.vehicleImgBox}>
+                            <img src={v.image} alt={v.name} className={styles.vehicleImg} />
+                            {isSelected && (
+                              <div className={styles.vehicleCheckBadge}>
+                                <Check size={16} />
+                              </div>
+                            )}
+                            <span className={styles.vehicleBadgeOverlay}>{v.capacityTag}</span>
+                          </div>
+
+                          <div className={styles.vehicleInfoBox}>
+                            <div className={styles.vehicleTopRow}>
+                              <div className={styles.vehicleTitleGroup}>
+                                <h4 className={styles.vehicleName}>{v.name}</h4>
+                                <div className={styles.categorySubtitleLine}>{v.subtitle}</div>
+                                {service === 'hourly' && (
+                                  <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.15rem' }}>
+                                    Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total
+                                  </div>
+                                )}
+                                <div className={styles.vehicleCapacityRow} style={{ marginTop: '0.4rem' }}>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Users size={13} strokeWidth={2} />
+                                    <span>Jusqu'à {v.maxPassengers} passagers</span>
+                                  </span>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Luggage size={13} strokeWidth={2} />
+                                    <span>{v.maxLuggage} valises max</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className={styles.vehicleQuoteBox}>
+                                <span className={styles.vehiclePrice}>Sur devis</span>
+                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                              </div>
+                            </div>
+
+                            <p className={styles.vehicleDesc}>{v.desc}</p>
+
+                            <button
+                              type="button"
+                              className={styles.chooseVehiclePrimaryBtn}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedVehicle(v.id);
+                                goToNextStep();
+                              }}
+                            >
+                              <span>Choisir ce Sprinter ({v.capacityTag})</span>
+                              <ArrowRight size={15} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ── MODE 3: PRESTIGE COLLECTION (Modèles d'exception précis) ── */}
+              {fleetMode === 'prestige' && (
+                <div style={{ marginTop: '1.25rem' }}>
+                  <div className={styles.specialHeaderBanner}>
+                    <button
+                      type="button"
+                      className={styles.backToStandardBtn}
+                      onClick={() => setFleetMode('standard')}
+                    >
+                      ← Retour aux 3 formules principales
+                    </button>
+                    <h3 className={styles.specialSectionTitle}>Prestige Collection : Véhicules d'exception</h3>
+                    <p className={styles.specialSectionSub}>
+                      Mercedes-Maybach, Rolls-Royce, Cadillac Escalade, Range Rover. Choisissez précisément le modèle pour votre déplacement.
+                    </p>
+                  </div>
+
+                  <div className={styles.vehiclesListGrid}>
+                    {PRESTIGE_VEHICLES.map((v) => {
+                      const isSelected = selectedVehicle === v.id;
+                      const activeAngle = vehicleAngles[v.id] || 'front';
+                      const displayImg =
+                        activeAngle === 'rear' && v.rearImage
+                          ? v.rearImage
+                          : activeAngle === 'interior' && v.interiorImage
+                          ? v.interiorImage
+                          : v.image;
+                      const hasMultiAngles = Boolean(v.rearImage || v.interiorImage);
+
+                      return (
+                        <div
+                          key={v.id}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setSelectedVehicle(v.id);
+                            goToNextStep();
+                          }}
+                          className={`${styles.vehicleSelectCard} ${isSelected ? styles.vehicleSelected : ''}`}
+                        >
+                          <div className={styles.vehicleImgBox}>
+                            <img src={displayImg} alt={v.name} className={styles.vehicleImg} />
+                            {isSelected && (
+                              <div className={styles.vehicleCheckBadge}>
+                                <Check size={16} />
+                              </div>
+                            )}
+                            <span className={styles.vehicleBadgeOverlay} style={{ background: 'rgba(184, 144, 60, 0.85)', color: '#fff' }}>
+                              ★ Prestige
+                            </span>
+
+                            {hasMultiAngles && (
+                              <div
+                                className={styles.vehicleAnglePills}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  type="button"
+                                  className={`${styles.vehicleAngleBtn} ${activeAngle === 'front' ? styles.vehicleAngleBtnActive : ''}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setVehicleAngles((prev) => ({ ...prev, [v.id]: 'front' }));
+                                  }}
+                                >
+                                  Devant
+                                </button>
+                                {v.rearImage && (
+                                  <button
+                                    type="button"
+                                    className={`${styles.vehicleAngleBtn} ${activeAngle === 'rear' ? styles.vehicleAngleBtnActive : ''}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setVehicleAngles((prev) => ({ ...prev, [v.id]: 'rear' }));
+                                    }}
+                                  >
+                                    Arrière
+                                  </button>
+                                )}
+                                {v.interiorImage && (
+                                  <button
+                                    type="button"
+                                    className={`${styles.vehicleAngleBtn} ${activeAngle === 'interior' ? styles.vehicleAngleBtnActive : ''}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setVehicleAngles((prev) => ({ ...prev, [v.id]: 'interior' }));
+                                    }}
+                                  >
+                                    Intérieur
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className={styles.vehicleInfoBox}>
+                            <div className={styles.vehicleTopRow}>
+                              <div className={styles.vehicleTitleGroup}>
+                                <h4 className={styles.vehicleName}>{v.name}</h4>
+                                <div className={styles.categorySubtitleLine}>{v.subtitle}</div>
+                                {service === 'hourly' && (
+                                  <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.15rem' }}>
+                                    Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total
+                                  </div>
+                                )}
+                                <div className={styles.vehicleCapacityRow} style={{ marginTop: '0.4rem' }}>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Users size={13} strokeWidth={2} />
+                                    <span>Jusqu'à {v.maxPassengers} passagers</span>
+                                  </span>
+                                  <span className={styles.vehicleCapacityBadge}>
+                                    <Luggage size={13} strokeWidth={2} />
+                                    <span>{v.maxLuggage} valises max</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className={styles.vehicleQuoteBox}>
+                                <span className={styles.vehiclePrice}>Sur devis</span>
+                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                              </div>
+                            </div>
+
+                            <p className={styles.vehicleDesc}>{v.desc}</p>
+
+                            <button
+                              type="button"
+                              className={styles.chooseVehiclePrimaryBtn}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedVehicle(v.id);
+                                goToNextStep();
+                              }}
+                            >
+                              <span>Choisir ce modèle ({v.name})</span>
+                              <ArrowRight size={15} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
 

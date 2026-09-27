@@ -1088,6 +1088,247 @@
   color: #18181b;
 }
 
+/* ── Blacklane-Inspired Class Details & CTA ── */
+.categorySubtitleLine {
+  font-size: 0.82rem;
+  color: #555555;
+  font-weight: 400;
+  margin-top: 0.2rem;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.chooseVehiclePrimaryBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 18px;
+  background: #0a0a0a;
+  color: #ffffff;
+  border: 1px solid #0a0a0a;
+  border-radius: var(--radius-subtle, 6px);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.chooseVehiclePrimaryBtn:hover {
+  background: #222222;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Special Categories Section (Large Groups & Prestige) ── */
+.specialCategoriesSection {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.specialCategoryDivider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  color: #888888;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.specialCategoryDivider::before,
+.specialCategoryDivider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.specialCategoryDivider span {
+  padding: 0 14px;
+}
+
+.specialCategoriesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .specialCategoriesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.specialCategoryCard {
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+  border-radius: var(--radius-subtle, 8px);
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.specialCategoryCard:hover {
+  background: #ffffff;
+  border-color: #0a0a0a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.specialCategoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.specialCategoryIconBox {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111111;
+  flex-shrink: 0;
+}
+
+.specialCategoryTag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: #666666;
+  display: inline-block;
+}
+
+.specialCategoryTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 2px 0 0 0;
+  font-family: var(--font-serif);
+}
+
+.specialCategoryDesc {
+  font-size: 0.82rem;
+  color: #666666;
+  line-height: 1.45;
+  margin: 6px 0 12px 0;
+}
+
+.specialCapacityPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.specialCapacityPills span {
+  font-size: 0.72rem;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: #444444;
+  font-weight: 500;
+}
+
+.specialCategoryCta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.specialHeaderBanner {
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+  border-radius: var(--radius-subtle, 8px);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.backToStandardBtn {
+  background: transparent;
+  border: none;
+  color: #666666;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.backToStandardBtn:hover {
+  color: #0a0a0a;
+}
+
+.specialSectionTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 0 0 4px 0;
+}
+
+.specialSectionSub {
+  font-size: 0.84rem;
+  color: #666666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.capacityFilterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.capacityFilterBtn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #444444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.capacityFilterBtn:hover {
+  border-color: #0a0a0a;
+  color: #0a0a0a;
+}
+
+.capacityFilterBtnActive {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border-color: #0a0a0a !important;
+}
+
 /* ── Capacity & Numbers ── */
 .capacitySection {
   display: flex;
