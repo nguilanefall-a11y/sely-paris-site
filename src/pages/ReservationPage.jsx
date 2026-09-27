@@ -530,11 +530,11 @@ export default function ReservationPage() {
   const initialService = searchParams.get('service') || null;
   const [service, setService] = useState(initialService);
 
-  // Step counter (1-indexed for each service)
+  // Step counter (1-indexed for each service, 0 for Welcome & Destination screen)
   const [step, setStep] = useState(() => {
     const s = searchParams.get('step');
     if (s && !isNaN(parseInt(s, 10))) return parseInt(s, 10);
-    return initialService ? 1 : 0;
+    return 0;
   });
 
   // Direction for slide animation: 1 = forward, -1 = backward

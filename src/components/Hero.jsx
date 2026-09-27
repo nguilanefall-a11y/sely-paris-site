@@ -44,8 +44,11 @@ export default function Hero() {
   const handleSubmit = useCallback((e) => {
     if (e) e.preventDefault();
     const cityPath = city && city !== 'paris' ? city : 'paris';
-    const params = new URLSearchParams({ step: '1', service: 'transfer' });
-    if (pickupValue.trim()) params.set('pickup', pickupValue.trim());
+    if (!pickupValue.trim()) {
+      navigate(`/${cityPath}/reserver`);
+      return;
+    }
+    const params = new URLSearchParams({ step: '1', service: 'transfer', pickup: pickupValue.trim() });
     navigate(`/${cityPath}/reserver?${params.toString()}`);
   }, [city, navigate, pickupValue]);
 
