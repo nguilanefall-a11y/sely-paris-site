@@ -158,7 +158,7 @@ export default function Hero() {
         <button
           type="button"
           className={styles.capsuleNavBtn}
-          onClick={scrollToServices}
+          onClick={() => navigate(getCityPath('/voyages'))}
         >
           <Car size={18} strokeWidth={1.8} />
           <span>{ht.navJourneys}</span>
@@ -177,19 +177,20 @@ export default function Hero() {
       {/* Help Modal */}
       <AnimatePresence>
         {helpOpen && (
-          <>
-            <motion.div
-              className={styles.modalBackdrop}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setHelpOpen(false)}
-            />
+          <motion.div
+            className={styles.modalBackdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setHelpOpen(false)}
+          >
             <motion.div
               className={styles.helpModal}
-              initial={{ scale: 0.94, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
+              initial={{ scale: 0.94, opacity: 0, y: 15 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.94, opacity: 0, y: 15 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.helpHeader}>
                 <h3>Assistance & Conciergerie VIP</h3>
@@ -197,6 +198,7 @@ export default function Hero() {
                   type="button"
                   onClick={() => setHelpOpen(false)}
                   className={styles.closeBtn}
+                  aria-label="Fermer"
                 >
                   <X size={20} />
                 </button>
@@ -220,7 +222,7 @@ export default function Hero() {
                 </a>
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

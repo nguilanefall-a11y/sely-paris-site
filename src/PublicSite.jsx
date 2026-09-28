@@ -18,6 +18,7 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import LegalPage from './pages/LegalPage';
 import JournalHubPage from './pages/JournalHubPage';
 import JournalArticlePage from './pages/JournalArticlePage';
+import VoyagesPage from './pages/VoyagesPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,6 +43,7 @@ function PublicSite() {
 
   const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/`;
   const isTunnel = location.pathname.includes('/reserver');
+  const isVoyages = location.pathname.includes('/voyages') || location.pathname.includes('/compte');
 
   return (
     <SmoothScroll>
@@ -56,6 +58,8 @@ function PublicSite() {
             <Route path="/vehicules" element={<VehiclesPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/reserver" element={<ReservationPage />} />
+            <Route path="/voyages" element={<VoyagesPage />} />
+            <Route path="/compte" element={<VoyagesPage defaultView="account" />} />
             <Route path="/demande-specifique" element={<SpecialRequestPage />} />
             <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
             <Route path="/confirmation-devis" element={<ReservationSuccessPage />} />
@@ -67,7 +71,7 @@ function PublicSite() {
           </Routes>
         </main>
         {!isTunnel && <Footer />}
-        {!isTunnel && <FloatingActions />}
+        {!isTunnel && !isVoyages && <FloatingActions />}
       </div>
     </SmoothScroll>
   );

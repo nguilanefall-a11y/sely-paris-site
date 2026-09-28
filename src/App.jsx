@@ -20,6 +20,8 @@ function App() {
         <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
         <Route path="/confirmation-devis" element={<ReservationSuccessPage />} />
         <Route path="/devis-confirme" element={<ReservationSuccessPage />} />
+        <Route path="/voyages" element={<Navigate to="/paris/voyages" replace />} />
+        <Route path="/compte" element={<Navigate to="/paris/compte" replace />} />
 
         {/* Le Journal SEO Hub & Article Routes */}
         <Route path="/journal" element={<JournalLayout><JournalHubPage /></JournalLayout>} />
