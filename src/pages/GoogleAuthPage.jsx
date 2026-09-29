@@ -22,8 +22,10 @@ export default function GoogleAuthPage() {
         redirectUri
       )}&response_type=token%20id_token&scope=openid%20profile%20email&nonce=${Date.now()}`;
       window.location.href = googleOAuthUrl;
+    } else {
+      navigate('/paris/voyages', { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
