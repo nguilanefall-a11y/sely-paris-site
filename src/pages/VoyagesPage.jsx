@@ -300,10 +300,9 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
             <div class="subtitle">Service de Chauffeur Privé & Conciergerie</div>
           </div>
           <div class="company-info">
-            <strong>AM AUTO / SELY PRIVÉ</strong><br />
-            161 B Rue Emile Combes, 33270 Floirac – France<br />
-            SIRET : 944 023 514 00010<br />
-            TVA Intracommunautaire : FR63 944023514<br />
+            <strong>SELY PRIVÉ</strong><br />
+            Service Premium de Chauffeur Privé & Conciergerie<br />
+            Paris – France<br />
             direction@sely.pro • +33 1 84 80 56 76
           </div>
         </div>
@@ -349,7 +348,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
         </div>
 
         <div class="footer">
-          SELY Privé • Exploité par AM AUTO • Licence VTC registre ministériel EVTC • Assurance RC Professionnelle passagers illimitée AXA.<br />
+          SELY Privé • Service de Chauffeur Privé & Conciergerie.<br />
           Règlement par carte bancaire sécurisée. Merci de votre confiance.
         </div>
       </body>
@@ -754,14 +753,6 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 <Link to={getCityPath('/politique-de-confidentialite')} style={{ color: '#2563eb', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
                   Consulter
                 </Link>
-              </div>
-
-              <div className={styles.legalListItem}>
-                <div>
-                  <div className={styles.legalTitle}>Licences VTC & Assurances Professionnelles</div>
-                  <div className={styles.legalDesc}>Exploité par AM AUTO (SIRET : 944 023 514 00010) • Registre VTC ministériel • Assurance AXA illimitée.</div>
-                </div>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#059669' }}>Certifié conforme</span>
               </div>
 
               <div style={{ marginTop: '1.5rem' }}>
