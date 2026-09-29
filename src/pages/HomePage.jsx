@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
 import Hero from '../components/Hero';
@@ -39,37 +39,8 @@ export default function HomePage({ initialTab = 'home' }) {
     }
   };
 
-  // Touch Swipe Gestures
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e) => {
-    const diffX = e.changedTouches[0].clientX - touchStartX.current;
-    const diffY = e.changedTouches[0].clientY - touchStartY.current;
-
-    // Detect dominant horizontal swipe with threshold
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 45) {
-      if (diffX < 0 && activeTab === 'home') {
-        // Swiped left -> transition to voyages
-        handleTabChange('voyages');
-      } else if (diffX > 0 && activeTab === 'voyages') {
-        // Swiped right -> transition back to home
-        handleTabChange('home');
-      }
-    }
-  };
-
   return (
-    <div
-      className={styles.appSliderWrapper}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className={styles.appSliderWrapper}>
       <div
         className={styles.appSliderTrack}
         style={{
