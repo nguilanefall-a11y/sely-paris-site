@@ -9,8 +9,12 @@ export default function GoogleAuthPage() {
 
   // If a real Google Cloud Client ID is present, redirect directly to Google OAuth endpoint
   useEffect(() => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (clientId && clientId !== 'VOTRE_GOOGLE_CLIENT_ID') {
+    const rawClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const clientId = (rawClientId && rawClientId !== 'VOTRE_GOOGLE_CLIENT_ID')
+      ? rawClientId
+      : (typeof window !== 'undefined' ? localStorage.getItem('sely_google_client_id') : null);
+
+    if (clientId) {
       const redirectUri = `${window.location.origin}/auth/google/callback`;
       const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(
         clientId

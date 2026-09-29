@@ -37,6 +37,27 @@ import { claimRequestsService } from '../services/claimRequestsService';
 import { notificationEmailService } from '../services/notificationEmailService';
 import styles from './VoyagesPage.module.css';
 
+const GoogleIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+    <path
+      fill="#4285F4"
+      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+    />
+    <path
+      fill="#34A853"
+      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+    />
+    <path
+      fill="#FBBC05"
+      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+    />
+    <path
+      fill="#EA4335"
+      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+    />
+  </svg>
+);
+
 export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = false }) {
   const { city, getCityPath } = useCity();
   const navigate = useNavigate();
@@ -173,6 +194,117 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
     window.addEventListener('message', handleAuthMessage);
     return () => window.removeEventListener('message', handleAuthMessage);
   }, []);
+
+  // Google OAuth states & handlers
+  const [googleSetupModalOpen, setGoogleSetupModalOpen] = useState(false);
+  const [customGoogleClientId, setCustomGoogleClientId] = useState('');
+
+  const handleGoogleLogin = () => {
+    const rawClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const clientId = (rawClientId && rawClientId !== 'VOTRE_GOOGLE_CLIENT_ID')
+      ? rawClientId
+      : (typeof window !== 'undefined' ? localStorage.getItem('sely_google_client_id') : null);
+
+    if (!clientId) {
+      setGoogleSetupModalOpen(true);
+      return;
+    }
+
+    setAuthLoading(true);
+    setLocalFormError('');
+    clearAuthError();
+
+    // 1. Essayer avec Google Identity Services (GSI) Token Client officiel
+    if (window.google?.accounts?.oauth2) {
+      try {
+        const client = window.google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+          callback: async (tokenResponse) => {
+            if (tokenResponse?.error) {
+              setAuthLoading(false);
+              setLocalFormError(`Erreur Google OAuth : ${tokenResponse.error}`);
+              return;
+            }
+            if (tokenResponse?.access_token) {
+              try {
+                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+                });
+                const data = await userInfoRes.json();
+                const res = await loginWithGoogle({
+                  id: `usr_google_${data.sub || Date.now()}`,
+                  email: (data.email || '').toLowerCase(),
+                  name: data.name || `${data.given_name || ''} ${data.family_name || ''}`.trim() || data.email,
+                  firstName: data.given_name || 'Client',
+                  lastName: data.family_name || '',
+                  avatar: data.picture || '',
+                  provider: 'google',
+                });
+                setAuthLoading(false);
+                if (res.success) {
+                  setAuthModal(null);
+                  showToast(`Connecté avec succès via Google (${data.email})`);
+                } else {
+                  setLocalFormError(res.error || 'Erreur lors de la connexion Google.');
+                }
+              } catch (err) {
+                setAuthLoading(false);
+                setLocalFormError('Impossible de récupérer votre profil Google.');
+              }
+            } else {
+              setAuthLoading(false);
+            }
+          },
+        });
+        client.requestAccessToken();
+        return;
+      } catch (err) {
+        console.error('Error with GSI oauth2 token client:', err);
+      }
+    }
+
+    // 2. Fallback popup OAuth 2.0 Web officiel
+    const redirectUri = `${window.location.origin}/auth/google/callback`;
+    const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(
+      clientId
+    )}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=token&scope=openid%20profile%20email`;
+
+    const popup = window.open(
+      googleOAuthUrl,
+      'google-oauth-popup',
+      'width=500,height=600,menubar=no,toolbar=no,status=no,location=no'
+    );
+
+    if (!popup) {
+      setAuthLoading(false);
+      setLocalFormError('Veuillez autoriser les fenêtres pop-up dans votre navigateur pour vous connecter avec Google.');
+    } else {
+      const checkPopup = setInterval(() => {
+        if (!popup || popup.closed) {
+          clearInterval(checkPopup);
+          setAuthLoading(false);
+        }
+      }, 1000);
+    }
+  };
+
+  const handleSaveCustomGoogleClientId = (e) => {
+    e.preventDefault();
+    const cleanId = customGoogleClientId.trim();
+    if (!cleanId || !cleanId.includes('.apps.googleusercontent.com')) {
+      alert("Veuillez renseigner un ID client Google valide (terminant par .apps.googleusercontent.com).");
+      return;
+    }
+    localStorage.setItem('sely_google_client_id', cleanId);
+    setGoogleSetupModalOpen(false);
+    showToast("Identifiant Google Client enregistré !");
+    setTimeout(() => {
+      handleGoogleLogin();
+    }, 200);
+  };
 
   const handleEmailLoginSubmit = async (e) => {
     e.preventDefault();
@@ -380,28 +512,39 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
       <div className={styles.authButtonGroup}>
         <button
           type="button"
-          className={styles.primaryAuthBtn}
-          onClick={() => {
-            setAuthModal('login');
-            setLocalFormError('');
-            clearAuthError();
-          }}
+          className={styles.googleAuthBtn}
+          onClick={handleGoogleLogin}
+          disabled={authLoading}
         >
-          <User size={15} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
-          Se connecter
+          <GoogleIcon size={18} />
+          <span>Continuer avec Google</span>
         </button>
 
-        <button
-          type="button"
-          className={styles.secondaryAuthBtn}
-          onClick={() => {
-            setAuthModal('register');
-            setLocalFormError('');
-            clearAuthError();
-          }}
-        >
-          Créer un compte
-        </button>
+        <div className={styles.authSecondaryRow}>
+          <button
+            type="button"
+            className={styles.secondaryAuthBtn}
+            onClick={() => {
+              setAuthModal('login');
+              setLocalFormError('');
+              clearAuthError();
+            }}
+          >
+            Se connecter
+          </button>
+
+          <button
+            type="button"
+            className={styles.secondaryAuthBtn}
+            onClick={() => {
+              setAuthModal('register');
+              setLocalFormError('');
+              clearAuthError();
+            }}
+          >
+            Créer un compte
+          </button>
+        </div>
       </div>
 
       <div className={styles.noAccountBookLinkRow}>
@@ -1264,6 +1407,21 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
 
               {authModal === 'login' ? (
                 <div>
+                  <button
+                    type="button"
+                    className={styles.googleAuthBtn}
+                    onClick={handleGoogleLogin}
+                    disabled={authLoading}
+                    style={{ marginBottom: '1.25rem', width: '100%' }}
+                  >
+                    <GoogleIcon size={20} />
+                    <span>Continuer avec Google</span>
+                  </button>
+
+                  <div className={styles.dividerRow} style={{ marginBottom: '1.25rem' }}>
+                    OU AVEC VOTRE EMAIL
+                  </div>
+
                   <form onSubmit={handleEmailLoginSubmit}>
                     <div style={{ marginBottom: '1rem' }}>
                       <label className={styles.formLabel}>Adresse email</label>
@@ -1351,7 +1509,23 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                   </form>
                 </div>
               ) : (
-                <form onSubmit={handleRegisterSubmit}>
+                <div>
+                  <button
+                    type="button"
+                    className={styles.googleAuthBtn}
+                    onClick={handleGoogleLogin}
+                    disabled={authLoading}
+                    style={{ marginBottom: '1.25rem', width: '100%' }}
+                  >
+                    <GoogleIcon size={20} />
+                    <span>S'inscrire avec Google</span>
+                  </button>
+
+                  <div className={styles.dividerRow} style={{ marginBottom: '1.25rem' }}>
+                    OU AVEC VOTRE EMAIL
+                  </div>
+
+                  <form onSubmit={handleRegisterSubmit}>
                   <div className={styles.formGrid} style={{ marginBottom: '1rem' }}>
                     <div>
                       <label className={styles.formLabel}>Prénom *</label>
@@ -1512,7 +1686,8 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                     </button>
                   </div>
                 </form>
-              )}
+              </div>
+            )}
             </motion.div>
           </div>
         </AnimatePresence>,
@@ -1617,6 +1792,97 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                   </button>
                 </form>
               )}
+            </motion.div>
+          </div>
+        </AnimatePresence>,
+        document.body
+      )}
+
+      {/* ── Google Setup Modal (Displayed if Google Client ID is missing) ── */}
+      {typeof document !== 'undefined' && googleSetupModalOpen && createPortal(
+        <AnimatePresence>
+          <div className={styles.modalBackdrop} onClick={() => setGoogleSetupModalOpen(false)}>
+            <motion.div
+              className={styles.modalBox}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '480px' }}
+            >
+              <div className={styles.modalHeader}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <GoogleIcon size={22} />
+                  <h3 className={styles.modalTitle}>Connexion Google</h3>
+                </div>
+                <button
+                  type="button"
+                  className={styles.modalCloseBtn}
+                  onClick={() => setGoogleSetupModalOpen(false)}
+                  aria-label="Fermer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div style={{ color: '#cbd5e1', fontSize: '0.88rem', lineHeight: 1.5, marginBottom: '1.25rem' }}>
+                Pour que la fenêtre de connexion Google officielle s'ouvre sur <strong>selyprive.com</strong>, l'identifiant <strong>Google Client ID</strong> de votre projet Google Cloud doit être configuré.
+              </div>
+
+              <form onSubmit={handleSaveCustomGoogleClientId}>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label className={styles.formLabel}>Votre Google OAuth Client ID</label>
+                  <input
+                    type="text"
+                    className={styles.formInput}
+                    value={customGoogleClientId}
+                    onChange={(e) => setCustomGoogleClientId(e.target.value)}
+                    placeholder="Ex : 123456789-xxxx.apps.googleusercontent.com"
+                    autoFocus
+                  />
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>
+                    Format : <code>...apps.googleusercontent.com</code>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                  <button
+                    type="submit"
+                    className={styles.primaryAuthBtn}
+                    style={{ width: '100%', padding: '0.65rem 0.5rem', fontSize: '0.82rem' }}
+                  >
+                    Enregistrer &amp; Activer
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.secondaryAuthBtn}
+                    onClick={() => setGoogleSetupModalOpen(false)}
+                    style={{ width: '100%', padding: '0.65rem 0.5rem', fontSize: '0.82rem' }}
+                  >
+                    Fermer
+                  </button>
+                </div>
+              </form>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                padding: '0.85rem 1rem',
+                fontSize: '0.78rem',
+                color: '#94a3b8',
+                lineHeight: 1.5
+              }}>
+                <div style={{ fontWeight: 600, color: '#f1f5f9', marginBottom: '0.35rem' }}>
+                  📌 Comment l'obtenir en 2 minutes sur Google Cloud :
+                </div>
+                <ol style={{ margin: 0, paddingLeft: '1.2rem' }}>
+                  <li>Rendez-vous sur <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer" style={{ color: '#60a5fa' }}>console.cloud.google.com</a></li>
+                  <li><em>API et services</em> &gt; <em>Identifiants</em> &gt; <em>Créer un ID client OAuth</em> (Application Web)</li>
+                  <li>Ajoutez dans <em>Origines JavaScript autorisées</em> :<br /><code style={{ color: '#cbd5e1' }}>https://www.selyprive.com</code></li>
+                  <li>Collez l'ID obtenu ci-dessus pour activer la connexion Google.</li>
+                </ol>
+              </div>
             </motion.div>
           </div>
         </AnimatePresence>,
