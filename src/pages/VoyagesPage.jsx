@@ -34,6 +34,7 @@ import {
 import { useCity } from '../hooks/useCity';
 import { useClientAuthStore } from '../store/useClientAuthStore';
 import { claimRequestsService } from '../services/claimRequestsService';
+import { notificationEmailService } from '../services/notificationEmailService';
 import styles from './VoyagesPage.module.css';
 
 export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = false }) {
@@ -112,13 +113,20 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
     e.preventDefault();
     if (!claimForm.clientName.trim()) return;
     setClaimLoading(true);
-    claimRequestsService.addRequest({
+
+    const claimData = {
       clientName: claimForm.clientName,
       clientEmail: user?.email || '',
       clientPhone: claimForm.clientPhone || user?.phone || '',
       details: claimForm.details,
       userId: user?.id || null,
-    });
+    };
+
+    claimRequestsService.addRequest(claimData);
+
+    // Envoi de l'email de notification automatique à direction@sely.pro
+    notificationEmailService.notifyClaimSubmitted(claimData);
+
     setClaimLoading(false);
     setClaimSuccess(true);
     showToast('Demande transmise avec succès à nos répartiteurs.');

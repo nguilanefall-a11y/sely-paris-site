@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useBookingsStore } from '../store/useBookingsStore';
 import { claimRequestsService } from '../../services/claimRequestsService';
+import { notificationEmailService } from '../../services/notificationEmailService';
 import {
   Calendar,
   Clock,
@@ -217,6 +218,10 @@ export default function BookingsManager() {
 
     syncToClientTrips(updatedBooking);
     claimRequestsService.updateRequestStatus(claimReq.id, 'linked', bookingId);
+
+    // Notification automatique par email à direction@sely.pro
+    notificationEmailService.notifyBookingLinked({ claimReq, booking: updatedBooking });
+
     setSelectedClaimForLink(null);
     triggerToast(`Course reliée avec succès au compte de ${claimReq.clientName} (${claimReq.clientEmail}) !`);
   };
@@ -357,6 +362,8 @@ export default function BookingsManager() {
 
     if (pendingClaimToLinkOnCreate) {
       claimRequestsService.updateRequestStatus(pendingClaimToLinkOnCreate.id, 'linked', created.id);
+      // Notification automatique par email à direction@sely.pro
+      notificationEmailService.notifyBookingLinked({ claimReq: pendingClaimToLinkOnCreate, booking: created });
       setPendingClaimToLinkOnCreate(null);
     }
 
@@ -407,6 +414,20 @@ export default function BookingsManager() {
 
     updateBooking(updatedData.id, updatedData);
     syncToClientTrips(updatedData);
+
+    // Si la course n'avait pas d'email client et qu'on lui en assigne un
+    if ((!selectedBooking?.email || selectedBooking.email === 'Sans email') && updatedData.email) {
+      notificationEmailService.notifyBookingLinked({
+        claimReq: {
+          clientName: updatedData.clientName || 'Client SELY',
+          clientEmail: updatedData.email,
+          clientPhone: updatedData.phone || '',
+          details: 'Rattachement manuel effectué depuis la modification de réservation.',
+        },
+        booking: updatedData,
+      });
+    }
+
     setSelectedBooking(null);
     setEditBookingForm(null);
     triggerToast(`Modifications enregistrées et synchronisées avec le client !`);
