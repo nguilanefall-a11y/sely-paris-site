@@ -41,7 +41,7 @@ function PublicSite() {
     return <Navigate to="/paris" replace />;
   }
 
-  const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/`;
+  const isHome = location.pathname === `/${city}` || location.pathname === `/${city}/` || location.pathname.includes('/voyages');
   const isTunnel = location.pathname.includes('/reserver');
   const isVoyages = location.pathname.includes('/voyages') || location.pathname.includes('/compte');
 
@@ -50,7 +50,7 @@ function PublicSite() {
       <div className="app-container">
         <AmbientGleam />
         <ScrollToTop />
-        {!isTunnel && <Navbar isHome={isHome} />}
+        {!isTunnel && !isVoyages && <Navbar isHome={isHome} />}
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -58,7 +58,7 @@ function PublicSite() {
             <Route path="/vehicules" element={<VehiclesPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/reserver" element={<ReservationPage />} />
-            <Route path="/voyages" element={<VoyagesPage />} />
+            <Route path="/voyages" element={<HomePage initialTab="voyages" />} />
             <Route path="/compte" element={<VoyagesPage defaultView="account" />} />
             <Route path="/demande-specifique" element={<SpecialRequestPage />} />
             <Route path="/reservation-succes" element={<ReservationSuccessPage />} />

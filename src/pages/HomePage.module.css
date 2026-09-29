@@ -1,0 +1,35 @@
+.appSliderWrapper {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.appSliderTrack {
+  display: flex;
+  width: 200%;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.slideAccueil {
+  width: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.slideVoyages {
+  width: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
+  position: relative;
+  background-color: #faf9f6;
+}
+
+/* On desktop, keep normal behavior */
+@media (min-width: 769px) {
+  .appSliderTrack {
+    /* If someone views on desktop, slider track can still work smoothly */
+  }
+}

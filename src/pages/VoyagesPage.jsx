@@ -30,7 +30,7 @@ import { useCity } from '../hooks/useCity';
 import { useClientAuthStore } from '../store/useClientAuthStore';
 import styles from './VoyagesPage.module.css';
 
-export default function VoyagesPage({ defaultView = 'trips' }) {
+export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = false }) {
   const { city, getCityPath } = useCity();
   const navigate = useNavigate();
   const {
@@ -1327,41 +1327,43 @@ export default function VoyagesPage({ defaultView = 'trips' }) {
       </AnimatePresence>
 
       {/* ── Mobile Floating Bottom Bar matching Screenshot (media_1790590617904.png) ── */}
-      <div className={styles.mobileBottomNav}>
-        <div className={styles.mobileCapsuleBar}>
-          <button
-            type="button"
-            className={styles.mobileCapsuleBtn}
-            onClick={() => navigate(getCityPath('/'))}
-          >
-            <Home size={18} strokeWidth={2} />
-            <span>Accueil</span>
-          </button>
+      {!hideBottomNav && (
+        <div className={styles.mobileBottomNav}>
+          <div className={styles.mobileCapsuleBar}>
+            <button
+              type="button"
+              className={styles.mobileCapsuleBtn}
+              onClick={() => navigate(getCityPath('/'))}
+            >
+              <Home size={18} strokeWidth={2} />
+              <span>Accueil</span>
+            </button>
 
-          <button
-            type="button"
-            className={`${styles.mobileCapsuleBtn} ${currentView === 'trips' ? styles.mobileActivePill : ''}`}
-            onClick={() => setCurrentView('trips')}
-          >
-            <Car size={18} strokeWidth={2} />
-            <span>Voyages</span>
-          </button>
+            <button
+              type="button"
+              className={`${styles.mobileCapsuleBtn} ${currentView === 'trips' ? styles.mobileActivePill : ''}`}
+              onClick={() => setCurrentView('trips')}
+            >
+              <Car size={18} strokeWidth={2} />
+              <span>Voyages</span>
+            </button>
 
-          <button
-            type="button"
-            className={styles.mobileCapsuleBtn}
-            onClick={() => setHelpOpen(true)}
-          >
-            <MessageSquare size={18} strokeWidth={2} />
-            <span>Aide</span>
-          </button>
+            <button
+              type="button"
+              className={styles.mobileCapsuleBtn}
+              onClick={() => setHelpOpen(true)}
+            >
+              <MessageSquare size={18} strokeWidth={2} />
+              <span>Aide</span>
+            </button>
+          </div>
+
+          {/* Round blue FAB button matching screenshot */}
+          <Link to={getCityPath('/reserver')} className={styles.mobileFabBookBtn} aria-label="Réserver un voyage">
+            <Car size={22} strokeWidth={2} />
+          </Link>
         </div>
-
-        {/* Round blue FAB button matching screenshot */}
-        <Link to={getCityPath('/reserver')} className={styles.mobileFabBookBtn} aria-label="Réserver un voyage">
-          <Car size={22} strokeWidth={2} />
-        </Link>
-      </div>
+      )}
     </div>
   );
 }
