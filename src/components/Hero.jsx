@@ -61,7 +61,7 @@ const HERO_TEXTS = {
 };
 
 export default function Hero() {
-  const { city, i18n } = useCity();
+  const { city, getCityPath, i18n } = useCity();
   const navigate = useNavigate();
 
   const [helpOpen, setHelpOpen] = useState(false);
