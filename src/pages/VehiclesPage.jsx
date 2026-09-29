@@ -33,7 +33,7 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '3',
     image: '/sclass-main-new.jpg',
-    rearImage: '/sclass_paris_hero.jpg',
+    rearImage: '/sclass-rear-paris-composite.jpg',
     interiorImage: '/sclass-interior-white.jpg',
     badge: 'FLEURON BUSINESS',
     badgeEn: 'BUSINESS FLAGSHIP'
@@ -49,6 +49,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '2',
     image: '/eclass-paris-luxury.jpg',
+    rearImage: '/eclass-rear-paris-eiffel.jpg',
+    interiorImage: '/eclass-interior-paris-eiffel.jpg',
     badge: 'CORPORATE VIP',
     badgeEn: 'CORPORATE VIP'
   },
@@ -63,6 +65,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '3',
     image: '/maybach-paris-luxury.jpg',
+    rearImage: '/maybach-rear-luxury.jpg',
+    interiorImage: '/maybach-interior-first-class.jpg',
     badge: 'ULTRA-EXCLUSIVE',
     badgeEn: 'ULTRA-EXCLUSIVE'
   },
@@ -77,6 +81,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '3',
     image: '/rolls-phantom-main.jpg',
+    rearImage: '/rolls-phantom-rear.jpg',
+    interiorImage: '/rolls-phantom-interior.jpg',
     badge: 'PRESTIGE MAJEUR',
     badgeEn: 'SUMMIT OF LUXURY'
   },
@@ -91,6 +97,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '4',
     image: '/rolls-cullinan-main.jpg',
+    rearImage: '/rolls-cullinan-rear.jpg',
+    interiorImage: '/rolls-cullinan-interior.jpg',
     badge: 'PALACE TOUT-TERRAIN',
     badgeEn: 'ROLLING PALACE'
   },
@@ -105,6 +113,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '4',
     image: '/range-rover-main.jpg',
+    rearImage: '/range-rover-rear.jpg',
+    interiorImage: '/range-rover-interior.jpg',
     badge: 'SÉRÉNITÉ ROYALE',
     badgeEn: 'ROYAL SERENITY'
   },
@@ -119,6 +129,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '3',
     image: '/g-class-main.jpg',
+    rearImage: '/g-class-rear.jpg',
+    interiorImage: '/g-class-interior.jpg',
     badge: 'CHARISME MYTHIQUE',
     badgeEn: 'MYTHIC CHARISMA'
   },
@@ -133,6 +145,8 @@ const VEHICLES_CATALOG = [
     passengers: '3',
     luggage: '3',
     image: '/brabus-g-class-main.jpg',
+    rearImage: '/brabus-g-class-rear.jpg',
+    interiorImage: '/g-class-interior.jpg',
     badge: 'HYPER-EXCLUSIF',
     badgeEn: 'HYPER-EXCLUSIVE'
   },
@@ -163,6 +177,8 @@ const VEHICLES_CATALOG = [
     passengers: '4',
     luggage: '3',
     image: '/tesla-y-paris-luxury.jpg',
+    rearImage: '/teslay-rear-paris-eiffel.jpg',
+    interiorImage: '/teslay-interior-paris-eiffel.jpg',
     badge: '100% ÉLECTRIQUE',
     badgeEn: '100% ELECTRIC'
   },
@@ -176,7 +192,9 @@ const VEHICLES_CATALOG = [
     descEn: '7-seat First Class mobile suite with embroidered white nappa leather, sparkling starlight roof, 4K cinema display and integrated private bar.',
     passengers: '7',
     luggage: '10',
-    image: '/minibus-7-vip-interior.jpg',
+    image: '/sprinter-7-ext.png',
+    rearImage: '/minibus-7-standard-interior.jpg',
+    interiorImage: '/minibus-7-vip-interior.jpg',
     badge: '7 PLACES VIP',
     badgeEn: '7 SEATS VIP'
   },
@@ -190,7 +208,9 @@ const VEHICLES_CATALOG = [
     descEn: '14-seat executive boardroom coach with lacquered conference tables, diamond-quilted beige leather, and crystal blue starlight ceiling.',
     passengers: '14',
     luggage: '14',
-    image: '/minibus-14-vip-interior.jpg',
+    image: '/sprinter-12-ext.png',
+    rearImage: '/minibus-14-standard-interior.jpg',
+    interiorImage: '/minibus-14-vip-interior.jpg',
     badge: '14 PLACES VIP',
     badgeEn: '14 SEATS VIP'
   },
@@ -204,7 +224,9 @@ const VEHICLES_CATALOG = [
     descEn: '19-seat grand touring coach with hardwood-style flooring, ergonomic leather armchairs, and ambient dual-line LED roof lighting.',
     passengers: '19',
     luggage: '19',
-    image: '/minibus-19-standard-interior.jpg',
+    image: '/sprinter-19-ext.png',
+    rearImage: '/minibus-19-vip-interior.jpg',
+    interiorImage: '/minibus-19-standard-interior.jpg',
     badge: '19 PLACES STANDARD',
     badgeEn: '19 SEATS STANDARD'
   }

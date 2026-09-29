@@ -27,6 +27,10 @@ function App() {
         <Route path="/devis-confirme" element={<ReservationSuccessPage />} />
         <Route path="/voyages" element={<Navigate to="/paris/voyages" replace />} />
         <Route path="/compte" element={<Navigate to="/paris/compte" replace />} />
+        <Route path="/vehicules" element={<Navigate to="/paris/vehicules" replace />} />
+        <Route path="/excellence" element={<Navigate to="/paris/excellence" replace />} />
+        <Route path="/contact" element={<Navigate to="/paris/contact" replace />} />
+        <Route path="/reserver" element={<Navigate to="/paris/reserver" replace />} />
 
         {/* Le Journal SEO Hub & Article Routes */}
         <Route path="/journal" element={<JournalLayout><JournalHubPage /></JournalLayout>} />

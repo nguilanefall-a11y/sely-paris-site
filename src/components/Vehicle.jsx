@@ -339,6 +339,10 @@ export default function Vehicle() {
   const [progress, setProgress] = useState(0);
 
   const stripRef = useRef(null);
+  const mobileStripRef = useRef(null);
+  const spotlightRef = useRef(null);
+  const touchStartXRef = useRef(null);
+  const touchStartYRef = useRef(null);
   const progressTimerRef = useRef(null);
   const startTimeRef = useRef(Date.now());
 
@@ -407,6 +411,34 @@ export default function Vehicle() {
     startTimeRef.current = Date.now();
   }, [filteredVehicles.length]);
 
+  // Mobile Touch Swipe Handlers for instant vehicle switching
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartXRef.current - touchEndX;
+    const diffY = touchStartYRef.current - touchEndY;
+
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        handleNext();
+        setIsPaused(true);
+      } else {
+        handlePrev();
+        setIsPaused(true);
+      }
+    }
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
+
   // Silk Auto-Parade Timer
   useEffect(() => {
     if (isPaused) return;
@@ -429,7 +461,7 @@ export default function Vehicle() {
     };
   }, [isPaused, currentIndex, handleNext]);
 
-  // Center active thumbnail in bottom strip
+  // Center active thumbnail in bottom strip & mobile pill strip
   useEffect(() => {
     if (stripRef.current) {
       const activeEl = stripRef.current.children[currentIndex];
@@ -439,13 +471,24 @@ export default function Vehicle() {
         strip.scrollTo({ left: offset, behavior: 'smooth' });
       }
     }
+    if (mobileStripRef.current) {
+      const activePill = mobileStripRef.current.children[currentIndex];
+      if (activePill) {
+        const strip = mobileStripRef.current;
+        const offset = activePill.offsetLeft - (strip.offsetWidth / 2) + (activePill.offsetWidth / 2);
+        strip.scrollTo({ left: offset, behavior: 'smooth' });
+      }
+    }
   }, [currentIndex]);
 
-  const goToVehicle = (idx) => {
+  const goToVehicle = (idx, shouldScroll = false) => {
     setCurrentIndex(idx);
     setProgress(0);
     setActiveAngle('exterior');
     startTimeRef.current = Date.now();
+    if (shouldScroll && spotlightRef.current) {
+      spotlightRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   };
 
   const handleBookVehicle = (vehId) => {
@@ -563,7 +606,7 @@ export default function Vehicle() {
         </div>
 
         {/* ── Main Vehicle Spotlight 3D Stage ── */}
-        <div className={styles.spotlightWrapper}>
+        <div className={styles.spotlightWrapper} ref={spotlightRef}>
           {/* Subtle Progress Bar */}
           <div className={styles.progressBarTrack}>
             <div 
@@ -578,6 +621,8 @@ export default function Vehicle() {
               className={styles.visualContainer}
               ref={tiltRef}
               style={tiltStyle}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
               {...tiltBind}
             >
               <div className={styles.specularGlare} style={glareStyle} />
@@ -665,20 +710,42 @@ export default function Vehicle() {
               <div className={styles.navControls}>
                 <button
                   type="button"
-                  onClick={handlePrev}
-                  className={styles.navBtn}
+                  onClick={(e) => { e.stopPropagation(); handlePrev(); setIsPaused(true); }}
+                  className={`${styles.navBtn} ${styles.navBtnPrev}`}
                   aria-label={isEn ? 'Previous vehicle' : 'Véhicule précédent'}
                 >
-                  <ChevronLeft size={17} strokeWidth={1.5} />
+                  <ChevronLeft size={18} strokeWidth={2} />
                 </button>
                 <button
                   type="button"
-                  onClick={handleNext}
-                  className={styles.navBtn}
+                  onClick={(e) => { e.stopPropagation(); handleNext(); setIsPaused(true); }}
+                  className={`${styles.navBtn} ${styles.navBtnNext}`}
                   aria-label={isEn ? 'Next vehicle' : 'Véhicule suivant'}
                 >
-                  <ChevronRight size={17} strokeWidth={1.5} />
+                  <ChevronRight size={18} strokeWidth={2} />
                 </button>
+              </div>
+            </div>
+
+            {/* Mobile Fast Vehicle Selector Bar */}
+            <div className={styles.mobileFleetBar}>
+              <div className={styles.mobileFleetScroll} ref={mobileStripRef}>
+                {filteredVehicles.map((veh, idx) => {
+                  const isActive = idx === currentIndex;
+                  return (
+                    <button
+                      key={veh.id}
+                      type="button"
+                      onClick={() => { goToVehicle(idx); setIsPaused(true); }}
+                      className={`${styles.mobileFleetPill} ${isActive ? styles.mobileFleetPillActive : ''}`}
+                    >
+                      <span className={styles.mobileFleetPillIndex}>{String(idx + 1).padStart(2, '0')}</span>
+                      <span className={styles.mobileFleetPillName}>
+                        {veh.name.replace('Mercedes-Maybach', 'Maybach').replace('Mercedes ', '').replace('Rolls-Royce ', '')}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -813,7 +880,7 @@ export default function Vehicle() {
                 <button
                   key={veh.id}
                   type="button"
-                  onClick={() => goToVehicle(idx)}
+                  onClick={() => goToVehicle(idx, true)}
                   className={`${styles.stripCard} ${isActive ? styles.stripCardActive : ''}`}
                 >
                   <div className={styles.stripCardThumb}>
