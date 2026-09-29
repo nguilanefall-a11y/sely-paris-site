@@ -19,6 +19,7 @@ const AdminRouter = () => {
       
       <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
+          <Route index element={<Navigate to="reservations" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="reservations" element={<BookingsManager />} />
           <Route path="clients" element={<ClientsManager />} />

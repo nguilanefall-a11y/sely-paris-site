@@ -16,31 +16,359 @@ import {
   Filter,
   CreditCard,
   MessageCircle,
-  ExternalLink,
   Trash2,
   Eye,
   X,
   Plus,
   Sparkles,
+  Edit2,
+  Save,
+  Check,
 } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+
+// The 5 official categories defined for SELY Privé
+export const VEHICLE_5_CATEGORIES = [
+  {
+    id: 'business_class',
+    label: 'Business Class',
+    subtitle: 'Classe E, EQE, Tesla Model Y (jusqu’à 3 passagers)',
+    defaultModel: 'Business Class (Mercedes Classe E / EQE)',
+    color: '#3b82f6',
+    bgColor: 'rgba(59, 130, 246, 0.15)',
+    border: 'rgba(59, 130, 246, 0.3)',
+    passengers: 3,
+    luggage: 2,
+    image: '/eclass-paris-luxury.jpg',
+    models: [
+      'Business Class (Mercedes Classe E)',
+      'Business Class (Mercedes EQE Électrique)',
+      'Business Class (Tesla Model Y)',
+    ],
+  },
+  {
+    id: 'first_class',
+    label: 'First Class',
+    subtitle: 'Mercedes Classe S ou similaire (jusqu’à 3 passagers)',
+    defaultModel: 'First Class (Mercedes Classe S)',
+    color: '#c5a880',
+    bgColor: 'rgba(197, 168, 128, 0.15)',
+    border: 'rgba(197, 168, 128, 0.3)',
+    passengers: 3,
+    luggage: 3,
+    image: '/sclass-main-new.jpg',
+    models: [
+      'First Class (Mercedes Classe S Longue)',
+      'First Class (Mercedes Classe S Maybach Line)',
+      'First Class (BMW Série 7)',
+    ],
+  },
+  {
+    id: 'xl',
+    label: 'XL',
+    subtitle: 'Mercedes Classe V / Business Van (jusqu’à 7 passagers)',
+    defaultModel: 'XL (Mercedes Classe V)',
+    color: '#10b981',
+    bgColor: 'rgba(16, 185, 129, 0.15)',
+    border: 'rgba(16, 185, 129, 0.3)',
+    passengers: 7,
+    luggage: 7,
+    image: '/vclass-paris-luxury.jpg',
+    models: [
+      'XL (Mercedes Classe V Extra Long)',
+      'XL (Mercedes Classe V Salon Face-à-Face)',
+      'XL (Mercedes EQV 100% Électrique)',
+    ],
+  },
+  {
+    id: 'sprinter',
+    label: 'Sprinter',
+    subtitle: 'Mercedes Sprinter VIP (7 à 19 places)',
+    defaultModel: 'Sprinter (Mercedes Sprinter VIP 14 places)',
+    color: '#8b5cf6',
+    bgColor: 'rgba(139, 92, 246, 0.15)',
+    border: 'rgba(139, 92, 246, 0.3)',
+    passengers: 14,
+    luggage: 14,
+    image: '/mercedes_sprinter_vip.png',
+    models: [
+      'Sprinter 7 places (VIP Lounge cuir & travail)',
+      'Sprinter 14 places (Affaires & Événements)',
+      'Sprinter 19 places (Grand Tourisme & Congrès)',
+    ],
+  },
+  {
+    id: 'special',
+    label: 'Véhicule Spécial',
+    subtitle: 'Prestige Collection (Maybach, Rolls-Royce, Escalade...)',
+    defaultModel: 'Véhicule Spécial (Mercedes-Maybach)',
+    color: '#ec4899',
+    bgColor: 'rgba(236, 72, 153, 0.15)',
+    border: 'rgba(236, 72, 153, 0.3)',
+    passengers: 3,
+    luggage: 3,
+    image: '/maybach-paris-luxury.jpg',
+    models: [
+      'Véhicule Spécial (Mercedes-Maybach)',
+      'Véhicule Spécial (Rolls-Royce Ghost)',
+      'Véhicule Spécial (Cadillac Escalade ESV)',
+      'Véhicule Spécial (Limousine Américaine 300C)',
+      'Véhicule Spécial (Sur Mesure)',
+    ],
+  },
+];
+
+const sanitizeDate = (d) => {
+  if (!d || d === '—' || !/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    return new Date().toISOString().split('T')[0];
+  }
+  return d;
+};
+
+const sanitizeTime = (t) => {
+  if (!t || t === '—' || !/^\d{2}:\d{2}$/.test(t)) {
+    return '12:00';
+  }
+  return t;
+};
+
+export const getVehicleMeta = (vehicleStr = '') => {
+  const s = vehicleStr.toLowerCase();
+  if (s.includes('sprinter')) {
+    return VEHICLE_5_CATEGORIES.find((v) => v.id === 'sprinter');
+  }
+  if (s.includes('spécial') || s.includes('special') || s.includes('maybach') || s.includes('rolls') || s.includes('escalade') || s.includes('limousine') || s.includes('prestige')) {
+    return VEHICLE_5_CATEGORIES.find((v) => v.id === 'special');
+  }
+  if (s.includes('xl') || s.includes('van') || s.includes('classe v') || s.includes('v-class')) {
+    return VEHICLE_5_CATEGORIES.find((v) => v.id === 'xl');
+  }
+  if (s.includes('first') || s.includes('classe s') || s.includes('s-class') || s.includes('série 7')) {
+    return VEHICLE_5_CATEGORIES.find((v) => v.id === 'first_class');
+  }
+  return VEHICLE_5_CATEGORIES.find((v) => v.id === 'business_class');
+};
 
 export default function BookingsManager() {
   const {
     bookings,
     isLoading,
-    lastSyncedAt,
     syncWhopPayments,
     updateBookingStatus,
+    updateBooking,
     deleteBooking,
     addBooking,
   } = useBookingsStore();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [cityFilter, setCityFilter] = useState('all');
+  const [vehicleFilter, setVehicleFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [editBookingForm, setEditBookingForm] = useState(null);
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const triggerToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3500);
+  };
+
+  // Sync to client trips in localStorage
+  const syncToClientTrips = (bookingData) => {
+    try {
+      const rawTrips = localStorage.getItem('sely_client_trips');
+      let existingTrips = rawTrips ? JSON.parse(rawTrips) : [];
+      const meta = getVehicleMeta(bookingData.vehicle);
+
+      const clientTrip = {
+        id: bookingData.id,
+        status: bookingData.status === 'completed' ? 'past' : (bookingData.status === 'cancelled' ? 'cancelled' : 'upcoming'),
+        service: bookingData.serviceType || 'transfer',
+        serviceLabel: bookingData.serviceType === 'hourly' ? 'Mise à disposition Chauffeur' : 'Transfert Privé Point A à B',
+        date: bookingData.date,
+        time: bookingData.time,
+        pickup: bookingData.pickup,
+        destination: bookingData.destination,
+        vehicleName: bookingData.vehicle,
+        vehicleCategory: meta?.label || bookingData.vehicle,
+        vehicleImage: meta?.image || '/sclass-main-new.jpg',
+        price: `${bookingData.amount} €`,
+        passengers: Number(bookingData.passengers) || meta?.passengers || 2,
+        luggage: Number(bookingData.luggage) || meta?.luggage || 2,
+        flightNumber: bookingData.flightNumber || '',
+        chauffeur: bookingData.chauffeur || '',
+        chauffeurPhone: bookingData.chauffeurPhone || '',
+        notes: bookingData.notes || '',
+        clientEmail: bookingData.email,
+        clientName: bookingData.clientName,
+        clientPhone: bookingData.phone,
+        invoiceNumber: `FACT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        paymentMethod: bookingData.paymentMethod || 'Lien de paiement externe',
+      };
+
+      const existingIndex = existingTrips.findIndex((t) => t.id === bookingData.id);
+      if (existingIndex >= 0) {
+        existingTrips[existingIndex] = { ...existingTrips[existingIndex], ...clientTrip };
+      } else {
+        existingTrips = [clientTrip, ...existingTrips];
+      }
+
+      localStorage.setItem('sely_client_trips', JSON.stringify(existingTrips));
+      window.dispatchEvent(new Event('sely_trips_updated'));
+    } catch (err) {
+      console.error('Failed to sync to client trips', err);
+    }
+  };
+
+  // Form for New Manual Booking (clean, empty defaults)
+  const [newForm, setNewForm] = useState({
+    clientName: '',
+    email: '',
+    phone: '',
+    serviceType: 'transfer',
+    date: new Date().toISOString().split('T')[0],
+    time: '12:00',
+    city: 'paris',
+    pickup: '',
+    destination: '',
+    vehicleCategory: 'business_class',
+    vehicle: 'Business Class (Mercedes Classe E)',
+    amount: '',
+    paymentMethod: 'Lien de paiement externe (Stripe / WhatsApp)',
+    status: 'paid', // 'paid' | 'completed' | 'cancelled' | 'pending'
+    passengers: 2,
+    luggage: 2,
+    chauffeur: '',
+    chauffeurPhone: '',
+    flightNumber: '',
+    notes: '',
+  });
+
+  const handleSelectNewCategory = (catId) => {
+    const cat = VEHICLE_5_CATEGORIES.find((c) => c.id === catId);
+    if (!cat) return;
+    setNewForm((prev) => ({
+      ...prev,
+      vehicleCategory: catId,
+      vehicle: cat.defaultModel,
+      passengers: cat.passengers,
+      luggage: cat.luggage,
+    }));
+  };
+
+  const handleCreateBooking = (e) => {
+    e.preventDefault();
+    const created = addBooking({
+      source: 'manual_admin',
+      clientName: newForm.clientName,
+      email: newForm.email,
+      phone: newForm.phone,
+      serviceType: newForm.serviceType,
+      date: newForm.date,
+      time: newForm.time,
+      city: newForm.city,
+      pickup: newForm.pickup,
+      destination: newForm.destination,
+      vehicle: newForm.vehicle,
+      vehicleCategory: VEHICLE_5_CATEGORIES.find((c) => c.id === newForm.vehicleCategory)?.label || 'Business Class',
+      amount: parseFloat(newForm.amount) || 0,
+      paymentMethod: newForm.paymentMethod,
+      status: newForm.status,
+      passengers: Number(newForm.passengers) || 2,
+      luggage: Number(newForm.luggage) || 2,
+      chauffeur: newForm.chauffeur,
+      chauffeurPhone: newForm.chauffeurPhone,
+      flightNumber: newForm.flightNumber,
+      notes: newForm.notes,
+    });
+
+    syncToClientTrips(created);
+    setShowNewModal(false);
+    setNewForm({
+      clientName: '',
+      email: '',
+      phone: '',
+      serviceType: 'transfer',
+      date: new Date().toISOString().split('T')[0],
+      time: '12:00',
+      city: 'paris',
+      pickup: '',
+      destination: '',
+      vehicleCategory: 'business_class',
+      vehicle: 'Business Class (Mercedes Classe E)',
+      amount: '',
+      paymentMethod: 'Lien de paiement externe (Stripe / WhatsApp)',
+      status: 'paid',
+      passengers: 2,
+      luggage: 2,
+      chauffeur: '',
+      chauffeurPhone: '',
+      flightNumber: '',
+      notes: '',
+    });
+    triggerToast(`Course enregistrée et synchronisée avec ${created.email}`);
+  };
+
+  // Open Edit modal
+  const handleOpenEdit = (booking) => {
+    const meta = getVehicleMeta(booking.vehicle);
+    setSelectedBooking(booking);
+    setEditBookingForm({
+      ...booking,
+      vehicleCategory: meta?.id || 'first_class',
+      vehicle: booking.vehicle || meta?.defaultModel || 'First Class (Mercedes Classe S)',
+      passengers: booking.passengers || meta?.passengers || 2,
+      luggage: booking.luggage || meta?.luggage || 2,
+      date: sanitizeDate(booking.date),
+      time: sanitizeTime(booking.time),
+    });
+  };
+
+  const handleSelectEditCategory = (catId) => {
+    const cat = VEHICLE_5_CATEGORIES.find((c) => c.id === catId);
+    if (!cat) return;
+    setEditBookingForm((prev) => ({
+      ...prev,
+      vehicleCategory: catId,
+      vehicle: cat.defaultModel,
+      passengers: cat.passengers,
+      luggage: cat.luggage,
+    }));
+  };
+
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    if (!editBookingForm) return;
+
+    const catObj = VEHICLE_5_CATEGORIES.find((c) => c.id === editBookingForm.vehicleCategory);
+    const updatedData = {
+      ...editBookingForm,
+      vehicleCategory: catObj?.label || editBookingForm.vehicleCategory,
+      date: sanitizeDate(editBookingForm.date),
+      time: sanitizeTime(editBookingForm.time),
+      amount: parseFloat(editBookingForm.amount) || 0,
+      passengers: Number(editBookingForm.passengers) || 2,
+      luggage: Number(editBookingForm.luggage) || 2,
+    };
+
+    updateBooking(updatedData.id, updatedData);
+    syncToClientTrips(updatedData);
+    setSelectedBooking(null);
+    setEditBookingForm(null);
+    triggerToast(`Modifications enregistrées et synchronisées avec le client !`);
+  };
+
+  const handleQuickStatusChange = (bookingId, newStatus) => {
+    updateBookingStatus(bookingId, newStatus);
+    const updated = bookings.find((b) => b.id === bookingId);
+    if (updated) {
+      const merged = { ...updated, status: newStatus };
+      syncToClientTrips(merged);
+    }
+    if (selectedBooking && selectedBooking.id === bookingId) {
+      setSelectedBooking((prev) => ({ ...prev, status: newStatus }));
+    }
+    triggerToast(`Statut mis à jour : ${newStatus}`);
+  };
 
   // Sync on mount
   useEffect(() => {
@@ -52,7 +380,6 @@ export default function BookingsManager() {
   const paidBookings = bookings.filter((b) => b.status === 'paid');
   const totalRevenue = paidBookings.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
   const pendingCount = bookings.filter((b) => b.status === 'pending').length;
-  const quoteCount = bookings.filter((b) => b.status === 'quote').length;
 
   // Filtered bookings
   const filteredBookings = bookings.filter((b) => {
@@ -61,141 +388,109 @@ export default function BookingsManager() {
       (b.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (b.phone || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (b.pickup || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (b.destination || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (b.chauffeur || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (b.vehicle || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus = statusFilter === 'all' || b.status === statusFilter;
-    const matchesCity = cityFilter === 'all' || (b.city || '').toLowerCase() === cityFilter.toLowerCase();
 
-    return matchesSearch && matchesStatus && matchesCity;
+    let matchesVehicle = true;
+    if (vehicleFilter !== 'all') {
+      const meta = getVehicleMeta(b.vehicle);
+      matchesVehicle = meta?.label === vehicleFilter;
+    }
+
+    return matchesSearch && matchesStatus && matchesVehicle;
   });
 
   const getStatusBadge = (status) => {
     switch (status) {
       case 'paid':
         return (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              backgroundColor: 'rgba(34, 197, 94, 0.15)',
-              color: '#4ade80',
-              border: '1px solid rgba(34, 197, 94, 0.3)',
-            }}
-          >
-            <CheckCircle2 size={12} /> Payé (Whop)
-          </span>
-        );
-      case 'quote':
-        return (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              backgroundColor: 'rgba(196, 161, 101, 0.15)',
-              color: 'var(--gold-accent)',
-              border: '1px solid rgba(196, 161, 101, 0.3)',
-            }}
-          >
-            <Clock3 size={12} /> Devis Demandé
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+            <CheckCircle2 size={12} /> Confirmé / Payé
           </span>
         );
       case 'completed':
         return (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              backgroundColor: 'rgba(59, 130, 246, 0.15)',
-              color: '#60a5fa',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-            }}
-          >
-            Course Terminée
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+            Terminé (Facturé)
           </span>
         );
       case 'cancelled':
         return (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              backgroundColor: 'rgba(239, 68, 68, 0.15)',
-              color: '#f87171',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-            }}
-          >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
             Annulé
           </span>
         );
       default:
         return (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              backgroundColor: 'rgba(234, 179, 8, 0.15)',
-              color: '#facc15',
-              border: '1px solid rgba(234, 179, 8, 0.3)',
-            }}
-          >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(234, 179, 8, 0.15)', color: '#facc15', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
             <Clock3 size={12} /> En Attente
           </span>
         );
     }
   };
 
-  const getCityName = (cityCode) => {
-    switch ((cityCode || '').toLowerCase()) {
-      case 'london':
-        return 'Londres';
-      case 'french-riviera':
-        return 'Côte d\'Azur';
-      case 'bordeaux':
-        return 'Bordeaux';
-      default:
-        return 'Paris';
-    }
-  };
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#ffffff' }}>
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 9999,
+          backgroundColor: '#1e293b',
+          border: '1px solid #c5a880',
+          color: '#ffffff',
+          padding: '0.85rem 1.4rem',
+          borderRadius: '10px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.6rem',
+          fontSize: '0.9rem',
+          fontWeight: 500,
+        }}>
+          <Check size={18} color="#4ade80" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Main Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>
-            Réservations & Courses
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>
+            Gestion & Attribution des Réservations
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            Suivi des courses en direct, détails clients et encaissements Whop
+          <p style={{ color: 'var(--text-secondary, #94a3b8)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+            Attribution des 5 catégories de véhicules, dates, chauffeurs et encaissements externes
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowNewModal(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.75rem 1.3rem',
+              borderRadius: '8px',
+              backgroundColor: '#c5a880',
+              color: '#000000',
+              border: 'none',
+              fontSize: '0.875rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(197, 168, 128, 0.35)',
+            }}
+          >
+            <Plus size={16} />
+            <span>+ Saisir une réservation manuelle</span>
+          </button>
+
           <button
             onClick={() => syncWhopPayments()}
             disabled={isLoading}
@@ -203,384 +498,1111 @@ export default function BookingsManager() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              padding: '0.75rem 1.25rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
               backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-glass)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               color: '#ffffff',
-              fontSize: '0.875rem',
-              fontWeight: 500,
+              fontSize: '0.85rem',
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
             }}
           >
-            <RefreshCw size={15} className={isLoading ? 'spinner' : ''} />
-            <span>{isLoading ? 'Synchronisation...' : 'Synchroniser Whop'}</span>
+            <RefreshCw size={14} className={isLoading ? 'spinner' : ''} />
+            <span>{isLoading ? 'Synchronisation...' : 'Synchroniser'}</span>
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
-        <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px' }}>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>Total Réservations</p>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 600 }}>{totalCount}</h3>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Toutes destinations</span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+        <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Réservations</p>
+          <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0' }}>{totalCount}</h3>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Toutes catégories</span>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', borderLeft: '4px solid #4ade80' }}>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>Encaissé via Whop</p>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#4ade80' }}>
+        <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(34,197,94,0.3)', borderLeft: '4px solid #22c55e' }}>
+          <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Chiffre d'Affaires Encaissé</p>
+          <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0', color: '#4ade80' }}>
             {totalRevenue.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €
           </h3>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{paidBookings.length} paiements confirmés</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{paidBookings.length} courses confirmées</span>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', borderLeft: '4px solid #facc15' }}>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>En attente de règlement</p>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#facc15' }}>{pendingCount}</h3>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Checkouts générés</span>
-        </div>
-
-        <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', borderLeft: '4px solid var(--gold-accent)' }}>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>Demandes de devis</p>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 600, color: 'var(--gold-accent)' }}>{quoteCount}</h3>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>À contacter</span>
+        <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(250,204,21,0.3)', borderLeft: '4px solid #facc15' }}>
+          <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>En Attente de Règlement</p>
+          <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0', color: '#facc15' }}>{pendingCount}</h3>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Liens envoyés / devis</span>
         </div>
       </div>
 
-      {/* Filters Bar */}
-      <div
-        className="glass-panel"
-        style={{
-          padding: '1rem 1.5rem',
-          borderRadius: '12px',
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
-        <div style={{ position: 'relative', flex: 1, minWidth: '220px' }}>
-          <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
-          <input
-            type="text"
-            placeholder="Rechercher client, email, téléphone, véhicule..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.65rem 1rem 0.65rem 2.5rem',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-glass)',
-              color: '#ffffff',
-              fontSize: '0.875rem',
-              outline: 'none',
-            }}
-          />
+      {/* 5 VEHICLES QUICK ATTRIBUTION & FILTER BAR */}
+      <div style={{
+        padding: '1.2rem',
+        borderRadius: '10px',
+        backgroundColor: '#0c0f17',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Filtrer par Catégorie de Véhicule (5 Types) :
+          </span>
+          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+            {filteredBookings.length} course(s) affichée(s)
+          </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        {/* 5 Vehicle Filter Pills */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => setVehicleFilter('all')}
+            style={{
+              padding: '0.45rem 0.9rem',
+              borderRadius: '6px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              border: vehicleFilter === 'all' ? '1px solid #ffffff' : '1px solid rgba(255,255,255,0.1)',
+              backgroundColor: vehicleFilter === 'all' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.03)',
+              color: '#ffffff',
+            }}
+          >
+            Tous les véhicules
+          </button>
+
+          {VEHICLE_5_CATEGORIES.map((cat) => {
+            const isSelected = vehicleFilter === cat.label;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setVehicleFilter(cat.label)}
+                style={{
+                  padding: '0.45rem 0.9rem',
+                  borderRadius: '6px',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  border: isSelected ? `2px solid ${cat.color}` : `1px solid ${cat.border}`,
+                  backgroundColor: isSelected ? cat.bgColor : 'rgba(255,255,255,0.02)',
+                  color: isSelected ? '#ffffff' : cat.color,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: cat.color }} />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search & Status Filters */}
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.85rem' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: '220px' }}>
+            <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              type="text"
+              placeholder="Rechercher client, email, téléphone, lieu, chauffeur..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.55rem 0.85rem 0.55rem 2.3rem',
+                borderRadius: '6px',
+                backgroundColor: '#121622',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#ffffff',
+                fontSize: '0.85rem',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             style={{
-              padding: '0.65rem 1rem',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-glass)',
+              padding: '0.55rem 0.85rem',
+              borderRadius: '6px',
+              backgroundColor: '#121622',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
               color: '#ffffff',
-              fontSize: '0.875rem',
+              fontSize: '0.85rem',
               outline: 'none',
+              cursor: 'pointer',
             }}
           >
-            <option value="all" style={{ background: '#12141a' }}>Tous les statuts</option>
-            <option value="paid" style={{ background: '#12141a' }}>Payé (Whop)</option>
-            <option value="pending" style={{ background: '#12141a' }}>En attente</option>
-            <option value="quote" style={{ background: '#12141a' }}>Devis demandé</option>
-            <option value="completed" style={{ background: '#12141a' }}>Course terminée</option>
-            <option value="cancelled" style={{ background: '#12141a' }}>Annulé</option>
-          </select>
-
-          <select
-            value={cityFilter}
-            onChange={(e) => setCityFilter(e.target.value)}
-            style={{
-              padding: '0.65rem 1rem',
-              borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-glass)',
-              color: '#ffffff',
-              fontSize: '0.875rem',
-              outline: 'none',
-            }}
-          >
-            <option value="all" style={{ background: '#12141a' }}>Toutes les villes</option>
-            <option value="paris" style={{ background: '#12141a' }}>Paris</option>
-            <option value="london" style={{ background: '#12141a' }}>Londres</option>
-            <option value="french-riviera" style={{ background: '#12141a' }}>Côte d'Azur</option>
-            <option value="bordeaux" style={{ background: '#12141a' }}>Bordeaux</option>
+            <option value="all">Tous les statuts</option>
+            <option value="paid">Confirmé / Payé</option>
+            <option value="completed">Terminé (Facturé)</option>
+            <option value="cancelled">Annulé</option>
+            <option value="pending">En attente</option>
           </select>
         </div>
       </div>
 
       {/* Bookings Table */}
-      <div className="glass-panel" style={{ borderRadius: '12px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div style={{ borderRadius: '10px', overflowX: 'auto', backgroundColor: '#0c0f17', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '850px' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-glass)', backgroundColor: 'rgba(255, 255, 255, 0.02)' }}>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>DATE / HEURE</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>CLIENT</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>TRAJET & VILLE</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>VÉHICULE</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>MONTANT</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>STATUT</th>
-              <th style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500, textAlign: 'right' }}>ACTIONS</th>
+            <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', backgroundColor: 'rgba(255, 255, 255, 0.02)' }}>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>DATE & HEURE</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>CLIENT</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>PRISE EN CHARGE & ARRIVÉE</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>VÉHICULE ATTRIBUÉ</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>MONTANT</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>CHAUFFEUR</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>STATUT</th>
+              <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600, textAlign: 'right' }}>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
             {filteredBookings.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  Aucune réservation trouvée.
+                <td colSpan={8} style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
+                  Aucune réservation trouvée pour ces critères.
                 </td>
               </tr>
             ) : (
-              filteredBookings.map((booking) => (
-                <tr
-                  key={booking.id}
-                  style={{
-                    borderBottom: '1px solid var(--border-glass)',
-                    transition: 'background 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                >
-                  {/* Date / Time */}
-                  <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem' }}>
-                    <div style={{ fontWeight: 600 }}>{booking.date || '—'}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{booking.time || '—'}</div>
-                  </td>
+              filteredBookings.map((booking) => {
+                const vehicleMeta = getVehicleMeta(booking.vehicle);
+                return (
+                  <tr
+                    key={booking.id}
+                    style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', transition: 'background 0.15s ease' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.02)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                  >
+                    {/* Date / Time */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem' }}>
+                      <div style={{ fontWeight: 600, color: '#ffffff' }}>{booking.date || '—'}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#c5a880', fontWeight: 500 }}>{booking.time || '—'}</div>
+                    </td>
 
-                  {/* Client */}
-                  <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem' }}>
-                    <div style={{ fontWeight: 600, color: '#ffffff' }}>{booking.clientName}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{booking.email}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--gold-accent)' }}>{booking.phone}</div>
-                  </td>
+                    {/* Client */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem' }}>
+                      <div style={{ fontWeight: 600, color: '#ffffff' }}>{booking.clientName}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{booking.email}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{booking.phone}</div>
+                    </td>
 
-                  {/* Trajet & Ville */}
-                  <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem' }}>
-                    <div style={{ display: 'inline-block', padding: '0.15rem 0.5rem', borderRadius: '4px', backgroundColor: 'rgba(255, 255, 255, 0.06)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
-                      {getCityName(booking.city)}
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: '#ffffff', maxWidth: '240px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      <strong>Départ:</strong> {booking.pickup}
-                    </div>
-                    {booking.destination && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', maxWidth: '240px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        <strong>Arrivée:</strong> {booking.destination}
+                    {/* Trajet */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.82rem', maxWidth: '240px' }}>
+                      <div style={{ color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <span style={{ color: '#4ade80', fontWeight: 700 }}>•</span> {booking.pickup}
                       </div>
-                    )}
-                  </td>
-
-                  {/* Vehicle */}
-                  <td style={{ padding: '1rem 1.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
-                    {booking.vehicle}
-                  </td>
-
-                  {/* Amount */}
-                  <td style={{ padding: '1rem 1.5rem', fontSize: '0.95rem', fontWeight: 700 }}>
-                    {booking.amount ? `${Number(booking.amount).toFixed(2)} €` : 'Sur devis'}
-                    {booking.paymentMethod && (
-                      <div style={{ fontSize: '0.7rem', fontWeight: 400, color: 'var(--text-secondary)' }}>
-                        {booking.paymentMethod}
+                      <div style={{ color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <span style={{ color: '#38bdf8', fontWeight: 700 }}>•</span> {booking.destination || 'Mise à disposition'}
                       </div>
-                    )}
-                  </td>
+                    </td>
 
-                  {/* Status */}
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    {getStatusBadge(booking.status)}
-                  </td>
+                    {/* Vehicle */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.82rem' }}>
+                      <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.2rem 0.55rem',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        backgroundColor: vehicleMeta?.bgColor || 'rgba(255,255,255,0.05)',
+                        color: vehicleMeta?.color || '#ffffff',
+                        border: `1px solid ${vehicleMeta?.border || 'rgba(255,255,255,0.1)'}`,
+                        marginBottom: '0.25rem',
+                      }}>
+                        <Car size={12} />
+                        <span>{vehicleMeta?.label || 'Véhicule'}</span>
+                      </div>
+                      <div style={{ color: '#ffffff', fontSize: '0.78rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>
+                        {booking.vehicle}
+                      </div>
+                    </td>
 
-                  {/* Actions */}
-                  <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', alignItems: 'center' }}>
-                      {booking.phone && booking.phone !== '—' && (
-                        <a
-                          href={`https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Bonjour ${booking.clientName}, nous confirmons la prise en charge de votre réservation SELY Privé.`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Contacter sur WhatsApp"
+                    {/* Amount */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.9rem', fontWeight: 700 }}>
+                      <div style={{ color: '#ffffff' }}>
+                        {booking.amount ? `${Number(booking.amount).toFixed(2)} €` : 'Sur devis'}
+                      </div>
+                      {booking.paymentMethod && (
+                        <div style={{ fontSize: '0.68rem', fontWeight: 400, color: '#94a3b8' }}>
+                          {booking.paymentMethod.replace('Lien de paiement externe', 'Lien Stripe/Ext')}
+                        </div>
+                      )}
+                    </td>
+
+                    {/* Chauffeur */}
+                    <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.82rem' }}>
+                      <div style={{ color: '#ffffff', fontWeight: 500 }}>
+                        {booking.chauffeur || '— Non assigné'}
+                      </div>
+                      {booking.chauffeurPhone && (
+                        <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                          {booking.chauffeurPhone}
+                        </div>
+                      )}
+                    </td>
+
+                    {/* Status */}
+                    <td style={{ padding: '0.9rem 1.25rem' }}>
+                      {getStatusBadge(booking.status)}
+                    </td>
+
+                    {/* Actions */}
+                    <td style={{ padding: '0.9rem 1.25rem', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '0.45rem', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        {booking.phone && booking.phone !== '—' && (
+                          <a
+                            href={`https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Bonjour ${booking.clientName}, nous confirmons la prise en charge de votre course SELY Privé le ${booking.date} à ${booking.time} en ${booking.vehicle}.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Contacter sur WhatsApp"
+                            style={{
+                              padding: '0.45rem',
+                              borderRadius: '6px',
+                              backgroundColor: 'rgba(37, 211, 102, 0.15)',
+                              color: '#25d366',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: '1px solid rgba(37, 211, 102, 0.3)',
+                            }}
+                          >
+                            <MessageCircle size={15} />
+                          </a>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEdit(booking)}
+                          title="Attribuer voiture, date ou modifier"
+                          style={{
+                            padding: '0.45rem 0.75rem',
+                            borderRadius: '6px',
+                            backgroundColor: 'rgba(197, 168, 128, 0.15)',
+                            border: '1px solid rgba(197, 168, 128, 0.4)',
+                            color: '#c5a880',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                          }}
+                        >
+                          <Edit2 size={13} />
+                          <span>Attribuer</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => deleteBooking(booking.id)}
+                          title="Supprimer"
                           style={{
                             padding: '0.45rem',
                             borderRadius: '6px',
-                            backgroundColor: 'rgba(37, 211, 102, 0.15)',
-                            color: '#25d366',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            border: 'none',
+                            color: '#f87171',
+                            cursor: 'pointer',
                           }}
                         >
-                          <MessageCircle size={15} />
-                        </a>
-                      )}
-
-                      <button
-                        onClick={() => setSelectedBooking(booking)}
-                        title="Voir le détail"
-                        style={{
-                          padding: '0.45rem',
-                          borderRadius: '6px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid var(--border-glass)',
-                          color: '#ffffff',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Eye size={15} />
-                      </button>
-
-                      <button
-                        onClick={() => deleteBooking(booking.id)}
-                        title="Supprimer"
-                        style={{
-                          padding: '0.45rem',
-                          borderRadius: '6px',
-                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                          border: 'none',
-                          color: '#f87171',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal Détail Réservation */}
-      {selectedBooking && (
+      {/* ========================================================= */}
+      {/* MODAL 1: ATTRIBUER & MODIFIER UNE RÉSERVATION EXISTANTE */}
+      {/* ========================================================= */}
+      {selectedBooking && editBookingForm && (
         <div
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             backdropFilter: 'blur(8px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem',
-            zIndex: 1000,
+            padding: '1.5rem',
+            zIndex: 1100,
+            overflowY: 'auto',
           }}
-          onClick={() => setSelectedBooking(null)}
+          onClick={() => {
+            setSelectedBooking(null);
+            setEditBookingForm(null);
+          }}
         >
           <div
-            className="glass-panel"
             style={{
-              maxWidth: '560px',
+              maxWidth: '720px',
               width: '100%',
-              borderRadius: '16px',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              borderRadius: '14px',
               padding: '2rem',
-              backgroundColor: '#12141a',
-              border: '1px solid var(--border-glass)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+              backgroundColor: '#0f131c',
+              border: '1px solid rgba(197, 168, 128, 0.4)',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.7)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.5rem',
+              gap: '1.25rem',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sparkles size={18} color="var(--gold-accent)" />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Détail de la Réservation</h3>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+                  Attribuer & Modifier la Réservation
+                </h3>
+                <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '0.25rem 0 0 0' }}>
+                  Client : <strong>{editBookingForm.clientName}</strong> ({editBookingForm.email})
+                </p>
               </div>
               <button
-                onClick={() => setSelectedBooking(null)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                type="button"
+                onClick={() => {
+                  setSelectedBooking(null);
+                  setEditBookingForm(null);
+                }}
+                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
               >
-                <X size={20} />
+                <X size={22} />
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontSize: '0.875rem' }}>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Client</span>
-                <strong>{selectedBooking.clientName}</strong>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Statut</span>
-                {getStatusBadge(selectedBooking.status)}
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Email</span>
-                <span>{selectedBooking.email}</span>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Téléphone</span>
-                <strong>{selectedBooking.phone}</strong>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Date & Heure</span>
-                <span>{selectedBooking.date} à {selectedBooking.time}</span>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', display: 'block' }}>Montant</span>
-                <strong style={{ color: '#ffffff', fontSize: '1.1rem' }}>
-                  {selectedBooking.amount ? `${Number(selectedBooking.amount).toFixed(2)} €` : 'Sur devis'}
-                </strong>
-              </div>
-            </div>
+            <form onSubmit={handleSaveEdit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+              {/* SECTION 1: ATTRIBUER LE VÉHICULE (LES 5 CHOIX OFFICIELS) */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    1. Attribuer le Type de Voiture (5 choix) *
+                  </label>
+                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Cliquez pour sélectionner</span>
+                </div>
 
-            <div style={{ padding: '1rem', backgroundColor: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <div><strong>Lieu de prise en charge :</strong> {selectedBooking.pickup}</div>
-              {selectedBooking.destination && <div><strong>Destination :</strong> {selectedBooking.destination}</div>}
-              <div><strong>Véhicule :</strong> {selectedBooking.vehicle}</div>
-              {selectedBooking.flightNumber && <div><strong>Numéro de vol :</strong> {selectedBooking.flightNumber}</div>}
-              {selectedBooking.specialRequests && <div><strong>Demande spéciale :</strong> {selectedBooking.specialRequests}</div>}
-            </div>
+                {/* 5 Vehicle Cards */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.6rem', marginBottom: '0.85rem' }}>
+                  {VEHICLE_5_CATEGORIES.map((cat) => {
+                    const isSelected = editBookingForm.vehicleCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        data-vehicle-cat={cat.id}
+                        onClick={() => handleSelectEditCategory(cat.id)}
+                        style={{
+                          padding: '0.75rem 0.5rem',
+                          borderRadius: '8px',
+                          border: isSelected ? `2px solid ${cat.color}` : '1px solid rgba(255,255,255,0.1)',
+                          backgroundColor: isSelected ? cat.bgColor : 'rgba(255,255,255,0.02)',
+                          color: '#ffffff',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <Car size={18} color={cat.color} />
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isSelected ? cat.color : '#ffffff' }}>
+                          {cat.label}
+                        </span>
+                        <span style={{ fontSize: '0.65rem', color: '#94a3b8' }}>
+                          {cat.passengers} passagers max
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
 
-            {/* Modifier le statut */}
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Changer le statut :</span>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                {/* Specific Model selection / custom text */}
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.6rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                      Modèle exact attribué
+                    </label>
+                    <select
+                      value={editBookingForm.vehicle}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, vehicle: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.8rem',
+                      }}
+                    >
+                      {VEHICLE_5_CATEGORIES.find((c) => c.id === editBookingForm.vehicleCategory)?.models.map((m) => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                      <option value={editBookingForm.vehicle}>{editBookingForm.vehicle}</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                      Passagers
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="30"
+                      value={editBookingForm.passengers}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, passengers: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.8rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                      Bagages
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="30"
+                      value={editBookingForm.luggage}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, luggage: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.8rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: DATE & HEURE */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  2. Date & Heure de Prise en Charge *
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                      Date de prise en charge
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={editBookingForm.date}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, date: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                      Heure de prise en charge
+                    </label>
+                    <input
+                      type="time"
+                      value={editBookingForm.time}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, time: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 3: LIEUX & LOGISTIQUE */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  3. Trajet & Prestation
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.6rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Lieu de prise en charge (Départ) *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editBookingForm.pickup}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, pickup: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Destination / Mise à disposition *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editBookingForm.destination}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, destination: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Chauffeur assigné</label>
+                    <input
+                      type="text"
+                      value={editBookingForm.chauffeur || ''}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, chauffeur: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Téléphone chauffeur</label>
+                    <input
+                      type="tel"
+                      value={editBookingForm.chauffeurPhone || ''}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, chauffeurPhone: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 4: STATUT & ENCAISSEMENT */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  4. Statut & Montant Encaissé
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Statut de la course *</label>
+                    <select
+                      value={editBookingForm.status}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, status: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <option value="paid">Confirmé / Payé (À Venir)</option>
+                      <option value="completed">Terminé (Passé / Facturé)</option>
+                      <option value="cancelled">Annulé</option>
+                      <option value="pending">En attente de paiement</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Montant total TTC (€)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={editBookingForm.amount}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, amount: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.85rem',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Moyen d'encaissement</label>
+                    <select
+                      value={editBookingForm.paymentMethod}
+                      onChange={(e) => setEditBookingForm({ ...editBookingForm, paymentMethod: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        borderRadius: '6px',
+                        backgroundColor: '#121622',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.8rem',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <option value="Lien de paiement externe (Stripe / WhatsApp)">Lien de paiement externe</option>
+                      <option value="Paiement WhatsApp confirmé">WhatsApp confirmé</option>
+                      <option value="Virement bancaire professionnel reçu">Virement bancaire reçu</option>
+                      <option value="Carte bancaire à bord">Carte bancaire à bord</option>
+                      <option value="Facturation fin de mois / Entreprise">Facturation Entreprise</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit / Cancel Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
                 <button
+                  type="button"
                   onClick={() => {
-                    updateBookingStatus(selectedBooking.id, 'paid');
-                    setSelectedBooking({ ...selectedBooking, status: 'paid' });
+                    setSelectedBooking(null);
+                    setEditBookingForm(null);
                   }}
-                  style={{ padding: '0.4rem 0.8rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', border: 'none', cursor: 'pointer' }}
-                >
-                  Payé
-                </button>
-                <button
-                  onClick={() => {
-                    updateBookingStatus(selectedBooking.id, 'completed');
-                    setSelectedBooking({ ...selectedBooking, status: 'completed' });
+                  style={{
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#ffffff',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer',
                   }}
-                  style={{ padding: '0.4rem 0.8rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: 'none', cursor: 'pointer' }}
-                >
-                  Terminé
-                </button>
-                <button
-                  onClick={() => {
-                    updateBookingStatus(selectedBooking.id, 'cancelled');
-                    setSelectedBooking({ ...selectedBooking, status: 'cancelled' });
-                  }}
-                  style={{ padding: '0.4rem 0.8rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171', border: 'none', cursor: 'pointer' }}
                 >
                   Annuler
                 </button>
+
+                <button
+                  type="submit"
+                  style={{
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '8px',
+                    backgroundColor: '#c5a880',
+                    border: 'none',
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    boxShadow: '0 4px 15px rgba(197, 168, 128, 0.4)',
+                  }}
+                >
+                  <Save size={16} />
+                  <span>Enregistrer & Synchroniser Client</span>
+                </button>
               </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* MODAL 2: SAISIR UNE NOUVELLE RÉSERVATION MANUELLE */}
+      {/* ========================================================= */}
+      {showNewModal && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.5rem',
+            zIndex: 1100,
+            overflowY: 'auto',
+          }}
+          onClick={() => setShowNewModal(false)}
+        >
+          <div
+            style={{
+              maxWidth: '720px',
+              width: '100%',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              borderRadius: '14px',
+              padding: '2rem',
+              backgroundColor: '#0f131c',
+              border: '1px solid rgba(197, 168, 128, 0.4)',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.7)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+                  Saisie Manuelle d'une Course
+                </h3>
+                <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '0.25rem 0 0 0' }}>
+                  Enregistrez les clients encaissés sur WhatsApp, mail ou virement
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowNewModal(false)}
+                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
+              >
+                <X size={22} />
+              </button>
             </div>
+
+            <form onSubmit={handleCreateBooking} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+              {/* SECTION 1: CLIENT */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  1. Informations Client
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Nom du client *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex : M. Dupont"
+                      value={newForm.clientName}
+                      onChange={(e) => setNewForm({ ...newForm, clientName: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Email client (Compte Voyages) *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="client@domaine.com"
+                      value={newForm.email}
+                      onChange={(e) => setNewForm({ ...newForm, email: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Téléphone / WhatsApp</label>
+                    <input
+                      type="tel"
+                      placeholder="+33 6 ..."
+                      value={newForm.phone}
+                      onChange={(e) => setNewForm({ ...newForm, phone: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: ATTRIBUER LE VÉHICULE (LES 5 CHOIX) */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    2. Attribuer le Type de Voiture (5 choix) *
+                  </label>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.6rem', marginBottom: '0.85rem' }}>
+                  {VEHICLE_5_CATEGORIES.map((cat) => {
+                    const isSelected = newForm.vehicleCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        data-vehicle-cat={cat.id}
+                        onClick={() => handleSelectNewCategory(cat.id)}
+                        style={{
+                          padding: '0.75rem 0.5rem',
+                          borderRadius: '8px',
+                          border: isSelected ? `2px solid ${cat.color}` : '1px solid rgba(255,255,255,0.1)',
+                          backgroundColor: isSelected ? cat.bgColor : 'rgba(255,255,255,0.02)',
+                          color: '#ffffff',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <Car size={18} color={cat.color} />
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isSelected ? cat.color : '#ffffff' }}>
+                          {cat.label}
+                        </span>
+                        <span style={{ fontSize: '0.65rem', color: '#94a3b8' }}>
+                          {cat.passengers} passagers max
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.6rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Modèle exact attribué</label>
+                    <select
+                      value={newForm.vehicle}
+                      onChange={(e) => setNewForm({ ...newForm, vehicle: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.8rem' }}
+                    >
+                      {VEHICLE_5_CATEGORIES.find((c) => c.id === newForm.vehicleCategory)?.models.map((m) => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Passagers</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={newForm.passengers}
+                      onChange={(e) => setNewForm({ ...newForm, passengers: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.8rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Bagages</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={newForm.luggage}
+                      onChange={(e) => setNewForm({ ...newForm, luggage: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.8rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 3: DATE, HEURE & TRAJET */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  3. Date, Heure & Trajet
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.6rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Date de prise en charge *</label>
+                    <input
+                      type="date"
+                      required
+                      value={newForm.date}
+                      onChange={(e) => setNewForm({ ...newForm, date: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Heure de prise en charge</label>
+                    <input
+                      type="time"
+                      value={newForm.time}
+                      onChange={(e) => setNewForm({ ...newForm, time: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Lieu de prise en charge (Départ) *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex : Aéroport Paris-CDG Terminal 2E"
+                      value={newForm.pickup}
+                      onChange={(e) => setNewForm({ ...newForm, pickup: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Destination / Mise à disposition *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex : Hôtel Ritz Paris ou Mise à disposition 4h"
+                      value={newForm.destination}
+                      onChange={(e) => setNewForm({ ...newForm, destination: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 4: ENCAISSEMENT & CHAUFFEUR */}
+              <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#c5a880', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                  4. Encaissement, Statut & Chauffeur
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginBottom: '0.6rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Montant TTC (€) *</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      required
+                      placeholder="0.00"
+                      value={newForm.amount}
+                      onChange={(e) => setNewForm({ ...newForm, amount: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Mode d'encaissement</label>
+                    <select
+                      value={newForm.paymentMethod}
+                      onChange={(e) => setNewForm({ ...newForm, paymentMethod: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.8rem', boxSizing: 'border-box' }}
+                    >
+                      <option value="Lien de paiement externe (Stripe / WhatsApp)">Lien de paiement externe</option>
+                      <option value="Paiement WhatsApp confirmé">WhatsApp confirmé</option>
+                      <option value="Virement bancaire professionnel reçu">Virement bancaire reçu</option>
+                      <option value="Carte bancaire à bord">Carte bancaire à bord</option>
+                      <option value="Facturation fin de mois / Entreprise">Facturation Entreprise</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Statut de la course *</label>
+                    <select
+                      value={newForm.status}
+                      onChange={(e) => setNewForm({ ...newForm, status: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    >
+                      <option value="paid">Confirmé / Payé (À Venir)</option>
+                      <option value="completed">Terminé (Facturé)</option>
+                      <option value="cancelled">Annulé</option>
+                      <option value="pending">En attente de paiement</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Chauffeur assigné</label>
+                    <input
+                      type="text"
+                      placeholder="Ex : Karim B."
+                      value={newForm.chauffeur}
+                      onChange={(e) => setNewForm({ ...newForm, chauffeur: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.72rem', color: '#94a3b8', marginBottom: '0.2rem' }}>Téléphone chauffeur</label>
+                    <input
+                      type="tel"
+                      placeholder="+33 6 ..."
+                      value={newForm.chauffeurPhone}
+                      onChange={(e) => setNewForm({ ...newForm, chauffeurPhone: e.target.value })}
+                      style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', backgroundColor: '#121622', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit / Cancel Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowNewModal(false)}
+                  style={{
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#ffffff',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Annuler
+                </button>
+
+                <button
+                  type="submit"
+                  style={{
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '8px',
+                    backgroundColor: '#c5a880',
+                    border: 'none',
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 15px rgba(197, 168, 128, 0.4)',
+                  }}
+                >
+                  Enregistrer & Synchroniser Client
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -26,7 +26,7 @@ const AdminLayout = () => {
 
   const navItems = [
     { path: '/sely-office/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/sely-office/reservations', label: 'Réservations & Whop', icon: Calendar },
+    { path: '/sely-office/reservations', label: 'Réservations & Attributions', icon: Calendar },
     { path: '/sely-office/clients', label: 'Clients', icon: Users },
     { path: '/sely-office/quotes', label: 'Devis', icon: FileText },
     { path: '/sely-office/invoices', label: 'Factures', icon: FileSpreadsheet },
@@ -36,12 +36,20 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
+    <div className="admin-root" style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#07090e', color: '#ffffff' }}>
+      <style>{`
+        .admin-root h1, .admin-root h2, .admin-root h3, .admin-root h4 {
+          color: #ffffff !important;
+        }
+        .admin-root th {
+          color: #94a3b8 !important;
+        }
+      `}</style>
       {/* Sidebar */}
       <aside style={{
         width: '280px',
-        borderRight: '1px solid var(--border-glass)',
-        backgroundColor: 'var(--bg-surface)',
+        borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: '#0c0f17',
         display: 'flex',
         flexDirection: 'column'
       }}>

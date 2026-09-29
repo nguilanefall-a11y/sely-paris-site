@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -24,7 +25,10 @@ import {
   X,
   CheckCircle2,
   AlertCircle,
-  FileText
+  FileText,
+  Eye,
+  EyeOff,
+  Loader2,
 } from 'lucide-react';
 import { useCity } from '../hooks/useCity';
 import { useClientAuthStore } from '../store/useClientAuthStore';
@@ -36,6 +40,9 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
   const {
     user,
     trips,
+    authLoading,
+    authError,
+    clearAuthError,
     loginWithGoogle,
     loginWithEmail,
     registerUser,
@@ -47,18 +54,33 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
   } = useClientAuthStore();
 
   const [currentView, setCurrentView] = useState(defaultView); // 'trips' | 'account'
-  const [activeTab, setActiveTab] = useState('upcoming'); // 'upcoming' | 'past' | 'cancelled'
+  const [activeTab, setActiveTab] = useState('upcoming'); // default to 'upcoming'
   const [helpOpen, setHelpOpen] = useState(false);
 
   // Modals state
   const [authModal, setAuthModal] = useState(null); // 'login' | 'register' | null
+  const [googleMiniOpen, setGoogleMiniOpen] = useState(false);
+  const [googleMiniEmail, setGoogleMiniEmail] = useState('');
   const [cancelModalTrip, setCancelModalTrip] = useState(null); // trip object to cancel
   const [cancelReason, setCancelReason] = useState('Changement d’agenda');
   const [toastMessage, setToastMessage] = useState('');
 
+  // Password visibility & form errors
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [localFormError, setLocalFormError] = useState('');
+
   // Auth form inputs
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [registerForm, setRegisterForm] = useState({ firstName: '', lastName: '', email: '', phone: '', password: '' });
+  const [registerForm, setRegisterForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   // Account editing states
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
@@ -85,31 +107,117 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
     setTimeout(() => setToastMessage(''), 3500);
   };
 
-  // Filter trips
-  const upcomingTrips = trips.filter((t) => t.status === 'upcoming');
-  const pastTrips = trips.filter((t) => t.status === 'past');
-  const cancelledTrips = trips.filter((t) => t.status === 'cancelled');
+  useEffect(() => {
+    // Dynamically load Google Identity Services SDK
+    const scriptId = 'google-gsi-client';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  // Filter trips by user account
+  const userTrips = user?.email
+    ? trips.filter((t) => !t.clientEmail || t.clientEmail.toLowerCase() === user.email.toLowerCase())
+    : trips;
+  const upcomingTrips = userTrips.filter((t) => t.status === 'upcoming');
+  const pastTrips = userTrips.filter((t) => t.status === 'past');
+  const cancelledTrips = userTrips.filter((t) => t.status === 'cancelled');
+
+  // Listen for Google Auth popup response
+  useEffect(() => {
+    const handleAuthMessage = async (e) => {
+      if (e.origin !== window.location.origin) return;
+      if (e.data?.type === 'SELY_GOOGLE_AUTH_SUCCESS' && e.data?.user) {
+        const res = await loginWithGoogle(e.data.user);
+        if (res.success) {
+          showToast(`Connecté avec Google (${e.data.user.email})`);
+          setAuthModal(null);
+        }
+      }
+    };
+    window.addEventListener('message', handleAuthMessage);
+    return () => window.removeEventListener('message', handleAuthMessage);
+  }, []);
 
   const handleGoogleLogin = () => {
-    loginWithGoogle();
-    showToast('Connexion Google réussie');
-    setAuthModal(null);
+    setLocalFormError('');
+    clearAuthError();
+    setGoogleMiniOpen(true);
   };
 
-  const handleEmailLoginSubmit = (e) => {
+  const handleMiniGoogleSubmit = async (e) => {
     e.preventDefault();
-    if (!loginForm.email) return;
-    loginWithEmail(loginForm);
-    showToast('Bienvenue sur votre espace SELY');
-    setAuthModal(null);
+    const clean = (googleMiniEmail || '').trim().toLowerCase();
+    if (!clean || !clean.includes('@') || !clean.includes('.')) return;
+    const rawName = clean.split('@')[0].replace(/[._-]/g, ' ');
+    const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+    const res = await loginWithGoogle({
+      id: `usr_g_${Date.now()}`,
+      email: clean,
+      name: formattedName,
+      firstName: formattedName.split(' ')[0],
+      lastName: formattedName.split(' ').slice(1).join(' '),
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(formattedName)}&background=4285F4&color=fff&size=128`,
+      provider: 'google',
+    });
+    if (res.success) {
+      showToast(`Connecté avec Google (${clean})`);
+      setGoogleMiniOpen(false);
+      setAuthModal(null);
+      setGoogleMiniEmail('');
+    }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleEmailLoginSubmit = async (e) => {
     e.preventDefault();
-    if (!registerForm.email) return;
-    registerUser(registerForm);
-    showToast('Compte créé avec succès');
-    setAuthModal(null);
+    setLocalFormError('');
+    clearAuthError();
+    if (!loginForm.email || !loginForm.password) {
+      setLocalFormError('Veuillez renseigner votre email et mot de passe.');
+      return;
+    }
+    const res = await loginWithEmail(loginForm);
+    if (res.success) {
+      showToast('Bienvenue sur votre espace SELY');
+      setAuthModal(null);
+      setLoginForm({ email: '', password: '' });
+    }
+  };
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    setLocalFormError('');
+    clearAuthError();
+    if (!registerForm.email || !registerForm.password || !registerForm.firstName) {
+      setLocalFormError('Veuillez renseigner les champs obligatoires (*).');
+      return;
+    }
+    if (registerForm.password.length < 6) {
+      setLocalFormError('Le mot de passe doit comporter au moins 6 caractères.');
+      return;
+    }
+    if (registerForm.password !== registerForm.confirmPassword) {
+      setLocalFormError('Les deux mots de passe ne correspondent pas.');
+      return;
+    }
+    const res = await registerUser(registerForm);
+    if (res.success) {
+      showToast('Compte SELY créé avec succès');
+      setAuthModal(null);
+      setRegisterForm({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+      });
+    }
   };
 
   const handleConfirmCancelTrip = () => {
@@ -259,6 +367,71 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
     invoiceWindow.document.close();
   };
 
+  const renderNoAccountCard = () => (
+    <div className={styles.noAccountCard}>
+      <div className={styles.noAccountBadge}>
+        <User size={13} /> Espace Réservations
+      </div>
+      <h2 className={styles.noAccountTitle}>Aucun compte actuellement</h2>
+      <p className={styles.noAccountText}>
+        Connectez-vous pour consulter vos réservations et vos factures.
+      </p>
+
+      <div className={styles.authButtonGroup}>
+        <button
+          type="button"
+          className={styles.googleAuthBtn}
+          onClick={handleGoogleLogin}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path
+              fill="#4285F4"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+            />
+          </svg>
+          <span>Continuer avec Google</span>
+        </button>
+
+        <div className={styles.authSecondaryRow}>
+          <button
+            type="button"
+            className={styles.primaryAuthBtn}
+            onClick={() => setAuthModal('register')}
+          >
+            Créer un compte
+          </button>
+
+          <button
+            type="button"
+            className={styles.secondaryAuthBtn}
+            onClick={() => setAuthModal('login')}
+          >
+            Se connecter
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.noAccountBookLinkRow}>
+        <span>Vous n'avez pas encore réservé ?</span>{' '}
+        <Link to={getCityPath('/reserver')} className={styles.noAccountBookLink}>
+          Réserver un trajet &rarr;
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.pageContainer}>
       {toastMessage && (
@@ -280,6 +453,10 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
         </div>
       )}
 
+      {/* Blurred luxury background matching the main screen */}
+      <div className={styles.voyagesBgImage} />
+      <div className={styles.voyagesVignetteOverlay} />
+
       <div className={styles.innerContent}>
         {/* Top Header Bar */}
         <div className={styles.topBar}>
@@ -287,7 +464,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
             {currentView === 'account' ? 'Mon Compte' : 'Voyages'}
           </h1>
 
-          {user && (
+          {user ? (
             <button
               type="button"
               className={styles.accountSwitchBtn}
@@ -302,73 +479,20 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
               )}
               <span>{currentView === 'account' ? 'Mes Voyages' : 'Mon Compte'}</span>
             </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.accountSwitchBtn}
+              onClick={() => setAuthModal('login')}
+            >
+              <User size={14} />
+              <span>Se connecter</span>
+            </button>
           )}
         </div>
 
-        {/* ── Case 1: NOT LOGGED IN -> Show "Aucun compte actuellement" ── */}
-        {!user ? (
-          <div className={styles.noAccountCard}>
-            <div className={styles.noAccountBadge}>
-              <User size={14} /> Espace Réservations
-            </div>
-            <h2 className={styles.noAccountTitle}>Aucun compte actuellement</h2>
-            <p className={styles.noAccountText}>
-              Pour consulter vos réservations en cours, retrouver vos factures passées et gérer vos coordonnées, veuillez vous connecter ou créer un compte client.
-            </p>
-
-            <div className={styles.authButtonGroup}>
-              {/* Google One-Click Login */}
-              <button
-                type="button"
-                className={styles.googleAuthBtn}
-                onClick={handleGoogleLogin}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                  />
-                </svg>
-                <span>Continuer avec Google</span>
-              </button>
-
-              <button
-                type="button"
-                className={styles.primaryAuthBtn}
-                onClick={() => setAuthModal('register')}
-              >
-                Créer un compte SELY
-              </button>
-
-              <button
-                type="button"
-                className={styles.secondaryAuthBtn}
-                onClick={() => setAuthModal('login')}
-              >
-                J'ai déjà un compte • Se connecter
-              </button>
-            </div>
-
-            <div className={styles.dividerRow}>OU</div>
-
-            <Link to={getCityPath('/reserver')} className={styles.emptyBookCtaBtn}>
-              Réservez un voyage
-            </Link>
-          </div>
-        ) : currentView === 'account' ? (
-          /* ── Case 2: MON COMPTE VIEW (4 SECTIONS) ── */
+        {currentView === 'account' && user ? (
+          /* ── Case 1: MON COMPTE VIEW (4 SECTIONS) ── */
           <div>
             {/* User Profile Header */}
             <div className={styles.accountHeader}>
@@ -391,6 +515,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 style={{ width: 'auto', padding: '0.5rem 1rem' }}
                 onClick={() => {
                   logout();
+                  setCurrentView('trips');
                   showToast('Déconnexion réussie');
                 }}
               >
@@ -540,11 +665,11 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
               </div>
             </div>
 
-            {/* SECTION 3: Paiement et facturation */}
+            {/* SECTION 3: Coordonnées de facturation */}
             <div className={styles.accountSectionCard}>
               <div className={styles.sectionHeader}>
                 <h3 className={styles.sectionTitle}>
-                  <CreditCard size={18} /> 3. Paiement et facturation
+                  <CreditCard size={18} /> 3. Coordonnées de facturation
                 </h3>
                 <button
                   type="button"
@@ -603,18 +728,6 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 </form>
               ) : (
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem', padding: '0.85rem', background: '#f8fafc', borderRadius: '10px' }}>
-                    <CreditCard size={22} color="#0f172a" />
-                    <div>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>
-                        {user.paymentBilling?.cardType || 'Carte bancaire'} •••• {user.paymentBilling?.last4 || '4242'}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                        Expire le {user.paymentBilling?.expiry || '12/28'}
-                      </div>
-                    </div>
-                  </div>
-
                   <div className={styles.formGrid}>
                     <div>
                       <span className={styles.formLabel}>Facturé au nom de</span>
@@ -683,6 +796,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                   className={styles.logoutBtn}
                   onClick={() => {
                     logout();
+                    setCurrentView('trips');
                     showToast('Vous avez été déconnecté.');
                   }}
                 >
@@ -702,7 +816,6 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 onClick={() => setActiveTab('upcoming')}
               >
                 <span>À Venir</span>
-                {upcomingTrips.length > 0 && <span className={styles.tabBadge}>{upcomingTrips.length}</span>}
                 {activeTab === 'upcoming' && <div className={styles.tabIndicator} />}
               </button>
 
@@ -712,7 +825,6 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 onClick={() => setActiveTab('past')}
               >
                 <span>Passées</span>
-                {pastTrips.length > 0 && <span className={styles.tabBadge}>{pastTrips.length}</span>}
                 {activeTab === 'past' && <div className={styles.tabIndicator} />}
               </button>
 
@@ -722,19 +834,19 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 onClick={() => setActiveTab('cancelled')}
               >
                 <span>Annulé</span>
-                {cancelledTrips.length > 0 && <span className={styles.tabBadge}>{cancelledTrips.length}</span>}
                 {activeTab === 'cancelled' && <div className={styles.tabIndicator} />}
               </button>
             </div>
 
             {/* TAB CONTENT: À Venir */}
             {activeTab === 'upcoming' && (
-              <div>
-                {upcomingTrips.length === 0 ? (
-                  <div className={styles.emptyStateContainer}>
-                    <div className={styles.emptyStateGraphic}>
-                      <CarIllustration />
-                    </div>
+              !user ? (
+                renderNoAccountCard()
+              ) : upcomingTrips.length === 0 ? (
+                <div className={styles.emptyStateContainer}>
+                  <div className={styles.emptyStateGraphic}>
+                    <CarIllustration />
+                  </div>
                     <h2 className={styles.emptyStateTitle}>Aucun trajet à venir</h2>
                     <p className={styles.emptyStateDesc}>
                       Vos prochaines réservations et transferts confirmés s'afficheront ici.
@@ -830,18 +942,18 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                       </div>
                     ))}
                   </div>
-                )}
-              </div>
+                )
             )}
 
             {/* TAB CONTENT: Passées */}
             {activeTab === 'past' && (
-              <div>
-                {pastTrips.length === 0 ? (
-                  <div className={styles.emptyStateContainer}>
-                    <div className={styles.emptyStateGraphic}>
-                      <CarIllustration />
-                    </div>
+              !user ? (
+                renderNoAccountCard()
+              ) : pastTrips.length === 0 ? (
+                <div className={styles.emptyStateContainer}>
+                  <div className={styles.emptyStateGraphic}>
+                    <CarIllustration />
+                  </div>
                     <h2 className={styles.emptyStateTitle}>Aucun trajet passé</h2>
                     <p className={styles.emptyStateDesc}>
                       L'historique de vos déplacements et vos factures officielles apparaîtront ici.
@@ -920,8 +1032,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                       </div>
                     ))}
                   </div>
-                )}
-              </div>
+                )
             )}
 
             {/* TAB CONTENT: Annulé (matches reference screenshot) */}
@@ -1114,9 +1225,16 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
       </AnimatePresence>
 
       {/* ── Login / Register Modal ── */}
-      <AnimatePresence>
-        {authModal && (
-          <div className={styles.modalBackdrop} onClick={() => setAuthModal(null)}>
+      {typeof document !== 'undefined' && authModal && createPortal(
+        <AnimatePresence>
+          <div
+            className={styles.modalBackdrop}
+            onClick={() => {
+              setAuthModal(null);
+              setLocalFormError('');
+              clearAuthError();
+            }}
+          >
             <motion.div
               className={styles.modalBox}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -1128,61 +1246,166 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 <h3 className={styles.modalTitle}>
                   {authModal === 'login' ? 'Connexion à votre compte' : 'Créer votre compte SELY'}
                 </h3>
-                <button type="button" className={styles.modalCloseBtn} onClick={() => setAuthModal(null)}>
+                <button
+                  type="button"
+                  className={styles.modalCloseBtn}
+                  onClick={() => {
+                    setAuthModal(null);
+                    setLocalFormError('');
+                    clearAuthError();
+                  }}
+                >
                   <X size={20} />
                 </button>
               </div>
 
-              {authModal === 'login' ? (
-                <form onSubmit={handleEmailLoginSubmit}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label className={styles.formLabel}>Adresse email</label>
-                    <input
-                      type="email"
-                      className={styles.formInput}
-                      value={loginForm.email}
-                      onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-                      placeholder="alexander.wright@luxury.com"
-                      required
-                    />
-                  </div>
-                  <div style={{ marginBottom: '1.25rem' }}>
-                    <label className={styles.formLabel}>Mot de passe</label>
-                    <input
-                      type="password"
-                      className={styles.formInput}
-                      value={loginForm.password}
-                      onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                      placeholder="••••••••"
-                      required
-                    />
-                  </div>
+              {/* Error Banner */}
+              {(localFormError || authError) && (
+                <div className={styles.authErrorBanner}>
+                  <AlertCircle size={18} style={{ flexShrink: 0 }} />
+                  <span>{localFormError || authError}</span>
+                </div>
+              )}
 
-                  <button type="submit" className={styles.primaryAuthBtn} style={{ marginBottom: '0.75rem' }}>
-                    Se connecter
+              {authModal === 'login' ? (
+                <div>
+                  <button
+                    type="button"
+                    className={styles.googleAuthBtn}
+                    onClick={handleGoogleLogin}
+                    disabled={authLoading}
+                    style={{ marginBottom: '1.25rem', width: '100%' }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                      <path
+                        fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                      />
+                      <path
+                        fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                      />
+                      <path
+                        fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                      />
+                      <path
+                        fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                      />
+                    </svg>
+                    <span>Continuer avec Google</span>
                   </button>
 
-                  <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
-                    Pas encore de compte ?{' '}
-                    <button
-                      type="button"
-                      style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}
-                      onClick={() => setAuthModal('register')}
-                    >
-                      Créer un compte
-                    </button>
+                  <div className={styles.dividerRow} style={{ margin: '1rem 0' }}>
+                    OU AVEC VOTRE EMAIL
                   </div>
-                </form>
+
+                  <form onSubmit={handleEmailLoginSubmit}>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label className={styles.formLabel}>Adresse email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        id="login-email"
+                        autoComplete="username email"
+                        className={styles.formInput}
+                        value={loginForm.email}
+                        onChange={(e) => {
+                          setLoginForm({ ...loginForm, email: e.target.value });
+                          if (localFormError || authError) {
+                            setLocalFormError('');
+                            clearAuthError();
+                          }
+                        }}
+                        placeholder="client@domaine.com"
+                        required
+                      />
+                    </div>
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      <label className={styles.formLabel}>Mot de passe</label>
+                      <div className={styles.passwordWrapper}>
+                        <input
+                          type={showLoginPassword ? 'text' : 'password'}
+                          name="password"
+                          id="login-password"
+                          autoComplete="current-password"
+                          className={`${styles.formInput} ${styles.inputWithToggle}`}
+                          value={loginForm.password}
+                          onChange={(e) => {
+                            setLoginForm({ ...loginForm, password: e.target.value });
+                            if (localFormError || authError) {
+                              setLocalFormError('');
+                              clearAuthError();
+                            }
+                          }}
+                          placeholder="••••••••"
+                          required
+                        />
+                        <button
+                          type="button"
+                          className={styles.passwordToggleBtn}
+                          onClick={() => setShowLoginPassword(!showLoginPassword)}
+                          aria-label="Afficher ou masquer le mot de passe"
+                        >
+                          {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={authLoading}
+                      className={styles.primaryAuthBtn}
+                      style={{
+                        marginBottom: '0.75rem',
+                        width: '100%',
+                        opacity: authLoading ? 0.75 : 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      {authLoading && <Loader2 size={16} className={styles.authLoadingSpinner} />}
+                      <span>{authLoading ? 'Connexion en cours...' : 'Se connecter'}</span>
+                    </button>
+
+                    <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>
+                      Pas encore de compte ?{' '}
+                      <button
+                        type="button"
+                        style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}
+                        onClick={() => {
+                          setAuthModal('register');
+                          setLocalFormError('');
+                          clearAuthError();
+                        }}
+                      >
+                        Créer un compte
+                      </button>
+                    </div>
+                  </form>
+                </div>
               ) : (
                 <form onSubmit={handleRegisterSubmit}>
                   <div className={styles.formGrid} style={{ marginBottom: '1rem' }}>
                     <div>
-                      <label className={styles.formLabel}>Prénom</label>
+                      <label className={styles.formLabel}>Prénom *</label>
                       <input
                         type="text"
+                        name="given-name"
+                        autoComplete="given-name"
                         className={styles.formInput}
                         value={registerForm.firstName}
-                        onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
+                        onChange={(e) => {
+                          setRegisterForm({ ...registerForm, firstName: e.target.value });
+                          if (localFormError || authError) {
+                            setLocalFormError('');
+                            clearAuthError();
+                          }
+                        }}
+                        placeholder="Ex : Alexandre"
                         required
                       />
                     </div>
@@ -1190,22 +1413,32 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                       <label className={styles.formLabel}>Nom</label>
                       <input
                         type="text"
+                        name="family-name"
+                        autoComplete="family-name"
                         className={styles.formInput}
                         value={registerForm.lastName}
                         onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
-                        required
+                        placeholder="Ex : Dupont"
                       />
                     </div>
                   </div>
 
                   <div style={{ marginBottom: '1rem' }}>
-                    <label className={styles.formLabel}>Adresse email</label>
+                    <label className={styles.formLabel}>Adresse email *</label>
                     <input
                       type="email"
+                      name="email"
+                      autoComplete="email"
                       className={styles.formInput}
                       value={registerForm.email}
-                      onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                      placeholder="votre.nom@exemple.com"
+                      onChange={(e) => {
+                        setRegisterForm({ ...registerForm, email: e.target.value });
+                        if (localFormError || authError) {
+                          setLocalFormError('');
+                          clearAuthError();
+                        }
+                      }}
+                      placeholder="votre.nom@domaine.com"
                       required
                     />
                   </div>
@@ -1214,6 +1447,8 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                     <label className={styles.formLabel}>Téléphone mobile</label>
                     <input
                       type="tel"
+                      name="tel"
+                      autoComplete="tel"
                       className={styles.formInput}
                       value={registerForm.phone}
                       onChange={(e) => setRegisterForm({ ...registerForm, phone: e.target.value })}
@@ -1221,20 +1456,82 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                     />
                   </div>
 
-                  <div style={{ marginBottom: '1.25rem' }}>
-                    <label className={styles.formLabel}>Mot de passe</label>
-                    <input
-                      type="password"
-                      className={styles.formInput}
-                      value={registerForm.password}
-                      onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                      placeholder="Minimum 8 caractères"
-                      required
-                    />
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label className={styles.formLabel}>Mot de passe (min. 6 caractères) *</label>
+                    <div className={styles.passwordWrapper}>
+                      <input
+                        type={showRegisterPassword ? 'text' : 'password'}
+                        name="new-password"
+                        autoComplete="new-password"
+                        className={`${styles.formInput} ${styles.inputWithToggle}`}
+                        value={registerForm.password}
+                        onChange={(e) => {
+                          setRegisterForm({ ...registerForm, password: e.target.value });
+                          if (localFormError || authError) {
+                            setLocalFormError('');
+                            clearAuthError();
+                          }
+                        }}
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className={styles.passwordToggleBtn}
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                        aria-label="Afficher ou masquer le mot de passe"
+                      >
+                        {showRegisterPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
                   </div>
 
-                  <button type="submit" className={styles.primaryAuthBtn} style={{ marginBottom: '0.75rem' }}>
-                    Valider l'inscription
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <label className={styles.formLabel}>Confirmer le mot de passe *</label>
+                    <div className={styles.passwordWrapper}>
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        name="confirm-password"
+                        autoComplete="new-password"
+                        className={`${styles.formInput} ${styles.inputWithToggle}`}
+                        value={registerForm.confirmPassword}
+                        onChange={(e) => {
+                          setRegisterForm({ ...registerForm, confirmPassword: e.target.value });
+                          if (localFormError || authError) {
+                            setLocalFormError('');
+                            clearAuthError();
+                          }
+                        }}
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className={styles.passwordToggleBtn}
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        aria-label="Afficher ou masquer le mot de passe"
+                      >
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className={styles.primaryAuthBtn}
+                    style={{
+                      marginBottom: '0.75rem',
+                      width: '100%',
+                      opacity: authLoading ? 0.75 : 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    {authLoading && <Loader2 size={16} className={styles.authLoadingSpinner} />}
+                    <span>{authLoading ? "Création du compte..." : "Valider l'inscription"}</span>
                   </button>
 
                   <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
@@ -1242,7 +1539,11 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                     <button
                       type="button"
                       style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 600, cursor: 'pointer' }}
-                      onClick={() => setAuthModal('login')}
+                      onClick={() => {
+                        setAuthModal('login');
+                        setLocalFormError('');
+                        clearAuthError();
+                      }}
                     >
                       Se connecter
                     </button>
@@ -1251,51 +1552,149 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
               )}
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
+
+      {/* ── Mini Google One-Tap Dialog (Very Small & Simple) ── */}
+      {typeof document !== 'undefined' && googleMiniOpen && createPortal(
+        <AnimatePresence>
+          <div className={styles.miniGoogleOverlay} onClick={() => setGoogleMiniOpen(false)}>
+            <motion.div
+              className={styles.miniGoogleCard}
+              initial={{ opacity: 0, scale: 0.92, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 8 }}
+              transition={{ duration: 0.18 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.miniGoogleHeader}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <h4 className={styles.miniGoogleTitle}>Se connecter avec Google</h4>
+                </div>
+                <button
+                  type="button"
+                  className={styles.miniGoogleCloseBtn}
+                  onClick={() => setGoogleMiniOpen(false)}
+                  aria-label="Fermer"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div className={styles.miniGoogleSub}>Accéder à SELY Paris</div>
+
+              <form onSubmit={handleMiniGoogleSubmit}>
+                <input
+                  type="email"
+                  className={styles.miniGoogleInput}
+                  value={googleMiniEmail}
+                  onChange={(e) => setGoogleMiniEmail(e.target.value)}
+                  placeholder="votre.email@gmail.com"
+                  autoFocus
+                  required
+                />
+
+                <div className={styles.miniGoogleActions}>
+                  <button
+                    type="button"
+                    className={styles.miniGoogleCancelBtn}
+                    onClick={() => setGoogleMiniOpen(false)}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className={styles.miniGoogleSubmitBtn}
+                  >
+                    <span>Continuer</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* ── Help / Conciergerie Modal (Centered, exactly as user requested) ── */}
+      {/* ── Help / Conciergerie Modal (Original Luxury Theme from Hero.jsx) ── */}
       <AnimatePresence>
         {helpOpen && (
           <div className={styles.modalBackdrop} onClick={() => setHelpOpen(false)}>
             <motion.div
               className={styles.modalBox}
+              style={{
+                maxWidth: '420px',
+                background: '#ffffff',
+                border: '1px solid #e5e5e5',
+                borderRadius: '12px',
+                padding: '1.75rem',
+                color: '#0a0a0a',
+                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.15)',
+              }}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={styles.modalHeader}>
-                <h3 className={styles.modalTitle}>Assistance & Conciergerie</h3>
-                <button type="button" className={styles.modalCloseBtn} onClick={() => setHelpOpen(false)}>
+              <div className={styles.modalHeader} style={{ marginBottom: '0.85rem' }}>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)',
+                    fontSize: '1.35rem',
+                    fontWeight: 500,
+                    color: '#0a0a0a',
+                    margin: 0,
+                  }}
+                >
+                  Assistance & Conciergerie VIP
+                </h3>
+                <button
+                  type="button"
+                  style={{ background: 'transparent', border: 'none', color: '#0a0a0a', cursor: 'pointer', padding: '0.35rem' }}
+                  onClick={() => setHelpOpen(false)}
+                  aria-label="Fermer"
+                >
                   <X size={20} />
                 </button>
               </div>
 
-              <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                Notre équipe opérationnelle et nos répartiteurs se tiennent à votre disposition 24h/24 et 7j/7 pour toute demande d'assistance immédiate.
+              <p style={{ fontFamily: 'var(--font-sans, "Montserrat", sans-serif)', fontSize: '0.88rem', color: '#555555', margin: '0 0 1.25rem 0', lineHeight: 1.5 }}>
+                Notre direction des opérations est à votre écoute 24h/24 et 7j/7.
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <a
-                  href="https://wa.me/33649567812"
+                  href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem',
+                    justifyContent: 'center',
+                    gap: '0.6rem',
                     padding: '0.85rem 1rem',
-                    background: '#25D366',
+                    background: '#0a0a0a',
                     color: '#ffffff',
-                    borderRadius: '12px',
+                    border: '1px solid #0a0a0a',
+                    borderRadius: '6px',
+                    fontFamily: 'var(--font-sans, "Montserrat", sans-serif)',
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
                     textDecoration: 'none',
-                    fontWeight: 600,
-                    fontSize: '0.92rem',
+                    transition: 'all 0.2s ease',
                   }}
                 >
-                  <MessageSquare size={18} />
-                  <span>Discuter sur WhatsApp</span>
+                  <MessageSquare size={16} />
+                  <span>Échanger sur WhatsApp</span>
                 </a>
 
                 <a
@@ -1303,23 +1702,23 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem',
+                    justifyContent: 'center',
+                    gap: '0.6rem',
                     padding: '0.85rem 1rem',
-                    background: '#f1f5f9',
-                    color: '#0f172a',
-                    borderRadius: '12px',
+                    background: '#f4f4f5',
+                    color: '#0a0a0a',
+                    border: '1px solid #e4e4e7',
+                    borderRadius: '6px',
+                    fontFamily: 'var(--font-sans, "Montserrat", sans-serif)',
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
                     textDecoration: 'none',
-                    fontWeight: 600,
-                    fontSize: '0.92rem',
+                    transition: 'all 0.2s ease',
                   }}
                 >
-                  <Phone size={18} />
-                  <span>Appeler la permanence : +33 1 84 80 56 76</span>
+                  <Phone size={16} />
+                  <span>+33 1 84 80 56 76</span>
                 </a>
-              </div>
-
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center' }}>
-                Disponible 24h/24 • Réponse prioritaire
               </div>
             </motion.div>
           </div>

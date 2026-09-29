@@ -33,6 +33,14 @@ export const useBookingsStore = create(
         }));
       },
 
+      updateBooking: (id, updatedFields) => {
+        set((state) => ({
+          bookings: state.bookings.map((b) =>
+            b.id === id ? { ...b, ...updatedFields, updatedAt: new Date().toISOString() } : b
+          ),
+        }));
+      },
+
       deleteBooking: (id) => {
         set((state) => ({
           bookings: state.bookings.filter((b) => b.id !== id),
@@ -119,6 +127,14 @@ export const useBookingsStore = create(
     }),
     {
       name: 'sely-bookings-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state && state.bookings) {
+          const demoIds = ['res_001', 'res_002', 'res_003', 'res_004', 'res_005'];
+          state.bookings = state.bookings.filter(
+            (b) => !demoIds.includes(b.id) && b.email !== 'alexander.wright@luxury.com'
+          );
+        }
+      },
     }
   )
 );

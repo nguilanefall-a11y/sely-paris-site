@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     const success = login(password);
     if (success) {
-      navigate('/sely-office/dashboard');
+      navigate('/sely-office/reservations');
     } else {
       setError('Mot de passe incorrect.');
     }
@@ -26,50 +26,54 @@ const Login = () => {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '2rem',
-      backgroundColor: 'var(--bg-color)'
+      backgroundColor: '#07090e',
+      color: '#ffffff',
     }}>
-      <div className="glass-panel" style={{
-        padding: '3rem',
-        borderRadius: '16px',
+      <div style={{
+        padding: '3rem 2.5rem',
+        borderRadius: '20px',
         width: '100%',
-        maxWidth: '400px',
-        textAlign: 'center'
+        maxWidth: '420px',
+        textAlign: 'center',
+        background: '#121622',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6)',
       }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
           <div style={{
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255,255,255,0.05)',
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid var(--border-glass)'
+            border: '1px solid rgba(255, 255, 255, 0.15)',
           }}>
-            <Lock size={28} color="var(--gold-accent)" />
+            <Lock size={28} color="#c5a880" />
           </div>
         </div>
         
-        <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 600 }}>SELY Office</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', fontWeight: 600, color: '#ffffff' }}>SELY Office</h1>
+        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '2rem' }}>
           Espace d'administration sécurisé
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder="Mot de passe administrateur"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={{
               padding: '1rem',
               borderRadius: '8px',
-              border: '1px solid var(--border-glass)',
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              color: 'var(--text-primary)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              backgroundColor: '#0a0d14',
+              color: '#ffffff',
               fontSize: '1rem',
               outline: 'none',
-              fontFamily: 'inherit'
+              fontFamily: 'inherit',
             }}
             autoFocus
           />
@@ -93,6 +97,12 @@ const Login = () => {
           >
             Se connecter
           </button>
+
+          <div style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            <a href="/paris" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>
+              ← Retour au site public SELY
+            </a>
+          </div>
         </form>
       </div>
     </div>

@@ -85,17 +85,17 @@ export default function BottomAppNav({ activeTab = 'home', onTabChange }) {
               </div>
 
               <p className={styles.modalBodyText}>
-                Notre direction des opérations est à votre écoute 24h/24 et 7j/7 pour toute assistance ou demande particulière.
+                Notre direction des opérations est à votre écoute 24h/24 et 7j/7.
               </p>
 
               <div className={styles.modalActions}>
                 <a
-                  href="https://wa.me/33649567812"
+                  href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.whatsappBtn}
                 >
-                  <MessageSquare size={18} />
+                  <MessageSquare size={16} />
                   <span>Échanger sur WhatsApp</span>
                 </a>
 
@@ -103,7 +103,7 @@ export default function BottomAppNav({ activeTab = 'home', onTabChange }) {
                   href="tel:+33184805676"
                   className={styles.phoneBtn}
                 >
-                  <Phone size={18} />
+                  <Phone size={16} />
                   <span>+33 1 84 80 56 76</span>
                 </a>
               </div>

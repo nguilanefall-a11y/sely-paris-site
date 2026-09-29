@@ -13,9 +13,15 @@ import styles from "./PageLoader.module.css";
  */
 export default function PageLoader() {
   const [isLoading, setIsLoading] = useState(() => {
-    // Only show once per session so refreshing during review directly shows the page
-    if (typeof window !== 'undefined' && sessionStorage.getItem('sely_loader_seen')) {
-      return false;
+    // Only show once per session and never on admin routes
+    if (typeof window !== 'undefined') {
+      const p = window.location.pathname;
+      if (p.startsWith('/admin') || p.startsWith('/sely-office')) {
+        return false;
+      }
+      if (sessionStorage.getItem('sely_loader_seen')) {
+        return false;
+      }
     }
     return true;
   });

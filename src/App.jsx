@@ -8,6 +8,9 @@ import JournalLayout from './JournalLayout';
 import JournalHubPage from './pages/JournalHubPage';
 import JournalArticlePage from './pages/JournalArticlePage';
 
+import GoogleAuthPage from './pages/GoogleAuthPage';
+import GoogleCallbackPage from './pages/GoogleCallbackPage';
+
 const AdminRouter = lazy(() => import('./admin/AdminRouter'));
 
 function App() {
@@ -17,6 +20,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/paris" replace />} />
         <Route path="/portal" element={<PortalPage />} />
+        <Route path="/auth/google" element={<GoogleAuthPage />} />
+        <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
         <Route path="/reservation-succes" element={<ReservationSuccessPage />} />
         <Route path="/confirmation-devis" element={<ReservationSuccessPage />} />
         <Route path="/devis-confirme" element={<ReservationSuccessPage />} />
@@ -35,8 +40,15 @@ function App() {
         <Route path="/ar/journal" element={<JournalLayout><JournalHubPage /></JournalLayout>} />
         <Route path="/ar/journal/:slug" element={<JournalLayout><JournalArticlePage /></JournalLayout>} />
 
-        <Route path="/:city/*" element={<PublicSite />} />
-
+        {/* Admin Backoffice Routes */}
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0a0a0a' }} />}>
+              <AdminRouter />
+            </Suspense>
+          }
+        />
         <Route
           path="/sely-office/*"
           element={
@@ -45,6 +57,8 @@ function App() {
             </Suspense>
           }
         />
+
+        <Route path="/:city/*" element={<PublicSite />} />
         {/* Fallback to /paris if invalid path */}
         <Route path="*" element={<Navigate to="/paris" replace />} />
       </Routes>
