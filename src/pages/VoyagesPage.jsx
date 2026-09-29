@@ -29,9 +29,11 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  HelpCircle,
 } from 'lucide-react';
 import { useCity } from '../hooks/useCity';
 import { useClientAuthStore } from '../store/useClientAuthStore';
+import { claimRequestsService } from '../services/claimRequestsService';
 import styles from './VoyagesPage.module.css';
 
 export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = false }) {
@@ -100,6 +102,28 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
   const [newAddressModal, setNewAddressModal] = useState(false);
   const [newAddressForm, setNewAddressForm] = useState({ label: '', address: '', type: 'home' });
 
+  // Claim existing booking states (Discreet button requested by user)
+  const [claimModalOpen, setClaimModalOpen] = useState(false);
+  const [claimForm, setClaimForm] = useState({ clientName: '', clientPhone: '', details: '' });
+  const [claimSuccess, setClaimSuccess] = useState(false);
+  const [claimLoading, setClaimLoading] = useState(false);
+
+  const handleClaimSubmit = (e) => {
+    e.preventDefault();
+    if (!claimForm.clientName.trim()) return;
+    setClaimLoading(true);
+    claimRequestsService.addRequest({
+      clientName: claimForm.clientName,
+      clientEmail: user?.email || '',
+      clientPhone: claimForm.clientPhone || user?.phone || '',
+      details: claimForm.details,
+      userId: user?.id || null,
+    });
+    setClaimLoading(false);
+    setClaimSuccess(true);
+    showToast('Demande transmise avec succès à nos répartiteurs.');
+  };
+
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3500);
@@ -118,10 +142,10 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
     }
   }, []);
 
-  // Filter trips by user account
+  // Filter trips by user account strictly matching the client's email
   const userTrips = user?.email
-    ? trips.filter((t) => !t.clientEmail || t.clientEmail.toLowerCase() === user.email.toLowerCase())
-    : trips;
+    ? trips.filter((t) => t.clientEmail && t.clientEmail.toLowerCase() === user.email.toLowerCase())
+    : [];
   const upcomingTrips = userTrips.filter((t) => t.status === 'upcoming');
   const pastTrips = userTrips.filter((t) => t.status === 'past');
   const cancelledTrips = userTrips.filter((t) => t.status === 'cancelled');
@@ -1051,6 +1075,28 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 )}
               </div>
             )}
+
+            {/* Discreet Claim Booking Button (requested by user) */}
+            {user && (
+              <div className={styles.claimBookingContainer}>
+                <button
+                  type="button"
+                  className={styles.claimBookingDiscreetBtn}
+                  onClick={() => {
+                    setClaimForm({
+                      clientName: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+                      clientPhone: user.phone || '',
+                      details: '',
+                    });
+                    setClaimSuccess(false);
+                    setClaimModalOpen(true);
+                  }}
+                >
+                  <HelpCircle size={14} className={styles.claimBookingIcon} />
+                  <span>Votre réservation n'apparaît pas ? Donnez-nous juste votre nom et nous connecterons votre réservation.</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -1466,6 +1512,110 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                       Se connecter
                     </button>
                   </div>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        </AnimatePresence>,
+        document.body
+      )}
+
+      {/* ── Claim / Link Booking Modal (Discreet button requested by user) ── */}
+      {typeof document !== 'undefined' && claimModalOpen && createPortal(
+        <AnimatePresence>
+          <div className={styles.modalBackdrop} onClick={() => setClaimModalOpen(false)}>
+            <motion.div
+              className={styles.modalBox}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.modalHeader}>
+                <h3 className={styles.modalTitle}>Rattacher votre réservation</h3>
+                <button
+                  type="button"
+                  className={styles.modalCloseBtn}
+                  onClick={() => setClaimModalOpen(false)}
+                  aria-label="Fermer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {claimSuccess ? (
+                <div>
+                  <div className={styles.claimSuccessBanner}>
+                    <CheckCircle2 size={20} style={{ flexShrink: 0, color: '#4ade80' }} />
+                    <div>
+                      <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Demande enregistrée avec succès</div>
+                      <div>Notre équipe a bien reçu votre demande pour <strong>{claimForm.clientName}</strong>. Nous associons votre réservation sous quelques instants.</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.primaryAuthBtn}
+                    onClick={() => setClaimModalOpen(false)}
+                    style={{ width: '100%' }}
+                  >
+                    Fermer
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleClaimSubmit}>
+                  <p style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.5, marginBottom: '1.25rem' }}>
+                    Vous avez réservé par WhatsApp, téléphone ou email ? Indiquez simplement votre nom pour que nos répartiteurs associent vos réservations à votre compte <strong>{user?.email}</strong>.
+                  </p>
+
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label className={styles.formLabel}>Votre Nom et Prénom *</label>
+                    <input
+                      type="text"
+                      className={styles.formInput}
+                      value={claimForm.clientName}
+                      onChange={(e) => setClaimForm({ ...claimForm, clientName: e.target.value })}
+                      placeholder="Ex : Alexandre Dupont"
+                      required
+                      autoFocus
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label className={styles.formLabel}>Téléphone de contact</label>
+                    <input
+                      type="tel"
+                      className={styles.formInput}
+                      value={claimForm.clientPhone}
+                      onChange={(e) => setClaimForm({ ...claimForm, clientPhone: e.target.value })}
+                      placeholder="Ex : +33 6 12 34 56 78"
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <label className={styles.formLabel}>Précisions sur la course (optionnel)</label>
+                    <input
+                      type="text"
+                      className={styles.formInput}
+                      value={claimForm.details}
+                      onChange={(e) => setClaimForm({ ...claimForm, details: e.target.value })}
+                      placeholder="Ex : Réservé sur WhatsApp pour demain 14h vers CDG"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={claimLoading}
+                    className={styles.primaryAuthBtn}
+                    style={{ width: '100%' }}
+                  >
+                    {claimLoading ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Loader2 size={16} className={styles.spinnerIcon} /> Transmission...
+                      </span>
+                    ) : (
+                      'Envoyer la demande'
+                    )}
+                  </button>
                 </form>
               )}
             </motion.div>

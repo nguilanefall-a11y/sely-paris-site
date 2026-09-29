@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useBookingsStore } from '../store/useBookingsStore';
+import { claimRequestsService } from '../../services/claimRequestsService';
 import {
   Calendar,
   Clock,
@@ -24,6 +25,12 @@ import {
   Edit2,
   Save,
   Check,
+  Link2,
+  Inbox,
+  ArrowRight,
+  UserCheck,
+  ShieldCheck,
+  ExternalLink,
 } from 'lucide-react';
 
 // The 5 official categories defined for SELY Privé
@@ -159,6 +166,7 @@ export default function BookingsManager() {
     addBooking,
   } = useBookingsStore();
 
+  const [activeMainTab, setActiveMainTab] = useState('bookings'); // 'bookings' | 'claims'
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [vehicleFilter, setVehicleFilter] = useState('all');
@@ -167,9 +175,50 @@ export default function BookingsManager() {
   const [showNewModal, setShowNewModal] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
+  // Claim requests state
+  const [claimRequests, setClaimRequests] = useState([]);
+  const [claimFilter, setClaimFilter] = useState('all'); // 'all' | 'pending' | 'linked' | 'rejected'
+  const [selectedClaimForLink, setSelectedClaimForLink] = useState(null);
+  const [linkingSearch, setLinkingSearch] = useState('');
+  const [pendingClaimToLinkOnCreate, setPendingClaimToLinkOnCreate] = useState(null);
+
+  // Load claims on mount & listen to changes
+  useEffect(() => {
+    const loadClaims = () => {
+      setClaimRequests(claimRequestsService.getRequests());
+    };
+    loadClaims();
+    window.addEventListener('sely_claim_requests_updated', loadClaims);
+    return () => window.removeEventListener('sely_claim_requests_updated', loadClaims);
+  }, []);
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3500);
+  };
+
+  // Linking a claim request to an existing booking
+  const handleLinkBookingToClaim = (bookingId, claimReq) => {
+    const booking = bookings.find((b) => b.id === bookingId);
+    if (!booking) return;
+
+    const updatedBooking = {
+      ...booking,
+      email: claimReq.clientEmail,
+      clientName: claimReq.clientName || booking.clientName,
+      phone: claimReq.clientPhone || booking.phone,
+    };
+
+    updateBooking(bookingId, {
+      email: claimReq.clientEmail,
+      clientName: claimReq.clientName || booking.clientName,
+      phone: claimReq.clientPhone || booking.phone,
+    });
+
+    syncToClientTrips(updatedBooking);
+    claimRequestsService.updateRequestStatus(claimReq.id, 'linked', bookingId);
+    setSelectedClaimForLink(null);
+    triggerToast(`Course reliée avec succès au compte de ${claimReq.clientName} (${claimReq.clientEmail}) !`);
   };
 
   // Sync to client trips in localStorage
@@ -305,6 +354,12 @@ export default function BookingsManager() {
       flightNumber: '',
       notes: '',
     });
+
+    if (pendingClaimToLinkOnCreate) {
+      claimRequestsService.updateRequestStatus(pendingClaimToLinkOnCreate.id, 'linked', created.id);
+      setPendingClaimToLinkOnCreate(null);
+    }
+
     triggerToast(`Course enregistrée et synchronisée avec ${created.email}`);
   };
 
@@ -402,6 +457,59 @@ export default function BookingsManager() {
 
     return matchesSearch && matchesStatus && matchesVehicle;
   });
+
+  const pendingClaims = claimRequests.filter((r) => r.status === 'pending');
+  const linkedClaims = claimRequests.filter((r) => r.status === 'linked');
+  const pendingClaimsCount = pendingClaims.length;
+
+  const filteredClaimRequests = claimRequests.filter((req) => {
+    if (claimFilter !== 'all' && req.status !== claimFilter) return false;
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      (req.clientName || '').toLowerCase().includes(term) ||
+      (req.clientEmail || '').toLowerCase().includes(term) ||
+      (req.clientPhone || '').toLowerCase().includes(term) ||
+      (req.details || '').toLowerCase().includes(term)
+    );
+  });
+
+  const availableBookingsForLinking = bookings.filter((b) => {
+    if (!linkingSearch) return true;
+    const term = linkingSearch.toLowerCase();
+    return (
+      (b.clientName || '').toLowerCase().includes(term) ||
+      (b.email || '').toLowerCase().includes(term) ||
+      (b.phone || '').toLowerCase().includes(term) ||
+      (b.pickup || '').toLowerCase().includes(term) ||
+      (b.destination || '').toLowerCase().includes(term) ||
+      (b.date || '').toLowerCase().includes(term) ||
+      (b.vehicle || '').toLowerCase().includes(term)
+    );
+  });
+
+  const getClaimStatusBadge = (status) => {
+    switch (status) {
+      case 'linked':
+        return (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+            <CheckCircle2 size={12} /> Reliée au client
+          </span>
+        );
+      case 'rejected':
+        return (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(100, 116, 139, 0.15)', color: '#94a3b8', border: '1px solid rgba(100, 116, 139, 0.3)' }}>
+            <X size={12} /> Ignorée
+          </span>
+        );
+      default:
+        return (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.75rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: 'rgba(234, 179, 8, 0.15)', color: '#facc15', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
+            <Clock3 size={12} /> En Attente
+          </span>
+        );
+    }
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -513,8 +621,131 @@ export default function BookingsManager() {
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+      {/* Pending Claims Alert Banner */}
+      {pendingClaimsCount > 0 && activeMainTab !== 'claims' && (
+        <div style={{
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.35)',
+          borderRadius: '10px',
+          padding: '0.85rem 1.25rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem',
+          flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444', boxShadow: '0 0 10px #ef4444' }} />
+            <span style={{ fontSize: '0.9rem', color: '#fca5a5' }}>
+              <strong>{pendingClaimsCount} demande(s) de rattachement client en attente :</strong> Un ou plusieurs clients connectés demandent la synchronisation d'une réservation sur leur compte.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActiveMainTab('claims')}
+            style={{
+              padding: '0.45rem 0.95rem',
+              borderRadius: '6px',
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
+              border: 'none',
+              fontWeight: 700,
+              fontSize: '0.82rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+            }}
+          >
+            <span>Traiter les demandes</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* Main Navigation Tabs */}
+      <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.1rem' }}>
+        <button
+          type="button"
+          onClick={() => setActiveMainTab('bookings')}
+          style={{
+            padding: '0.75rem 1.25rem',
+            background: 'none',
+            border: 'none',
+            borderBottom: activeMainTab === 'bookings' ? '3px solid #c5a880' : '3px solid transparent',
+            color: activeMainTab === 'bookings' ? '#ffffff' : '#94a3b8',
+            fontWeight: activeMainTab === 'bookings' ? 700 : 500,
+            fontSize: '0.95rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            transition: 'all 0.2s',
+          }}
+        >
+          <Car size={18} color={activeMainTab === 'bookings' ? '#c5a880' : '#94a3b8'} />
+          <span>Courses & Réservations</span>
+          <span style={{
+            fontSize: '0.75rem',
+            padding: '0.15rem 0.55rem',
+            borderRadius: '12px',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            color: '#e2e8f0',
+          }}>
+            {bookings.length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveMainTab('claims')}
+          style={{
+            padding: '0.75rem 1.25rem',
+            background: 'none',
+            border: 'none',
+            borderBottom: activeMainTab === 'claims' ? '3px solid #c5a880' : '3px solid transparent',
+            color: activeMainTab === 'claims' ? '#ffffff' : '#94a3b8',
+            fontWeight: activeMainTab === 'claims' ? 700 : 500,
+            fontSize: '0.95rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            transition: 'all 0.2s',
+          }}
+        >
+          <Link2 size={18} color={activeMainTab === 'claims' ? '#c5a880' : '#94a3b8'} />
+          <span>Demandes de rattachement</span>
+          {pendingClaimsCount > 0 ? (
+            <span style={{
+              fontSize: '0.75rem',
+              padding: '0.15rem 0.55rem',
+              borderRadius: '12px',
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
+              fontWeight: 700,
+              boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)',
+            }}>
+              {pendingClaimsCount}
+            </span>
+          ) : (
+            <span style={{
+              fontSize: '0.75rem',
+              padding: '0.15rem 0.55rem',
+              borderRadius: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              color: '#94a3b8',
+            }}>
+              {claimRequests.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {activeMainTab === 'bookings' && (
+        <>
+          {/* KPI Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
         <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(255,255,255,0.08)' }}>
           <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Réservations</p>
           <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0' }}>{totalCount}</h3>
@@ -825,6 +1056,341 @@ export default function BookingsManager() {
           </tbody>
         </table>
       </div>
+        </>
+      )}
+
+      {/* ========================================================= */}
+      {/* VUE 2: GESTION DES DEMANDES DE RATTACHEMENT CLIENT        */}
+      {/* ========================================================= */}
+      {activeMainTab === 'claims' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {/* KPI Cards for claims */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Demandes</p>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0' }}>{claimRequests.length}</h3>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Historique complet</span>
+            </div>
+
+            <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(250,204,21,0.3)', borderLeft: '4px solid #facc15' }}>
+              <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>En Attente de Rattachement</p>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0', color: '#facc15' }}>{pendingClaimsCount}</h3>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>À relier à une course</span>
+            </div>
+
+            <div style={{ padding: '1.25rem', borderRadius: '10px', backgroundColor: '#0f131c', border: '1px solid rgba(34,197,94,0.3)', borderLeft: '4px solid #22c55e' }}>
+              <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Courses Reliées avec Succès</p>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '0.35rem 0', color: '#4ade80' }}>{linkedClaims.length}</h3>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Visibles sur l'espace client</span>
+            </div>
+          </div>
+
+          {/* Filter Bar */}
+          <div style={{
+            padding: '1rem 1.2rem',
+            borderRadius: '10px',
+            backgroundColor: '#0c0f17',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {[
+                { id: 'all', label: `Toutes (${claimRequests.length})` },
+                { id: 'pending', label: `En attente (${pendingClaimsCount})` },
+                { id: 'linked', label: `Reliées (${linkedClaims.length})` },
+                { id: 'rejected', label: `Ignorées (${claimRequests.filter(r => r.status === 'rejected').length})` },
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setClaimFilter(f.id)}
+                  style={{
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: '6px',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    border: claimFilter === f.id ? '1px solid #c5a880' : '1px solid rgba(255,255,255,0.1)',
+                    backgroundColor: claimFilter === f.id ? 'rgba(197,168,128,0.2)' : 'rgba(255,255,255,0.03)',
+                    color: claimFilter === f.id ? '#ffffff' : '#94a3b8',
+                  }}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ position: 'relative', minWidth: '240px', flex: 1, maxWidth: '400px' }}>
+              <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <input
+                type="text"
+                placeholder="Rechercher client, email, téléphone..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.55rem 0.85rem 0.55rem 2.3rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#121622',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#ffffff',
+                  fontSize: '0.85rem',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Claims Table */}
+          <div style={{ borderRadius: '10px', overflowX: 'auto', backgroundColor: '#0c0f17', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '850px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', backgroundColor: 'rgba(255, 255, 255, 0.02)' }}>
+                  <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>DATE DE DEMANDE</th>
+                  <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>CLIENT & CONTACT</th>
+                  <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>DÉTAILS DU TRAJET DEMANDÉ</th>
+                  <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>STATUT</th>
+                  <th style={{ padding: '0.85rem 1.25rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600, textAlign: 'right' }}>ACTIONS DE RATTACHEMENT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredClaimRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} style={{ padding: '3.5rem 1.5rem', textAlign: 'center', color: '#94a3b8' }}>
+                      <Inbox size={40} style={{ opacity: 0.35, marginBottom: '0.75rem', margin: '0 auto 0.75rem auto', display: 'block' }} />
+                      <div style={{ fontWeight: 600, fontSize: '1rem', color: '#ffffff' }}>Aucune demande de rattachement trouvée</div>
+                      <p style={{ fontSize: '0.85rem', color: '#64748b', maxWidth: '460px', margin: '0.5rem auto 0' }}>
+                        Quand un client connecté clique sur <em>« Votre réservation n'apparaît pas ? »</em> depuis son espace, sa demande apparaît instantanément ici pour être reliée.
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredClaimRequests.map((req) => {
+                    const linkedBooking = req.linkedBookingId ? bookings.find((b) => b.id === req.linkedBookingId) : null;
+                    return (
+                      <tr
+                        key={req.id}
+                        style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', transition: 'background 0.15s ease' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.02)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {/* Date */}
+                        <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', verticalAlign: 'top' }}>
+                          <div style={{ fontWeight: 600, color: '#ffffff' }}>
+                            {new Date(req.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                            {new Date(req.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </td>
+
+                        {/* Client & contact */}
+                        <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', verticalAlign: 'top' }}>
+                          <div style={{ fontWeight: 600, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <User size={14} color="#c5a880" />
+                            {req.clientName}
+                          </div>
+                          <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+                            {req.clientEmail}
+                          </div>
+                          {req.clientPhone && (
+                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.15rem' }}>
+                              Tél: {req.clientPhone}
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Details */}
+                        <td style={{ padding: '0.9rem 1.25rem', fontSize: '0.85rem', verticalAlign: 'top', maxWidth: '300px' }}>
+                          <div style={{ color: req.details ? '#e2e8f0' : '#64748b', fontStyle: req.details ? 'normal' : 'italic', lineHeight: 1.4 }}>
+                            {req.details || 'Aucun détail précisé par le client'}
+                          </div>
+                          {linkedBooking && (
+                            <div style={{ marginTop: '0.5rem', padding: '0.4rem 0.65rem', borderRadius: '6px', backgroundColor: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.25)', fontSize: '0.78rem', color: '#4ade80' }}>
+                              <strong>Course reliée :</strong> {linkedBooking.date} • {linkedBooking.pickup} &rarr; {linkedBooking.destination} ({linkedBooking.vehicle})
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Status */}
+                        <td style={{ padding: '0.9rem 1.25rem', verticalAlign: 'top' }}>
+                          {getClaimStatusBadge(req.status)}
+                        </td>
+
+                        {/* Actions */}
+                        <td style={{ padding: '0.9rem 1.25rem', textAlign: 'right', verticalAlign: 'top' }}>
+                          <div style={{ display: 'flex', gap: '0.45rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                            {req.status === 'pending' && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setLinkingSearch('');
+                                    setSelectedClaimForLink(req);
+                                  }}
+                                  style={{
+                                    padding: '0.45rem 0.8rem',
+                                    borderRadius: '6px',
+                                    backgroundColor: '#c5a880',
+                                    color: '#000000',
+                                    border: 'none',
+                                    fontSize: '0.78rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.35rem',
+                                    boxShadow: '0 2px 8px rgba(197,168,128,0.3)',
+                                  }}
+                                >
+                                  <Link2 size={13} />
+                                  <span>Relier à une course</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setPendingClaimToLinkOnCreate(req);
+                                    setNewForm({
+                                      clientName: req.clientName,
+                                      email: req.clientEmail,
+                                      phone: req.clientPhone || '',
+                                      serviceType: 'transfer',
+                                      date: new Date().toISOString().split('T')[0],
+                                      time: '12:00',
+                                      city: 'paris',
+                                      pickup: '',
+                                      destination: '',
+                                      vehicleCategory: 'business_class',
+                                      vehicle: 'Business Class (Mercedes Classe E)',
+                                      amount: '',
+                                      paymentMethod: 'Lien de paiement externe (Stripe / WhatsApp)',
+                                      status: 'paid',
+                                      passengers: 2,
+                                      luggage: 2,
+                                      chauffeur: '',
+                                      chauffeurPhone: '',
+                                      flightNumber: '',
+                                      notes: req.details ? `Demande de rattachement: ${req.details}` : '',
+                                    });
+                                    setShowNewModal(true);
+                                  }}
+                                  style={{
+                                    padding: '0.45rem 0.75rem',
+                                    borderRadius: '6px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                                    color: '#ffffff',
+                                    fontSize: '0.78rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.35rem',
+                                  }}
+                                  title="Créer une nouvelle course directement pour ce client"
+                                >
+                                  <Plus size={13} />
+                                  <span>Créer course</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    claimRequestsService.updateRequestStatus(req.id, 'rejected');
+                                    triggerToast('Demande marquée comme ignorée');
+                                  }}
+                                  style={{
+                                    padding: '0.45rem 0.65rem',
+                                    borderRadius: '6px',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    border: 'none',
+                                    color: '#f87171',
+                                    fontSize: '0.78rem',
+                                    cursor: 'pointer',
+                                  }}
+                                  title="Ignorer cette demande"
+                                >
+                                  Ignorer
+                                </button>
+                              </>
+                            )}
+
+                            {req.status === 'linked' && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  claimRequestsService.updateRequestStatus(req.id, 'pending', null);
+                                  triggerToast('Déliaison effectuée. Demande repassée en attente.');
+                                }}
+                                style={{
+                                  padding: '0.45rem 0.75rem',
+                                  borderRadius: '6px',
+                                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                                  color: '#cbd5e1',
+                                  fontSize: '0.78rem',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                Délier
+                              </button>
+                            )}
+
+                            {req.status === 'rejected' && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  claimRequestsService.updateRequestStatus(req.id, 'pending');
+                                  triggerToast('Demande réactivée en attente');
+                                }}
+                                style={{
+                                  padding: '0.45rem 0.75rem',
+                                  borderRadius: '6px',
+                                  backgroundColor: 'rgba(234, 179, 8, 0.15)',
+                                  border: '1px solid rgba(234, 179, 8, 0.3)',
+                                  color: '#facc15',
+                                  fontSize: '0.78rem',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                Réactiver
+                              </button>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                claimRequestsService.deleteRequest(req.id);
+                                triggerToast('Demande supprimée');
+                              }}
+                              style={{
+                                padding: '0.45rem',
+                                borderRadius: '6px',
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                                color: '#64748b',
+                                cursor: 'pointer',
+                              }}
+                              title="Supprimer définitivement l'entrée"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================= */}
       {/* MODAL 1: ATTRIBUER & MODIFIER UNE RÉSERVATION EXISTANTE */}
@@ -1603,6 +2169,199 @@ export default function BookingsManager() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* MODAL 3: RELIER UNE DEMANDE CLIENT À UNE COURSE EXISTANTE */}
+      {/* ========================================================= */}
+      {selectedClaimForLink && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.5rem',
+            zIndex: 1200,
+            overflowY: 'auto',
+          }}
+          onClick={() => setSelectedClaimForLink(null)}
+        >
+          <div
+            style={{
+              backgroundColor: '#0d111a',
+              border: '1px solid rgba(197, 168, 128, 0.4)',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              maxWidth: '750px',
+              width: '100%',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
+              <div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#c5a880', fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+                  <Link2 size={14} /> Rattachement de réservation
+                </div>
+                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+                  Relier la réservation de {selectedClaimForLink.clientName}
+                </h2>
+                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.25rem' }}>
+                  Compte client : <strong style={{ color: '#ffffff' }}>{selectedClaimForLink.clientEmail}</strong>
+                  {selectedClaimForLink.clientPhone && ` • Tél : ${selectedClaimForLink.clientPhone}`}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedClaimForLink(null)}
+                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Client request info banner */}
+            <div style={{ backgroundColor: 'rgba(197, 168, 128, 0.08)', border: '1px solid rgba(197, 168, 128, 0.25)', borderRadius: '8px', padding: '0.85rem 1rem' }}>
+              <div style={{ fontSize: '0.75rem', color: '#c5a880', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                Précisions indiquées par le client :
+              </div>
+              <div style={{ fontSize: '0.88rem', color: '#f1f5f9' }}>
+                {selectedClaimForLink.details || 'Aucune précision complémentaire saisie par le client.'}
+              </div>
+            </div>
+
+            {/* Search courses */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '0.4rem' }}>
+                Rechercher la course correspondante dans le planning :
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+                <input
+                  type="text"
+                  placeholder="Filtrer par nom, adresse, date, véhicule..."
+                  value={linkingSearch}
+                  onChange={(e) => setLinkingSearch(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.65rem 0.85rem 0.65rem 2.3rem',
+                    borderRadius: '8px',
+                    backgroundColor: '#121622',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#ffffff',
+                    fontSize: '0.85rem',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* List of bookings to link */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', maxHeight: '350px', overflowY: 'auto' }}>
+              {availableBookingsForLinking.length === 0 ? (
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                  Aucune course trouvée correspondant à « {linkingSearch} ».
+                </div>
+              ) : (
+                availableBookingsForLinking.map((booking) => {
+                  const meta = getVehicleMeta(booking.vehicle);
+                  return (
+                    <div
+                      key={booking.id}
+                      style={{
+                        padding: '0.9rem 1.1rem',
+                        borderRadius: '8px',
+                        backgroundColor: '#141926',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: '240px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.25rem' }}>
+                          <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '0.9rem' }}>
+                            {booking.date} • {booking.time}
+                          </span>
+                          <span style={{ fontSize: '0.72rem', padding: '0.15rem 0.5rem', borderRadius: '10px', backgroundColor: meta?.bgColor || 'rgba(197,168,128,0.2)', color: meta?.color || '#c5a880', fontWeight: 600 }}>
+                            {meta?.label || booking.vehicle}
+                          </span>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4ade80' }}>
+                            {booking.amount} €
+                          </span>
+                        </div>
+
+                        <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginBottom: '0.2rem' }}>
+                          <span style={{ color: '#4ade80' }}>•</span> {booking.pickup} &rarr; {booking.destination}
+                        </div>
+
+                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                          Client actuel : <span style={{ color: '#94a3b8' }}>{booking.clientName}</span> ({booking.email || 'Sans email'})
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleLinkBookingToClaim(booking.id, selectedClaimForLink)}
+                        style={{
+                          padding: '0.6rem 1rem',
+                          borderRadius: '6px',
+                          backgroundColor: '#c5a880',
+                          color: '#000000',
+                          border: 'none',
+                          fontSize: '0.8rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          whiteSpace: 'nowrap',
+                          boxShadow: '0 2px 8px rgba(197,168,128,0.3)',
+                        }}
+                      >
+                        <Check size={14} />
+                        <span>Connecter à ce client</span>
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Footer */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem' }}>
+              <button
+                type="button"
+                onClick={() => setSelectedClaimForLink(null)}
+                style={{
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#ffffff',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                }}
+              >
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
       )}
