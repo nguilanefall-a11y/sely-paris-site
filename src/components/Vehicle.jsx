@@ -242,6 +242,26 @@ const FLEET_VEHICLES = [
     group: 'berlines'
   },
   {
+    id: 'bmw-i5',
+    key: 'v15',
+    category: 'BERLINE ÉLECTRIQUE EXECUTIVE',
+    categoryEn: 'EXECUTIVE ELECTRIC SALOON',
+    name: 'BMW i5 Berline Électrique',
+    watermark: 'BMW i5',
+    subtitle: 'La nouvelle berline d\'affaires 100% électrique au raffinement souverain',
+    subtitleEn: 'The modern all-electric executive saloon with peerless refined silence',
+    image: '/bmw-i5-main.jpg',
+    rearImage: '/bmw-i5-rear.jpg',
+    interiorImage: '/bmw-i5-interior.jpg',
+    passengers: '3',
+    luggage: '3',
+    badge: '100% ÉLECTRIQUE VIP',
+    badgeEn: '100% ELECTRIC VIP',
+    highlights: ['Calandre Iconic Glow rétroéclairée & Phares LED affûtés', 'BMW Curved Display panoramique & Interaction Bar cristalline', 'Confort feutré zéro émission avec accès prioritaire'],
+    highlightsEn: ['Illuminated Iconic Glow grille & sharp LED headlights', 'Panoramic BMW Curved Display & crystalline Interaction Bar', 'Zero-emission serenity with priority city access'],
+    group: 'berlines'
+  },
+  {
     id: 'sprinter-12',
     key: 'v6',
     isMinibus: true,

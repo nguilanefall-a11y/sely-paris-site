@@ -55,6 +55,22 @@ const VEHICLES_CATALOG = [
     badgeEn: 'CORPORATE VIP'
   },
   {
+    id: 'bmw-i5',
+    title: 'BMW i5 Berline Électrique',
+    titleEn: 'BMW i5 Electric Saloon',
+    category: 'BERLINE ÉLECTRIQUE EXECUTIVE',
+    categoryEn: 'EXECUTIVE ELECTRIC SALOON',
+    desc: 'L\'incarnation de la berline d\'affaires 100% électrique. Calandre rétroéclairée Iconic Glow, écran panoramique incurvé BMW et silence absolu pour vos transferts parisiens.',
+    descEn: 'The modern benchmark for all-electric executive travel. Illuminated Iconic Glow kidney grille, BMW Curved Display, and whisper-quiet poise across Paris.',
+    passengers: '3',
+    luggage: '3',
+    image: '/bmw-i5-main.jpg',
+    rearImage: '/bmw-i5-rear.jpg',
+    interiorImage: '/bmw-i5-interior.jpg',
+    badge: '100% ÉLECTRIQUE VIP',
+    badgeEn: '100% ELECTRIC VIP'
+  },
+  {
     id: 'maybach',
     title: 'Mercedes-Maybach',
     titleEn: 'Mercedes-Maybach',
@@ -243,7 +259,7 @@ export default function VehiclesPage() {
 
   const filteredVehicles = VEHICLES_CATALOG.filter((v) => {
     if (activeCategory === 'all') return true;
-    if (activeCategory === 'berlines') return v.id === 'classe-s' || v.id === 'classe-e' || v.id === 'tesla-y';
+    if (activeCategory === 'berlines') return v.id === 'classe-s' || v.id === 'classe-e' || v.id === 'tesla-y' || v.id === 'bmw-i5';
     if (activeCategory === 'prestige') return v.id === 'maybach' || v.id === 'rolls-phantom' || v.id === 'rolls-cullinan';
     if (activeCategory === 'suv') return v.id === 'range-rover' || v.id === 'classe-g' || v.id === 'brabus-g' || v.id === 'cadillac-escalade';
     if (activeCategory === 'vans') return v.id === 'classe-v';

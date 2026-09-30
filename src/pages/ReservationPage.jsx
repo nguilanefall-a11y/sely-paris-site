@@ -66,7 +66,7 @@ export const QUOTE_CLASSES = [
     id: 'business-class',
     classCategory: 'standard',
     name: 'Business Class',
-    subtitle: 'Classe E, EQE, Tesla Model Y ou similaire',
+    subtitle: 'Classe E, BMW i5, Tesla Model Y ou similaire',
     vehicleTag: 'Business Class',
     passengers: 'Jusqu’à 3 passagers',
     maxPassengers: 3,
@@ -74,7 +74,7 @@ export const QUOTE_CLASSES = [
     luggage: '2 valises max',
     desc: 'Berlines exécutives haut de gamme pour vos transferts aéroports, gares et rendez-vous professionnels.',
     image: '/eclass-paris-luxury.jpg',
-    models: ['Mercedes Classe E', 'Mercedes EQE', 'Tesla Model Y'],
+    models: ['Mercedes Classe E', 'BMW i5', 'Mercedes EQE', 'Tesla Model Y'],
   },
   {
     id: 'business-van',
@@ -238,6 +238,15 @@ const VEHICLES = [
     maxPassengers: 3,
     maxLuggage: 2,
     image: '/eclass-paris-luxury.jpg',
+  },
+  {
+    id: 'bmw-i5',
+    name: 'BMW i5 Berline Électrique',
+    aliasOf: 'business-class',
+    passengers: '3 passagers',
+    maxPassengers: 3,
+    maxLuggage: 3,
+    image: '/bmw-i5-main.jpg',
   },
   {
     id: 'tesla-y',
@@ -808,7 +817,7 @@ export default function ReservationPage() {
   const [selectedVehicle, setSelectedVehicle] = useState(() => {
     const fromUrl = searchParams.get('vehicle');
     if (fromUrl) {
-      if (fromUrl === 'classe-e' || fromUrl === 'tesla-y') return 'business-class';
+      if (fromUrl === 'classe-e' || fromUrl === 'tesla-y' || fromUrl === 'bmw-i5') return 'business-class';
       if (fromUrl === 'classe-v') return 'business-van';
       if (fromUrl === 'classe-s') return 'first-class';
       if (VEHICLES.some((v) => v.id === fromUrl)) return fromUrl;
