@@ -457,3 +457,33 @@ for (const lang of languages) {
 }
 
 console.log(`[PRERENDER] Successfully generated ${generatedCount} article pages and 5 hub pages in dist/!`);
+
+// ─── 3. PRERENDER CONVERSION CONFIRMATION PAGES WITH GOOGLE ADS EVENT SNIPPET ───
+const rawConversionSnippet = `
+    <!-- Event snippet for Demande de devis (1) conversion page -->
+    <script>
+      gtag('event', 'conversion', {'send_to': 'AW-18418775333/IzlhCL_QyIsdEKXq4M5E'});
+    </script>
+`;
+
+const conversionRoutes = [
+  'reservation-succes',
+  'confirmation-devis',
+  'devis-confirme',
+  'paris/reservation-succes',
+  'paris/confirmation-devis',
+  'paris/devis-confirme',
+];
+
+for (const route of conversionRoutes) {
+  let convHtml = baseTemplate;
+  if (!convHtml.includes('AW-18418775333/IzlhCL_QyIsdEKXq4M5E')) {
+    convHtml = convHtml.replace('</head>', `${rawConversionSnippet}\n</head>`);
+  }
+  const convDir = path.join(distDir, route);
+  fs.mkdirSync(convDir, { recursive: true });
+  fs.writeFileSync(path.join(convDir, 'index.html'), convHtml, 'utf8');
+}
+
+console.log(`[PRERENDER] Successfully generated ${conversionRoutes.length} conversion confirmation pages in dist/!`);
+

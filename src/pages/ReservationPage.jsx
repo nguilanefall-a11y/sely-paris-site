@@ -56,6 +56,7 @@ import { useBookingsStore } from '../admin/store/useBookingsStore';
 import LuxuryDateTimePicker from '../components/LuxuryDateTimePicker';
 import { useVoiceDictation } from '../hooks/useVoiceDictation';
 import { getPopularDestinations } from '../lib/popularDestinations';
+import { trackQuoteConversion } from '../lib/googleAds';
 import styles from './ReservationPage.module.css';
 
 /* ─── Vehicle Catalogue & Quote Classes (Simplified & Blacklane UX Logic) ─── */
@@ -1163,6 +1164,9 @@ export default function ReservationPage() {
         try {
           sessionStorage.setItem('sely_latest_quote', JSON.stringify(quoteData));
         } catch (err) {}
+
+        // Google Ads conversion event: Demande de devis (1)
+        trackQuoteConversion(quoteData);
 
         navigate(getCityPath('/reservation-succes'), { state: quoteData });
       } else {

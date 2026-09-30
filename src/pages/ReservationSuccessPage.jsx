@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -22,6 +22,7 @@ import {
   FileText
 } from 'lucide-react';
 import { useCity } from '../hooks/useCity';
+import { trackQuoteConversion } from '../lib/googleAds';
 import styles from './ReservationSuccessPage.module.css';
 
 const TEXTS = {
@@ -252,6 +253,19 @@ export default function ReservationSuccessPage() {
       cityName: 'Paris',
     });
   }, [location.state]);
+
+  const trackedRef = useRef(false);
+
+  // Fire Google Ads conversion tracking for "Demande de devis (1)"
+  useEffect(() => {
+    if (quoteData && !trackedRef.current) {
+      trackedRef.current = true;
+      trackQuoteConversion({
+        ref: quoteData.ref,
+        estimatedPrice: quoteData.estimatedPrice,
+      });
+    }
+  }, [quoteData]);
 
   const handleCopyRef = () => {
     if (!quoteData?.ref) return;

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { User, Mail, Phone, Building2, MessageSquare, Loader2, Check, Send, Zap, Mic, MicOff } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
 import { useVoiceDictation } from '../hooks/useVoiceDictation';
+import { trackQuoteConversion } from '../lib/googleAds';
 import styles from './SpecialRequestPage.module.css';
 
 export default function SpecialRequestPage() {
@@ -99,6 +100,9 @@ export default function SpecialRequestPage() {
         try {
           sessionStorage.setItem('sely_latest_quote', JSON.stringify(quoteData));
         } catch (err) {}
+
+        // Google Ads conversion event: Demande de devis (1)
+        trackQuoteConversion(quoteData);
 
         navigate(getCityPath('/reservation-succes'), { state: quoteData });
       } else {

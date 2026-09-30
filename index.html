@@ -31,6 +31,16 @@
 
       gtag('config', 'AW-18418775333');
     </script>
+    <!-- Event snippet for Demande de devis (1) conversion page -->
+    <script>
+      if (typeof window !== 'undefined' && (
+        window.location.pathname.includes('/reservation-succes') ||
+        window.location.pathname.includes('/confirmation-devis') ||
+        window.location.pathname.includes('/devis-confirme')
+      )) {
+        gtag('event', 'conversion', {'send_to': 'AW-18418775333/IzlhCL_QyIsdEKXq4M5E'});
+      }
+    </script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
