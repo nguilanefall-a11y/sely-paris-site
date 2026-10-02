@@ -241,7 +241,7 @@ const VEHICLES = [
   },
   {
     id: 'bmw-i5',
-    name: 'BMW i5 Berline Électrique',
+    name: 'BMW i5 Berline',
     aliasOf: 'business-class',
     passengers: '3 passagers',
     maxPassengers: 3,

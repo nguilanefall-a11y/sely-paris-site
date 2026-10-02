@@ -56,19 +56,19 @@ const VEHICLES_CATALOG = [
   },
   {
     id: 'bmw-i5',
-    title: 'BMW i5 Berline Électrique',
-    titleEn: 'BMW i5 Electric Saloon',
-    category: 'BERLINE ÉLECTRIQUE EXECUTIVE',
-    categoryEn: 'EXECUTIVE ELECTRIC SALOON',
-    desc: 'L\'incarnation de la berline d\'affaires 100% électrique. Calandre rétroéclairée Iconic Glow, écran panoramique incurvé BMW et silence absolu pour vos transferts parisiens.',
-    descEn: 'The modern benchmark for all-electric executive travel. Illuminated Iconic Glow kidney grille, BMW Curved Display, and whisper-quiet poise across Paris.',
+    title: 'BMW i5 Berline',
+    titleEn: 'BMW i5 Saloon',
+    category: 'BERLINE EXECUTIVE',
+    categoryEn: 'EXECUTIVE SALOON',
+    desc: 'L\'incarnation de la berline d\'affaires d\'exception. Calandre rétroéclairée Iconic Glow, écran panoramique incurvé BMW et silence feutré pour vos transferts parisiens.',
+    descEn: 'The modern benchmark for executive travel. Illuminated Iconic Glow kidney grille, BMW Curved Display, and whisper-quiet poise across Paris.',
     passengers: '3',
     luggage: '3',
     image: '/bmw-i5-main.jpg',
     rearImage: '/bmw-i5-rear.jpg',
     interiorImage: '/bmw-i5-interior.jpg',
-    badge: '100% ÉLECTRIQUE VIP',
-    badgeEn: '100% ELECTRIC VIP'
+    badge: 'EXECUTIVE VIP',
+    badgeEn: 'EXECUTIVE VIP'
   },
   {
     id: 'maybach',
