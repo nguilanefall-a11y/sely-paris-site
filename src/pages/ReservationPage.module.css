@@ -4627,3 +4627,247 @@
 .hourlyTotalBanner strong {
   color: #e5c378;
 }
+
+/* ── Stepper Breadcrumb (Item 16) ── */
+.stepperBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #888888;
+  padding: 0 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.stepperBreadcrumb::-webkit-scrollbar {
+  display: none;
+}
+
+.stepActive {
+  color: #0a0a0a;
+  font-weight: 700;
+  border-bottom: 2px solid #b8903c;
+  padding-bottom: 2px;
+}
+
+.stepDone {
+  color: #555555;
+}
+
+.stepInactive {
+  color: #aaaaaa;
+}
+
+.stepArrow {
+  color: #cccccc;
+  font-size: 0.8rem;
+}
+
+/* ── Sticky / Visible Trip Recap Card during funnel (Item 17) ── */
+.stickyTripRecapCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #f7f5f0;
+  border: 1px solid #e8e4dc;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stickyTripRecapLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow: hidden;
+}
+
+.stickyTripRecapRoute {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #111111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stickyTripRecapTime {
+  font-size: 0.76rem;
+  color: #666666;
+}
+
+.stickyTripRecapEditBtn {
+  background: transparent;
+  border: 1px solid #d0c9bc;
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.stickyTripRecapEditBtn:hover {
+  background: #ffffff;
+  border-color: #0a0a0a;
+}
+
+/* ── Unverified Address Hint & Badge (Item 5) ── */
+.unverifiedFieldHint {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  color: #a87212;
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+
+.toConfirmBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #a87212;
+  background: #fdf6e7;
+  border: 1px solid #fae1af;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Suggestions Dropdown Sections (Item 6) ── */
+.sugSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8c8275;
+  padding: 8px 12px 4px 12px;
+  border-bottom: 1px solid #f2eee8;
+  margin-bottom: 4px;
+}
+
+.sugLoadingState,
+.sugEmptyState {
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  color: #666666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+/* ── Flexible Departure Toggle (Item 1) ── */
+.timeLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.flexibleToggleBtn {
+  background: transparent;
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8a7342;
+  cursor: pointer;
+  padding: 2px 4px;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.flexibleToggleBtn:hover {
+  color: #574621;
+}
+
+.flexibleToggleActive {
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.flexibleTimePlaceholder {
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px dashed #c8bca8;
+  background: #faf8f5;
+  font-size: 13px;
+  color: #7d6e5a;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Quick Terminal Chips (Item 2) ── */
+.quickTerminalChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.terminalChip {
+  background: #f7f5f0;
+  border: 1px solid #dcd7cf;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #222222;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.terminalChip:hover {
+  background: #eae5dc;
+  border-color: #888888;
+}
+
+.terminalChipActive {
+  background: #0a0a0a;
+  color: #ffffff;
+  border-color: #0a0a0a;
+}
+
+/* ── Final Submit Reassurance Notice (Item 20) ── */
+.finalSubmitNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: #666666;
+  margin-top: 0.75rem;
+  text-align: center;
+  line-height: 1.4;
+  padding: 0 0.5rem;
+}
+
+.noticeIcon {
+  color: #2e7d32;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .pillSelectorBtn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.82rem;
+    gap: 0.35rem;
+  }
+}

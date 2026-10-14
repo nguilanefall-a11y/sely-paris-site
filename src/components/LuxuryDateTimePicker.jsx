@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, ChevronDown, Check } from 'lucide-react';
 import styles from './LuxuryDateTimePicker.module.css';
 
 const MONTH_NAMES_FR = [
@@ -131,9 +131,39 @@ export default function LuxuryDateTimePicker({
   const monthNames = isEn ? MONTH_NAMES_EN : MONTH_NAMES_FR;
   const weekdays = isEn ? WEEKDAYS_EN : WEEKDAYS_FR;
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className={styles.container}>
-      {/* ── Compact Recap ── */}
+      {/* ── Compact Mobile Trigger (Suggestion 15) ── */}
+      <button
+        type="button"
+        onClick={() => setMobileOpen(prev => !prev)}
+        className={styles.compactMobileTrigger}
+        aria-expanded={mobileOpen}
+      >
+        <div className={styles.compactLeft}>
+          <div className={styles.compactCalendarIcon}>
+            <Calendar size={18} />
+          </div>
+          <div className={styles.compactTextGroup}>
+            <span className={styles.compactMainText}>
+              {formattedDate} · {selectedTime}
+            </span>
+            <span className={styles.compactSubText}>
+              {isEn ? 'Chauffeur on site 15 min early' : 'Chauffeur en place 15 min avant'}
+            </span>
+          </div>
+        </div>
+        <div className={styles.compactAction}>
+          <span className={styles.compactActionLabel}>
+            {mobileOpen ? (isEn ? 'Fermer' : 'Fermer') : (isEn ? 'Modifier' : 'Modifier')}
+          </span>
+          <ChevronDown size={16} className={`${styles.compactChevron} ${mobileOpen ? styles.chevronRotated : ''}`} />
+        </div>
+      </button>
+
+      {/* ── Desktop Recap ── */}
       <div className={styles.recapBar}>
         <span className={styles.recapDate}>{formattedDate}</span>
         <span className={styles.recapSep}>·</span>
@@ -143,8 +173,8 @@ export default function LuxuryDateTimePicker({
         </span>
       </div>
 
-      {/* ── Two Columns ── */}
-      <div className={styles.grid}>
+      {/* ── Two Columns (expandable on mobile) ── */}
+      <div className={`${styles.grid} ${mobileOpen ? styles.gridOpen : ''}`}>
 
         {/* ─── DATE ─── */}
         <div className={styles.card}>
@@ -254,6 +284,15 @@ export default function LuxuryDateTimePicker({
           </div>
         </div>
 
+        {/* Mobile close/validate action */}
+        <button
+          type="button"
+          onClick={() => setMobileOpen(false)}
+          className={styles.closeMobilePickerBtn}
+        >
+          <Check size={16} />
+          <span>{isEn ? 'Confirm date & time' : 'Valider la date et l’heure'}</span>
+        </button>
       </div>
     </div>
   );

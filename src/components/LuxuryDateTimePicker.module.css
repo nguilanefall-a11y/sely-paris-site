@@ -49,6 +49,106 @@
   letter-spacing: 0.01em;
 }
 
+/* ── Compact mobile trigger (Suggestion 15) ── */
+.compactMobileTrigger {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  background: #ffffff;
+  border: 1px solid #18181b;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.compactMobileTrigger:hover {
+  background: #fbfbfb;
+}
+
+.compactLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.compactCalendarIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f4f4f5;
+  color: #18181b;
+  flex-shrink: 0;
+}
+
+.compactTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.compactMainText {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  text-transform: capitalize;
+}
+
+.compactSubText {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: #71717a;
+}
+
+.compactAction {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #000000;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.compactChevron {
+  transition: transform 0.2s ease;
+}
+
+.chevronRotated {
+  transform: rotate(180deg);
+}
+
+.closeMobilePickerBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.35rem;
+  transition: background 0.18s ease;
+}
+
+.closeMobilePickerBtn:hover {
+  background: #262626;
+}
+
 /* ── 2-col layout ── */
 .grid {
   display: grid;
@@ -56,9 +156,27 @@
   gap: 1rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+  .recapBar {
+    display: none;
+  }
+
+  .compactMobileTrigger {
+    display: flex;
+  }
+
   .grid {
-    grid-template-columns: 1fr;
+    display: none;
+  }
+
+  .gridOpen {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .closeMobilePickerBtn {
+    display: flex;
   }
 }
 

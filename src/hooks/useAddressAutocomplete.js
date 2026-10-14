@@ -27,8 +27,6 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
       setIsLoading(true);
       try {
         const cityBias = CITY_COORDS[city] || CITY_COORDS.paris;
-        // Search without restricting to a single country: works across all France, UK (England, London), Monaco, Switzerland, etc.
-        // lat & lon provide proximity bias to the active city
         const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(
           query.trim()
         )}&limit=7&lat=${cityBias.lat}&lon=${cityBias.lon}`;
@@ -38,12 +36,37 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
           const data = await response.json();
           if (data && data.features) {
             const formatted = data.features.map((f) => {
-              const props = f.properties;
+              const props = f.properties || {};
               const parts = [];
 
-              // Street number and name
+              // Check if place is an airport or VIP transport terminal
+              const isAirport =
+                props.osm_key === 'aeroway' ||
+                props.osm_value === 'aerodrome' ||
+                props.osm_value === 'terminal' ||
+                (props.name && /a[ée]roport|airport|cdg|orly|roissy|bourget|heathrow|gatwick|terminal/i.test(props.name)) ||
+                (props.street && /cdg|roissy/i.test(props.street));
+
               let mainAddress = '';
-              if (props.street) {
+
+              if (isAirport) {
+                // Preserve explicit airport identity instead of administrative street (e.g. Place de Dublin)
+                if (props.name && /cdg|charles de gaulle/i.test(props.name)) {
+                  mainAddress = props.name.includes('Aéroport') ? props.name : `Aéroport CDG - ${props.name}`;
+                } else if (/cdg|charles de gaulle|roissy/i.test(query)) {
+                  mainAddress = props.name ? `Aéroport CDG (${props.name})` : 'Aéroport Paris-Charles de Gaulle (CDG)';
+                } else if (props.name) {
+                  mainAddress = props.name;
+                } else {
+                  mainAddress = 'Aéroport Paris-Charles de Gaulle (CDG)';
+                }
+              } else if (props.name && (!props.street || props.osm_key !== 'highway')) {
+                // Recognised Point of Interest, Hotel, Palace or Monument
+                mainAddress = props.name;
+                if (props.street && props.housenumber) {
+                  mainAddress = `${props.name} (${props.housenumber} ${props.street})`;
+                }
+              } else if (props.street) {
                 if (props.housenumber) {
                   mainAddress = `${props.housenumber} ${props.street}`;
                 } else {
@@ -65,13 +88,14 @@ export function useAddressAutocomplete(initialValue = '', city = 'paris') {
               if (props.state && !props.city) parts.push(props.state);
 
               // Country
-              if (props.country) parts.push(props.country);
+              if (props.country && props.country !== 'France') parts.push(props.country);
 
               const label = parts.join(', ');
               return {
                 id: `${props.osm_id || Math.random()}-${props.osm_type || 'node'}`,
                 label,
                 description: label,
+                isAirport,
                 coordinates: f.geometry && f.geometry.coordinates ? f.geometry.coordinates : null, // [lon, lat]
               };
             });

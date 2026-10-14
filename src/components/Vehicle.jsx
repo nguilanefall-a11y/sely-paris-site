@@ -885,7 +885,7 @@ export default function Vehicle() {
                 {isEn ? 'EXPLORE THE FLEET' : 'SÉLECTEUR RAPIDE DE LA FLOTTE'}
               </span>
               <span className={styles.stripSubtitle}>
-                {isEn ? 'Explore each bespoke model in the collection' : 'Parcourez les 12 modèles de notre flotte'}
+                {isEn ? `Explore all ${VEHICLES.length} models in the collection` : `Parcourez les ${VEHICLES.length} modèles de notre flotte`}
               </span>
             </div>
             <span className={styles.stripHint}>

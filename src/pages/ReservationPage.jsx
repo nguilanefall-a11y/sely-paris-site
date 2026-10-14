@@ -14,6 +14,8 @@ import {
   Baby,
   PlaneTakeoff,
   Briefcase,
+  Search,
+  ShieldCheck,
   MessageSquare,
   Loader2,
   AlertCircle,
@@ -277,7 +279,10 @@ const VEHICLES = [
   },
 ];
 
-const AIRPORT_KEYWORDS = ['aéroport', 'cdg', 'orly', 'airport', 'roissy', 'beauvais', 'bourget'];
+const AIRPORT_KEYWORDS = [
+  'aéroport', 'aeroport', 'airport', 'cdg', 'orly', 'roissy', 'beauvais', 'bourget',
+  'tremblay', 'charles de gaulle', 'heathrow', 'gatwick', 'jfk', 'lga', 'terminal'
+];
 
 function containsAirport(value) {
   if (!value) return false;
@@ -591,7 +596,7 @@ export default function ReservationPage() {
       startTime: searchParams.get('time') || '09:00',
       endTime: '17:00',
       hours: 8,
-      isFlexible: true,
+      isFlexible: false,
     },
   ]);
   const [hasLongDistance, setHasLongDistance] = useState(false);
@@ -646,6 +651,7 @@ export default function ReservationPage() {
           ...d,
           startTime: newStart,
           endTime: `${endHStr}:${endMStr}`,
+          isFlexible: false,
         };
       })
     );
@@ -801,7 +807,7 @@ export default function ReservationPage() {
         unique.push(item);
       }
     }
-    return unique.length > 0 ? unique.slice(0, 6) : LUXURY_SUGGESTIONS.slice(0, 6);
+    return unique.slice(0, 6);
   };
 
   const [fleetMode, setFleetMode] = useState(() => {
@@ -1271,7 +1277,7 @@ export default function ReservationPage() {
               id="urgent-request-pill"
             >
               <Sparkles size={16} strokeWidth={1.8} style={{ color: '#b8903c' }} />
-              <span>{t('tunnel.urgent_pill_label', 'Demande spécifique urgente')}</span>
+              <span>{t('tunnel.urgent_pill_label', 'Demande urgente')}</span>
               <ChevronDown size={14} className={styles.pillChevron} />
             </button>
           </div>
@@ -1363,6 +1369,11 @@ export default function ReservationPage() {
                 </button>
               )}
             </div>
+            {pickup && pickup.trim().length >= 3 && !pickupCoords && (
+              <span className={styles.unverifiedFieldHint}>
+                ℹ️ {t('tunnel.address_to_confirm', 'Adresse à confirmer par nos services')}
+              </span>
+            )}
 
             {/* Pickup temporary autocomplete / suggestions dropdown */}
             {activeInputFocus === 'pickup' && (
@@ -1372,53 +1383,79 @@ export default function ReservationPage() {
                   onClick={() => setActiveInputFocus(null)}
                 />
                 <div className={styles.fieldSuggestionsDropdown}>
-                  {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 ? (
-                    pickupAutocomplete.suggestions.map((s, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setPickup(s.label);
-                          if (s.coordinates) setPickupCoords(s.coordinates);
-                          pickupAutocomplete.setSuggestions([]);
-                          setActiveInputFocus(null);
-                        }}
-                        className={styles.fieldSuggestionItem}
-                      >
-                        <div className={styles.sugIconCircle}>
-                          <MapPin size={16} />
-                        </div>
-                        <div className={styles.sugDetails}>
-                          <span className={styles.sugMain}>{s.label}</span>
-                        </div>
-                      </button>
-                    ))
+                  {(!pickup || pickup.trim().length < 2) ? (
+                    <>
+                      <div className={styles.sugSectionTitle}>
+                        <Sparkles size={13} />
+                        <span>{t('tunnel.popular_destinations', 'Destinations populaires & aéroports')}</span>
+                      </div>
+                      {getPopularDestinations(currentCity).slice(0, 6).map((p, idx) => (
+                        <button
+                          key={p.id || idx}
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setPickup(p.label);
+                            if (p.coordinates) setPickupCoords(p.coordinates);
+                            pickupAutocomplete.setSuggestions([]);
+                            setActiveInputFocus(null);
+                          }}
+                          className={styles.fieldSuggestionItem}
+                        >
+                          <div className={styles.sugIconCircle}>
+                            {p.type === 'airport' ? <PlaneTakeoff size={16} /> : <MapPin size={16} />}
+                          </div>
+                          <div className={styles.sugDetails}>
+                            <span className={styles.sugMain}>{p.label}</span>
+                            <span className={styles.sugSub}>{p.subtitle}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </>
                   ) : (
-                    getFallbackSuggestions(pickup).map((item, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setPickup(item.label);
-                          setActiveInputFocus(null);
-                        }}
-                        className={styles.fieldSuggestionItem}
-                      >
-                        <div className={styles.sugIconCircle}>
-                          {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
-                            <PlaneTakeoff size={16} />
-                          ) : (
-                            <MapPin size={16} />
-                          )}
+                    <>
+                      {pickupAutocomplete.isLoading && (
+                        <div className={styles.sugLoadingState}>
+                          <Loader2 size={14} className={styles.spinner} />
+                          <span>{t('tunnel.searching_address', 'Recherche d’adresses...')}</span>
                         </div>
-                        <div className={styles.sugDetails}>
-                          <span className={styles.sugMain}>{item.label}</span>
-                          <span className={styles.sugSub}>{item.category}</span>
-                        </div>
-                      </button>
-                    ))
+                      )}
+                      {pickupAutocomplete.suggestions && pickupAutocomplete.suggestions.length > 0 ? (
+                        <>
+                          <div className={styles.sugSectionTitle}>
+                            <Search size={13} />
+                            <span>{t('tunnel.search_results', 'Résultats d’adresses')}</span>
+                          </div>
+                          {pickupAutocomplete.suggestions.map((s, idx) => (
+                            <button
+                              key={s.id || idx}
+                              type="button"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setPickup(s.label);
+                                if (s.coordinates) setPickupCoords(s.coordinates);
+                                pickupAutocomplete.setSuggestions([]);
+                                setActiveInputFocus(null);
+                              }}
+                              className={styles.fieldSuggestionItem}
+                            >
+                              <div className={styles.sugIconCircle}>
+                                {s.isAirport ? <PlaneTakeoff size={16} /> : <MapPin size={16} />}
+                              </div>
+                              <div className={styles.sugDetails}>
+                                <span className={styles.sugMain}>{s.label}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </>
+                      ) : (
+                        !pickupAutocomplete.isLoading && (
+                          <div className={styles.sugEmptyState}>
+                            <span>{t('tunnel.no_address_found', 'Aucune adresse exacte trouvée. Vous pouvez conserver cette saisie, elle sera confirmée par notre équipe.')}</span>
+                          </div>
+                        )
+                      )}
+                    </>
                   )}
                 </div>
               </>
@@ -1465,6 +1502,11 @@ export default function ReservationPage() {
                 </button>
               )}
             </div>
+            {destination && destination.trim().length >= 3 && !destCoords && (
+              <span className={styles.unverifiedFieldHint}>
+                ℹ️ {t('tunnel.address_to_confirm', 'Adresse à confirmer par nos services')}
+              </span>
+            )}
 
             {/* Destination temporary autocomplete / suggestions dropdown */}
             {activeInputFocus === 'destination' && (
@@ -1474,53 +1516,79 @@ export default function ReservationPage() {
                   onClick={() => setActiveInputFocus(null)}
                 />
                 <div className={styles.fieldSuggestionsDropdown}>
-                  {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 ? (
-                    destAutocomplete.suggestions.map((s, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setDestination(s.label);
-                          if (s.coordinates) setDestCoords(s.coordinates);
-                          destAutocomplete.setSuggestions([]);
-                          setActiveInputFocus(null);
-                        }}
-                        className={styles.fieldSuggestionItem}
-                      >
-                        <div className={styles.sugIconCircle}>
-                          <MapPin size={16} />
-                        </div>
-                        <div className={styles.sugDetails}>
-                          <span className={styles.sugMain}>{s.label}</span>
-                        </div>
-                      </button>
-                    ))
+                  {(!destination || destination.trim().length < 2) ? (
+                    <>
+                      <div className={styles.sugSectionTitle}>
+                        <Sparkles size={13} />
+                        <span>{t('tunnel.popular_destinations', 'Destinations populaires & aéroports')}</span>
+                      </div>
+                      {getPopularDestinations(currentCity).slice(0, 6).map((p, idx) => (
+                        <button
+                          key={p.id || idx}
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setDestination(p.label);
+                            if (p.coordinates) setDestCoords(p.coordinates);
+                            destAutocomplete.setSuggestions([]);
+                            setActiveInputFocus(null);
+                          }}
+                          className={styles.fieldSuggestionItem}
+                        >
+                          <div className={styles.sugIconCircle}>
+                            {p.type === 'airport' ? <PlaneTakeoff size={16} /> : <MapPin size={16} />}
+                          </div>
+                          <div className={styles.sugDetails}>
+                            <span className={styles.sugMain}>{p.label}</span>
+                            <span className={styles.sugSub}>{p.subtitle}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </>
                   ) : (
-                    getFallbackSuggestions(destination).map((item, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setDestination(item.label);
-                          setActiveInputFocus(null);
-                        }}
-                        className={styles.fieldSuggestionItem}
-                      >
-                        <div className={styles.sugIconCircle}>
-                          {item.category.includes('Aéroport') || item.category.includes('Aviation') ? (
-                            <PlaneTakeoff size={16} />
-                          ) : (
-                            <MapPin size={16} />
-                          )}
+                    <>
+                      {destAutocomplete.isLoading && (
+                        <div className={styles.sugLoadingState}>
+                          <Loader2 size={14} className={styles.spinner} />
+                          <span>{t('tunnel.searching_address', 'Recherche d’adresses...')}</span>
                         </div>
-                        <div className={styles.sugDetails}>
-                          <span className={styles.sugMain}>{item.label}</span>
-                          <span className={styles.sugSub}>{item.category}</span>
-                        </div>
-                      </button>
-                    ))
+                      )}
+                      {destAutocomplete.suggestions && destAutocomplete.suggestions.length > 0 ? (
+                        <>
+                          <div className={styles.sugSectionTitle}>
+                            <Search size={13} />
+                            <span>{t('tunnel.search_results', 'Résultats d’adresses')}</span>
+                          </div>
+                          {destAutocomplete.suggestions.map((s, idx) => (
+                            <button
+                              key={s.id || idx}
+                              type="button"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setDestination(s.label);
+                                if (s.coordinates) setDestCoords(s.coordinates);
+                                destAutocomplete.setSuggestions([]);
+                                setActiveInputFocus(null);
+                              }}
+                              className={styles.fieldSuggestionItem}
+                            >
+                              <div className={styles.sugIconCircle}>
+                                {s.isAirport ? <PlaneTakeoff size={16} /> : <MapPin size={16} />}
+                              </div>
+                              <div className={styles.sugDetails}>
+                                <span className={styles.sugMain}>{s.label}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </>
+                      ) : (
+                        !destAutocomplete.isLoading && (
+                          <div className={styles.sugEmptyState}>
+                            <span>{t('tunnel.no_address_found', 'Aucune adresse exacte trouvée. Vous pouvez conserver cette saisie, elle sera confirmée par notre équipe.')}</span>
+                          </div>
+                        )
+                      )}
+                    </>
                   )}
                 </div>
               </>
@@ -1597,7 +1665,7 @@ export default function ReservationPage() {
                   <div key={d.id} className={styles.hourlyDayCard}>
                     <div className={styles.hourlyDayHeader}>
                       <div className={styles.hourlyDayBadge}>
-                        <span>Jour {index + 1}</span>
+                        <span>{t('tunnel.day', 'Jour')} {index + 1}</span>
                         <span className={styles.hourlyDayDateDesc}>· {formatDayShort(d.date)}</span>
                       </div>
                       {scheduleDays.length > 1 && (
@@ -1607,7 +1675,7 @@ export default function ReservationPage() {
                           className={styles.removeDayMiniBtn}
                         >
                           <Trash2 size={13} />
-                          <span>Retirer</span>
+                          <span>{t('tunnel.remove', 'Retirer')}</span>
                         </button>
                       )}
                     </div>
@@ -1615,7 +1683,7 @@ export default function ReservationPage() {
                     {/* Date and start time row */}
                     <div className={styles.dayDateTimeRow}>
                       <div className={styles.dayDateCol}>
-                        <label className={styles.miniFieldLabel}>Date du jour {index + 1}</label>
+                        <label className={styles.miniFieldLabel}>{t('tunnel.day_date', 'Date')} {index + 1}</label>
                         <input
                           type="date"
                           min={todayISO}
@@ -1627,13 +1695,34 @@ export default function ReservationPage() {
                         />
                       </div>
                       <div className={styles.dayTimeCol}>
-                        <label className={styles.miniFieldLabel}>Heure de départ</label>
-                        <input
-                          type="time"
-                          value={d.startTime || '09:00'}
-                          onChange={(e) => updateDayStartTime(d.id, e.target.value)}
-                          className={styles.nativeTimeClean}
-                        />
+                        <div className={styles.timeLabelRow}>
+                          <label className={styles.miniFieldLabel}>{t('tunnel.departure_time', 'Heure de départ')}</label>
+                          <button
+                            type="button"
+                            onClick={() => toggleDayFlexible(d.id)}
+                            className={`${styles.flexibleToggleBtn} ${d.isFlexible ? styles.flexibleToggleActive : ''}`}
+                            title="Indiquer départ libre si vous souhaitez définir l'horaire plus tard"
+                          >
+                            {d.isFlexible ? t('tunnel.flexible_active', '✓ Départ libre') : t('tunnel.set_flexible', 'Départ libre ?')}
+                          </button>
+                        </div>
+                        {d.isFlexible ? (
+                          <div
+                            className={styles.flexibleTimePlaceholder}
+                            onClick={() => toggleDayFlexible(d.id)}
+                            role="button"
+                            tabIndex={0}
+                          >
+                            <span>{t('tunnel.flexible_notice', 'Horaires libres — à convenir')}</span>
+                          </div>
+                        ) : (
+                          <input
+                            type="time"
+                            value={d.startTime || '09:00'}
+                            onChange={(e) => updateDayStartTime(d.id, e.target.value)}
+                            className={styles.nativeTimeClean}
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -1798,9 +1887,27 @@ export default function ReservationPage() {
           )}
         </div>
 
-        {step > 0 && (
+        {step > 0 && service !== 'bespoke' ? (
+          <nav className={styles.stepperBreadcrumb} aria-label="Progression de la réservation">
+            <span className={step === 1 ? styles.stepActive : step > 1 ? styles.stepDone : styles.stepInactive}>
+              {t('tunnel.step_route', 'Trajet')}
+            </span>
+            <span className={styles.stepArrow}>→</span>
+            <span className={step === 2 ? styles.stepActive : step > 2 ? styles.stepDone : styles.stepInactive}>
+              {t('tunnel.step_vehicle', 'Véhicule')}
+            </span>
+            <span className={styles.stepArrow}>→</span>
+            <span className={step === 3 ? styles.stepActive : step > 3 ? styles.stepDone : styles.stepInactive}>
+              {t('tunnel.step_details', 'Coordonnées')}
+            </span>
+            <span className={styles.stepArrow}>→</span>
+            <span className={step === 4 ? styles.stepActive : styles.stepInactive}>
+              {t('tunnel.step_recap', 'Récapitulatif')}
+            </span>
+          </nav>
+        ) : step > 0 && (
           <div className={styles.stepCounter}>
-            <span>{service === 'transfer' ? t('tunnel.service_transfer', 'Transfert') : service === 'hourly' ? t('tunnel.service_hourly', 'Chauffeur à la journée') : t('tunnel.service_bespoke', 'Sur-mesure')}</span>
+            <span>{t('tunnel.service_bespoke', 'Sur-mesure')}</span>
           </div>
         )}
 
@@ -2102,10 +2209,31 @@ export default function ReservationPage() {
               exit="exit"
               className={styles.screenContainer}
             >
+              {/* Trip recap banner during vehicle selection (Item 17) */}
+              <div className={styles.stickyTripRecapCard}>
+                <div className={styles.stickyTripRecapLeft}>
+                  <span className={styles.stickyTripRecapRoute}>
+                    📍 {service === 'transfer' ? `${pickup} → ${destination}` : `${pickup} (${totalScheduleHours}h)`}
+                  </span>
+                  <span className={styles.stickyTripRecapTime}>
+                    📅 {service === 'hourly'
+                      ? `${scheduleDays[0]?.date} à ${scheduleDays[0]?.isFlexible ? t('tunnel.free_departure', 'Départ libre') : scheduleDays[0]?.startTime}`
+                      : `${date} à ${time}`}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className={styles.stickyTripRecapEditBtn}
+                >
+                  {t('funnel.back', 'Modifier')}
+                </button>
+              </div>
+
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>NOTRE FLOTTE DEVIS</span>
-                <h2 className={styles.screenTitle}>Sélectionnez votre véhicule</h2>
-                <p className={styles.screenSubtitle}>Prestation tout inclus (chauffeur dédié, carburant, péages et accueil personnalisé).</p>
+                <span className={styles.microBadge}>{t('tunnel.quote_fleet_badge', 'NOTRE FLOTTE DEVIS')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.select_vehicle_title', 'Sélectionnez votre véhicule')}</h2>
+                <p className={styles.screenSubtitle}>{t('tunnel.select_vehicle_sub', 'Prestation tout inclus (chauffeur dédié, carburant, péages et accueil personnalisé).')}</p>
               </div>
 
               {/* Category Filter Tabs */}
@@ -2577,10 +2705,31 @@ export default function ReservationPage() {
               exit="exit"
               className={styles.screenContainer}
             >
+              {/* Trip recap banner during contact details (Item 17) */}
+              <div className={styles.stickyTripRecapCard}>
+                <div className={styles.stickyTripRecapLeft}>
+                  <span className={styles.stickyTripRecapRoute}>
+                    🚗 {selectedVehicleData?.name} · {service === 'transfer' ? `${pickup} → ${destination}` : `${pickup} (${totalScheduleHours}h)`}
+                  </span>
+                  <span className={styles.stickyTripRecapTime}>
+                    📅 {service === 'hourly'
+                      ? `${scheduleDays[0]?.date} à ${scheduleDays[0]?.isFlexible ? t('tunnel.free_departure', 'Départ libre') : scheduleDays[0]?.startTime}`
+                      : `${date} à ${time}`}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className={styles.stickyTripRecapEditBtn}
+                >
+                  {t('funnel.back', 'Modifier')}
+                </button>
+              </div>
+
               <div className={styles.screenIntro}>
                 <span className={styles.microBadge}>{t('tunnel.step3_badge', 'VOS COORDONNÉES')}</span>
                 <h2 className={styles.screenTitle}>{t('tunnel.step3_title', 'Où vous contacter pour confirmer ?')}</h2>
-                <p className={styles.screenSubtitle}>{t('tunnel.step3_subtitle', 'Seuls votre numéro de téléphone et votre email sont nécessaires. Notre équipe vous répond sous 30 minutes.')}</p>
+                <p className={styles.screenSubtitle}>{t('tunnel.step3_subtitle', 'Seuls votre numéro de téléphone et votre email sont nécessaires. Notre équipe vous répond sous 15 minutes.')}</p>
               </div>
 
               <div className={styles.contactFormGrid}>
@@ -2618,20 +2767,45 @@ export default function ReservationPage() {
                   </div>
                 </div>
 
-                {/* Numéro de vol si aéroport */}
+                {/* Numéro de vol & Terminal si aéroport (Item 2) */}
                 {isAirportTrip && (
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <PlaneTakeoff size={14} />
-                      <span>{t('tunnel.flight_label', 'Numéro de vol (optionnel)')}</span>
+                      <span>{t('tunnel.airport_terminal_flight_label', 'Terminal d’arrivée ou Numéro de vol')}</span>
                     </label>
                     <input
                       type="text"
                       value={flightNumber}
                       onChange={(e) => setFlightNumber(e.target.value)}
-                      placeholder="Ex : AF1234, DL402, EK073..."
+                      placeholder={t('tunnel.airport_flight_placeholder', 'Ex : Terminal 2E, Vol AF1234, Salon VIP...')}
                       className={styles.luxuryInput}
                     />
+                    <div className={styles.quickTerminalChips}>
+                      {(pickup.toLowerCase().includes('orly') || destination.toLowerCase().includes('orly')) ? (
+                        ['Orly 1-2', 'Orly 3', 'Orly 4'].map((tName) => (
+                          <button
+                            key={tName}
+                            type="button"
+                            className={`${styles.terminalChip} ${flightNumber.includes(tName) ? styles.terminalChipActive : ''}`}
+                            onClick={() => setFlightNumber(flightNumber ? `${flightNumber} · ${tName}` : tName)}
+                          >
+                            {tName}
+                          </button>
+                        ))
+                      ) : (
+                        ['Terminal 1', 'Terminal 2E', 'Terminal 2F', 'Terminal 2G', 'Terminal 3'].map((tName) => (
+                          <button
+                            key={tName}
+                            type="button"
+                            className={`${styles.terminalChip} ${flightNumber.includes(tName) ? styles.terminalChipActive : ''}`}
+                            onClick={() => setFlightNumber(flightNumber ? `${flightNumber} · ${tName}` : tName)}
+                          >
+                            {tName}
+                          </button>
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -2713,8 +2887,9 @@ export default function ReservationPage() {
                   <div className={styles.summaryRow}>
                     <MapPin size={16} className={styles.summaryIcon} />
                     <div className={styles.summaryCol}>
-                      <strong>Lieu de départ :</strong>
+                      <strong>{t('tunnel.pickup_label', 'Lieu de départ :')}</strong>
                       <span>{pickup}</span>
+                      {!pickupCoords && <span className={styles.toConfirmBadge}>{t('tunnel.to_confirm', 'À confirmer')}</span>}
                     </div>
                   </div>
 
@@ -2722,8 +2897,9 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <Navigation size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol}>
-                        <strong>Destination :</strong>
+                        <strong>{t('tunnel.dest_label', 'Destination :')}</strong>
                         <span>{destination}</span>
+                        {!destCoords && <span className={styles.toConfirmBadge}>{t('tunnel.to_confirm', 'À confirmer')}</span>}
                         {distanceKm && <span className={styles.distanceBadge}>{distanceKm} km estimés</span>}
                       </div>
                     </div>
@@ -2733,14 +2909,16 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <Calendar size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol} style={{ width: '100%' }}>
-                        <strong>Planning ({scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total) :</strong>
+                        <strong>{t('tunnel.schedule_label', 'Planning')} ({scheduleDays.length} {scheduleDays.length > 1 ? t('tunnel.days', 'jours') : t('tunnel.day', 'jour')} · {totalScheduleHours}h) :</strong>
                         <div className={styles.scheduleSummaryList}>
                           {scheduleDays.map((d, idx) => (
                             <div key={d.id} className={styles.scheduleSummaryItem}>
-                              <span className={styles.scheduleSummaryDayTag}>Jour {idx + 1}</span>
+                              <span className={styles.scheduleSummaryDayTag}>{t('tunnel.day', 'Jour')} {idx + 1}</span>
                               <span className={styles.scheduleSummaryDate}>{d.date}</span>
                               <span className={styles.scheduleSummarySlot}>
-                                {d.isFlexible ? `${d.hours}h flexibles (départ libre)` : `${d.startTime} → ${d.endTime}`}
+                                {d.isFlexible
+                                  ? `${d.hours}h flexibles (${t('tunnel.free_departure', 'départ libre')})`
+                                  : `${t('tunnel.from_time', 'Départ à')} ${d.startTime} · ${d.hours}h (${t('tunnel.until_time', 'jusqu\'à')} ${d.endTime})`}
                               </span>
                               <span className={styles.scheduleSummaryHours}>{d.hours}h</span>
                             </div>
@@ -2758,7 +2936,7 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <Calendar size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol}>
-                        <strong>Date & Heure :</strong>
+                        <strong>{t('tunnel.datetime_label', 'Date & Heure :')}</strong>
                         <span>{date} à {time}</span>
                       </div>
                     </div>
@@ -2767,7 +2945,7 @@ export default function ReservationPage() {
                   <div className={styles.summaryRow}>
                     <User size={16} className={styles.summaryIcon} />
                     <div className={styles.summaryCol}>
-                      <strong>Client :</strong>
+                      <strong>{t('tunnel.summary_contact', 'Client :')}</strong>
                       <span>{firstName} {lastName} · {phone} · {email}</span>
                     </div>
                   </div>
@@ -2776,7 +2954,7 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <PlaneTakeoff size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol}>
-                        <strong>Vol de suivi :</strong>
+                        <strong>{t('tunnel.flight_terminal_title', 'Terminal / Vol de suivi :')}</strong>
                         <span>{flightNumber}</span>
                       </div>
                     </div>
@@ -2810,40 +2988,40 @@ export default function ReservationPage() {
                 {/* Official Financial Quotation Breakdown */}
                 <div className={styles.quoteBreakdownTable}>
                   <div className={styles.quoteTableHeader}>
-                    <span>DÉTAIL DU DEVIS</span>
-                    <span>TARIFICATION</span>
+                    <span>{t('tunnel.quote_breakdown_title', 'DÉTAIL DU DEVIS')}</span>
+                    <span>{t('tunnel.pricing_title', 'TARIFICATION')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Prestation chauffeur privé & véhicule ({selectedVehicleData.name})</span>
-                    <span className={styles.freeMention}>Sur devis</span>
+                    <span>{t('tunnel.chauffeur_vehicle_service', 'Prestation chauffeur privé & véhicule')} ({selectedVehicleData.name})</span>
+                    <span className={styles.freeMention}>{t('tunnel.on_quote', 'Sur devis')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Instructions personnalisées & confort à bord</span>
-                    <span className={styles.freeMention}>Inclus</span>
+                    <span>{t('tunnel.custom_instructions', 'Instructions personnalisées & confort à bord')}</span>
+                    <span className={styles.freeMention}>{t('tunnel.included', 'Inclus')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Carburant, autoroutes et péages</span>
-                    <span className={styles.freeMention}>Inclus</span>
+                    <span>{t('tunnel.fuel_tolls', 'Carburant, autoroutes et péages')}</span>
+                    <span className={styles.freeMention}>{t('tunnel.included', 'Inclus')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Attente offerte (30 min ville / 60 min aéroport)</span>
-                    <span className={styles.freeMention}>Offert</span>
+                    <span>{t('tunnel.complimentary_wait', 'Attente offerte (30 min ville / 60 min aéroport)')}</span>
+                    <span className={styles.freeMention}>{t('tunnel.complimentary', 'Offert')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Bouteilles d'eau fraîches, chargeurs & Wi-Fi à bord</span>
-                    <span className={styles.freeMention}>Offert</span>
+                    <span>{t('tunnel.amenities', 'Bouteilles d\'eau fraîches, chargeurs & Wi-Fi à bord')}</span>
+                    <span className={styles.freeMention}>{t('tunnel.complimentary', 'Offert')}</span>
                   </div>
                   <div className={styles.quoteTableRow}>
-                    <span>Assurances professionnelles & taxes</span>
-                    <span className={styles.freeMention}>Incluses</span>
+                    <span>{t('tunnel.insurance_taxes', 'Assurances professionnelles & taxes')}</span>
+                    <span className={styles.freeMention}>{t('tunnel.included_fem', 'Incluses')}</span>
                   </div>
                   <div className={styles.quoteTableTotalRow}>
                     <div className={styles.quoteTotalLeft}>
-                      <strong>TARIFICATION DE LA PRESTATION</strong>
-                      <span>Étude tarifaire sur-mesure transmise sous 15 min par nos conseillers dédiés</span>
+                      <strong>{t('tunnel.total_service_pricing', 'TARIFICATION DE LA PRESTATION')}</strong>
+                      <span>{t('tunnel.quote_delay_promise', 'Étude tarifaire sur-mesure transmise sous 15 min par nos conseillers dédiés')}</span>
                     </div>
                     <strong className={styles.bigPrice}>
-                      Sur devis
+                      {t('tunnel.on_quote', 'Sur devis')}
                     </strong>
                   </div>
                 </div>
@@ -2853,29 +3031,29 @@ export default function ReservationPage() {
                   <div className={styles.guaranteeItem}>
                     <Shield size={16} className={styles.guaranteeIcon} />
                     <div>
-                      <strong>Annulation Flexible</strong>
-                      <p>Sans frais jusqu'à 24h avant la prise en charge.</p>
+                      <strong>{t('tunnel.guarantee_cancellation_title', 'Annulation Flexible')}</strong>
+                      <p>{t('tunnel.guarantee_cancellation_desc', 'Sans frais jusqu\'à 24h avant la prise en charge.')}</p>
                     </div>
                   </div>
                   <div className={styles.guaranteeItem}>
                     <PlaneTakeoff size={16} className={styles.guaranteeIcon} />
                     <div>
-                      <strong>Suivi Vol en Temps Réel</strong>
-                      <p>Ajustement automatique en cas de retard de vol.</p>
+                      <strong>{t('tunnel.guarantee_flight_title', 'Suivi Vol en Temps Réel')}</strong>
+                      <p>{t('tunnel.guarantee_flight_desc', 'Ajustement automatique en cas de retard de vol.')}</p>
                     </div>
                   </div>
                   <div className={styles.guaranteeItem}>
                     <Award size={16} className={styles.guaranteeIcon} />
                     <div>
-                      <strong>Chauffeur Grande Remise</strong>
-                      <p>Tenue costume stricte, discrétion absolue garantie.</p>
+                      <strong>{t('tunnel.guarantee_chauffeur_title', 'Chauffeur Grande Remise')}</strong>
+                      <p>{t('tunnel.guarantee_chauffeur_desc', 'Tenue costume stricte, discrétion absolue garantie.')}</p>
                     </div>
                   </div>
                   <div className={styles.guaranteeItem}>
                     <CheckCircle2 size={16} className={styles.guaranteeIcon} />
                     <div>
-                      <strong>Devis Sans Engagement</strong>
-                      <p>Proposition ferme et détaillée transmise sous 15 minutes.</p>
+                      <strong>{t('tunnel.guarantee_commitment_title', 'Devis Sans Engagement')}</strong>
+                      <p>{t('tunnel.guarantee_commitment_desc', 'Proposition ferme et détaillée transmise sous 15 minutes.')}</p>
                     </div>
                   </div>
                 </div>
@@ -2894,11 +3072,16 @@ export default function ReservationPage() {
                     <Loader2 size={18} className={styles.spinner} />
                   ) : (
                     <>
-                      <span>Envoyer le devis</span>
+                      <span>{t('tunnel.send_quote_request', 'Envoyer ma demande de devis')}</span>
                       <ArrowRight size={18} />
                     </>
                   )}
                 </button>
+
+                <div className={styles.finalSubmitNotice}>
+                  <ShieldCheck size={15} className={styles.noticeIcon} />
+                  <span>{t('tunnel.no_commitment_notice', 'Demande sans engagement · Devis officiel et détaillé transmis sous 15 minutes par email & WhatsApp.')}</span>
+                </div>
               </div>
 
               {status === 'error' && (

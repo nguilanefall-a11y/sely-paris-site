@@ -71,7 +71,7 @@ export default function HowItWorks() {
         'howItWorks.step1_desc',
         'Sélectionnez votre itinéraire, date et véhicule d\'exception parmi notre flotte de berlines de prestige, SUV et vans VIP.'
       ),
-      meta: isEn ? 'Instant online quote' : 'Devis instantané en ligne'
+      meta: isEn ? 'Confirmed quote within 15 min' : 'Devis confirmé sous 15 min'
     },
     {
       category: isEn ? 'CONFIRMATION' : 'PROTOCOLE',
