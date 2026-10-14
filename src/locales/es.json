@@ -1010,6 +1010,12 @@
     "flexible_banner_desc": "Su chófer permanece a su disposición y se adapta a su agenda. Acordará la hora exacta según sus necesidades.",
     "start_at": "Salida deseada a:",
     "hours_wanted": "Duración deseada",
-    "hours_range_hint": "De 1h a 24h a su elección"
+    "hours_range_hint": "De 1h a 24h a su elección",
+    "multiple_transfers_btn": "+ Añadir viaje de vuelta / Múltiples traslados",
+    "multiple_transfers_active": "Múltiples traslados",
+    "add_another_transfer": "+ Añadir otro traslado",
+    "swap_addresses": "Invertir",
+    "multiple_transfers_label": "Trayectos múltiples",
+    "transfers": "traslados"
   }
 }

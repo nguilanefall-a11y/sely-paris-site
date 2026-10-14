@@ -5121,3 +5121,257 @@
   margin-top: 0.35rem;
   padding: 0 2px;
 }
+
+/* ── Top Service Switcher (Aller simple & Mise à disposition direct buttons) ── */
+.topServiceSwitcherWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.topServiceSwitcher {
+  display: flex;
+  background: #f4f4f5;
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid #e4e4e7;
+  gap: 4px;
+}
+
+.serviceSwitchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: #52525b;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.serviceSwitchBtn:hover {
+  color: #09090b;
+}
+
+.serviceSwitchBtnActive {
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.urgentPillBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  background: #ffffff;
+  border: 1.2px solid #e4e4e7;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #27272a;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.urgentPillBtn:hover {
+  border-color: #000000;
+  color: #000000;
+}
+
+/* ── Transfer Mode Pills Row (Multiple Transfers Toggle) ── */
+.transferModePillsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.transferTypePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  background: #ffffff;
+  border: 1.2px dashed #b8903c;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8a6a24;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.transferTypePill:hover {
+  background: #fbf7ee;
+  border-color: #8a6a24;
+}
+
+.transferTypePillActive {
+  background: #fbf7ee !important;
+  border: 1.5px solid #b8903c !important;
+  color: #634a10 !important;
+}
+
+/* ── Extra Transfers Container & Cards ── */
+.extraTransfersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.extraTransferCard {
+  background: #fafafa;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.extraTransferCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.extraTransferBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #09090b;
+}
+
+.extraTransferHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.swapAddressesBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 3px 8px;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #3f3f46;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.swapAddressesBtn:hover {
+  background: #f4f4f5;
+  color: #000000;
+  border-color: #18181b;
+}
+
+.removeTransferMiniBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 3px 8px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #e11d48;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.removeTransferMiniBtn:hover {
+  background: #ffe4e6;
+  border-color: #fda4af;
+}
+
+.extraTransferFieldsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.extraTransferField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.extraTransferRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.extraTransferCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nativeTextClean {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: #09090b;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.nativeTextClean:focus {
+  border-color: #000000;
+}
+
+.addAnotherTransferBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border: 1.5px dashed #18181b;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #09090b;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.addAnotherTransferBtn:hover {
+  background: #f4f4f5;
+  border-style: solid;
+}
+

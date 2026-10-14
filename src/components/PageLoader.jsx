@@ -53,6 +53,7 @@ export default function PageLoader() {
           initial={{ y: 0, opacity: 1 }}
           exit={{
             y: "-100%",
+            pointerEvents: "none",
             transition: {
               duration: 0.85,
               ease: [0.76, 0, 0.24, 1],

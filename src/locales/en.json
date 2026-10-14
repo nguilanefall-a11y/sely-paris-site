@@ -1124,6 +1124,12 @@
     "flexible_banner_desc": "Your chauffeur is reserved and adjusts to your schedule. You can set the departure time freely as needed.",
     "start_at": "Pick-up time:",
     "hours_wanted": "Disposal duration",
-    "hours_range_hint": "From 1h to 24h freely"
+    "hours_range_hint": "From 1h to 24h freely",
+    "multiple_transfers_btn": "+ Add return trip / Multiple transfers",
+    "multiple_transfers_active": "Multiple transfers",
+    "add_another_transfer": "+ Add another transfer",
+    "swap_addresses": "Reverse",
+    "multiple_transfers_label": "Multiple transfers",
+    "transfers": "transfers"
   }
 }

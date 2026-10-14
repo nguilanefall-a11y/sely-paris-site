@@ -1124,6 +1124,12 @@
     "flexible_banner_desc": "Votre chauffeur reste réservé et s’adapte à votre planning. Vous conviendrez de l’heure exacte selon vos besoins.",
     "start_at": "Départ souhaité à :",
     "hours_wanted": "Nombre d’heures souhaité",
-    "hours_range_hint": "De 1h à 24h au choix"
+    "hours_range_hint": "De 1h à 24h au choix",
+    "multiple_transfers_btn": "+ Ajouter un trajet retour / Plusieurs transferts",
+    "multiple_transfers_active": "Plusieurs transferts",
+    "add_another_transfer": "+ Ajouter un autre transfert",
+    "swap_addresses": "Inverser",
+    "multiple_transfers_label": "Trajets multiples",
+    "transfers": "transferts"
   }
 }

@@ -49,6 +49,7 @@ import {
   Home,
   Compass,
   ArrowDown,
+  Repeat,
 } from 'lucide-react';
 import { getFormAccessKey } from '../lib/formRouting';
 import LanguageSelector from '../components/LanguageSelector';
@@ -588,6 +589,42 @@ export default function ReservationPage() {
   const [duration, setDuration] = useState(searchParams.get('duration') || '3 heures');
   const [customHours, setCustomHours] = useState('5');
 
+  // Multiple transfers support (Aller-Retour & trajets additionnels)
+  const [extraTransfers, setExtraTransfers] = useState([]);
+
+  const addReturnTransfer = () => {
+    setExtraTransfers((prev) => [
+      ...prev,
+      {
+        id: Date.now() + Math.random(),
+        pickup: destination || '',
+        destination: pickup || '',
+        date: tomorrowISO || date,
+        time: time || '14:00',
+        flightNumber: '',
+        terminal: '',
+      },
+    ]);
+  };
+
+  const removeExtraTransfer = (id) => {
+    setExtraTransfers((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const updateExtraTransfer = (id, field, value) => {
+    setExtraTransfers((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
+    );
+  };
+
+  const swapExtraTransferAddresses = (id) => {
+    setExtraTransfers((prev) =>
+      prev.map((t) =>
+        t.id === id ? { ...t, pickup: t.destination, destination: t.pickup } : t
+      )
+    );
+  };
+
   // Multi-day custom schedule for hourly service
   const [scheduleDays, setScheduleDays] = useState(() => [
     {
@@ -936,7 +973,7 @@ export default function ReservationPage() {
   // Pricing calculation
   const calculatedPrice = useMemo(() => {
     if (!selectedVehicle) return null;
-    return calculateTripPrice({
+    const base = calculateTripPrice({
       city: currentCity || 'paris',
       serviceType: service === 'hourly' ? 'hourly' : 'transfer',
       vehicleId: selectedVehicle,
@@ -949,6 +986,15 @@ export default function ReservationPage() {
       options: {},
       lang: i18n?.language === 'en' ? 'en' : 'fr',
     });
+    if (service === 'transfer' && extraTransfers.length > 0 && base) {
+      const count = 1 + extraTransfers.length;
+      return {
+        ...base,
+        totalPrice: base.totalPrice * count,
+        calculationDetails: `${base.calculationDetails} × ${count} transferts`,
+      };
+    }
+    return base;
   }, [
     currentCity,
     service,
@@ -962,6 +1008,7 @@ export default function ReservationPage() {
     totalScheduleHours,
     hasLongDistance,
     scheduleDays,
+    extraTransfers,
     i18n?.language,
   ]);
 
@@ -1257,95 +1304,73 @@ export default function ReservationPage() {
           </h1>
         </header>
 
-        {/* Capsule Pills Row */}
-        <div style={{ position: 'relative', marginBottom: '1.75rem' }}>
-          <div className={styles.pillsRow}>
-            {/* Pill 1: Aller simple / Chauffeur à l'heure */}
+        {/* Top Service Switcher: Aller simple & Mise à disposition (directly visible) + Demande urgente */}
+        <div className={styles.topServiceSwitcherWrapper}>
+          <div className={styles.topServiceSwitcher}>
+            {/* Bouton 1 : Aller simple */}
             <button
               type="button"
               onClick={() => {
-                setServiceMenuOpen(!serviceMenuOpen);
-                setUrgentModalOpen(false);
-              }}
-              className={styles.pillSelectorBtn}
-              id="service-selector-pill"
-            >
-              <Route size={16} strokeWidth={1.8} />
-              <span>{service === 'hourly' ? t('tunnel.service_hourly_label', 'Chauffeur à l’heure') : t('tunnel.service_transfer_label', 'Aller simple')}</span>
-              <ChevronDown size={14} className={styles.pillChevron} />
-            </button>
-
-            {/* Pill 2: Demande spécifique urgente */}
-            <button
-              type="button"
-              onClick={() => {
-                setUrgentModalOpen(true);
+                setService('transfer');
                 setServiceMenuOpen(false);
               }}
-              className={styles.pillSelectorBtn}
-              id="urgent-request-pill"
+              className={`${styles.serviceSwitchBtn} ${service === 'transfer' ? styles.serviceSwitchBtnActive : ''}`}
+              id="service-transfer-btn"
             >
-              <Sparkles size={16} strokeWidth={1.8} style={{ color: '#b8903c' }} />
-              <span>{t('tunnel.urgent_pill_label', 'Demande urgente')}</span>
-              <ChevronDown size={14} className={styles.pillChevron} />
+              <Route size={15} strokeWidth={2} />
+              <span>{t('tunnel.service_transfer_label', 'Aller simple')}</span>
+            </button>
+
+            {/* Bouton 2 : Mise à disposition */}
+            <button
+              type="button"
+              onClick={() => {
+                setService('hourly');
+                setServiceMenuOpen(false);
+              }}
+              className={`${styles.serviceSwitchBtn} ${service === 'hourly' ? styles.serviceSwitchBtnActive : ''}`}
+              id="service-hourly-btn"
+            >
+              <Clock size={15} strokeWidth={2} />
+              <span>{t('tunnel.service_hourly_label', 'Mise à disposition')}</span>
             </button>
           </div>
 
-          {/* Service Dropdown Popover */}
-          <AnimatePresence>
-            {serviceMenuOpen && (
-              <>
-                <div
-                  style={{ position: 'fixed', inset: 0, zIndex: 1001 }}
-                  onClick={() => setServiceMenuOpen(false)}
-                />
-                <motion.div
-                  className={styles.popoverMenu}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  <button
-                    type="button"
-                    className={`${styles.popoverMenuItem} ${service === 'transfer' ? styles.popoverMenuItemActive : ''}`}
-                    onClick={() => {
-                      setService('transfer');
-                      setServiceMenuOpen(false);
-                    }}
-                  >
-                    <div className={styles.sugIconCircle}>
-                      <Route size={16} />
-                    </div>
-                    <div className={styles.popoverMenuItemText}>
-                      <strong>{t('tunnel.service_transfer_label', 'Aller simple')}</strong>
-                      <span>{t('tunnel.service_transfer_desc', 'Transfert direct point à point')}</span>
-                    </div>
-                    {service === 'transfer' && <Check size={16} />}
-                  </button>
-
-                  <button
-                    type="button"
-                    className={`${styles.popoverMenuItem} ${service === 'hourly' ? styles.popoverMenuItemActive : ''}`}
-                    onClick={() => {
-                      setService('hourly');
-                      setServiceMenuOpen(false);
-                    }}
-                  >
-                    <div className={styles.sugIconCircle}>
-                      <Clock size={16} />
-                    </div>
-                    <div className={styles.popoverMenuItemText}>
-                      <strong>{t('tunnel.service_hourly_label', 'Chauffeur à l’heure')}</strong>
-                      <span>{t('tunnel.service_hourly_desc', 'Mise à disposition horaire ou à la journée')}</span>
-                    </div>
-                    {service === 'hourly' && <Check size={16} />}
-                  </button>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          {/* Bouton 3 : Demande urgente */}
+          <button
+            type="button"
+            onClick={() => setUrgentModalOpen(true)}
+            className={styles.urgentPillBtn}
+            id="urgent-request-pill"
+          >
+            <Sparkles size={15} strokeWidth={1.8} style={{ color: '#b8903c' }} />
+            <span>{t('tunnel.urgent_pill_label', 'Demande urgente')}</span>
+          </button>
         </div>
+
+        {/* Transfer Options Row: Button for multiple transfers */}
+        {service === 'transfer' && (
+          <div className={styles.transferModePillsRow}>
+            <button
+              type="button"
+              onClick={() => {
+                if (extraTransfers.length === 0) {
+                  addReturnTransfer();
+                } else {
+                  setExtraTransfers([]);
+                }
+              }}
+              className={`${styles.transferTypePill} ${extraTransfers.length > 0 ? styles.transferTypePillActive : ''}`}
+            >
+              <Repeat size={14} />
+              <span>
+                {extraTransfers.length > 0
+                  ? `${t('tunnel.multiple_transfers_active', 'Plusieurs transferts')} (${1 + extraTransfers.length})`
+                  : t('tunnel.multiple_transfers_btn', '+ Ajouter un trajet retour / Plusieurs transferts')}
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Underline Inputs Container */}
         <div className={styles.inputsContainer}>
@@ -1616,6 +1641,108 @@ export default function ReservationPage() {
               isEn={i18n?.language === 'en'}
               minDateISO={todayISO}
             />
+          </div>
+        )}
+
+        {/* Extra Transfers (Multi-trajets & Aller-Retour) */}
+        {service === 'transfer' && extraTransfers.length > 0 && (
+          <div className={styles.extraTransfersContainer}>
+            {extraTransfers.map((et, idx) => (
+              <div key={et.id} className={styles.extraTransferCard}>
+                <div className={styles.extraTransferCardHeader}>
+                  <div className={styles.extraTransferBadge}>
+                    <Repeat size={14} />
+                    <span>Transfert {idx + 2} {idx === 0 ? '(Trajet Retour)' : ''}</span>
+                  </div>
+                  <div className={styles.extraTransferHeaderActions}>
+                    <button
+                      type="button"
+                      onClick={() => swapExtraTransferAddresses(et.id)}
+                      className={styles.swapAddressesBtn}
+                      title="Inverser le point de départ et la destination"
+                    >
+                      <ArrowUpDown size={13} />
+                      <span>{t('tunnel.swap_addresses', 'Inverser')}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeExtraTransfer(et.id)}
+                      className={styles.removeTransferMiniBtn}
+                      aria-label="Supprimer ce transfert"
+                    >
+                      <Trash2 size={13} />
+                      <span>{t('tunnel.remove', 'Retirer')}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.extraTransferFieldsGrid}>
+                  <div className={styles.extraTransferField}>
+                    <label className={styles.miniFieldLabel}>Lieu de prise en charge</label>
+                    <input
+                      type="text"
+                      value={et.pickup}
+                      onChange={(e) => updateExtraTransfer(et.id, 'pickup', e.target.value)}
+                      placeholder="Adresse, aéroport, hôtel..."
+                      className={styles.nativeTextClean}
+                    />
+                  </div>
+
+                  <div className={styles.extraTransferField}>
+                    <label className={styles.miniFieldLabel}>Destination</label>
+                    <input
+                      type="text"
+                      value={et.destination}
+                      onChange={(e) => updateExtraTransfer(et.id, 'destination', e.target.value)}
+                      placeholder="Adresse, aéroport, hôtel..."
+                      className={styles.nativeTextClean}
+                    />
+                  </div>
+
+                  <div className={styles.extraTransferRow}>
+                    <div className={styles.extraTransferCol}>
+                      <label className={styles.miniFieldLabel}>{t('tunnel.day_date', 'Date')}</label>
+                      <input
+                        type="date"
+                        min={todayISO}
+                        value={et.date}
+                        onChange={(e) => updateExtraTransfer(et.id, 'date', e.target.value)}
+                        className={styles.nativeDateClean}
+                      />
+                    </div>
+                    <div className={styles.extraTransferCol}>
+                      <label className={styles.miniFieldLabel}>{t('tunnel.departure_time', 'Heure de départ')}</label>
+                      <input
+                        type="time"
+                        value={et.time}
+                        onChange={(e) => updateExtraTransfer(et.id, 'time', e.target.value)}
+                        className={styles.nativeTimeClean}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.extraTransferField}>
+                    <label className={styles.miniFieldLabel}>N° de vol ou terminal (si aéroport)</label>
+                    <input
+                      type="text"
+                      value={et.flightNumber}
+                      onChange={(e) => updateExtraTransfer(et.id, 'flightNumber', e.target.value)}
+                      placeholder="Ex : Terminal 2E, Vol AF1234..."
+                      className={styles.nativeTextClean}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addReturnTransfer}
+              className={styles.addAnotherTransferBtn}
+            >
+              <Plus size={15} />
+              <span>{t('tunnel.add_another_transfer', '+ Ajouter un autre transfert')}</span>
+            </button>
           </div>
         )}
 
@@ -3022,6 +3149,27 @@ export default function ReservationPage() {
                             <span>Longue distance : {longDistanceCities || 'Oui (Inter-villes)'}</span>
                           </div>
                         )}
+                      </div>
+                    </div>
+                  ) : extraTransfers.length > 0 ? (
+                    <div className={styles.summaryRow}>
+                      <Repeat size={16} className={styles.summaryIcon} />
+                      <div className={styles.summaryCol} style={{ width: '100%' }}>
+                        <strong>{t('tunnel.multiple_transfers_label', 'Trajets multiples')} ({1 + extraTransfers.length} transferts) :</strong>
+                        <div className={styles.scheduleSummaryList}>
+                          <div className={styles.scheduleSummaryItem}>
+                            <span className={styles.scheduleSummaryDayTag}>Transfert 1 (Aller)</span>
+                            <span className={styles.scheduleSummaryDate}>{pickup} → {destination}</span>
+                            <span className={styles.scheduleSummarySlot}>{date} à {time}</span>
+                          </div>
+                          {extraTransfers.map((et, idx) => (
+                            <div key={et.id} className={styles.scheduleSummaryItem}>
+                              <span className={styles.scheduleSummaryDayTag}>Transfert {idx + 2} {idx === 0 ? '(Retour)' : ''}</span>
+                              <span className={styles.scheduleSummaryDate}>{et.pickup || '—'} → {et.destination || '—'}</span>
+                              <span className={styles.scheduleSummarySlot}>{et.date} à {et.time} {et.flightNumber ? `· Vol: ${et.flightNumber}` : ''}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ) : (
