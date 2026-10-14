@@ -1,5 +1,7 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import i18n from './i18n';
+import { initGeoLanguageDetection } from './lib/geoDetector';
 import PortalPage from './pages/PortalPage';
 import PublicSite from './PublicSite';
 import ReservationSuccessPage from './pages/ReservationSuccessPage';
@@ -14,6 +16,10 @@ import GoogleCallbackPage from './pages/GoogleCallbackPage';
 const AdminRouter = lazy(() => import('./admin/AdminRouter'));
 
 function App() {
+  useEffect(() => {
+    initGeoLanguageDetection(i18n);
+  }, []);
+
   return (
     <BrowserRouter>
       <PageLoader />

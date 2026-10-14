@@ -25,10 +25,6 @@ export default function Navbar({ isHome }) {
     setMobileMenuOpen(false);
   }, [location]);
 
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language.startsWith('fr') ? 'en' : 'fr');
-  };
-
   const navClass = `${styles.header} ${scrolled || !isHome || mobileMenuOpen ? styles.solid : styles.transparent}`;
 
   const links = [

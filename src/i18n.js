@@ -27,30 +27,50 @@ const selySmartDetector = {
       return firstSegment;
     }
 
-    const saved = localStorage.getItem('i18nextLng');
-    if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    try {
+      const hasManual = localStorage.getItem('sely_manual_lang') === 'true';
+      const saved = localStorage.getItem('i18nextLng');
+      if (hasManual && saved && SUPPORTED_LANGS.includes(saved)) {
+        if (saved === 'ar') document.documentElement.dir = 'rtl';
+        return saved;
+      }
+
+      const geoSaved = sessionStorage.getItem('sely_geo_lang');
+      if (geoSaved && SUPPORTED_LANGS.includes(geoSaved)) {
+        if (geoSaved === 'ar') document.documentElement.dir = 'rtl';
+        return geoSaved;
+      }
+    } catch (e) {
+      // Storage unavailable
+    }
 
     if (pathname.startsWith('/london') || pathname.startsWith('/usa')) return 'en';
-    if (pathname.startsWith('/uae')) return 'ar';
-
+    if (pathname.startsWith('/uae')) {
+      document.documentElement.dir = 'rtl';
+      return 'ar';
+    }
 
     const navLangs = navigator.languages || [navigator.language || ''];
     for (const l of navLangs) {
       if (!l) continue;
       const code = l.toLowerCase().split('-')[0];
-      if (SUPPORTED_LANGS.includes(code)) return code;
+      if (SUPPORTED_LANGS.includes(code)) {
+        if (code === 'ar') document.documentElement.dir = 'rtl';
+        return code;
+      }
     }
 
     return 'fr';
   },
   cacheUserLanguage(lng) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('i18nextLng', lng);
-      if (lng === 'ar') {
-        document.documentElement.dir = 'rtl';
-      } else {
-        document.documentElement.dir = 'ltr';
-      }
+      try {
+        if (lng === 'ar') {
+          document.documentElement.dir = 'rtl';
+        } else {
+          document.documentElement.dir = 'ltr';
+        }
+      } catch (e) {}
     }
   },
 };
@@ -72,20 +92,24 @@ i18n
     fallbackLng: 'fr',
     supportedLngs: SUPPORTED_LANGS,
     detection: {
-      order: ['selySmartDetector', 'localStorage', 'navigator'],
-      caches: ['localStorage'],
+      order: ['selySmartDetector'],
+      caches: [],
     },
     interpolation: {
       escapeValue: false,
     },
   });
 
-// Handle RTL on language change
-i18n.on('languageChanged', (lng) => {
+// Handle RTL and html lang on language change and initial load
+const syncDocumentLanguage = (lng) => {
   if (typeof document !== 'undefined') {
-    document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = lng;
+    const lang = lng || 'fr';
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
   }
-});
+};
+
+syncDocumentLanguage(i18n.language);
+i18n.on('languageChanged', syncDocumentLanguage);
 
 export default i18n;

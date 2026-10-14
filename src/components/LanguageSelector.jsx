@@ -31,6 +31,12 @@ export default function LanguageSelector({ variant = 'navbar', className = '' })
   }, []);
 
   const handleSelect = (code) => {
+    try {
+      localStorage.setItem('sely_manual_lang', 'true');
+      localStorage.setItem('i18nextLng', code);
+    } catch (e) {
+      // Ignore if localStorage unavailable
+    }
     i18n.changeLanguage(code);
     setIsOpen(false);
   };

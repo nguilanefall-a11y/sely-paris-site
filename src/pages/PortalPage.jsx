@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import LanguageSelector from '../components/LanguageSelector';
 import styles from './PortalPage.module.css';
 
 export default function PortalPage() {
@@ -19,10 +20,6 @@ export default function PortalPage() {
     { key: 'uae', label: t('cities.uae', 'ÉMIRATS (UAE)').toUpperCase(), bg: '/uae_hero_bg.jpg' },
     { key: 'usa', label: t('cities.usa', 'ÉTATS-UNIS (USA)').toUpperCase(), bg: '/usa_hero_bg.jpg' }
   ];
-
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language.startsWith('fr') ? 'en' : 'fr');
-  };
 
   const handleSelect = (city) => {
     navigate(`/${city}`);
@@ -65,9 +62,7 @@ export default function PortalPage() {
 
       {/* Header elements (Language Switcher) */}
       <header className={styles.header}>
-        <button onClick={toggleLanguage} className={styles.langToggle}>
-          {i18n.language.startsWith('en') ? 'EN' : 'FR'}
-        </button>
+        <LanguageSelector />
       </header>
 
       {/* Main Content */}
