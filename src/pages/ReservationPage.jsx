@@ -368,7 +368,7 @@ const TERRITORIES_DATA = {
   },
 };
 
-const DRIVER_INSTRUCTIONS_LIST = [
+const localizedDriverInstructions = [
   {
     id: 'silence',
     title: 'Silence souhaité à bord',
@@ -472,6 +472,86 @@ const WELCOME_TEXTS = {
     helpPhone: '致电 24/7 热线 (+33 1 84 80 56 76)',
     close: '关闭',
   },
+  de: {
+    welcome: 'Willkommen',
+    heroTitle: 'Beginnen Sie Ihre Reise',
+    destinationPlaceholder: 'Zielort eingeben',
+    exploreServices: '↓ Reisen & Services entdecken',
+    navHome: 'Startseite',
+    navJourneys: 'Reisen',
+    navHelp: 'Hilfe',
+    servicesTitle: 'Entdecken Sie unsere Mobilitätsservices',
+    servicesSubtitle: 'Wählen Sie den exklusiven Chauffeurservice nach Ihren Anforderungen.',
+    helpTitle: 'VIP-Concierge & Betreuung',
+    helpSubtitle: 'Unsere Einsatzzentrale steht Ihnen rund um die Uhr zur Verfügung.',
+    helpWhatsapp: 'Direkt per WhatsApp kontaktieren',
+    helpPhone: 'Hotline anrufen (+33 1 84 80 56 76)',
+    close: 'Schließen',
+  },
+  it: {
+    welcome: 'Benvenuto',
+    heroTitle: 'Inizia il tuo viaggio',
+    destinationPlaceholder: 'Inserisci la tua destinazione',
+    exploreServices: '↓ Esplora viaggi e servizi',
+    navHome: 'Home',
+    navJourneys: 'Viaggi',
+    navHelp: 'Aiuto',
+    servicesTitle: 'Esplora i nostri servizi di mobilità',
+    servicesSubtitle: 'Seleziona il servizio con autista privato su misura per le tue esigenze.',
+    helpTitle: 'Concierge VIP & Assistenza',
+    helpSubtitle: 'La nostra centrale operativa è a tua disposizione 24 ore su 24, 7 giorni su 7.',
+    helpWhatsapp: 'Contattaci su WhatsApp',
+    helpPhone: 'Chiama l\'assistenza (+33 1 84 80 56 76)',
+    close: 'Chiudi',
+  },
+  pt: {
+    welcome: 'Bem-vindo',
+    heroTitle: 'Comece sua jornada',
+    destinationPlaceholder: 'Digite seu destino',
+    exploreServices: '↓ Conheça nossas viagens e serviços',
+    navHome: 'Início',
+    navJourneys: 'Viagens',
+    navHelp: 'Ajuda',
+    servicesTitle: 'Conheça nossos serviços de transporte',
+    servicesSubtitle: 'Selecione o serviço de motorista particular ideal para sua viagem.',
+    helpTitle: 'Concierge VIP & Atendimento',
+    helpSubtitle: 'Nossa central de operações está à sua disposição 24h por dia, 7 dias por semana.',
+    helpWhatsapp: 'Falar diretamente no WhatsApp',
+    helpPhone: 'Ligar para a central (+33 1 84 80 56 76)',
+    close: 'Fechar',
+  },
+  ru: {
+    welcome: 'Добро пожаловать',
+    heroTitle: 'Начните ваше путешествие',
+    destinationPlaceholder: 'Укажите пункт назначения',
+    exploreServices: '↓ Ознакомиться с поездками и услугами',
+    navHome: 'Главная',
+    navJourneys: 'Поездки',
+    navHelp: 'Помощь',
+    servicesTitle: 'Премиальные транспортные услуги',
+    servicesSubtitle: 'Выберите поездку с личным водителем по вашим требованиям.',
+    helpTitle: 'VIP-консьерж и поддержка',
+    helpSubtitle: 'Наша диспетчерская служба работает круглосуточно 24/7.',
+    helpWhatsapp: 'Связаться через WhatsApp',
+    helpPhone: 'Позвонить на горячую линию (+33 1 84 80 56 76)',
+    close: 'Закрыть',
+  },
+  ja: {
+    welcome: 'ようこそ',
+    heroTitle: '贅沢な旅の始まり',
+    destinationPlaceholder: '目的地をご入力ください',
+    exploreServices: '↓ サービス・プランを見る',
+    navHome: 'ホーム',
+    navJourneys: 'プラン一覧',
+    navHelp: 'サポート',
+    servicesTitle: '最高峰のモビリティサービス',
+    servicesSubtitle: 'お客様のご要望に寄り添う専属ハイヤーサービスをご案内します。',
+    helpTitle: 'VIPコンシェルジュ＆サポート',
+    helpSubtitle: '専属デスクが24時間365日体制でお待ちしております。',
+    helpWhatsapp: 'WhatsAppで相談する',
+    helpPhone: 'デスクへ電話 (+33 1 84 80 56 76)',
+    close: '閉じる',
+  },
 };
 
 export default function ReservationPage() {
@@ -479,15 +559,8 @@ export default function ReservationPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const langKey = i18n?.language?.startsWith('en')
-    ? 'en'
-    : i18n?.language?.startsWith('es')
-    ? 'es'
-    : i18n?.language?.startsWith('ar')
-    ? 'ar'
-    : i18n?.language?.startsWith('zh')
-    ? 'zh'
-    : 'fr';
+  const rawLang = (i18n?.language || 'fr').split('-')[0].toLowerCase();
+  const langKey = WELCOME_TEXTS[rawLang] ? rawLang : 'fr';
 
   const welcomeT = WELCOME_TEXTS[langKey] || WELCOME_TEXTS.fr;
   const isRtl = langKey === 'ar';
@@ -524,7 +597,7 @@ export default function ReservationPage() {
     try {
       const [y, m, d] = dateStr.split('-').map(Number);
       const dateObj = new Date(y, m - 1, d);
-      const formatted = dateObj.toLocaleDateString('fr-FR', {
+      const formatted = dateObj.toLocaleDateString(i18n?.language || 'fr', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -541,7 +614,7 @@ export default function ReservationPage() {
     try {
       const [y, m, d] = dateStr.split('-').map(Number);
       const dateObj = new Date(y, m - 1, d);
-      const formatted = dateObj.toLocaleDateString('fr-FR', {
+      const formatted = dateObj.toLocaleDateString(i18n?.language || 'fr', {
         weekday: 'short',
         day: 'numeric',
         month: 'short',
@@ -553,6 +626,94 @@ export default function ReservationPage() {
   }, []);
 
   // Service selection: 'transfer' (default: Aller simple), 'hourly' (Chauffeur à l'heure), 'bespoke'
+  
+  const getLocalizedQuoteClass = useCallback((qc) => {
+    const subMap = {
+      'business-class': t('tunnel.qc_business_sub', qc.subtitle),
+      'business-van': t('tunnel.qc_van_sub', qc.subtitle),
+      'first-class': t('tunnel.qc_first_sub', qc.subtitle),
+    };
+    const descMap = {
+      'business-class': t('tunnel.qc_business_desc', qc.desc),
+      'business-van': t('tunnel.qc_van_desc', qc.desc),
+      'first-class': t('tunnel.qc_first_desc', qc.desc),
+    };
+    return {
+      ...qc,
+      subtitle: subMap[qc.id] || qc.subtitle,
+      desc: descMap[qc.id] || qc.desc,
+      passengers: t('tunnel.up_to_passengers', "Jusqu'à {{count}} passagers", { count: qc.maxPassengers }),
+      luggage: t('tunnel.max_luggage', "{{count}} valises max", { count: qc.maxLuggage }),
+    };
+  }, [t]);
+
+  const getLocalizedLargeGroup = useCallback((v) => {
+    const subMap = {
+      'sprinter-7-vip': t('tunnel.lg_7_sub', v.subtitle),
+      'sprinter-14-vip': t('tunnel.lg_14_sub', v.subtitle),
+      'sprinter-19-standard': t('tunnel.lg_19_sub', v.subtitle),
+    };
+    const descMap = {
+      'sprinter-7-vip': t('tunnel.lg_7_desc', v.desc),
+      'sprinter-14-vip': t('tunnel.lg_14_desc', v.desc),
+      'sprinter-19-standard': t('tunnel.lg_19_desc', v.desc),
+    };
+    return {
+      ...v,
+      subtitle: subMap[v.id] || v.subtitle,
+      desc: descMap[v.id] || v.desc,
+      passengers: t('tunnel.up_to_passengers', "Jusqu'à {{count}} passagers", { count: v.maxPassengers }),
+      luggage: t('tunnel.max_luggage', "{{count}} valises max", { count: v.maxLuggage }),
+    };
+  }, [t]);
+
+  const getLocalizedPrestige = useCallback((v) => {
+    const subMap = {
+      'maybach': t('tunnel.pv_maybach_sub', v.subtitle),
+      'rolls-phantom': t('tunnel.pv_phantom_sub', v.subtitle),
+      'rolls-cullinan': t('tunnel.pv_cullinan_sub', v.subtitle),
+      'cadillac-escalade': t('tunnel.pv_escalade_sub', v.subtitle),
+      'range-rover': t('tunnel.pv_rangerover_sub', v.subtitle),
+    };
+    const descMap = {
+      'maybach': t('tunnel.pv_maybach_desc', v.desc),
+      'rolls-phantom': t('tunnel.pv_phantom_desc', v.desc),
+      'rolls-cullinan': t('tunnel.pv_cullinan_desc', v.desc),
+      'cadillac-escalade': t('tunnel.pv_escalade_desc', v.desc),
+      'range-rover': t('tunnel.pv_rangerover_desc', v.desc),
+    };
+    return {
+      ...v,
+      subtitle: subMap[v.id] || v.subtitle,
+      desc: descMap[v.id] || v.desc,
+      passengers: t('tunnel.up_to_passengers', "Jusqu'à {{count}} passagers", { count: v.maxPassengers }),
+      luggage: t('tunnel.max_luggage', "{{count}} valises max", { count: v.maxLuggage }),
+    };
+  }, [t]);
+
+  const localizedDriverInstructions = useMemo(() => [
+    {
+      id: 'silence',
+      title: t('tunnel.driver_silence_title', 'Silence souhaité à bord'),
+      desc: t('tunnel.driver_silence_desc', 'Trajet calme et reposant, idéal pour travailler ou se détendre sans distraction.'),
+    },
+    {
+      id: 'call_on_arrival',
+      title: t('tunnel.driver_call_title', 'Appel ou SMS à l’arrivée'),
+      desc: t('tunnel.driver_call_desc', 'Votre chauffeur vous avertit discrètement dès qu’il est stationné au point de rendez-vous.'),
+    },
+    {
+      id: 'luggage_help',
+      title: t('tunnel.driver_luggage_title', 'Aide au port des bagages'),
+      desc: t('tunnel.driver_luggage_desc', 'Prise en charge et chargement attentionné de vos bagages dès votre accueil.'),
+    },
+    {
+      id: 'cabin_temp',
+      title: t('tunnel.driver_temp_title', 'Température cabine personnalisée'),
+      desc: t('tunnel.driver_temp_desc', 'Climatisation fraîche ou cabine tempérée ajustée selon vos préférences.'),
+    },
+  ], [t]);
+
   const initialService = searchParams.get('service') || 'transfer';
   const [service, setService] = useState(initialService);
 
@@ -967,8 +1128,12 @@ export default function ReservationPage() {
     if (match && match.aliasOf) {
       match = VEHICLES.find((v) => v.id === match.aliasOf) || match;
     }
-    return match || QUOTE_CLASSES[0];
-  }, [selectedVehicle]);
+    const raw = match || QUOTE_CLASSES[0];
+    if (QUOTE_CLASSES.some(qc => qc.id === raw.id)) return getLocalizedQuoteClass(raw);
+    if (LARGE_GROUPS_VEHICLES.some(lg => lg.id === raw.id)) return getLocalizedLargeGroup(raw);
+    if (PRESTIGE_VEHICLES.some(pv => pv.id === raw.id)) return getLocalizedPrestige(raw);
+    return raw;
+  }, [selectedVehicle, getLocalizedQuoteClass, getLocalizedLargeGroup, getLocalizedPrestige]);
 
   // Pricing calculation
   const calculatedPrice = useMemo(() => {
@@ -1143,7 +1308,7 @@ export default function ReservationPage() {
           Bagages: `${selectedVehicleData.maxLuggage} valises max`,
           'Numéro de vol': isAirportTrip && flightNumber ? flightNumber : '—',
           'Instructions chauffeur': driverInstructions.length > 0
-            ? driverInstructions.map((id) => DRIVER_INSTRUCTIONS_LIST.find((item) => item.id === id)?.title || id).join(', ')
+            ? driverInstructions.map((id) => localizedDriverInstructions.find((item) => item.id === id)?.title || id).join(', ')
             : 'Standards VIP',
           'Précisions particulières': specialRequests || 'Aucune',
           Prénom: firstName,
@@ -1218,7 +1383,7 @@ export default function ReservationPage() {
           luggage: selectedVehicleData?.maxLuggage,
           flightNumber: isAirportTrip && flightNumber ? flightNumber : null,
           driverInstructions: driverInstructions.length > 0
-            ? driverInstructions.map((id) => DRIVER_INSTRUCTIONS_LIST.find((item) => item.id === id)?.title || id)
+            ? driverInstructions.map((id) => localizedDriverInstructions.find((item) => item.id === id)?.title || id)
             : [],
           specialRequests: specialRequests || null,
           client: {
@@ -1295,7 +1460,7 @@ export default function ReservationPage() {
             type="button"
             onClick={goToPrevStep}
             className={styles.backCircleBtn}
-            aria-label="Retour à l'accueil"
+            aria-label={t('tunnel.back_to_home', "Retour à l'accueil")}
           >
             <ChevronLeft size={22} strokeWidth={1.8} />
           </button>
@@ -1397,7 +1562,7 @@ export default function ReservationPage() {
                   onClick={() => setPickup('')}
                   className={styles.clearBtn}
                   style={{ position: 'absolute', right: 0 }}
-                  aria-label="Effacer le départ"
+                  aria-label={t('tunnel.remove', 'Effacer')}
                 >
                   <X size={16} />
                 </button>
@@ -1501,8 +1666,8 @@ export default function ReservationPage() {
             type="button"
             onClick={handleSwapAddresses}
             className={styles.swapBtnFloating}
-            aria-label="Inverser les adresses"
-            title="Inverser départ et destination"
+            aria-label={t('tunnel.swap_addresses', 'Inverser les adresses')}
+            title={t('tunnel.swap_addresses', 'Inverser les adresses')}
           >
             <ArrowUpDown size={17} strokeWidth={1.8} />
           </button>
@@ -1530,7 +1695,7 @@ export default function ReservationPage() {
                   onClick={() => setDestination('')}
                   className={styles.clearBtn}
                   style={{ position: 'absolute', right: 0 }}
-                  aria-label="Effacer la destination"
+                  aria-label={t('tunnel.remove', 'Effacer')}
                 >
                   <X size={16} />
                 </button>
@@ -1651,14 +1816,14 @@ export default function ReservationPage() {
                 <div className={styles.extraTransferCardHeader}>
                   <div className={styles.extraTransferBadge}>
                     <Repeat size={14} />
-                    <span>Transfert {idx + 2} {idx === 0 ? '(Trajet Retour)' : ''}</span>
+                    <span>{t('tunnel.transfers', 'Transfert')} {idx + 2} {idx === 0 ? t('tunnel.transfer_return', '(Trajet Retour)') : ''}</span>
                   </div>
                   <div className={styles.extraTransferHeaderActions}>
                     <button
                       type="button"
                       onClick={() => swapExtraTransferAddresses(et.id)}
                       className={styles.swapAddressesBtn}
-                      title="Inverser le point de départ et la destination"
+                      title={t('tunnel.swap_addresses', 'Inverser le point de départ et la destination')}
                     >
                       <ArrowUpDown size={13} />
                       <span>{t('tunnel.swap_addresses', 'Inverser')}</span>
@@ -1667,7 +1832,7 @@ export default function ReservationPage() {
                       type="button"
                       onClick={() => removeExtraTransfer(et.id)}
                       className={styles.removeTransferMiniBtn}
-                      aria-label="Supprimer ce transfert"
+                      aria-label={t('tunnel.remove', 'Supprimer ce transfert')}
                     >
                       <Trash2 size={13} />
                       <span>{t('tunnel.remove', 'Retirer')}</span>
@@ -1677,23 +1842,23 @@ export default function ReservationPage() {
 
                 <div className={styles.extraTransferFieldsGrid}>
                   <div className={styles.extraTransferField}>
-                    <label className={styles.miniFieldLabel}>Lieu de prise en charge</label>
+                    <label className={styles.miniFieldLabel}>{t('tunnel.pickup_label', 'Lieu de prise en charge')}</label>
                     <input
                       type="text"
                       value={et.pickup}
                       onChange={(e) => updateExtraTransfer(et.id, 'pickup', e.target.value)}
-                      placeholder="Adresse, aéroport, hôtel..."
+                      placeholder={t('tunnel.pickup_placeholder', 'Adresse, aéroport, hôtel...')}
                       className={styles.nativeTextClean}
                     />
                   </div>
 
                   <div className={styles.extraTransferField}>
-                    <label className={styles.miniFieldLabel}>Destination</label>
+                    <label className={styles.miniFieldLabel}>{t('tunnel.dest_label', 'Destination')}</label>
                     <input
                       type="text"
                       value={et.destination}
                       onChange={(e) => updateExtraTransfer(et.id, 'destination', e.target.value)}
-                      placeholder="Adresse, aéroport, hôtel..."
+                      placeholder={t('tunnel.pickup_placeholder', 'Adresse, aéroport, hôtel...')}
                       className={styles.nativeTextClean}
                     />
                   </div>
@@ -1721,12 +1886,12 @@ export default function ReservationPage() {
                   </div>
 
                   <div className={styles.extraTransferField}>
-                    <label className={styles.miniFieldLabel}>N° de vol ou terminal (si aéroport)</label>
+                    <label className={styles.miniFieldLabel}>{t('tunnel.airport_terminal_flight_label', 'N° de vol ou terminal (si aéroport)')}</label>
                     <input
                       type="text"
                       value={et.flightNumber}
                       onChange={(e) => updateExtraTransfer(et.id, 'flightNumber', e.target.value)}
-                      placeholder="Ex : Terminal 2E, Vol AF1234..."
+                      placeholder={t('tunnel.airport_flight_placeholder', 'Ex : Terminal 2E, Vol AF1234...')}
                       className={styles.nativeTextClean}
                     />
                   </div>
@@ -1751,8 +1916,8 @@ export default function ReservationPage() {
             {/* Number of days row */}
             <div className={styles.daysStepperRow}>
               <div>
-                <span className={styles.hourlySectionTitle}>Mise à disposition</span>
-                <p className={styles.hourlySectionSubtitle}>Choisissez le nombre de jours et vos horaires</p>
+                <span className={styles.hourlySectionTitle}>{t('tunnel.service_hourly', 'Mise à disposition')}</span>
+                <p className={styles.hourlySectionSubtitle}>{t('tunnel.choose_days_hours', 'Choisissez le nombre de jours et vos horaires')}</p>
               </div>
 
               <div className={styles.stepperControl}>
@@ -1761,18 +1926,18 @@ export default function ReservationPage() {
                   className={styles.stepperBtn}
                   onClick={() => setNumberOfDays(scheduleDays.length - 1)}
                   disabled={scheduleDays.length <= 1}
-                  aria-label="Moins de jours"
+                  aria-label={t('tunnel.fewer_days', 'Moins de jours')}
                 >
                   -
                 </button>
                 <span className={styles.stepperCount}>
-                  {scheduleDays.length} {scheduleDays.length > 1 ? 'jours' : 'jour'}
+                  {scheduleDays.length} {scheduleDays.length > 1 ? t('tunnel.days', 'jours') : t('tunnel.day', 'jour')}
                 </span>
                 <button
                   type="button"
                   className={styles.stepperBtn}
                   onClick={() => setNumberOfDays(scheduleDays.length + 1)}
-                  aria-label="Plus de jours"
+                  aria-label={t('tunnel.more_days', 'Plus de jours')}
                 >
                   +
                 </button>
@@ -1788,7 +1953,7 @@ export default function ReservationPage() {
                   onClick={() => setNumberOfDays(num)}
                   className={`${styles.quickDayPill} ${scheduleDays.length === num ? styles.quickDayPillActive : ''}`}
                 >
-                  {num === 7 ? '1 semaine' : `${num} ${num > 1 ? 'jours' : 'jour'}`}
+                  {num === 7 ? t('tunnel.one_week', '1 semaine') : `${num} ${num > 1 ? t('tunnel.days', 'jours') : t('tunnel.day', 'jour')}`}
                 </button>
               ))}
             </div>
@@ -1888,7 +2053,7 @@ export default function ReservationPage() {
                           onClick={() => setDayHours(d.id, Math.max(1, (d.hours || 8) - 1))}
                           disabled={(d.hours || 8) <= 1}
                           className={styles.hourDialStepBtn}
-                          aria-label="Diminuer d'une heure"
+                          aria-label={t('tunnel.decrease_hour', "Diminuer d'une heure")}
                         >
                           -
                         </button>
@@ -1902,13 +2067,13 @@ export default function ReservationPage() {
                               setDayHours(d.id, Math.max(1, (d.hours || 8) - 1));
                             }
                           }}
-                          title="Faites défiler à la molette ou cliquez sur + / - pour ajuster"
+                          title={t('tunnel.scroll_adjust_title', "Faites défiler à la molette ou cliquez sur + / - pour ajuster")}
                         >
                           <span className={styles.hourDialNumber}>{d.hours || 8}</span>
-                          <span className={styles.hourDialUnit}>{(d.hours || 8) > 1 ? 'heures' : 'heure'}</span>
-                          {(d.hours || 8) === 8 && <span className={styles.hourDialTag}>1 jour</span>}
-                          {(d.hours || 8) === 4 && <span className={styles.hourDialTag}>1/2 jour</span>}
-                          {(d.hours || 8) === 24 && <span className={styles.hourDialTag}>24h continue</span>}
+                          <span className={styles.hourDialUnit}>{(d.hours || 8) > 1 ? t('tunnel.hours', 'heures') : t('tunnel.hour', 'heure')}</span>
+                          {(d.hours || 8) === 8 && <span className={styles.hourDialTag}>{t('tunnel.one_day', '1 jour')}</span>}
+                          {(d.hours || 8) === 4 && <span className={styles.hourDialTag}>{t('tunnel.half_day', '1/2 jour')}</span>}
+                          {(d.hours || 8) === 24 && <span className={styles.hourDialTag}>{t('tunnel.continuous_24h', '24h continue')}</span>}
                         </div>
 
                         <button
@@ -1916,7 +2081,7 @@ export default function ReservationPage() {
                           onClick={() => setDayHours(d.id, Math.min(24, (d.hours || 8) + 1))}
                           disabled={(d.hours || 8) >= 24}
                           className={styles.hourDialStepBtn}
-                          aria-label="Augmenter d'une heure"
+                          aria-label={t('tunnel.increase_hour', "Augmenter d'une heure")}
                         >
                           +
                         </button>
@@ -1932,7 +2097,7 @@ export default function ReservationPage() {
                           value={d.hours || 8}
                           onChange={(e) => setDayHours(d.id, parseInt(e.target.value, 10))}
                           className={styles.hourLuxuryRange}
-                          aria-label="Sélectionner la durée"
+                          aria-label={t('tunnel.select_duration', 'Sélectionner la durée')}
                         />
                         <div className={styles.hourSliderScale}>
                           <span>1h</span>
@@ -1955,8 +2120,8 @@ export default function ReservationPage() {
                               className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
                             >
                               <span className={styles.durationPillNumber}>{h}h</span>
-                              {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
-                              {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
+                              {h === 8 && <span className={styles.durationPillTag}>{t('tunnel.one_day', '1 jour')}</span>}
+                              {h === 4 && <span className={styles.durationPillTag}>{t('tunnel.half_day', '1/2 j')}</span>}
                             </button>
                           ))}
                         </div>
@@ -1971,7 +2136,7 @@ export default function ReservationPage() {
             <div className={styles.hourlyTotalBanner}>
               <Calendar size={16} />
               <span>
-                Total : <strong>{scheduleDays.length} {scheduleDays.length > 1 ? 'jours' : 'jour'}</strong> · <strong>{totalScheduleHours}h</strong> de mise à disposition
+                Total : <strong>{scheduleDays.length} {scheduleDays.length > 1 ? t('tunnel.days', 'jours') : t('tunnel.day', 'jour')}</strong> · <strong>{totalScheduleHours}h</strong> {t('tunnel.service_hourly', 'de mise à disposition')}
               </span>
             </div>
           </div>
@@ -2092,7 +2257,7 @@ export default function ReservationPage() {
               type="button"
               onClick={goToPrevStep}
               className={styles.navBackBtn}
-              aria-label="Étape précédente"
+              aria-label={t('tunnel.prev_step', 'Étape précédente')}
             >
               <ArrowLeft size={16} strokeWidth={1.5} />
               <span>{t('funnel.back', 'Retour')}</span>
@@ -2106,7 +2271,7 @@ export default function ReservationPage() {
         </div>
 
         {step > 0 && service !== 'bespoke' ? (
-          <nav className={styles.stepperBreadcrumb} aria-label="Progression de la réservation">
+          <nav className={styles.stepperBreadcrumb} aria-label={t('tunnel.booking_progress', 'Progression de la réservation')}>
             <span className={step === 1 ? styles.stepActive : step > 1 ? styles.stepDone : styles.stepInactive}>
               {t('tunnel.step_route', 'Trajet')}
             </span>
@@ -2189,8 +2354,8 @@ export default function ReservationPage() {
                       onChange={(e) => setPickup(e.target.value)}
                       placeholder={
                         service === 'transfer'
-                          ? 'Adresse, aéroport, hôtel, palace...'
-                          : 'Hôtel, palace, bureau, adresse parisienne...'
+                          ? t('tunnel.pickup_placeholder', 'Adresse, aéroport, hôtel, palace...')
+                          : t('tunnel.pickup_hourly_placeholder', 'Hôtel, palace, bureau, adresse...')
                       }
                       className={styles.luxuryInput}
                       id="pickup-input"
@@ -2251,7 +2416,7 @@ export default function ReservationPage() {
                         type="text"
                         value={destination}
                         onChange={(e) => setDestination(e.target.value)}
-                        placeholder="Adresse d'arrivée, aéroport, restaurant, hôtel..."
+                        placeholder={t('tunnel.destination_placeholder', "Adresse d'arrivée, aéroport, restaurant, hôtel...")}
                         className={styles.luxuryInput}
                         id="destination-input"
                       />
@@ -2305,7 +2470,7 @@ export default function ReservationPage() {
                   <div className={styles.mergedFieldGroup}>
                     <label className={styles.mergedFieldLabel}>
                       <Calendar size={15} />
-                      <span>Planning des journées</span>
+                      <span>{t('tunnel.schedule_days_title', 'Planning des journées')}</span>
                     </label>
                     <div className={styles.scheduleContainer}>
                       <div className={styles.multiDaysList}>
@@ -2315,7 +2480,7 @@ export default function ReservationPage() {
                             <div key={d.id} className={styles.dayCard}>
                               <div className={styles.dayCardHeader}>
                                 <div className={styles.dayCardHeaderLeft}>
-                                  <span className={styles.dayBadge}>Jour {index + 1}</span>
+                                  <span className={styles.dayBadge}>{t('tunnel.day', 'Jour')} {index + 1}</span>
                                   <span className={styles.dayHeaderDateDesc}>· {formatDayShort(d.date)}</span>
                                 </div>
                                 {scheduleDays.length > 1 && (
@@ -2325,7 +2490,7 @@ export default function ReservationPage() {
                                     className={styles.removeDayMiniBtn}
                                   >
                                     <Trash2 size={13} />
-                                    <span>Retirer</span>
+                                    <span>{t('tunnel.remove', 'Retirer')}</span>
                                   </button>
                                 )}
                               </div>
@@ -2337,7 +2502,7 @@ export default function ReservationPage() {
                                     onClick={() => updateDayDate(d.id, todayISO)}
                                     className={`${styles.dateSelectBtn} ${isToday ? styles.dateSelectActive : ''}`}
                                   >
-                                    <span>Aujourd'hui</span>
+                                    <span>{t('tunnel.today', "Aujourd'hui")}</span>
                                   </button>
                                   <label
                                     className={`${styles.dateSelectBtn} ${!isToday ? styles.dateSelectActive : ''}`}
@@ -2349,7 +2514,7 @@ export default function ReservationPage() {
                                     }}
                                   >
                                     <Calendar size={13} />
-                                    <span>{!isToday ? formatDayShort(d.date) : 'Autre date'}</span>
+                                    <span>{!isToday ? formatDayShort(d.date) : t('tunnel.other_date', 'Autre date')}</span>
                                     <input
                                       type="date"
                                       min={todayISO}
@@ -2372,8 +2537,8 @@ export default function ReservationPage() {
                                         className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
                                       >
                                         <span className={styles.durationPillNumber}>{h}h</span>
-                                        {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
-                                        {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
+                                        {h === 8 && <span className={styles.durationPillTag}>{t('tunnel.one_day', '1 jour')}</span>}
+                                        {h === 4 && <span className={styles.durationPillTag}>{t('tunnel.half_day', '1/2 j')}</span>}
                                       </button>
                                     ))}
                                   </div>
@@ -2386,7 +2551,7 @@ export default function ReservationPage() {
                       <div className={styles.addScheduleRow}>
                         <button type="button" onClick={addScheduleDay} className={styles.addDayActionBtn}>
                           <Plus size={15} />
-                          <span>Ajouter une journée</span>
+                          <span>{t('tunnel.add_day', 'Ajouter une journée')}</span>
                         </button>
                       </div>
                     </div>
@@ -2460,21 +2625,21 @@ export default function ReservationPage() {
                   onClick={() => setFleetMode('standard')}
                   className={`${styles.classFilterTab} ${fleetMode === 'standard' ? styles.classFilterActive : ''}`}
                 >
-                  <span>Formules Devis (3)</span>
+                  <span>{t('tunnel.quote_packages_tab', 'Formules Devis (3)')}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setFleetMode('large-groups')}
                   className={`${styles.classFilterTab} ${fleetMode === 'large-groups' ? styles.classFilterActive : ''}`}
                 >
-                  <span>Large Groups (7-19)</span>
+                  <span>{t('tunnel.large_groups_tab', 'Large Groups (7-19)')}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setFleetMode('prestige')}
                   className={`${styles.classFilterTab} ${fleetMode === 'prestige' ? styles.classFilterActive : ''}`}
                 >
-                  <span>Prestige Collection</span>
+                  <span>{t('tunnel.prestige_tab', 'Prestige Collection')}</span>
                 </button>
               </div>
 
@@ -2482,7 +2647,8 @@ export default function ReservationPage() {
               {fleetMode === 'standard' && (
                 <div style={{ marginTop: '1.25rem' }}>
                   <div className={styles.vehiclesListGrid}>
-                    {QUOTE_CLASSES.map((qc) => {
+                    {QUOTE_CLASSES.map((rawQc) => {
+                      const qc = getLocalizedQuoteClass(rawQc);
                       const isSelected = selectedVehicle === qc.id || (selectedVehicleData && selectedVehicleData.id === qc.id);
                       return (
                         <div
@@ -2523,7 +2689,7 @@ export default function ReservationPage() {
                                 </div>
                                 {service === 'hourly' && (
                                   <div style={{ fontSize: '0.78rem', color: '#666', fontWeight: 500, marginTop: '0.2rem' }}>
-                                    Planning : {scheduleDays.length} jour{scheduleDays.length > 1 ? 's' : ''} · {totalScheduleHours}h au total
+                                    Planning : {scheduleDays.length} {scheduleDays.length > 1 ? t('tunnel.days', 'jours') : t('tunnel.day', 'jour')} · {totalScheduleHours}h {t('tunnel.total_in_all', 'au total')}
                                   </div>
                                 )}
                                 <div className={styles.vehicleCapacityRow} style={{ marginTop: '0.45rem' }}>
@@ -2538,19 +2704,17 @@ export default function ReservationPage() {
                                 </div>
                               </div>
                               <div className={styles.vehicleQuoteBox}>
-                                <span className={styles.vehiclePrice}>
-                                  Sur devis
-                                </span>
-                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                                <span className={styles.vehiclePrice}>{t('tunnel.on_quote', 'Sur devis')}</span>
+                                <span className={styles.vehiclePriceNote}>{t('tunnel.custom_study', 'Étude personnalisée')}</span>
                               </div>
                             </div>
 
                             <p className={styles.vehicleDesc}>{qc.desc}</p>
 
                             <div className={styles.vehicleQuotePills}>
-                              <span className={styles.quotePill}>Devis sous 30 min</span>
-                              <span className={styles.quotePill}>Chauffeur dédié</span>
-                              <span className={styles.quotePill}>Wi-Fi & Rafraîchissements</span>
+                              <span className={styles.quotePill}>{t('tunnel.quote_pill_delay', 'Devis sous 15 min')}</span>
+                              <span className={styles.quotePill}>{t('tunnel.quote_pill_chauffeur', 'Chauffeur dédié')}</span>
+                              <span className={styles.quotePill}>{t('tunnel.quote_pill_amenities', 'Wi-Fi & Rafraîchissements')}</span>
                             </div>
 
                             <button
@@ -2562,7 +2726,7 @@ export default function ReservationPage() {
                                 goToNextStep();
                               }}
                             >
-                              <span>Choisir {qc.name}</span>
+                              <span>{t('tunnel.choose_vehicle_name', 'Choisir')} {qc.name}</span>
                               <ArrowRight size={15} />
                             </button>
                           </div>
@@ -2574,7 +2738,7 @@ export default function ReservationPage() {
                   {/* Two Special Categories Discovery Banners */}
                   <div className={styles.specialCategoriesSection}>
                     <div className={styles.specialCategoryDivider}>
-                      <span>Ou découvrez nos catégories spéciales</span>
+                      <span>{t('tunnel.or_discover_special', 'Ou découvrez nos catégories spéciales')}</span>
                     </div>
 
                     <div className={styles.specialCategoriesGrid}>
@@ -2590,20 +2754,20 @@ export default function ReservationPage() {
                             <Users size={20} />
                           </div>
                           <div>
-                            <span className={styles.specialCategoryTag}>Catégorie Spéciale</span>
-                            <h4 className={styles.specialCategoryTitle}>Large Groups (7 à 19 places)</h4>
+                            <span className={styles.specialCategoryTag}>{t('tunnel.special_category_tag', 'Catégorie Spéciale')}</span>
+                            <h4 className={styles.specialCategoryTitle}>{t('tunnel.large_groups_tab', 'Large Groups (7-19)')}</h4>
                           </div>
                         </div>
                         <p className={styles.specialCategoryDesc}>
-                          Mercedes Sprinter de 7 à 19 places pour délégations, mariages et transport d’équipes. Choisissez précisément la capacité souhaitée.
+                          {t('tunnel.large_groups_sub', 'Mercedes Sprinter de 7 à 19 places pour délégations, mariages et transport d’équipes. Choisissez précisément la capacité souhaitée.')}
                         </p>
                         <div className={styles.specialCapacityPills}>
-                          <span>7 places Lounge VIP</span>
-                          <span>14 places Minibus</span>
-                          <span>19 places Tourisme</span>
+                          <span>7 {t('tunnel.seats_unit', 'places')} Lounge VIP</span>
+                          <span>14 {t('tunnel.seats_unit', 'places')} Minibus</span>
+                          <span>19 {t('tunnel.seats_unit', 'places')} Tourisme</span>
                         </div>
                         <div className={styles.specialCategoryCta}>
-                          <span>Choisir selon la capacité (7 à 19 pl.)</span>
+                          <span>{t('tunnel.choose_by_capacity', 'Choisir selon la capacité (7 à 19 pl.)')}</span>
                           <ArrowRight size={14} />
                         </div>
                       </div>
@@ -2620,12 +2784,12 @@ export default function ReservationPage() {
                             <Sparkles size={20} style={{ color: '#b8903c' }} />
                           </div>
                           <div>
-                            <span className={styles.specialCategoryTag} style={{ color: '#b8903c' }}>Catégorie Spéciale</span>
-                            <h4 className={styles.specialCategoryTitle}>Prestige Collection</h4>
+                            <span className={styles.specialCategoryTag} style={{ color: '#b8903c' }}>{t('tunnel.special_category_tag', 'Catégorie Spéciale')}</span>
+                            <h4 className={styles.specialCategoryTitle}>{t('tunnel.prestige_tab', 'Prestige Collection')}</h4>
                           </div>
                         </div>
                         <p className={styles.specialCategoryDesc}>
-                          Mercedes-Maybach, Rolls-Royce Phantom & Cullinan, Cadillac Escalade ESV, Range Rover. Sélectionnez votre véhicule d’exception précis.
+                          {t('tunnel.prestige_sub', 'Mercedes-Maybach, Rolls-Royce Phantom & Cullinan, Cadillac Escalade ESV, Range Rover. Sélectionnez votre véhicule d’exception précis.')}
                         </p>
                         <div className={styles.specialCapacityPills}>
                           <span>Mercedes-Maybach</span>
@@ -2634,7 +2798,7 @@ export default function ReservationPage() {
                           <span>Range Rover</span>
                         </div>
                         <div className={styles.specialCategoryCta}>
-                          <span>Choisir précisément le véhicule</span>
+                          <span>{t('tunnel.choose_exact_vehicle', 'Choisir précisément le véhicule')}</span>
                           <ArrowRight size={14} />
                         </div>
                       </div>
@@ -2652,11 +2816,11 @@ export default function ReservationPage() {
                       className={styles.backToStandardBtn}
                       onClick={() => setFleetMode('standard')}
                     >
-                      ← Retour aux 3 formules principales
+                      {t('tunnel.back_to_3_classes', '← Retour aux 3 formules principales')}
                     </button>
-                    <h3 className={styles.specialSectionTitle}>Large Groups : Sprinter de 7 à 19 places</h3>
+                    <h3 className={styles.specialSectionTitle}>{t('tunnel.large_groups_heading', 'Large Groups : Sprinter de 7 à 19 places')}</h3>
                     <p className={styles.specialSectionSub}>
-                      Sélectionnez la configuration adaptée à la taille de votre groupe et au volume de vos bagages.
+                      {t('tunnel.large_groups_sub', 'Sélectionnez la configuration adaptée à la taille de votre groupe et au volume de vos bagages.')}
                     </p>
 
                     <div className={styles.capacityFilterBar}>
@@ -2665,34 +2829,35 @@ export default function ReservationPage() {
                         onClick={() => setLargeGroupCapacity('all')}
                         className={`${styles.capacityFilterBtn} ${largeGroupCapacity === 'all' ? styles.capacityFilterBtnActive : ''}`}
                       >
-                        Toutes les capacités
+                        {t('tunnel.all_capacities', 'Toutes les capacités')}
                       </button>
                       <button
                         type="button"
                         onClick={() => setLargeGroupCapacity('7')}
                         className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '7' ? styles.capacityFilterBtnActive : ''}`}
                       >
-                        7 places (Lounge VIP)
+                        7 {t('tunnel.seats_unit', 'places')} (Lounge VIP)
                       </button>
                       <button
                         type="button"
                         onClick={() => setLargeGroupCapacity('14')}
                         className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '14' ? styles.capacityFilterBtnActive : ''}`}
                       >
-                        14 places (Minibus Affaires)
+                        14 {t('tunnel.seats_unit', 'places')} (Minibus Affaires)
                       </button>
                       <button
                         type="button"
                         onClick={() => setLargeGroupCapacity('19')}
                         className={`${styles.capacityFilterBtn} ${largeGroupCapacity === '19' ? styles.capacityFilterBtnActive : ''}`}
                       >
-                        19 places (Grand Tourisme)
+                        19 {t('tunnel.seats_unit', 'places')} (Grand Tourisme)
                       </button>
                     </div>
                   </div>
 
                   <div className={styles.vehiclesListGrid}>
-                    {LARGE_GROUPS_VEHICLES.filter(v => largeGroupCapacity === 'all' || v.capacityTag.includes(largeGroupCapacity)).map((v) => {
+                    {LARGE_GROUPS_VEHICLES.filter(v => largeGroupCapacity === 'all' || v.capacityTag.includes(largeGroupCapacity)).map((rawV) => {
+                      const v = getLocalizedLargeGroup(rawV);
                       const isSelected = selectedVehicle === v.id;
                       return (
                         <div
@@ -2738,7 +2903,7 @@ export default function ReservationPage() {
                               </div>
                               <div className={styles.vehicleQuoteBox}>
                                 <span className={styles.vehiclePrice}>Sur devis</span>
-                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                                <span className={styles.vehiclePriceNote}>{t('tunnel.custom_study', 'Étude personnalisée')}</span>
                               </div>
                             </div>
 
@@ -2753,7 +2918,7 @@ export default function ReservationPage() {
                                 goToNextStep();
                               }}
                             >
-                              <span>Choisir ce Sprinter ({v.capacityTag})</span>
+                              <span>{t('tunnel.choose_this_sprinter', 'Choisir ce Sprinter')} ({v.capacityTag})</span>
                               <ArrowRight size={15} />
                             </button>
                           </div>
@@ -2773,16 +2938,17 @@ export default function ReservationPage() {
                       className={styles.backToStandardBtn}
                       onClick={() => setFleetMode('standard')}
                     >
-                      ← Retour aux 3 formules principales
+                      {t('tunnel.back_to_3_classes', '← Retour aux 3 formules principales')}
                     </button>
-                    <h3 className={styles.specialSectionTitle}>Prestige Collection : Véhicules d'exception</h3>
+                    <h3 className={styles.specialSectionTitle}>{t('tunnel.prestige_heading', "Prestige Collection : Véhicules d'exception")}</h3>
                     <p className={styles.specialSectionSub}>
-                      Mercedes-Maybach, Rolls-Royce, Cadillac Escalade, Range Rover. Choisissez précisément le modèle pour votre déplacement.
+                      {t('tunnel.prestige_sub', 'Mercedes-Maybach, Rolls-Royce, Cadillac Escalade, Range Rover. Choisissez précisément le modèle pour votre déplacement.')}
                     </p>
                   </div>
 
                   <div className={styles.vehiclesListGrid}>
-                    {PRESTIGE_VEHICLES.map((v) => {
+                    {PRESTIGE_VEHICLES.map((rawV) => {
+                      const v = getLocalizedPrestige(rawV);
                       const isSelected = selectedVehicle === v.id;
                       const activeAngle = vehicleAngles[v.id] || 'front';
                       const displayImg =
@@ -2881,7 +3047,7 @@ export default function ReservationPage() {
                               </div>
                               <div className={styles.vehicleQuoteBox}>
                                 <span className={styles.vehiclePrice}>Sur devis</span>
-                                <span className={styles.vehiclePriceNote}>Étude personnalisée</span>
+                                <span className={styles.vehiclePriceNote}>{t('tunnel.custom_study', 'Étude personnalisée')}</span>
                               </div>
                             </div>
 
@@ -2896,7 +3062,7 @@ export default function ReservationPage() {
                                 goToNextStep();
                               }}
                             >
-                              <span>Choisir ce modèle ({v.name})</span>
+                              <span>{t('tunnel.choose_this_model', 'Choisir ce modèle')} ({v.name})</span>
                               <ArrowRight size={15} />
                             </button>
                           </div>
@@ -3036,7 +3202,7 @@ export default function ReservationPage() {
                     rows={2}
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
-                    placeholder="Code d'accès, instructions spécifiques, nom pour l'accueil chauffeur..."
+                    placeholder={t('tunnel.special_requests_placeholder', "Code d'accès, instructions spécifiques, nom pour l'accueil chauffeur...")}
                     className={styles.luxuryTextarea}
                   />
                 </div>
@@ -3071,10 +3237,10 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>DEMANDE DE DEVIS OFFICIEL</span>
-                <h2 className={styles.screenTitle}>Votre demande de devis</h2>
+                <span className={styles.microBadge}>{t('tunnel.recap_badge', 'DEMANDE DE DEVIS OFFICIEL')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.recap_title', 'Votre demande de devis')}</h2>
                 <p className={styles.screenSubtitle}>
-                  Étude personnalisée sur mesure, sans supplément caché ni engagement.
+                  {t('tunnel.recap_subtitle', 'Étude personnalisée sur mesure, sans supplément caché ni engagement.')}
                 </p>
               </div>
 
@@ -3083,7 +3249,7 @@ export default function ReservationPage() {
                 <div className={styles.voucherTopRibbon}>
                   <div className={styles.voucherStatusBadge}>
                     <CheckCircle2 size={13} />
-                    <span>DEVIS OFFICIEL SUR-MESURE</span>
+                    <span>{t('tunnel.recap_voucher_status', 'DEVIS OFFICIEL SUR-MESURE')}</span>
                   </div>
                 </div>
 
@@ -3091,7 +3257,7 @@ export default function ReservationPage() {
                 <div className={styles.summaryVehicleHeader}>
                   <img src={selectedVehicleData.image} alt={selectedVehicleData.name} className={styles.summaryVehicleThumb} />
                   <div className={styles.summaryVehicleDetails}>
-                    <span className={styles.summaryTag}>{service === 'transfer' ? 'TRANSFERT PRIVÉ' : 'CHAUFFEUR À LA JOURNÉE'}</span>
+                    <span className={styles.summaryTag}>{service === 'transfer' ? t('tunnel.summary_transfer', 'TRANSFERT PRIVÉ') : t('tunnel.summary_hourly', 'CHAUFFEUR À LA JOURNÉE')}</span>
                     <h3 className={styles.summaryVehicleTitle}>{selectedVehicleData.name}</h3>
                     <span className={styles.summarySpecs}>
                       <Users size={14} /> Jusqu'à {selectedVehicleData.maxPassengers} passagers max · <Luggage size={14} /> {selectedVehicleData.maxLuggage} valises max
@@ -3144,7 +3310,7 @@ export default function ReservationPage() {
                         {hasLongDistance && (
                           <div className={styles.summaryLongDistanceNote}>
                             <Route size={14} />
-                            <span>Longue distance : {longDistanceCities || 'Oui (Inter-villes)'}</span>
+                            <span>{t('tunnel.long_distance', 'Longue distance')} : {longDistanceCities || t('tunnel.yes_intercity', 'Oui (Inter-villes)')}</span>
                           </div>
                         )}
                       </div>
@@ -3156,13 +3322,13 @@ export default function ReservationPage() {
                         <strong>{t('tunnel.multiple_transfers_label', 'Trajets multiples')} ({1 + extraTransfers.length} transferts) :</strong>
                         <div className={styles.scheduleSummaryList}>
                           <div className={styles.scheduleSummaryItem}>
-                            <span className={styles.scheduleSummaryDayTag}>Transfert 1 (Aller)</span>
+                            <span className={styles.scheduleSummaryDayTag}>{t('tunnel.transfer_outward', 'Transfert 1 (Aller)')}</span>
                             <span className={styles.scheduleSummaryDate}>{pickup} → {destination}</span>
                             <span className={styles.scheduleSummarySlot}>{date} à {time}</span>
                           </div>
                           {extraTransfers.map((et, idx) => (
                             <div key={et.id} className={styles.scheduleSummaryItem}>
-                              <span className={styles.scheduleSummaryDayTag}>Transfert {idx + 2} {idx === 0 ? '(Retour)' : ''}</span>
+                              <span className={styles.scheduleSummaryDayTag}>{t('tunnel.transfers', 'Transfert')} {idx + 2} {idx === 0 ? t('tunnel.transfer_return', '(Retour)') : ''}</span>
                               <span className={styles.scheduleSummaryDate}>{et.pickup || '—'} → {et.destination || '—'}</span>
                               <span className={styles.scheduleSummarySlot}>{et.date} à {et.time} {et.flightNumber ? `· Vol: ${et.flightNumber}` : ''}</span>
                             </div>
@@ -3202,10 +3368,10 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <MessageSquare size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol}>
-                        <strong>Instructions chauffeur :</strong>
+                        <strong>{t('tunnel.driver_instructions_label', 'Instructions chauffeur :')}</strong>
                         <span>
                           {driverInstructions
-                            .map((id) => DRIVER_INSTRUCTIONS_LIST.find((item) => item.id === id)?.title || id)
+                            .map((id) => localizedDriverInstructions.find((item) => item.id === id)?.title || id)
                             .join(' · ')}
                         </span>
                       </div>
@@ -3216,7 +3382,7 @@ export default function ReservationPage() {
                     <div className={styles.summaryRow}>
                       <MessageSquare size={16} className={styles.summaryIcon} />
                       <div className={styles.summaryCol}>
-                        <strong>Précisions particulières :</strong>
+                        <strong>{t('tunnel.special_requests_label', 'Précisions particulières :')}</strong>
                         <span>{specialRequests}</span>
                       </div>
                     </div>
@@ -3345,16 +3511,16 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>DEMANDE SUR-MESURE & ÉVÉNEMENTS</span>
-                <h2 className={styles.screenTitle}>Décrivez votre besoin avec vos propres mots</h2>
+                <span className={styles.microBadge}>{t('tunnel.bespoke_badge', 'DEMANDE SUR-MESURE & ÉVÉNEMENTS')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.bespoke_title', 'Décrivez votre besoin avec vos propres mots')}</h2>
                 <p className={styles.screenSubtitle}>
-                  Vous pouvez saisir votre texte au clavier ou simplement parler grâce à la dictée vocale.
+                  {t('tunnel.bespoke_sub', 'Vous pouvez saisir votre texte au clavier ou simplement parler grâce à la dictée vocale.')}
                 </p>
               </div>
 
               <div className={styles.bespokeInputBox}>
                 <div className={styles.textareaHeader}>
-                  <span className={styles.inputHeaderTitle}>VOTRE PROGRAMME DE MOBILITÉ</span>
+                  <span className={styles.inputHeaderTitle}>{t('tunnel.bespoke_header', 'VOTRE PROGRAMME DE MOBILITÉ')}</span>
                   <div className={styles.voiceControlGroup}>
                     <button
                       type="button"
@@ -3380,7 +3546,7 @@ export default function ReservationPage() {
                         type="button"
                         className={`${styles.voiceLangBtn} ${voiceLang.startsWith('fr') ? styles.voiceLangBtnActive : ''}`}
                         onClick={() => setVoiceLang('fr-FR')}
-                        title="Micro en Français"
+                        title="Micro (FR)"
                       >
                         🇫🇷 FR
                       </button>
@@ -3400,7 +3566,7 @@ export default function ReservationPage() {
                   rows={5}
                   value={bespokeText}
                   onChange={(e) => setBespokeText(e.target.value)}
-                  placeholder="Ex : Nous sommes 6 personnes arrivant de New York ce vendredi. Nous avons besoin d'un Classe V pour trois jours et d'une berline supplémentaire samedi soir..."
+                  placeholder={t('tunnel.bespoke_placeholder', "Ex : Nous sommes 6 personnes arrivant de New York ce vendredi...")}
                   className={styles.bespokeLargeTextarea}
                 />
 
@@ -3427,7 +3593,7 @@ export default function ReservationPage() {
                   className={styles.nextStepBtn}
                   id="bespoke-continue-btn"
                 >
-                  <span>Continuer vers vos coordonnées</span>
+                  <span>{t('tunnel.continue_to_contact', 'Continuer vers vos coordonnées')}</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -3448,10 +3614,10 @@ export default function ReservationPage() {
               className={styles.screenContainer}
             >
               <div className={styles.screenIntro}>
-                <span className={styles.microBadge}>COORDONNÉES DE RÉPONSE</span>
-                <h2 className={styles.screenTitle}>Où notre équipe doit-elle vous contacter ?</h2>
+                <span className={styles.microBadge}>{t('tunnel.contact_badge', 'COORDONNÉES DE RÉPONSE')}</span>
+                <h2 className={styles.screenTitle}>{t('tunnel.contact_title', 'Où notre équipe doit-elle vous contacter ?')}</h2>
                 <p className={styles.screenSubtitle}>
-                  Seuls votre numéro de téléphone et votre email sont indispensables.
+                  {t('tunnel.contact_sub', 'Seuls votre numéro de téléphone et votre email sont indispensables.')}
                 </p>
               </div>
 
@@ -3494,26 +3660,26 @@ export default function ReservationPage() {
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <User size={14} />
-                      <span>Votre Nom complet (Optionnel)</span>
+                      <span>{t('tunnel.name_optional', 'Votre Nom complet (Optionnel)')}</span>
                     </label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Prénom et Nom"
+                      placeholder={t('tunnel.name_placeholder', 'Prénom et Nom')}
                       className={styles.luxuryInput}
                     />
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.fieldLabel}>
                       <Building2 size={14} />
-                      <span>Société / Organisation (Optionnel)</span>
+                      <span>{t('tunnel.company_optional', 'Société / Organisation (Optionnel)')}</span>
                     </label>
                     <input
                       type="text"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
-                      placeholder="Agence, Ambassade, Entreprise..."
+                      placeholder={t('tunnel.company_placeholder', 'Agence, Ambassade, Entreprise...')}
                       className={styles.luxuryInput}
                     />
                   </div>
@@ -3532,7 +3698,7 @@ export default function ReservationPage() {
                     <Loader2 size={18} className={styles.spinner} />
                   ) : (
                     <>
-                      <span>Transmettre ma demande sur-mesure</span>
+                      <span>{t('tunnel.submit_bespoke_cta', 'Transmettre ma demande sur-mesure')}</span>
                       <ArrowRight size={16} />
                     </>
                   )}
@@ -3561,9 +3727,9 @@ export default function ReservationPage() {
               <div className={styles.successIconCircle}>
                 <Check size={36} />
               </div>
-              <h2 className={styles.successTitle}>Votre devis a été envoyé avec succès</h2>
+              <h2 className={styles.successTitle}>{t('tunnel.success_title', 'Votre devis a été envoyé avec succès')}</h2>
               <p className={styles.successMessage}>
-                Notre équipe dédiée a bien reçu votre demande. Votre devis officiel détaillé ainsi que la confirmation de votre prise en charge vous sont adressés par email et SMS.
+                {t('tunnel.success_message', 'Notre équipe dédiée a bien reçu votre demande. Votre devis officiel détaillé ainsi que la confirmation de votre prise en charge vous sont adressés par email et SMS.')}
               </p>
               <div className={styles.successActions}>
                 <button
@@ -3571,7 +3737,7 @@ export default function ReservationPage() {
                   onClick={() => navigate(getCityPath('/'))}
                   className={styles.nextStepBtn}
                 >
-                  <span>Retourner à l'accueil SELY</span>
+                  <span>{t('tunnel.back_to_home', "Retourner à l'accueil SELY")}</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
