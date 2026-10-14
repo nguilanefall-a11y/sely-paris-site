@@ -87,6 +87,34 @@ export default function LegalPage() {
               <p><strong>Protection des données personnelles (RGPD) :</strong> Les données recueillies dans le cadre des demandes de devis et réservations font l'objet d'un traitement sécurisé strictement confidentiel. Conformément à la réglementation européenne (RGPD 2016/679), vous disposez d'un droit permanent d'accès, de rectification et d'effacement de vos données personnelles sur simple demande par email à : <a href="mailto:direction@sely.pro">direction@sely.pro</a>.</p>
             </div>
           </section>
+
+          {/* 5. Sécurité Privée & Agrément Dirigeant CNAPS */}
+          <section className={styles.legalCard}>
+            <div className={styles.cardHeader}>
+              <Shield size={20} className={styles.cardIcon} />
+              <h2>{isFrench ? "5. Sécurité Privée & Agrément Dirigeant CNAPS" : "5. Private Security & CNAPS Director Accreditation"}</h2>
+            </div>
+            <div className={styles.cardBody}>
+              <p>
+                <strong>{isFrench ? "Agrément Dirigeant CNAPS :" : "CNAPS Director Accreditation:"}</strong>{' '}
+                {isFrench
+                  ? "Notre direction générale est titulaire de l'agrément dirigeant délivré par le Conseil National des Activités Privées de Sécurité (CNAPS), établissement public administratif sous tutelle du Ministère de l'Intérieur, habilitant l'organisation et la conduite d'opérations de sécurité privée et de protection physique des personnes (Livre VI du Code de la sécurité intérieure)."
+                  : "Our executive management holds official director accreditation issued by CNAPS (National Council for Private Security Activities), under the supervision of the French Ministry of the Interior, certifying legal compliance for private security operations and close personal protection."}
+              </p>
+              <p style={{ background: 'rgba(197, 160, 89, 0.08)', padding: '0.85rem 1.1rem', borderLeft: '3px solid #c5a059', margin: '1rem 0' }}>
+                <strong>{isFrench ? "Mention légale obligatoire (Article L612-14 du CSI) :" : "Mandatory statutory notice (Art. L612-14 CSI):"}</strong>{' '}
+                <em>{isFrench
+                  ? "« L'autorisation d'exercice ne confère aucune prérogative de puissance publique à l'entreprise ou aux personnes qui en bénéficient. »"
+                  : "“Exercise authorization does not confer any public power prerogatives on the company or on the persons who benefit from it.”"}</em>
+              </p>
+              <p>
+                <strong>{isFrench ? "Champs d'intervention habilités :" : "Authorized Scope:"}</strong>{' '}
+                {isFrench
+                  ? "Chauffeurs de sécurité avec formation conduite défensive et anti-agression, agents de protection rapprochée (APR certifiés), convois et escortes sécurisées, audits d'itinéraires et sécurisation de séjours d'exception."
+                  : "Security drivers trained in defensive and anti-ambush techniques, certified close protection officers (CPO/APR), secure convoys and motorcades, route audits and VIP event security."}
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </div>

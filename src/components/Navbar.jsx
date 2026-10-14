@@ -30,6 +30,7 @@ export default function Navbar({ isHome }) {
   const links = [
     { to: getCityPath('/vehicules'), label: t('nav.vehicules', 'Flotte') },
     { to: getCityPath('/excellence'), label: t('nav.excellence', 'Services') },
+    { to: getCityPath('/securite-privee'), label: t('nav.security', 'Sécurité Privée') },
     { to: getCityPath('/voyages'), label: t('nav.voyages', 'Voyages') },
     { to: getCityPath('/contact'), label: t('nav.contact', 'Contact') },
   ];

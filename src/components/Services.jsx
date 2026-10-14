@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { useCity } from '../hooks/useCity';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Plane, Briefcase, Clock, Sparkles, ArrowRight } from 'lucide-react';
+import { Plane, Briefcase, Clock, Sparkles, ArrowRight, Shield } from 'lucide-react';
 import { usePerspectiveTilt } from '../hooks/usePerspectiveTilt';
 import styles from './Services.module.css';
 
@@ -80,7 +80,7 @@ function ServiceMonolith({ service, index }) {
 }
 
 export default function Services() {
-  const { t } = useCity();
+  const { t, getCityPath } = useCity();
   const sectionRef = useRef(null);
 
   const services = [
@@ -176,6 +176,35 @@ export default function Services() {
           {services.map((srv, idx) => (
             <ServiceMonolith key={idx} service={srv} index={idx} />
           ))}
+        </div>
+
+        {/* ── VIP Security & CNAPS Highlight Banner ── */}
+        <div className={styles.securityBanner}>
+          <div className={styles.securityBannerGleam} />
+          <div className={styles.securityBannerLeft}>
+            <div className={styles.securityBadge}>
+              <Shield size={14} className={styles.shieldIcon} />
+              <span>{t('services.security_badge', 'DÉPARTEMENT SÉCURITÉ PRIVÉE • AGRÉMENT CNAPS')}</span>
+            </div>
+            <h3 className={styles.securityTitle}>
+              {t('services.security_title', 'Protection Rapprochée & Chauffeurs de Sécurité')}
+            </h3>
+            <p className={styles.securityText}>
+              {t(
+                'services.security_desc',
+                'Notre direction générale titulaire de l’agrément dirigeant CNAPS vous accompagne dans la sécurisation intégrale de vos déplacements : agents de protection rapprochée (APR), conduite défensive anti-agression, convois sécurisés et discrétion absolue.'
+              )}
+            </p>
+            <div className={styles.securityLegalNotice}>
+              {t('services.security_legal', 'Art. L612-14 CSI : L\'autorisation d\'exercice ne confère aucune prérogative de puissance publique à l\'entreprise ou aux personnes qui en bénéficient.')}
+            </div>
+          </div>
+          <div className={styles.securityBannerRight}>
+            <Link to={getCityPath('/securite-privee')} className={styles.securityCta}>
+              <span>{t('services.security_cta', 'DÉCOUVRIR LE DÉPARTEMENT SÉCURITÉ')}</span>
+              <ArrowRight size={15} />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

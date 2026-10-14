@@ -138,6 +138,57 @@
   color: #ffffff;
 }
 
+.cnapsMentionRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1.8rem;
+  background: rgba(197, 160, 89, 0.05);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 4px;
+}
+
+.cnapsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  background: rgba(197, 160, 89, 0.15);
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  color: #c5a059;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cnapsMentionText {
+  color: #d1d5db;
+  font-size: 0.82rem;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.cnapsLink {
+  color: #c5a059;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.cnapsLink:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 .bottomBar {
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);

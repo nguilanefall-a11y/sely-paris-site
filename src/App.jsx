@@ -37,6 +37,8 @@ function App() {
         <Route path="/excellence" element={<Navigate to="/paris/excellence" replace />} />
         <Route path="/contact" element={<Navigate to="/paris/contact" replace />} />
         <Route path="/reserver" element={<Navigate to="/paris/reserver" replace />} />
+        <Route path="/securite-privee" element={<Navigate to="/paris/securite-privee" replace />} />
+        <Route path="/protection-rapprochee" element={<Navigate to="/paris/securite-privee" replace />} />
 
         {/* Le Journal SEO Hub & Article Routes */}
         <Route path="/journal" element={<JournalLayout><JournalHubPage /></JournalLayout>} />

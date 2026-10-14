@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCity } from '../hooks/useCity';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Shield } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -25,6 +25,7 @@ export default function Footer() {
             <ul>
               <li><Link to={getCityPath('/vehicules')}>{t('nav.fleet')}</Link></li>
               <li><Link to={getCityPath('/excellence')}>{t('nav.excellence')}</Link></li>
+              <li><Link to={getCityPath('/securite-privee')}>{t('nav.security', 'Sécurité Privée')}</Link></li>
               <li><Link to={getCityPath('/contact')}>{t('nav.contact')}</Link></li>
             </ul>
           </div>
@@ -46,6 +47,22 @@ export default function Footer() {
           </div>
         </div>
         
+        <div className={styles.cnapsMentionRow}>
+          <div className={styles.cnapsBadge}>
+            <Shield size={13} />
+            <span>CNAPS</span>
+          </div>
+          <p className={styles.cnapsMentionText}>
+            {t(
+              'footer.cnaps_mention',
+              'Protection rapprochée & sécurité privée : Dirigeant agréé CNAPS (Conseil National des Activités Privées de Sécurité) conformément au Code de la sécurité intérieure.'
+            )}
+          </p>
+          <Link to={getCityPath('/securite-privee')} className={styles.cnapsLink}>
+            {t('footer.cnaps_link', 'Consulter le département sécurité →')}
+          </Link>
+        </div>
+
         <div className={styles.bottomBar}>
           <div className={styles.copyright}>
             &copy; {currentYear} {t('footer.rights')}
