@@ -50,26 +50,138 @@
   transform: rotate(180deg);
 }
 
+/* Dropdown Menu - Luxury Multilingual Panel */
 .dropdownMenu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   right: 0;
   background: #ffffff;
-  border: 1px solid #0a0a0a;
-  padding: 0.35rem;
-  min-width: 160px;
+  border: 1px solid #111111;
+  width: 320px;
+  max-width: 90vw;
   display: flex;
   flex-direction: column;
-  gap: 2px;
   z-index: 1050;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownHeader {
+  padding: 0.85rem 1rem 0.65rem;
+  border-bottom: 1px solid #eeeeee;
+  background: #fafafa;
+}
+
+.headerTitle {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: #666666;
+  margin-bottom: 0.6rem;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  padding: 0.45rem 0.65rem;
+  transition: border-color 0.2s ease;
+}
+
+.searchBox:focus-within {
+  border-color: #0a0a0a;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.8rem;
+  color: #111111;
+  width: 100%;
+}
+
+.searchInput::placeholder {
+  color: #999999;
+  font-size: 0.76rem;
+}
+
+/* Quick Chips (Top VIP Languages) */
+.quickChipsSection {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #ffffff;
+}
+
+.quickChipsLabel {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888888;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.chipsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chipBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.25rem 0.55rem;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #222222;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chipBtn:hover {
+  background: #0a0a0a;
+  color: #ffffff;
+  border-color: #0a0a0a;
+}
+
+.chipActive {
+  background: #0a0a0a;
+  color: #ffffff;
+  border-color: #0a0a0a;
+}
+
+/* Languages Scrollable List */
+.languagesList {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 0.35rem;
+}
+
+.languagesList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.languagesList::-webkit-scrollbar-thumb {
+  background: #cccccc;
 }
 
 .menuItem {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0.55rem 0.85rem;
+  padding: 0.55rem 0.75rem;
   background: transparent;
   border: none;
   width: 100%;
@@ -99,15 +211,34 @@
   line-height: 1;
 }
 
-.itemLabel {
+.itemLabelGroup {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.itemLabel {
+  font-size: 0.78rem;
+  color: #111111;
+}
+
+.itemEnglishName {
+  font-size: 0.65rem;
+  color: #888888;
 }
 
 .activeDot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #0a0a0a;
+}
+
+.noResults {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #888888;
 }
 
 /* Variant: Tunnel (dark background or floating) */
@@ -150,8 +281,16 @@
   .mobileFull .dropdownMenu {
     position: static;
     width: 100%;
+    max-width: 100%;
     box-shadow: none;
     border: 1px solid #e0e0e0;
     margin-top: 0.35rem;
+  }
+
+  .dropdownMenu {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95vw;
   }
 }

@@ -22,13 +22,65 @@ const COUNTRY_TO_LANG = {
   BO: 'es', DO: 'es', UY: 'es', CR: 'es', PA: 'es',
 
   // Monde sinophone
-  CN: 'zh', HK: 'zh', TW: 'zh', MO: 'zh', SG: 'zh',
+  CN: 'zh-CN', HK: 'zh-TW', TW: 'zh-TW', MO: 'zh-TW', SG: 'zh-CN',
+
+  // Europe & Monde
+  DE: 'de', AT: 'de',
+  IT: 'it', SM: 'it', VA: 'it',
+  PT: 'pt', BR: 'pt',
+  RU: 'ru', BY: 'ru', KZ: 'ru',
+  JP: 'ja',
+  KR: 'ko',
+  TR: 'tr',
+  NL: 'nl',
+  SE: 'sv',
+  PL: 'pl',
+  GR: 'el', CY: 'el',
+  IL: 'he',
+  NO: 'no',
+  DK: 'da',
+  FI: 'fi',
+  CZ: 'cs',
+  RO: 'ro',
+  HU: 'hu',
+  UA: 'uk',
+  TH: 'th',
+  VN: 'vi',
+  ID: 'id',
+  IN: 'hi',
+
+  // Pays anglophones
+  US: 'en', GB: 'en', CA: 'en', AU: 'en', NZ: 'en', IE: 'en',
 };
 
 /**
+ * Résout la meilleure langue pour un visiteur selon :
+ * 1. La langue configurée sur son appareil/téléphone (ex: un voyageur hispanophone ou arabophone aux USA garde sa langue !)
+ * 2. Le pays de géolocalisation IP
+ */
+export function resolveBestLanguage({ visitorCountry, browserLangs = [] } = {}) {
+  const deviceLangs = (browserLangs || [])
+    .map((l) => String(l).toLowerCase().split('-')[0])
+    .filter(Boolean);
+  const primaryDeviceLang = deviceLangs[0];
+
+  // Si le téléphone du voyageur est dans une langue spécifique (ex: espagnol, arabe, français, russe, japonais, etc.)
+  // même s'il est physiquement en Amérique ou en Angleterre, on respecte la langue de son téléphone !
+  if (primaryDeviceLang && primaryDeviceLang !== 'en') {
+    return primaryDeviceLang;
+  }
+
+  // Si la langue du téléphone est l'anglais ou générique, on utilise le pays IP s'il a une langue nationale spécifique
+  if (visitorCountry) {
+    const countryLang = getLanguageForCountry(visitorCountry);
+    if (countryLang) return countryLang;
+  }
+
+  return primaryDeviceLang || 'fr';
+}
+
+/**
  * Résout le code langue recommandé pour un code pays ISO (2 lettres)
- * Si le pays n'est pas francophone, hispanophone, arabophone ou sinophone,
- * bascule automatiquement vers l'anglais ('en', langue de référence internationale).
  */
 export function getLanguageForCountry(countryCode) {
   if (!countryCode) return null;
@@ -36,7 +88,6 @@ export function getLanguageForCountry(countryCode) {
   if (COUNTRY_TO_LANG[cc]) {
     return COUNTRY_TO_LANG[cc];
   }
-  // Tous les autres pays (USA, UK, Allemagne, Italie, Japon, etc.) -> Anglais
   return 'en';
 }
 
@@ -94,9 +145,12 @@ export async function detectVisitorCountry() {
   return null;
 }
 
+import { applyUniversalLanguage } from './universalTranslator';
+
 /**
- * Initialise la détection automatique de la langue par géolocalisation
+ * Initialise la détection automatique de la langue
  * S'exécute au chargement de l'application.
+ * Priorise la langue de l'appareil du voyageur, puis son pays IP.
  * Ne remplace JAMAIS la langue si l'utilisateur a expressément choisi une langue via le sélecteur.
  */
 export async function initGeoLanguageDetection(i18nInstance) {
@@ -109,10 +163,14 @@ export async function initGeoLanguageDetection(i18nInstance) {
     return;
   }
 
-  // 2. Si l'utilisateur a manuellement choisi une langue, on respecte son choix absolu
+  // 2. Si l'utilisateur a manuellement choisi une langue, on applique son choix absolu
   try {
     const hasManualChoice = localStorage.getItem('sely_manual_lang') === 'true';
     if (hasManualChoice) {
+      const preferred = localStorage.getItem('sely_preferred_lang') || localStorage.getItem('i18nextLng');
+      if (preferred) {
+        await applyUniversalLanguage(preferred, { isManual: false });
+      }
       return;
     }
 
@@ -127,23 +185,26 @@ export async function initGeoLanguageDetection(i18nInstance) {
 
   try {
     const country = await detectVisitorCountry();
+    const browserLangs = typeof navigator !== 'undefined' ? (navigator.languages || [navigator.language || '']) : [];
+
     if (country) {
       try {
         sessionStorage.setItem('sely_visitor_country', country);
         sessionStorage.setItem('sely_geo_detected', 'true');
       } catch (e) {}
+    }
 
-      const recommendedLang = getLanguageForCountry(country);
-      if (recommendedLang) {
-        try {
-          sessionStorage.setItem('sely_geo_lang', recommendedLang);
-        } catch (e) {}
+    const recommendedLang = resolveBestLanguage({
+      visitorCountry: country,
+      browserLangs,
+    });
 
-        const currentLang = (i18nInstance.language || '').split('-')[0];
-        if (currentLang !== recommendedLang) {
-          await i18nInstance.changeLanguage(recommendedLang);
-        }
-      }
+    if (recommendedLang) {
+      try {
+        sessionStorage.setItem('sely_geo_lang', recommendedLang);
+      } catch (e) {}
+
+      await applyUniversalLanguage(recommendedLang, { isManual: false });
     }
   } catch (err) {
     // Tolérance totale aux pannes réseau
