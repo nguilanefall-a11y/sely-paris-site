@@ -57,14 +57,17 @@ export default function Navbar({ isHome }) {
                 ? '欢迎'
                 : 'Bienvenue'}
             </span>
-            <button
-              type="button"
-              aria-label="Ouvrir le menu"
-              className={styles.mobileMenuToggleHome}
-              onClick={() => setMobileMenuOpen(true)}
-            >
-              <Menu size={26} strokeWidth={1.8} color="#ffffff" />
-            </button>
+            <div className={styles.homeTopActions}>
+              <LanguageSelector variant="homeHero" />
+              <button
+                type="button"
+                aria-label="Ouvrir le menu"
+                className={styles.mobileMenuToggleHome}
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <Menu size={26} strokeWidth={1.8} color="#ffffff" />
+              </button>
+            </div>
           </div>
         ) : (
           <>
