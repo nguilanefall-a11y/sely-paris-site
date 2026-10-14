@@ -7,9 +7,14 @@ import enTranslation from './locales/en.json';
 import esTranslation from './locales/es.json';
 import arTranslation from './locales/ar.json';
 import zhTranslation from './locales/zh.json';
+import deTranslation from './locales/de.json';
+import itTranslation from './locales/it.json';
+import ptTranslation from './locales/pt.json';
+import ruTranslation from './locales/ru.json';
+import jaTranslation from './locales/ja.json';
 
 // Détecteur intelligent de langue pour les visiteurs SELY :
-const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ar', 'zh'];
+const SUPPORTED_LANGS = ['fr', 'en', 'es', 'ar', 'zh', 'de', 'it', 'pt', 'ru', 'ja'];
 
 const selySmartDetector = {
   name: 'selySmartDetector',
@@ -18,7 +23,7 @@ const selySmartDetector = {
 
     const pathname = (window.location.pathname || '').toLowerCase();
     const firstSegment = pathname.split('/').filter(Boolean)[0];
-    if (['fr', 'en', 'es', 'ar', 'zh'].includes(firstSegment)) {
+    if (['fr', 'en', 'es', 'ar', 'zh', 'de', 'it', 'pt', 'ru', 'ja'].includes(firstSegment)) {
       if (firstSegment === 'ar') {
         document.documentElement.dir = 'rtl';
       } else {
@@ -29,7 +34,7 @@ const selySmartDetector = {
 
     try {
       const hasManual = localStorage.getItem('sely_manual_lang') === 'true';
-      const saved = localStorage.getItem('i18nextLng');
+      const saved = localStorage.getItem('sely_preferred_lang') || localStorage.getItem('i18nextLng');
       if (hasManual && saved && SUPPORTED_LANGS.includes(saved)) {
         if (saved === 'ar') document.documentElement.dir = 'rtl';
         return saved;
@@ -42,12 +47,6 @@ const selySmartDetector = {
       }
     } catch (e) {
       // Storage unavailable
-    }
-
-    if (pathname.startsWith('/london') || pathname.startsWith('/usa')) return 'en';
-    if (pathname.startsWith('/uae')) {
-      document.documentElement.dir = 'rtl';
-      return 'ar';
     }
 
     const navLangs = navigator.languages || [navigator.language || ''];
@@ -88,6 +87,11 @@ i18n
       es: { translation: esTranslation },
       ar: { translation: arTranslation },
       zh: { translation: zhTranslation },
+      de: { translation: deTranslation },
+      it: { translation: itTranslation },
+      pt: { translation: ptTranslation },
+      ru: { translation: ruTranslation },
+      ja: { translation: jaTranslation },
     },
     fallbackLng: 'fr',
     supportedLngs: SUPPORTED_LANGS,

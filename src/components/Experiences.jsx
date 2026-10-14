@@ -12,9 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 function ExperienceCard3D({ exp, index }) {
   const navigate = useNavigate();
-  const { getCityPath } = useCity();
-  const { i18n } = useTranslation();
-  const isEn = i18n?.language?.startsWith('en');
+  const { t, getCityPath } = useCity();
 
   const {
     ref: tiltRef,
@@ -58,7 +56,7 @@ function ExperienceCard3D({ exp, index }) {
 
         <div className={styles.linkRow}>
           <span className={styles.linkText}>
-            {isEn ? 'BOOK THIS EXPERIENCE' : 'RÉSERVER CETTE EXPÉRIENCE'}
+            {t('experiences.reserve_btn', 'RÉSERVER CETTE EXPÉRIENCE')}
           </span>
           <ArrowRight size={14} strokeWidth={1.8} className={styles.linkArrow} />
         </div>
@@ -69,8 +67,6 @@ function ExperienceCard3D({ exp, index }) {
 
 export default function Experiences() {
   const { t } = useCity();
-  const { i18n } = useTranslation();
-  const isEn = i18n?.language?.startsWith('en');
   const sectionRef = useRef(null);
 
   const experiences = [
@@ -133,16 +129,12 @@ export default function Experiences() {
           <div className={styles.eyebrowRow}>
             <span className={styles.eyebrowDot} />
             <span className={styles.eyebrow}>
-              {isEn ? 'CURATED BESPOKE JOURNEYS' : 'EXPÉRIENCES & SUR-MESURE'}
+              {t('experiences.eyebrow', 'EXPÉRIENCES & SUR-MESURE')}
             </span>
           </div>
 
           <h2 className={styles.title}>
-            {isEn ? (
-              <>Art of Living &amp; <span className={styles.titleItalic}>Parisian Prestige.</span></>
-            ) : (
-              <>Art de Vivre &amp; <span className={styles.titleItalic}>Prestige Parisien.</span></>
-            )}
+            {t('experiences.headline_pre', 'Art de Vivre & ')}<span className={styles.titleItalic}>{t('experiences.headline_bold', 'Prestige Parisien.')}</span>
           </h2>
 
           <p className={styles.subtitle}>

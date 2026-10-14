@@ -19,7 +19,8 @@
     "book_service": "Solicitar presupuesto",
     "call_us": "Llámenos",
     "quote": "Presupuesto",
-    "reserve": "Reservar"
+    "reserve": "Reservar",
+    "voyages": "Viajes"
   },
   "hero": {
     "pretitle": "CASA DE CHÓFER PRIVADO — PARÍS",
@@ -41,7 +42,15 @@
     "srv2_title": "Viajes de Negocios & Diplomáticos",
     "srv2_desc": "Servicio de alta discreción para directores, delegaciones y eventos corporativos.",
     "srv3_title": "Chófer por Día",
-    "srv3_desc": "Vehículo de prestigio y chófer a su entera disposición por horas o jornada completa."
+    "srv3_desc": "Vehículo de prestigio y chófer a su entera disposición por horas o jornada completa.",
+    "eyebrow": "SERVICIOS DE ALTA MOVILIDAD",
+    "headline_pre": "Un Servicio de ",
+    "headline_bold": "Gran Categoría.",
+    "tag1": "PROTOCOLO AEROPORTUARIO",
+    "tag2": "EJECUTIVO & DIPLOMACIA",
+    "tag3": "A MEDIDA & EVENTOS",
+    "tag4": "ESTÁNDARES DE PALACIO",
+    "reserve_btn": "RESERVAR ESTE SERVICIO"
   },
   "features": {
     "title": "Our Standard of Excellence",
@@ -118,13 +127,24 @@
     "cta": "Book a chauffeur"
   },
   "about": {
-    "title": "Your Private Chauffeur",
+    "title": "Su Chófer Privado",
     "subtitle": "The art of bespoke transportation in Paris.",
-    "desc_p1": "SELY is more than just a ride. It is the assurance of having a true professional dedicated to the success of your journey.",
-    "desc_p2": "Bilingual, punctual, and absolutely discreet, your chauffeur accompanies you in all your travels with relentless standards.",
-    "attr1": "Professional & Bilingual",
-    "attr2": "Strict Punctuality",
-    "attr3": "Absolute Confidentiality"
+    "desc_p1": "SELY es más que un servicio de transporte. Es la garantía de tener a su lado a un auténtico profesional dedicado al éxito de su viaje.",
+    "desc_p2": "Bilingüe, puntual y de una discreción absoluta, su chófer le acompaña en todos sus desplazamientos con un estándar impecable.",
+    "attr1": "Saber Estar & Bilingüismo",
+    "attr2": "Puntualidad Estricta",
+    "attr3": "Confidencialidad Absoluta",
+    "badge": "PROTOCOLO DIPLOMÁTICO & PALACIO",
+    "eyebrow": "SU CHÓFER PRIVADO",
+    "headline": "El arte del transporte de lujo en París.",
+    "pillar1_title": "Saber Estar & Bilingüismo",
+    "pillar1_desc": "Chóferes anglófonos, vestimenta formal impecable y códigos de gran hotel.",
+    "pillar2_title": "Puntualidad Estricta",
+    "pillar2_desc": "Vehículo en el punto 15 minutos antes y seguimiento de vuelos en tiempo real.",
+    "pillar3_title": "Confidencialidad Absoluta",
+    "pillar3_desc": "Compromiso de secreto profesional absoluto para sus reuniones y conversaciones.",
+    "book_cta": "RESERVAR UN CHÓFER",
+    "whatsapp_cta": "ASISTENCIA WHATSAPP"
   },
   "booking": {
     "badge_contact": "CONTACTO & RESERVA",
@@ -181,7 +201,11 @@
     "e3_title": "Events & Seminars",
     "e3_desc": "Weddings, professional evenings, congresses, or launches. A fleet of prestigious vehicles for your guests.",
     "e4_title": "Bespoke Services",
-    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal."
+    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal.",
+    "eyebrow": "EXPERIENCIAS & A MEDIDA",
+    "headline_pre": "Arte de Vivir & ",
+    "headline_bold": "Prestigio Parisino.",
+    "reserve_btn": "RESERVAR ESTA EXPERIENCIA"
   },
   "testimonials": {
     "badge": "TESTIMONIALS",
@@ -209,7 +233,6 @@
     "privacy_policy": "Política de Privacidad",
     "legal_notices": "Aviso Legal & Licencia VTC"
   },
-
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",
@@ -482,7 +505,15 @@
     "step2_desc": "A professional chauffeur is assigned to you. They prepare the vehicle and arrive early at the agreed location.",
     "step3_title": "3. Travel in comfort",
     "step3_desc": "Greeting at the vehicle door, luggage handling, and a comfortable ride with chilled water and chargers onboard.",
-    "cta": "Request a quote"
+    "cta": "Request a quote",
+    "eyebrow": "EL PROTOCOLO SELY",
+    "badge_sub": "LOGÍSTICA DE ALTA PRECISIÓN · PARÍS",
+    "cat1": "SELECCIÓN",
+    "meta1": "Presupuesto confirmado en 15 min",
+    "cat2": "PROTOCOLO",
+    "meta2": "Seguimiento telemétrico de vuelos",
+    "cat3": "EXPERIENCIA",
+    "meta3": "Discreción diplomática"
   },
   "floating": {
     "whatsapp": "WhatsApp Quote",
@@ -1017,5 +1048,15 @@
     "swap_addresses": "Invertir",
     "multiple_transfers_label": "Trayectos múltiples",
     "transfers": "traslados"
+  },
+  "common": {
+    "welcome": "Bienvenido"
+  },
+  "voyages": {
+    "upcoming": "Próximos",
+    "past": "Pasados",
+    "cancelled": "Cancelado",
+    "title": "Mis Viajes",
+    "book_service": "Reservar un servicio"
   }
 }

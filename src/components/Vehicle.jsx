@@ -19,6 +19,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import styles from './Vehicle.module.css';
+import { getVehicleUI, getLocalizedVehicleData } from '../lib/vehicleTranslations';
 
 const FLEET_VEHICLES = [
   {
@@ -350,7 +351,8 @@ export default function Vehicle() {
   const { i18n } = useTranslation();
   const { getCityPath } = useCity();
   const navigate = useNavigate();
-  const isEn = i18n?.language?.startsWith('en');
+  const currentLang = i18n?.language?.split('-')[0] || 'fr';
+  const vUi = useMemo(() => getVehicleUI(currentLang), [currentLang]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [filter, setFilter] = useState('all');
@@ -401,15 +403,16 @@ export default function Vehicle() {
   const activeMinibusConfig = MINIBUS_CONFIGS[selectedMinibus] || MINIBUS_CONFIGS['7-vip'];
 
   const displayedVehicle = useMemo(() => {
+    let raw = currentVehicle;
     if (isMinibus) {
-      return {
+      raw = {
         ...currentVehicle,
         ...activeMinibusConfig,
         id: activeMinibusConfig.id,
       };
     }
-    return currentVehicle;
-  }, [currentVehicle, isMinibus, activeMinibusConfig]);
+    return getLocalizedVehicleData(raw, currentLang);
+  }, [currentVehicle, isMinibus, activeMinibusConfig, currentLang]);
 
   const currentImage = useMemo(() => {
     if (activeAngle === 'rear') return displayedVehicle.rearImage || displayedVehicle.image;
@@ -566,7 +569,7 @@ export default function Vehicle() {
             <div className={styles.categoryBadgeGroup}>
               <span className={styles.luxuryDot} />
               <span className={styles.categoryBadge}>
-                {isEn ? 'THE PRIVATE AUTOMOTIVE SUITE' : 'LA FLOTTE D\'EXCEPTION'}
+                {vUi.suite}
               </span>
             </div>
 
@@ -575,10 +578,10 @@ export default function Vehicle() {
                 type="button"
                 onClick={() => setIsPaused(!isPaused)} 
                 className={styles.playPauseBtn}
-                title={isPaused ? (isEn ? 'Play auto parade' : 'Reprendre le défilé') : (isEn ? 'Pause parade' : 'Mettre en pause')}
+                title={isPaused ? vUi.play_parade : vUi.pause_parade}
               >
                 {isPaused ? <Play size={11} fill="currentColor" /> : <Pause size={11} fill="currentColor" />}
-                <span>{isPaused ? (isEn ? 'PAUSED' : 'EN PAUSE') : (isEn ? '3D PARADE' : 'DÉFILÉ 3D')}</span>
+                <span>{isPaused ? vUi.paused : vUi.parade_3d}</span>
               </button>
               <div className={styles.counter}>
                 <span className={styles.counterCurrent}>
@@ -594,24 +597,22 @@ export default function Vehicle() {
 
           <div className={styles.titleRow}>
             <h2 className={styles.title}>
-              Prestige &amp; <span className={styles.titleItalic}>{isEn ? 'Private Travel.' : 'Haute Mobilité.'}</span>
+              Prestige &amp; <span className={styles.titleItalic}>{vUi.headline_bold}</span>
             </h2>
             <p className={styles.subtitle}>
-              {isEn 
-                ? 'An uncompromising private collection of thirty flagship limousines and luxury vans, curated for state protocol, diplomatic summits, and bespoke Parisian travel.'
-                : 'Une collection privée de trente véhicules de grand prestige entretenus selon les exigences rigoureuses du protocole diplomatique et des palaces parisiens.'}
+              {vUi.desc}
             </p>
           </div>
 
           {/* Category Filter Tabs */}
           <div className={styles.filterTabs}>
             {[
-              { id: 'all', label: isEn ? 'ALL FLEET' : 'TOUTE LA FLOTTE' },
-              { id: 'berlines', label: isEn ? 'PRESTIGE SALOONS' : 'BERLINES D\'ÉTAT' },
-              { id: 'prestige', label: isEn ? 'HAUTE COUTURE' : 'HAUTE COUTURE' },
-              { id: 'suv', label: isEn ? 'PREMIUM SUVS' : 'SUVS PRESTIGE' },
-              { id: 'vans', label: isEn ? 'PALACE VANS' : 'VANS' },
-              { id: 'minibus', label: isEn ? 'MINIBUS' : 'MINIBUS' },
+              { id: 'all', label: vUi.cat_all },
+              { id: 'berlines', label: vUi.cat_berlines },
+              { id: 'prestige', label: vUi.cat_prestige },
+              { id: 'suv', label: vUi.cat_suv },
+              { id: 'vans', label: vUi.cat_vans },
+              { id: 'minibus', label: vUi.cat_minibus },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -671,15 +672,15 @@ export default function Vehicle() {
               <div className={styles.floatingStatusPill}>
                 <Sparkles size={11} className={styles.statusPillIcon} />
                 <span className={styles.statusPillBadge}>
-                  {isEn ? currentVehicle.badgeEn : currentVehicle.badge}
+                  {displayedVehicle.badge}
                 </span>
                 <span className={styles.statusPillDot}>·</span>
                 <span className={styles.statusPillAngle}>
                   {activeAngle === 'exterior' 
-                    ? (isEn ? 'EXTERIOR 3/4' : 'EXTÉRIEUR 3/4') 
+                    ? vUi.front_angle 
                     : activeAngle === 'rear' 
-                    ? (isEn ? 'REAR 3/4' : 'VUE ARRIÈRE') 
-                    : (isEn ? 'FIRST CLASS SUITE' : 'HABITACLE 2026')}
+                    ? vUi.rear_angle 
+                    : vUi.cabin_angle}
                 </span>
               </div>
 
@@ -687,17 +688,17 @@ export default function Vehicle() {
               <div className={styles.cameraDialBar}>
                 <div className={styles.cameraDialLabel}>
                   <Compass size={12} strokeWidth={1.5} />
-                  <span>{isEn ? 'PERSPECTIVE' : 'ANGLE CAMÉRA'}</span>
+                  <span>{vUi.perspective}</span>
                 </div>
                 <div className={styles.cameraDialPills}>
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setActiveAngle('exterior'); setIsPaused(true); }}
                     className={`${styles.dialPill} ${activeAngle === 'exterior' ? styles.dialPillActive : ''}`}
-                    title={isEn ? 'Front 3/4 Exterior View' : 'Vue Extérieure 3/4 avant'}
+                    title={vUi.front_angle}
                   >
                     <span className={styles.dialNum}>01</span>
-                    <span className={styles.dialText}>{isEn ? 'EXTERIOR' : 'EXTÉRIEUR'}</span>
+                    <span className={styles.dialText}>{vUi.dial_ext}</span>
                   </button>
 
                   {displayedVehicle.rearImage && (
@@ -705,10 +706,10 @@ export default function Vehicle() {
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setActiveAngle('rear'); setIsPaused(true); }}
                       className={`${styles.dialPill} ${activeAngle === 'rear' ? styles.dialPillActive : ''}`}
-                      title={isEn ? 'Rear 3/4 Stature View' : 'Vue Arrière statutaire'}
+                      title={vUi.rear_angle}
                     >
                       <span className={styles.dialNum}>02</span>
-                      <span className={styles.dialText}>{isEn ? 'REAR' : 'ARRIÈRE'}</span>
+                      <span className={styles.dialText}>{vUi.dial_rear}</span>
                     </button>
                   )}
 
@@ -717,10 +718,10 @@ export default function Vehicle() {
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setActiveAngle('interior'); setIsPaused(true); }}
                       className={`${styles.dialPill} ${activeAngle === 'interior' ? styles.dialPillActive : ''}`}
-                      title={isEn ? 'First Class Interior Suite' : 'Habitacle Première Classe'}
+                      title={vUi.cabin_angle}
                     >
                       <span className={styles.dialNum}>03</span>
-                      <span className={styles.dialText}>{isEn ? 'CABIN' : 'HABITACLE'}</span>
+                      <span className={styles.dialText}>{vUi.dial_cabin}</span>
                     </button>
                   )}
                 </div>
@@ -732,7 +733,7 @@ export default function Vehicle() {
                   type="button"
                   onClick={(e) => { e.stopPropagation(); handlePrev(); setIsPaused(true); }}
                   className={`${styles.navBtn} ${styles.navBtnPrev}`}
-                  aria-label={isEn ? 'Previous vehicle' : 'Véhicule précédent'}
+                  aria-label={vUi.prev_veh}
                 >
                   <ChevronLeft size={18} strokeWidth={2} />
                 </button>
@@ -740,7 +741,7 @@ export default function Vehicle() {
                   type="button"
                   onClick={(e) => { e.stopPropagation(); handleNext(); setIsPaused(true); }}
                   className={`${styles.navBtn} ${styles.navBtnNext}`}
-                  aria-label={isEn ? 'Next vehicle' : 'Véhicule suivant'}
+                  aria-label={vUi.next_veh}
                 >
                   <ChevronRight size={18} strokeWidth={2} />
                 </button>
@@ -782,25 +783,25 @@ export default function Vehicle() {
                 >
                   <div className={styles.categoryLine}>
                     <span className={styles.categoryLabel}>
-                      {isEn ? displayedVehicle.categoryEn : displayedVehicle.category}
+                      {displayedVehicle.category}
                     </span>
                   </div>
 
                   <h3 className={styles.carName}>{displayedVehicle.name}</h3>
                   <p className={styles.carDesc}>
-                    {isEn ? displayedVehicle.subtitleEn : displayedVehicle.subtitle}
+                    {displayedVehicle.subtitle}
                   </p>
 
                   {/* Interactive Minibus Selection: Exactly 3 Models */}
                   {isMinibus && (
                     <div className={styles.minibusConfigurator}>
                       <div className={styles.configRow}>
-                        <span className={styles.configLabel}>{isEn ? 'CONFIGURATION' : 'CONFIGURATION'} :</span>
+                        <span className={styles.configLabel}>{vUi.configuration} :</span>
                         <div className={styles.configPills}>
                           {[
-                            { key: '7-vip', label: isEn ? '7 Seats · VIP' : '7 Places · VIP', isVip: true },
-                            { key: '14-vip', label: isEn ? '14 Seats · VIP' : '14 Places · VIP', isVip: true },
-                            { key: '19-standard', label: isEn ? '19 Seats · Standard' : '19 Places · Standard', isVip: false },
+                            { key: '7-vip', label: `7 ${vUi.vip_label}`, isVip: true },
+                            { key: '14-vip', label: `14 ${vUi.vip_label}`, isVip: true },
+                            { key: '19-standard', label: `19 ${vUi.std_label}`, isVip: false },
                           ].map((item) => (
                             <button
                               key={item.key}
@@ -826,16 +827,16 @@ export default function Vehicle() {
                     <div className={styles.specBox}>
                       <Users size={15} strokeWidth={1.5} className={styles.specIcon} />
                       <div className={styles.specInfo}>
-                        <span className={styles.specTitle}>{isEn ? 'PASSENGERS' : 'PASSAGERS'}</span>
-                        <span className={styles.specValue}>{displayedVehicle.passengers} {isEn ? 'Guests' : 'Places'}</span>
+                        <span className={styles.specTitle}>{vUi.passengers}</span>
+                        <span className={styles.specValue}>{displayedVehicle.passengers} {vUi.guests}</span>
                       </div>
                     </div>
 
                     <div className={styles.specBox}>
                       <Briefcase size={15} strokeWidth={1.5} className={styles.specIcon} />
                       <div className={styles.specInfo}>
-                        <span className={styles.specTitle}>{isEn ? 'LUGGAGE' : 'BAGAGES'}</span>
-                        <span className={styles.specValue}>{displayedVehicle.luggage} {isEn ? 'Bags' : 'Valises'}</span>
+                        <span className={styles.specTitle}>{vUi.luggage}</span>
+                        <span className={styles.specValue}>{displayedVehicle.luggage} {vUi.bags}</span>
                       </div>
                     </div>
                   </div>
@@ -843,9 +844,9 @@ export default function Vehicle() {
                   {/* High Fashion Standards Checklist */}
                   <div className={styles.highlightsList}>
                     <span className={styles.highlightsHeader}>
-                      {isEn ? 'CABIN ATTRIBUTES & PROTOCOL' : 'ÉQUIPEMENTS & PRESTATIONS À BORD'}
+                      {vUi.attributes}
                     </span>
-                    {(isEn ? displayedVehicle.highlightsEn : displayedVehicle.highlights).map((item, idx) => (
+                    {displayedVehicle.highlights.map((item, idx) => (
                       <div key={idx} className={styles.highlightRow}>
                         <span className={styles.highlightIndex}>0{idx + 1}</span>
                         <span className={styles.highlightText}>{item}</span>
@@ -860,7 +861,7 @@ export default function Vehicle() {
                       onClick={() => handleBookVehicle(displayedVehicle.id)}
                       className={styles.primaryCta}
                     >
-                      <span>{isEn ? 'SELECT THIS VEHICLE' : 'RÉSERVER CE VÉHICULE'}</span>
+                      <span>{vUi.reserve_cta}</span>
                       <ArrowRight size={14} strokeWidth={1.8} className={styles.ctaArrow} />
                     </button>
                     <button
@@ -868,7 +869,7 @@ export default function Vehicle() {
                       onClick={() => navigate(getCityPath('/vehicules'))}
                       className={styles.secondaryCta}
                     >
-                      <span>{isEn ? 'DISCOVER FULL FLEET' : 'TOUTE LA FLOTTE'}</span>
+                      <span>{vUi.discover_all}</span>
                     </button>
                   </div>
                 </motion.div>
@@ -882,20 +883,21 @@ export default function Vehicle() {
           <div className={styles.stripHeader}>
             <div className={styles.stripHeaderLeft}>
               <span className={styles.stripTitle}>
-                {isEn ? 'EXPLORE THE FLEET' : 'SÉLECTEUR RAPIDE DE LA FLOTTE'}
+                {vUi.strip_title}
               </span>
               <span className={styles.stripSubtitle}>
-                {isEn ? `Explore all ${FLEET_VEHICLES.length} models in the collection` : `Parcourez les ${FLEET_VEHICLES.length} modèles de notre flotte`}
+                {`${vUi.strip_sub} (${FLEET_VEHICLES.length})`}
               </span>
             </div>
             <span className={styles.stripHint}>
-              {isEn ? 'Click to inspect in 3D' : 'Cliquez pour afficher en 3D'}
+              {vUi.strip_hint}
             </span>
           </div>
 
           <div className={styles.stripScrollWrapper} ref={stripRef}>
             {filteredVehicles.map((veh, idx) => {
               const isActive = idx === currentIndex;
+              const locVeh = getLocalizedVehicleData(veh, currentLang);
               return (
                 <button
                   key={veh.id}
@@ -913,7 +915,7 @@ export default function Vehicle() {
                       <span className={styles.stripCardBadge}>{veh.passengers}p</span>
                     </div>
                     <span className={styles.stripCardName}>{veh.name}</span>
-                    <span className={styles.stripCardCat}>{isEn ? veh.categoryEn : veh.category}</span>
+                    <span className={styles.stripCardCat}>{locVeh.category}</span>
                   </div>
                   {isActive && <div className={styles.stripActiveIndicator} />}
                 </button>

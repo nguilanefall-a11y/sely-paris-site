@@ -30,7 +30,7 @@ export default function Navbar({ isHome }) {
   const links = [
     { to: getCityPath('/vehicules'), label: t('nav.vehicules', 'Flotte') },
     { to: getCityPath('/excellence'), label: t('nav.excellence', 'Services') },
-    { to: getCityPath('/voyages'), label: 'Voyages' },
+    { to: getCityPath('/voyages'), label: t('nav.voyages', 'Voyages') },
     { to: getCityPath('/contact'), label: t('nav.contact', 'Contact') },
   ];
 
@@ -47,15 +47,7 @@ export default function Navbar({ isHome }) {
         {isHomeTop ? (
           <div className={styles.homeTopBar}>
             <span className={styles.homeWelcomeText}>
-              {i18n.language.startsWith('en')
-                ? 'Welcome'
-                : i18n.language.startsWith('es')
-                ? 'Bienvenido'
-                : i18n.language.startsWith('ar')
-                ? 'مرحباً بكم'
-                : i18n.language.startsWith('zh')
-                ? '欢迎'
-                : 'Bienvenue'}
+              {t('common.welcome', 'Bienvenue')}
             </span>
             <div className={styles.homeTopActions}>
               <LanguageSelector variant="homeHero" />

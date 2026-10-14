@@ -1,18 +1,140 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Calendar, ChevronDown, Check } from 'lucide-react';
 import styles from './LuxuryDateTimePicker.module.css';
 
-const MONTH_NAMES_FR = [
-  'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-];
-const MONTH_NAMES_EN = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const WEEKDAYS_FR = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-const WEEKDAYS_EN = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const PICKER_TEXTS = {
+  fr: {
+    notice: 'Chauffeur en place 15 min avant',
+    close: 'Fermer',
+    edit: 'Modifier',
+    dateLabel: 'Date de prise en charge',
+    today: 'Auj.',
+    tomorrow: 'Demain',
+    weekend: 'Week-end',
+    timeLabel: 'Heure de prise en charge',
+    hour: 'HEURE',
+    min: 'MIN',
+    confirm: 'Valider la date et l’heure'
+  },
+  en: {
+    notice: 'Chauffeur on site 15 min early',
+    close: 'Close',
+    edit: 'Edit',
+    dateLabel: 'Pick-up date',
+    today: 'Today',
+    tomorrow: 'Tomorrow',
+    weekend: 'Weekend',
+    timeLabel: 'Pick-up time',
+    hour: 'HOUR',
+    min: 'MIN',
+    confirm: 'Confirm date & time'
+  },
+  es: {
+    notice: 'Chófer en el lugar 15 min antes',
+    close: 'Cerrar',
+    edit: 'Modificar',
+    dateLabel: 'Fecha de recogida',
+    today: 'Hoy',
+    tomorrow: 'Mañana',
+    weekend: 'Fin de semana',
+    timeLabel: 'Hora de recogida',
+    hour: 'HORA',
+    min: 'MIN',
+    confirm: 'Confirmar fecha y hora'
+  },
+  ar: {
+    notice: 'السائق في الموقع قبل 15 دقيقة',
+    close: 'إغلاق',
+    edit: 'تعديل',
+    dateLabel: 'تاريخ الاستلام',
+    today: 'اليوم',
+    tomorrow: 'غداً',
+    weekend: 'عطلة نهاية الأسبوع',
+    timeLabel: 'وقت الاستلام',
+    hour: 'الساعة',
+    min: 'الدقيقة',
+    confirm: 'تأكيد التاريخ والوقت'
+  },
+  zh: {
+    notice: '司机提前15分钟到位',
+    close: '关闭',
+    edit: '修改',
+    dateLabel: '接送日期',
+    today: '今天',
+    tomorrow: '明天',
+    weekend: '周末',
+    timeLabel: '接送时间',
+    hour: '小时',
+    min: '分钟',
+    confirm: '确认日期与时间'
+  },
+  de: {
+    notice: 'Chauffeur 15 Min. vor Ort',
+    close: 'Schließen',
+    edit: 'Bearbeiten',
+    dateLabel: 'Abholdatum',
+    today: 'Heute',
+    tomorrow: 'Morgen',
+    weekend: 'Wochenende',
+    timeLabel: 'Abholzeit',
+    hour: 'STUNDE',
+    min: 'MIN',
+    confirm: 'Datum & Uhrzeit bestätigen'
+  },
+  it: {
+    notice: 'Autista sul posto 15 min prima',
+    close: 'Chiudi',
+    edit: 'Modifica',
+    dateLabel: 'Data di ritiro',
+    today: 'Oggi',
+    tomorrow: 'Domani',
+    weekend: 'Fine settimana',
+    timeLabel: 'Ora di ritiro',
+    hour: 'ORA',
+    min: 'MIN',
+    confirm: 'Conferma data e ora'
+  },
+  pt: {
+    notice: 'Motorista no local 15 min antes',
+    close: 'Fechar',
+    edit: 'Modificar',
+    dateLabel: 'Data de recolha',
+    today: 'Hoje',
+    tomorrow: 'Amanhã',
+    weekend: 'Fim de semana',
+    timeLabel: 'Hora de partida',
+    hour: 'HORA',
+    min: 'MIN',
+    confirm: 'Confirmar data e hora'
+  },
+  ru: {
+    notice: 'Водитель на месте за 15 мин',
+    close: 'Закрыть',
+    edit: 'Изменить',
+    dateLabel: 'Дата подачи',
+    today: 'Сегодня',
+    tomorrow: 'Завтра',
+    weekend: 'Выходные',
+    timeLabel: 'Время подачи',
+    hour: 'ЧАСЫ',
+    min: 'МИН',
+    confirm: 'Подтвердить дату и время'
+  },
+  ja: {
+    notice: '15分前にお迎えに伺います',
+    close: '閉じる',
+    edit: '変更',
+    dateLabel: 'お迎え日',
+    today: '今日',
+    tomorrow: '明日',
+    weekend: '週末',
+    timeLabel: 'お迎え時間',
+    hour: '時',
+    min: '分',
+    confirm: '日時を確定する'
+  }
+};
 
 // Only show practical hours: 06–23 + 00
 const HOURS = [
@@ -28,9 +150,12 @@ export default function LuxuryDateTimePicker({
   onDateChange,
   selectedTime,
   onTimeChange,
-  isEn = false,
+  isEn,
   minDateISO,
 }) {
+  const { i18n } = useTranslation();
+  const currentLang = (i18n?.language || (isEn ? 'en' : 'fr')).split('-')[0];
+  const pTexts = PICKER_TEXTS[currentLang] || PICKER_TEXTS.fr;
   const today = useMemo(() => {
     const t = new Date();
     t.setHours(0, 0, 0, 0);
@@ -122,14 +247,28 @@ export default function LuxuryDateTimePicker({
     try {
       const [y, m, d] = selectedDate.split('-').map(Number);
       const obj = new Date(y, m - 1, d);
-      return obj.toLocaleDateString(isEn ? 'en-GB' : 'fr-FR', {
+      return obj.toLocaleDateString(currentLang, {
         weekday: 'long', day: 'numeric', month: 'long',
       });
     } catch { return selectedDate; }
-  }, [selectedDate, isEn]);
+  }, [selectedDate, currentLang]);
 
-  const monthNames = isEn ? MONTH_NAMES_EN : MONTH_NAMES_FR;
-  const weekdays = isEn ? WEEKDAYS_EN : WEEKDAYS_FR;
+  const monthNames = useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(2026, i, 15);
+      const name = d.toLocaleDateString(currentLang, { month: 'long' });
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    });
+  }, [currentLang]);
+
+  const weekdays = useMemo(() => {
+    // 2026-01-05 is a Monday
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(2026, 0, 5 + i);
+      const letter = d.toLocaleDateString(currentLang, { weekday: 'narrow' });
+      return letter.toUpperCase();
+    });
+  }, [currentLang]);
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -151,13 +290,13 @@ export default function LuxuryDateTimePicker({
               {formattedDate} · {selectedTime}
             </span>
             <span className={styles.compactSubText}>
-              {isEn ? 'Chauffeur on site 15 min early' : 'Chauffeur en place 15 min avant'}
+              {pTexts.notice}
             </span>
           </div>
         </div>
         <div className={styles.compactAction}>
           <span className={styles.compactActionLabel}>
-            {mobileOpen ? (isEn ? 'Fermer' : 'Fermer') : (isEn ? 'Modifier' : 'Modifier')}
+            {mobileOpen ? pTexts.close : pTexts.edit}
           </span>
           <ChevronDown size={16} className={`${styles.compactChevron} ${mobileOpen ? styles.chevronRotated : ''}`} />
         </div>
@@ -169,7 +308,7 @@ export default function LuxuryDateTimePicker({
         <span className={styles.recapSep}>·</span>
         <span className={styles.recapTime}>{selectedTime}</span>
         <span className={styles.recapNote}>
-          {isEn ? '— chauffeur on site 15 min early' : '— chauffeur en place 15 min avant'}
+          — {pTexts.notice}
         </span>
       </div>
 
@@ -179,20 +318,20 @@ export default function LuxuryDateTimePicker({
         {/* ─── DATE ─── */}
         <div className={styles.card}>
           <div className={styles.cardLabel}>
-            {isEn ? 'Date' : 'Date de prise en charge'}
+            {pTexts.dateLabel}
           </div>
 
           {/* Quick presets */}
           <div className={styles.quickRow}>
             <button type="button" onClick={() => setQuickDate(0)}
               className={`${styles.quickBtn} ${selectedDate === todayISO ? styles.quickBtnActive : ''}`}>
-              {isEn ? 'Today' : "Auj."}
+              {pTexts.today}
             </button>
             <button type="button" onClick={() => setQuickDate(1)} className={styles.quickBtn}>
-              {isEn ? 'Tomorrow' : 'Demain'}
+              {pTexts.tomorrow}
             </button>
             <button type="button" onClick={setWeekend} className={styles.quickBtn}>
-              Week-end
+              {pTexts.weekend}
             </button>
           </div>
 
@@ -243,7 +382,7 @@ export default function LuxuryDateTimePicker({
         {/* ─── TIME ─── */}
         <div className={styles.card}>
           <div className={styles.cardLabel}>
-            {isEn ? 'Pick-up time' : 'Heure de prise en charge'}
+            {pTexts.timeLabel}
           </div>
 
           {/* Large clock display */}
@@ -254,7 +393,7 @@ export default function LuxuryDateTimePicker({
           </div>
 
           {/* Hour grid */}
-          <div className={styles.sectionLabel}>{isEn ? 'HOUR' : 'HEURE'}</div>
+          <div className={styles.sectionLabel}>{pTexts.hour}</div>
           <div className={styles.hoursGrid}>
             {HOURS.map(h => (
               <button
@@ -269,7 +408,7 @@ export default function LuxuryDateTimePicker({
           </div>
 
           {/* Minute row */}
-          <div className={styles.sectionLabel}>{isEn ? 'MIN' : 'MIN'}</div>
+          <div className={styles.sectionLabel}>{pTexts.min}</div>
           <div className={styles.minutesRow}>
             {MINUTES.map(m => (
               <button
@@ -291,7 +430,7 @@ export default function LuxuryDateTimePicker({
           className={styles.closeMobilePickerBtn}
         >
           <Check size={16} />
-          <span>{isEn ? 'Confirm date & time' : 'Valider la date et l’heure'}</span>
+          <span>{pTexts.confirm}</span>
         </button>
       </div>
     </div>

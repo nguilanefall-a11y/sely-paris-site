@@ -55,8 +55,6 @@ function StepMonolith({ step, index }) {
 
 export default function HowItWorks() {
   const { t, getCityPath } = useCity();
-  const { i18n } = useTranslation();
-  const isEn = i18n?.language?.startsWith('en');
 
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
@@ -64,34 +62,34 @@ export default function HowItWorks() {
 
   const steps = [
     {
-      category: isEn ? 'SELECTION' : 'SÉLECTION',
+      category: t('howItWorks.cat1', 'SÉLECTION'),
       icon: <Car size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step1_title', 'Configuration & Choix'),
       desc: t(
         'howItWorks.step1_desc',
         'Sélectionnez votre itinéraire, date et véhicule d\'exception parmi notre flotte de berlines de prestige, SUV et vans VIP.'
       ),
-      meta: isEn ? 'Confirmed quote within 15 min' : 'Devis confirmé sous 15 min'
+      meta: t('howItWorks.meta1', 'Devis confirmé sous 15 min')
     },
     {
-      category: isEn ? 'CONFIRMATION' : 'PROTOCOLE',
+      category: t('howItWorks.cat2', 'PROTOCOLE'),
       icon: <UserCheck size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step2_title', 'Attribution du Chauffeur'),
       desc: t(
         'howItWorks.step2_desc',
         'Confirmation immédiate et transmission des coordonnées directes de votre chauffeur bilingue dédié.'
       ),
-      meta: isEn ? '24/7 dedicated dispatch' : 'Suivi télémétrique des vols'
+      meta: t('howItWorks.meta2', 'Suivi télémétrique des vols')
     },
     {
-      category: isEn ? 'JOURNEY' : 'EXPÉRIENCE',
+      category: t('howItWorks.cat3', 'EXPÉRIENCE'),
       icon: <ShieldCheck size={18} strokeWidth={1.5} />,
       title: t('howItWorks.step3_title', 'Prise en Charge Palace'),
       desc: t(
         'howItWorks.step3_desc',
         'Mise en place 15 minutes en avance, accueil personnalisé en tenue formelle et voyage dans un calme feutré.'
       ),
-      meta: isEn ? 'Zero compromise serenity' : 'Discrétion diplomatique'
+      meta: t('howItWorks.meta3', 'Discrétion diplomatique')
     }
   ];
 
@@ -170,16 +168,12 @@ export default function HowItWorks() {
           <div className={styles.eyebrowRow}>
             <span className={styles.eyebrowDot} />
             <span className={styles.eyebrow}>
-              {isEn ? 'THE SELY PROTOCOL' : 'LE PROTOCOLE SELY'}
+              {t('howItWorks.eyebrow', 'LE PROTOCOLE SELY')}
             </span>
           </div>
 
           <h2 className={styles.title}>
-            {isEn ? (
-              <>Trajectory of <span className={styles.titleItalic}>Excellence.</span></>
-            ) : (
-              <>L'Itinéraire d'une <span className={styles.titleItalic}>Haute Exigence.</span></>
-            )}
+            {t('howItWorks.title', 'L\'Itinéraire d\'une Haute Exigence.')}
           </h2>
 
           <p className={styles.subtitle}>
@@ -196,7 +190,7 @@ export default function HowItWorks() {
           <div className={styles.imageOverlay} />
           <div className={styles.imageBadge}>
             <Compass size={13} strokeWidth={1.5} />
-            <span>{isEn ? 'PRECISION TRANSFERS & PALACE LOGISTICS' : 'LOGISTIQUE HAUTE PRÉCISION · PARIS'}</span>
+            <span>{t('howItWorks.badge_sub', 'LOGISTIQUE HAUTE PRÉCISION · PARIS')}</span>
           </div>
         </div>
 

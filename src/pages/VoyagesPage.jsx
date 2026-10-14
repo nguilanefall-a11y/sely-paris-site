@@ -38,7 +38,7 @@ import { notificationEmailService } from '../services/notificationEmailService';
 import styles from './VoyagesPage.module.css';
 
 export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = false }) {
-  const { city, getCityPath } = useCity();
+  const { city, getCityPath, t } = useCity();
   const navigate = useNavigate();
   const {
     user,
@@ -787,7 +787,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 className={`${styles.tabBtn} ${activeTab === 'upcoming' ? styles.tabBtnActive : ''}`}
                 onClick={() => setActiveTab('upcoming')}
               >
-                <span>À Venir</span>
+                <span>{t('voyages.upcoming', 'À Venir')}</span>
                 {activeTab === 'upcoming' && <div className={styles.tabIndicator} />}
               </button>
 
@@ -796,7 +796,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 className={`${styles.tabBtn} ${activeTab === 'past' ? styles.tabBtnActive : ''}`}
                 onClick={() => setActiveTab('past')}
               >
-                <span>Passées</span>
+                <span>{t('voyages.past', 'Passées')}</span>
                 {activeTab === 'past' && <div className={styles.tabIndicator} />}
               </button>
 
@@ -805,7 +805,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
                 className={`${styles.tabBtn} ${activeTab === 'cancelled' ? styles.tabBtnActive : ''}`}
                 onClick={() => setActiveTab('cancelled')}
               >
-                <span>Annulé</span>
+                <span>{t('voyages.cancelled', 'Annulé')}</span>
                 {activeTab === 'cancelled' && <div className={styles.tabIndicator} />}
               </button>
             </div>

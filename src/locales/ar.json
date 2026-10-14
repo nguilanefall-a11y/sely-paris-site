@@ -19,7 +19,8 @@
     "book_service": "طلب عرض سعر",
     "call_us": "اتصل بنا",
     "quote": "عرض السعر",
-    "reserve": "حجز"
+    "reserve": "حجز",
+    "voyages": "رحلاتنا"
   },
   "hero": {
     "pretitle": "دار السائق الخاص — باريس",
@@ -40,7 +41,15 @@
     "srv2_title": "رجال الأعمال والوفود الدبلوماسية",
     "srv2_desc": "خدمة فائقة السرية للشخصيات والوفود والفعاليات الرسمية.",
     "srv3_title": "سائق خاص ليوم كامل",
-    "srv3_desc": "سيارة فاخرة مع سائق تحت تصرفكم بالساعة أو ليوم كامل."
+    "srv3_desc": "سيارة فاخرة مع سائق تحت تصرفكم بالساعة أو ليوم كامل.",
+    "eyebrow": "خدمات تنقل راقية ومتميزة",
+    "headline_pre": "خدمة بمعايير ",
+    "headline_bold": "فائقة الفخامة.",
+    "tag1": "بروتوكول المطارات والقطارات",
+    "tag2": "تنفيذي ودبلوماسي",
+    "tag3": "حسب الطلب والفعاليات",
+    "tag4": "معايير القصور الفاخرة",
+    "reserve_btn": "حجز هذه الخدمة"
   },
   "features": {
     "title": "Our Standard of Excellence",
@@ -117,13 +126,24 @@
     "cta": "Book a chauffeur"
   },
   "about": {
-    "title": "Your Private Chauffeur",
+    "title": "سائقكم الخاص",
     "subtitle": "The art of bespoke transportation in Paris.",
-    "desc_p1": "SELY is more than just a ride. It is the assurance of having a true professional dedicated to the success of your journey.",
-    "desc_p2": "Bilingual, punctual, and absolutely discreet, your chauffeur accompanies you in all your travels with relentless standards.",
-    "attr1": "Professional & Bilingual",
-    "attr2": "Strict Punctuality",
-    "attr3": "Absolute Confidentiality"
+    "desc_p1": "سيلي ليست مجرد خدمة تنقل، بل هي ضمان لوجود محترف حقيقي بجانبكم مكرس لنجاح رحلتكم.",
+    "desc_p2": "سائقكم ثنائي اللغة، دقيق في المواعيد وذو سرية مطلقة، يرافقكم في جميع تنقلاتكم بأعلى معايير التميز.",
+    "attr1": "اللباقة واللغات المتعددة",
+    "attr2": "دقة صارمة في المواعيد",
+    "attr3": "سرية تامة",
+    "badge": "البروتوكول الدبلوماسي وخدمات القصور",
+    "eyebrow": "سائقكم الخاص",
+    "headline": "فن التنقل الفاخر والمخصص في باريس.",
+    "pillar1_title": "اللباقة واللغات المتعددة",
+    "pillar1_desc": "سائقون يتقنون الإنجليزية، هندام رسمي لا تشوبه شائبة وبروتوكول فنادق القصور.",
+    "pillar2_title": "دقة صارمة في المواعيد",
+    "pillar2_desc": "وصول السيارة قبل 15 دقيقة ومتابعة حية لمواعيد وتأخيرات الطيران.",
+    "pillar3_title": "سرية تامة",
+    "pillar3_desc": "التزام كامل بالسرية المهنية لاجتماعاتكم ومحادثاتكم الخاصة.",
+    "book_cta": "حجز سائق خاص",
+    "whatsapp_cta": "مساعدة واتساب"
   },
   "booking": {
     "badge_contact": "الاتصال والحجز",
@@ -180,7 +200,11 @@
     "e3_title": "Events & Seminars",
     "e3_desc": "Weddings, professional evenings, congresses, or launches. A fleet of prestigious vehicles for your guests.",
     "e4_title": "Bespoke Services",
-    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal."
+    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal.",
+    "eyebrow": "تجارب حصرية ومصممة خصيصاً",
+    "headline_pre": "فن الحياة و ",
+    "headline_bold": "بريق باريس.",
+    "reserve_btn": "حجز هذه التجربة"
   },
   "testimonials": {
     "badge": "TESTIMONIALS",
@@ -208,7 +232,6 @@
     "privacy_policy": "سياسة الخصوصية",
     "legal_notices": "الشروط القانونية وترخيص النقل الفاخر"
   },
-
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",
@@ -481,7 +504,15 @@
     "step2_desc": "A professional chauffeur is assigned to you. They prepare the vehicle and arrive early at the agreed location.",
     "step3_title": "3. Travel in comfort",
     "step3_desc": "Greeting at the vehicle door, luggage handling, and a comfortable ride with chilled water and chargers onboard.",
-    "cta": "Request a quote"
+    "cta": "Request a quote",
+    "eyebrow": "بروتوكول سيلي",
+    "badge_sub": "لوجستيات دقيقة وفائقة · باريس",
+    "cat1": "الاختيار",
+    "meta1": "تأكيد عرض السعر خلال 15 دقيقة",
+    "cat2": "البروتوكول",
+    "meta2": "تتبع عن بُعد لرحلات الطيران",
+    "cat3": "التجربة",
+    "meta3": "سرية دبلوماسية مطلقة"
   },
   "floating": {
     "whatsapp": "WhatsApp Quote",
@@ -958,5 +989,15 @@
     "bespoke_step2_subtitle": "رقم الهاتف والبريد الإلكتروني فقط مطلوبان.",
     "bespoke_submit_cta": "إرسال الطلب المخصص",
     "quick_whatsapp_pref": "هل تفضل الحجز المباشر عبر المراسلة؟"
+  },
+  "common": {
+    "welcome": "مرحباً بكم"
+  },
+  "voyages": {
+    "upcoming": "القادمة",
+    "past": "السابقة",
+    "cancelled": "الملغاة",
+    "title": "رحلاتي",
+    "book_service": "حجز خدمة"
   }
 }

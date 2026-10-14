@@ -19,7 +19,8 @@
     "book_service": "获取即时报价",
     "call_us": "致电我们",
     "quote": "即时报价",
-    "reserve": "预订"
+    "reserve": "预订",
+    "voyages": "尊享行程"
   },
   "hero": {
     "pretitle": "私人专车府邸 — 巴黎",
@@ -40,7 +41,15 @@
     "srv2_title": "商务考察与官方代表团",
     "srv2_desc": "为高管、代表团和高端商务活动提供极高私密性的专车保障。",
     "srv3_title": "专属包车一天",
-    "srv3_desc": "豪华轿车与专属司机按小时或全天候命，随心所行。"
+    "srv3_desc": "豪华轿车与专属司机按小时或全天候命，随心所行。",
+    "eyebrow": "顶级尊贵出行服务",
+    "headline_pre": "无与伦比的",
+    "headline_bold": "殿堂级标准。",
+    "tag1": "航空与高铁尊贵礼遇",
+    "tag2": "企业高管与外交出访",
+    "tag3": "专属定制与盛典活动",
+    "tag4": "宫殿级款待礼节",
+    "reserve_btn": "预订此项专属服务"
   },
   "features": {
     "title": "Our Standard of Excellence",
@@ -117,13 +126,24 @@
     "cta": "Book a chauffeur"
   },
   "about": {
-    "title": "Your Private Chauffeur",
+    "title": "您的专属私人司仪",
     "subtitle": "The art of bespoke transportation in Paris.",
-    "desc_p1": "SELY is more than just a ride. It is the assurance of having a true professional dedicated to the success of your journey.",
-    "desc_p2": "Bilingual, punctual, and absolutely discreet, your chauffeur accompanies you in all your travels with relentless standards.",
-    "attr1": "Professional & Bilingual",
-    "attr2": "Strict Punctuality",
-    "attr3": "Absolute Confidentiality"
+    "desc_p1": "SELY不仅是一次出行服务，更是拥有专业随行司仪保障您行程圆满的尊贵体验。",
+    "desc_p2": "双语流利、严守时刻且恪守隐秘，您的私人司机以至高标准全程相伴。",
+    "attr1": "双语沟通与顶级素养",
+    "attr2": "严苛的时间准则",
+    "attr3": "绝对隐秘安全",
+    "badge": "外交礼仪与宫殿级出行",
+    "eyebrow": "您的专属私人司仪",
+    "headline": "巴黎尊享定制出行之艺术。",
+    "pillar1_title": "双语沟通与顶级素养",
+    "pillar1_desc": "流利英语交流，无暇正装出席，五星宫殿级服务准则。",
+    "pillar2_title": "严苛的时间准则",
+    "pillar2_desc": "提前15分钟车辆就位，实时航班动态无缝追踪。",
+    "pillar3_title": "绝对隐秘安全",
+    "pillar3_desc": "严格的外交级保密协议，保障商务洽谈与私人对话绝对安全。",
+    "book_cta": "立即预订私人专车",
+    "whatsapp_cta": "WhatsApp 尊享客服"
   },
   "booking": {
     "badge_contact": "联络与预订",
@@ -180,7 +200,11 @@
     "e3_title": "Events & Seminars",
     "e3_desc": "Weddings, professional evenings, congresses, or launches. A fleet of prestigious vehicles for your guests.",
     "e4_title": "Bespoke Services",
-    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal."
+    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal.",
+    "eyebrow": "专属定制尊享旅程",
+    "headline_pre": "生活艺术与",
+    "headline_bold": "巴黎风华。",
+    "reserve_btn": "预订此项体验"
   },
   "testimonials": {
     "badge": "TESTIMONIALS",
@@ -208,7 +232,6 @@
     "privacy_policy": "隐私政策",
     "legal_notices": "法律声明与高级专车运营许可"
   },
-
   "page_experience": {
     "title": "The Experience",
     "subtitle": "More than just a journey, a moment of grace out of time.",
@@ -481,7 +504,15 @@
     "step2_desc": "A professional chauffeur is assigned to you. They prepare the vehicle and arrive early at the agreed location.",
     "step3_title": "3. Travel in comfort",
     "step3_desc": "Greeting at the vehicle door, luggage handling, and a comfortable ride with chilled water and chargers onboard.",
-    "cta": "Request a quote"
+    "cta": "Request a quote",
+    "eyebrow": "SELY服务协议",
+    "badge_sub": "高精度尊贵出行保障 · 巴黎",
+    "cat1": "定制选择",
+    "meta1": "15分钟内确认报价",
+    "cat2": "礼仪协议",
+    "meta2": "实时追踪航班状态",
+    "cat3": "非凡体验",
+    "meta3": "外交级绝对保密"
   },
   "floating": {
     "whatsapp": "WhatsApp Quote",
@@ -958,5 +989,15 @@
     "bespoke_step2_subtitle": "仅需您的手机号码与电子邮箱。",
     "bespoke_submit_cta": "提交定制需求",
     "quick_whatsapp_pref": "想直接通过消息与礼宾沟通预订？"
+  },
+  "common": {
+    "welcome": "欢迎莅临"
+  },
+  "voyages": {
+    "upcoming": "即将出行",
+    "past": "历史行程",
+    "cancelled": "已取消",
+    "title": "我的行程",
+    "book_service": "预订专属服务"
   }
 }

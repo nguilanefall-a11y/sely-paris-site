@@ -12,9 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 function ServiceMonolith({ service, index }) {
   const navigate = useNavigate();
-  const { getCityPath } = useCity();
-  const { i18n } = useTranslation();
-  const isEn = i18n?.language?.startsWith('en');
+  const { t, getCityPath } = useCity();
 
   const {
     ref: tiltRef,
@@ -70,7 +68,7 @@ function ServiceMonolith({ service, index }) {
 
         <div className={styles.cardFooter}>
           <span className={styles.ctaText}>
-            {isEn ? 'RESERVE THIS SERVICE' : 'RÉSERVER CE SERVICE'}
+            {t('services.reserve_btn', 'RÉSERVER CE SERVICE')}
           </span>
           <div className={styles.ctaArrowWrapper}>
             <ArrowRight size={14} strokeWidth={1.8} className={styles.ctaArrow} />
@@ -83,8 +81,6 @@ function ServiceMonolith({ service, index }) {
 
 export default function Services() {
   const { t } = useCity();
-  const { i18n } = useTranslation();
-  const isEn = i18n?.language?.startsWith('en');
   const sectionRef = useRef(null);
 
   const services = [
@@ -93,7 +89,7 @@ export default function Services() {
       icon: <Plane size={20} strokeWidth={1.5} />,
       title: t('services.srv1_title', 'Transferts Aéroport & Gare'),
       desc: t('services.srv1_desc', 'Trajets directs et accueil nominatif avec pancarte aux aéroports CDG, Orly, Le Bourget et gares TGV.'),
-      tag: isEn ? 'FLIGHT & RAIL PROTOCOL' : 'PROTOCOLE AÉROPORTUAIRE',
+      tag: t('services.tag1', 'PROTOCOLE AÉROPORTUAIRE'),
       bgImage: '/airport_transfer_luxury.png'
     },
     {
@@ -101,7 +97,7 @@ export default function Services() {
       icon: <Briefcase size={20} strokeWidth={1.5} />,
       title: t('services.srv2_title', 'Voyages d\'Affaires'),
       desc: t('services.srv2_desc', 'Un salon de travail roulant feutré et connecté. Wi-Fi haut débit, chargeurs et discrétion diplomatique garantie.'),
-      tag: isEn ? 'CORPORATE EXECUTIVE' : 'EXECUTIVE & DIPLOMATIE',
+      tag: t('services.tag2', 'EXECUTIVE & DIPLOMATIE'),
       bgImage: '/experience_chauffeur_no_watch.png'
     },
     {
@@ -109,7 +105,7 @@ export default function Services() {
       icon: <Clock size={20} strokeWidth={1.5} />,
       title: t('services.srv3_title', 'Chauffeur à la journée'),
       desc: t('services.srv3_desc', 'Un véhicule et un chauffeur dédiés pour quelques heures, la journée ou vos événements parisiens haute couture.'),
-      tag: isEn ? 'BESPOKE AVAILABILITY' : 'SUR-MESURE & ÉVÉNEMENTS',
+      tag: t('services.tag3', 'SUR-MESURE & ÉVÉNEMENTS'),
       bgImage: '/louvre-chauffeur-hero.jpg'
     },
     {
@@ -117,7 +113,7 @@ export default function Services() {
       icon: <Sparkles size={20} strokeWidth={1.5} />,
       title: t('services.srv4_title', 'Attentions Particulières'),
       desc: t('services.srv4_desc', 'Service de bagagerie palace, bouteilles d\'eau minérale de prestige, confiseries et presse internationale sur demande.'),
-      tag: isEn ? 'PALACE EXCELLENCE' : 'STANDARDS DE PALACE',
+      tag: t('services.tag4', 'STANDARDS DE PALACE'),
       bgImage: '/experience_onboard.png'
     }
   ];
@@ -159,16 +155,12 @@ export default function Services() {
           <div className={styles.eyebrowRow}>
             <span className={styles.eyebrowDot} />
             <span className={styles.eyebrow}>
-              {isEn ? 'HAUTE MOBILITY EXPERIENCES' : 'SERVICES DE HAUTE REMISE'}
+              {t('services.eyebrow', 'SERVICES DE HAUTE REMISE')}
             </span>
           </div>
 
           <h2 className={styles.title}>
-            {isEn ? (
-              <>Uncompromising <span className={styles.titleItalic}>Standards.</span></>
-            ) : (
-              <>Un Service de <span className={styles.titleItalic}>Grand Standing.</span></>
-            )}
+            {t('services.headline_pre', 'Un Service de ')}<span className={styles.titleItalic}>{t('services.headline_bold', 'Grand Standing.')}</span>
           </h2>
 
           <p className={styles.subtitle}>

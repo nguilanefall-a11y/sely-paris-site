@@ -1638,7 +1638,6 @@ export default function ReservationPage() {
               onDateChange={setDate}
               selectedTime={time}
               onTimeChange={setTime}
-              isEn={i18n?.language === 'en'}
               minDateISO={todayISO}
             />
           </div>
@@ -2296,7 +2295,6 @@ export default function ReservationPage() {
                       onDateChange={setDate}
                       selectedTime={time}
                       onTimeChange={setTime}
-                      isEn={i18n?.language === 'en'}
                       minDateISO={todayISO}
                     />
                   </div>

@@ -16,7 +16,7 @@
     "about": "About",
     "contact": "Contact",
     "experience": "The Experience",
-    "voyages": "Our Journeys",
+    "voyages": "Journeys",
     "processus": "The Process",
     "excellence": "Excellence",
     "testimonials": "Testimonials",
@@ -103,7 +103,15 @@
     "srv3_title": "Hourly Service",
     "srv3_desc": "Book a vehicle with a chauffeur for the duration of your choice. He remains at your disposal as long as needed.",
     "srv4_title": "Beyond Expectations",
-    "srv4_desc": "Daily press, chilled water, universal chargers, and luggage assistance for uncompromised comfort."
+    "srv4_desc": "Daily press, chilled water, universal chargers, and luggage assistance for uncompromised comfort.",
+    "eyebrow": "HAUTE MOBILITY EXPERIENCES",
+    "headline_pre": "Uncompromising ",
+    "headline_bold": "Standards.",
+    "tag1": "FLIGHT & RAIL PROTOCOL",
+    "tag2": "CORPORATE EXECUTIVE",
+    "tag3": "BESPOKE AVAILABILITY",
+    "tag4": "PALACE EXCELLENCE",
+    "reserve_btn": "RESERVE THIS SERVICE"
   },
   "features": {
     "title": "Our Standard of Excellence",
@@ -186,7 +194,18 @@
     "desc_p2": "Bilingual, punctual, and absolutely discreet, your chauffeur accompanies you in all your travels with relentless standards.",
     "attr1": "Professional & Bilingual",
     "attr2": "Strict Punctuality",
-    "attr3": "Absolute Confidentiality"
+    "attr3": "Absolute Confidentiality",
+    "badge": "PROTOCOL & LUXURY MOBILITY",
+    "eyebrow": "YOUR PRIVATE CHAUFFEUR",
+    "headline": "The art of bespoke transportation in Paris.",
+    "pillar1_title": "Professional & Bilingual",
+    "pillar1_desc": "English-fluent drivers, immaculate formal attire, palace hospitality code.",
+    "pillar2_title": "Strict Punctuality",
+    "pillar2_desc": "Vehicle placed on location 15 minutes ahead of schedule with real-time flight tracking.",
+    "pillar3_title": "Absolute Confidentiality",
+    "pillar3_desc": "Diplomatic non-disclosure protocol guaranteeing complete business privacy.",
+    "book_cta": "BOOK A CHAUFFEUR",
+    "whatsapp_cta": "WHATSAPP ASSISTANCE"
   },
   "booking": {
     "badge_contact": "Contact &\nBooking",
@@ -290,7 +309,11 @@
     "e3_title": "Events & Seminars",
     "e3_desc": "Weddings, professional evenings, congresses, or launches. A fleet of prestigious vehicles for your guests.",
     "e4_title": "Bespoke Services",
-    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal."
+    "e4_desc": "Special attention for every ride: universal chargers, chilled water, and dedicated chauffeur service at your disposal.",
+    "eyebrow": "CURATED BESPOKE JOURNEYS",
+    "headline_pre": "Art of Living & ",
+    "headline_bold": "Parisian Prestige.",
+    "reserve_btn": "BOOK THIS EXPERIENCE"
   },
   "testimonials": {
     "badge": "TESTIMONIALS",
@@ -596,7 +619,15 @@
     "step2_desc": "A professional chauffeur is assigned to you. They prepare the vehicle and arrive early at the agreed location.",
     "step3_title": "3. Travel in comfort",
     "step3_desc": "Greeting at the vehicle door, luggage handling, and a comfortable ride with chilled water and chargers onboard.",
-    "cta": "Request a quote"
+    "cta": "Request a quote",
+    "eyebrow": "THE SELY PROTOCOL",
+    "badge_sub": "PRECISION TRANSFERS & PALACE LOGISTICS",
+    "cat1": "SELECTION",
+    "meta1": "Confirmed quote within 15 min",
+    "cat2": "CONFIRMATION",
+    "meta2": "24/7 dedicated dispatch",
+    "cat3": "JOURNEY",
+    "meta3": "Zero compromise serenity"
   },
   "floating": {
     "whatsapp": "WhatsApp Quote",
@@ -1131,5 +1162,15 @@
     "swap_addresses": "Reverse",
     "multiple_transfers_label": "Multiple transfers",
     "transfers": "transfers"
+  },
+  "common": {
+    "welcome": "Welcome"
+  },
+  "voyages": {
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "cancelled": "Cancelled",
+    "title": "My Journeys",
+    "book_service": "Book a service"
   }
 }

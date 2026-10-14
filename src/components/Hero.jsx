@@ -21,6 +21,9 @@ const HERO_TEXTS = {
     navHome: 'Accueil',
     navJourneys: 'Voyages',
     navHelp: 'Aide',
+    helpTitle: 'Assistance & Conciergerie VIP',
+    helpDesc: 'Notre direction des opérations est à votre écoute 24h/24 et 7j/7.',
+    helpWhatsapp: 'Échanger sur WhatsApp',
   },
   en: {
     welcome: 'Welcome',
@@ -30,6 +33,9 @@ const HERO_TEXTS = {
     navHome: 'Home',
     navJourneys: 'Journeys',
     navHelp: 'Help',
+    helpTitle: 'VIP Concierge & Dispatch',
+    helpDesc: 'Our operations desk is available 24/7.',
+    helpWhatsapp: 'Chat on WhatsApp',
   },
   es: {
     welcome: 'Bienvenido',
@@ -39,6 +45,9 @@ const HERO_TEXTS = {
     navHome: 'Inicio',
     navJourneys: 'Viajes',
     navHelp: 'Ayuda',
+    helpTitle: 'Asistencia & Conserjería VIP',
+    helpDesc: 'Nuestro equipo de operaciones está a su disposición 24/7.',
+    helpWhatsapp: 'Contactar por WhatsApp',
   },
   ar: {
     welcome: 'مرحباً بكم',
@@ -48,6 +57,9 @@ const HERO_TEXTS = {
     navHome: 'الرئيسية',
     navJourneys: 'الرحلات',
     navHelp: 'المساعدة',
+    helpTitle: 'المساعدة والكونسيرج VIP',
+    helpDesc: 'فريق العمليات لدينا في خدمتكم على مدار الساعة 24/7.',
+    helpWhatsapp: 'محادثة عبر واتساب',
   },
   zh: {
     welcome: '欢迎',
@@ -57,6 +69,69 @@ const HERO_TEXTS = {
     navHome: '首页',
     navJourneys: '行程',
     navHelp: '帮助',
+    helpTitle: 'VIP尊享礼宾与全天候支持',
+    helpDesc: '运营调度中心为您提供24小时全天候服务。',
+    helpWhatsapp: '通过 WhatsApp 沟通',
+  },
+  de: {
+    welcome: 'Willkommen',
+    heroTitle: 'Beginnen Sie\nIhre Reise',
+    destinationPlaceholder: 'Wohin möchten Sie? Ziel eingeben',
+    exploreServices: '↓ Reisen & Services entdecken',
+    navHome: 'Startseite',
+    navJourneys: 'Reisen',
+    navHelp: 'Hilfe',
+    helpTitle: 'VIP-Concierge & Kundenservice',
+    helpDesc: 'Unsere Einsatzleitung ist rund um die Uhr für Sie da (24/7).',
+    helpWhatsapp: 'Über WhatsApp schreiben',
+  },
+  it: {
+    welcome: 'Benvenuto',
+    heroTitle: 'Iniziate il\nvostro viaggio',
+    destinationPlaceholder: 'Dove desiderate andare? Destinazione',
+    exploreServices: '↓ Scoprite viaggi e servizi',
+    navHome: 'Home',
+    navJourneys: 'Viaggi',
+    navHelp: 'Aiuto',
+    helpTitle: 'Assistenza & Concierge VIP',
+    helpDesc: 'La nostra centrale operativa è a vostra disposizione 24/7.',
+    helpWhatsapp: 'Scrivi su WhatsApp',
+  },
+  pt: {
+    welcome: 'Bem-vindo',
+    heroTitle: 'Comece a\nsua viagem',
+    destinationPlaceholder: 'Para onde vai? Insira o destino',
+    exploreServices: '↓ Explorar viagens e serviços',
+    navHome: 'Início',
+    navJourneys: 'Viagens',
+    navHelp: 'Ajuda',
+    helpTitle: 'Assistência & Concierge VIP',
+    helpDesc: 'A nossa central de operações está disponível 24 horas por dia, 7 dias por semana.',
+    helpWhatsapp: 'Falar no WhatsApp',
+  },
+  ru: {
+    welcome: 'Добро пожаловать',
+    heroTitle: 'Начните ваше\nпутешествие',
+    destinationPlaceholder: 'Куда едем? Введите пункт назначения',
+    exploreServices: '↓ Посмотреть поездки и услуги',
+    navHome: 'Главная',
+    navJourneys: 'Поездки',
+    navHelp: 'Помощь',
+    helpTitle: 'VIP-консьерж и поддержка',
+    helpDesc: 'Наша операционная служба на связи 24 часа в сутки, 7 дней в неделю.',
+    helpWhatsapp: 'Написать в WhatsApp',
+  },
+  ja: {
+    welcome: 'ようこそ',
+    heroTitle: '特別な旅を\nここから',
+    destinationPlaceholder: '目的地を入力してください',
+    exploreServices: '↓ 旅程とサービスを見る',
+    navHome: 'ホーム',
+    navJourneys: '旅程',
+    navHelp: 'ヘルプ',
+    helpTitle: 'VIP コンシェルジュ＆サポート',
+    helpDesc: '運行オペレーションデスクは24時間365日対応いたします。',
+    helpWhatsapp: 'WhatsAppで問い合わせる',
   },
 };
 
@@ -67,18 +142,8 @@ export default function Hero({ hideBottomNav = false }) {
   const [helpOpen, setHelpOpen] = useState(false);
 
   const currentCity = city || 'paris';
-
-  const langKey = i18n?.language?.startsWith('en')
-    ? 'en'
-    : i18n?.language?.startsWith('es')
-    ? 'es'
-    : i18n?.language?.startsWith('ar')
-    ? 'ar'
-    : i18n?.language?.startsWith('zh')
-    ? 'zh'
-    : 'fr';
-
-  const ht = HERO_TEXTS[langKey] || HERO_TEXTS.fr;
+  const cleanLang = (i18n?.language || 'fr').split('-')[0].toLowerCase();
+  const ht = HERO_TEXTS[cleanLang] || HERO_TEXTS.fr;
 
   const handleGoToReservation = () => {
     const cityPath = currentCity !== 'paris' ? currentCity : 'paris';
@@ -195,7 +260,7 @@ export default function Hero({ hideBottomNav = false }) {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className={styles.helpHeader}>
-                    <h3>Assistance & Conciergerie VIP</h3>
+                    <h3>{ht.helpTitle}</h3>
                     <button
                       type="button"
                       onClick={() => setHelpOpen(false)}
@@ -206,7 +271,7 @@ export default function Hero({ hideBottomNav = false }) {
                     </button>
                   </div>
                   <p className={styles.helpText}>
-                    Notre direction des opérations est à votre écoute 24h/24 et 7j/7.
+                    {ht.helpDesc}
                   </p>
                   <div className={styles.helpActions}>
                     <a
@@ -216,7 +281,7 @@ export default function Hero({ hideBottomNav = false }) {
                       className={styles.whatsappBtn}
                     >
                       <MessageSquare size={16} />
-                      <span>Échanger sur WhatsApp</span>
+                      <span>{ht.helpWhatsapp}</span>
                     </a>
                     <a href="tel:+33184805676" className={styles.phoneBtn}>
                       <Phone size={16} />

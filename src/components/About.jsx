@@ -21,7 +21,6 @@ export default function About() {
   const { t, getCityPath } = useCity();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
-  const isEn = i18n?.language?.startsWith('en');
 
   const sectionRef = useRef(null);
   const imageWrapperRef = useRef(null);
@@ -123,7 +122,7 @@ export default function About() {
               <div className={styles.floatingTag}>
                 <div className={styles.tagDot} />
                 <span className={styles.tagText}>
-                  {isEn ? 'PROTOCOL & LUXURY MOBILITY' : 'PROTOCOLE DIPLOMATIQUE & PALACE'}
+                  {t('about.badge', 'PROTOCOLE DIPLOMATIQUE & PALACE')}
                 </span>
               </div>
             </div>
@@ -134,28 +133,26 @@ export default function About() {
             <div className={styles.eyebrowRow} data-reveal>
               <span className={styles.eyebrowLine} />
               <span className={styles.eyebrow}>
-                {isEn ? 'YOUR PRIVATE CHAUFFEUR' : 'VOTRE CHAUFFEUR PRIVÉ'}
+                {t('about.eyebrow', 'VOTRE CHAUFFEUR PRIVÉ')}
               </span>
             </div>
 
             <h2 className={styles.title} data-reveal>
-              {isEn ? (
-                <>The art of bespoke <span className={styles.titleItalic}>transportation.</span></>
-              ) : (
-                <>L'art de la grande <span className={styles.titleItalic}>remise à Paris.</span></>
-              )}
+              {t('about.headline', 'L’art de la grande remise à Paris.')}
             </h2>
 
             <p className={styles.body} data-reveal>
-              {isEn 
-                ? 'SELY is more than just a ride. It is the assurance of having a true professional dedicated to the success of your journey.'
-                : 'SELY n\'est pas qu\'un service de transport. C\'est la garantie d\'avoir à vos côtés un véritable professionnel, dédié à la réussite de votre trajet.'}
+              {t(
+                'about.desc_p1',
+                'SELY n\'est pas qu\'un service de transport. C\'est la garantie d\'avoir à vos côtés un véritable professionnel, dédié à la réussite de votre trajet.'
+              )}
             </p>
 
             <p className={styles.body} data-reveal>
-              {isEn 
-                ? 'Bilingual, punctual, and absolutely discreet, your chauffeur accompanies you in all your travels with relentless standards.'
-                : 'Bilingue, ponctuel et d\'une discrétion absolue, votre chauffeur vous accompagne dans tous vos déplacements avec une exigence de chaque instant.'}
+              {t(
+                'about.desc_p2',
+                'Bilingue, ponctuel et d\'une discrétion absolue, votre chauffeur vous accompagne dans tous vos déplacements avec une exigence de chaque instant.'
+              )}
             </p>
 
             {/* ── Three Pillars — 3D Monolith Cards ── */}
@@ -167,12 +164,10 @@ export default function About() {
                 </div>
                 <div className={styles.pillarContent}>
                   <h4 className={styles.pillarTitle}>
-                    {isEn ? 'Professional & Bilingual' : 'Savoir-Être & Bilinguisme'}
+                    {t('about.pillar1_title', 'Savoir-Être & Bilinguisme')}
                   </h4>
                   <p className={styles.pillarDesc}>
-                    {isEn 
-                      ? 'English-fluent drivers, immaculate formal attire, palace hospitality code.'
-                      : 'Chauffeurs anglophones, tenue de rigueur impeccable et codes de palace.'}
+                    {t('about.pillar1_desc', 'Chauffeurs anglophones, tenue de rigueur impeccable et codes de palace.')}
                   </p>
                 </div>
               </div>
@@ -184,12 +179,10 @@ export default function About() {
                 </div>
                 <div className={styles.pillarContent}>
                   <h4 className={styles.pillarTitle}>
-                    {isEn ? 'Strict Punctuality' : 'Ponctualité Stricte'}
+                    {t('about.pillar2_title', 'Ponctualité Stricte')}
                   </h4>
                   <p className={styles.pillarDesc}>
-                    {isEn 
-                      ? 'Vehicle placed on location 15 minutes ahead of schedule with real-time flight tracking.'
-                      : 'Mise en place 15 minutes en avance et suivi télémétrique des vols en direct.'}
+                    {t('about.pillar2_desc', 'Mise en place 15 minutes en avance et suivi télémétrique des vols en direct.')}
                   </p>
                 </div>
               </div>
@@ -201,12 +194,10 @@ export default function About() {
                 </div>
                 <div className={styles.pillarContent}>
                   <h4 className={styles.pillarTitle}>
-                    {isEn ? 'Absolute Confidentiality' : 'Discrétion Absolue'}
+                    {t('about.pillar3_title', 'Discrétion Absolue')}
                   </h4>
                   <p className={styles.pillarDesc}>
-                    {isEn 
-                      ? 'Diplomatic non-disclosure protocol guaranteeing complete business privacy.'
-                      : 'Engagement de secret professionnel absolu pour vos réunions et conversations.'}
+                    {t('about.pillar3_desc', 'Engagement de secret professionnel absolu pour vos réunions et conversations.')}
                   </p>
                 </div>
               </div>
@@ -219,7 +210,7 @@ export default function About() {
                 onClick={() => navigate(getCityPath('/reserver'))}
                 className={styles.primaryCta}
               >
-                <span>{isEn ? 'BOOK A CHAUFFEUR' : 'RÉSERVER UN CHAUFFEUR'}</span>
+                <span>{t('about.book_cta', 'RÉSERVER UN CHAUFFEUR')}</span>
                 <ArrowRight size={14} strokeWidth={1.8} className={styles.ctaArrow} />
               </button>
 
@@ -231,7 +222,7 @@ export default function About() {
                 title="Échanger directement sur WhatsApp"
               >
                 <WhatsAppIcon />
-                <span>{isEn ? 'WHATSAPP ASSISTANCE' : 'ASSISTANCE WHATSAPP'}</span>
+                <span>{t('about.whatsapp_cta', 'ASSISTANCE WHATSAPP')}</span>
               </a>
             </div>
 

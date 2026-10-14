@@ -6,15 +6,15 @@ import styles from './LegalPage.module.css';
 
 export default function LegalPage() {
   const { t, i18n } = useCity();
-  const isEn = i18n?.language?.startsWith('en');
+  const isFrench = !i18n?.language || i18n.language.startsWith('fr');
 
   return (
     <div className={styles.legalPage}>
       <PageHeader
-        title={isEn ? "Legal Notices & VTC License" : "Mentions Légales & Licence VTC"}
-        subtitle={isEn 
-          ? "Official institutional information, EVTC transport registry and regulatory compliance."
-          : "Informations institutionnelles officielles, inscription au registre EVTC et garanties réglementaires."}
+        title={isFrench ? "Mentions Légales & Licence VTC" : "Legal Notices & VTC License"}
+        subtitle={isFrench 
+          ? "Informations institutionnelles officielles, inscription au registre EVTC et garanties réglementaires."
+          : "Official institutional information, EVTC transport registry and regulatory compliance."}
         image="/louvre-chauffeur-hero.jpg"
       />
 
@@ -24,11 +24,11 @@ export default function LegalPage() {
             <Shield size={28} />
           </div>
           <div className={styles.complianceText}>
-            <h3>{isEn ? "Registered Luxury Passenger Transport Operator (EVTC)" : "Exploitant de Transport de Personnes Agréé (EVTC)"}</h3>
+            <h3>{isFrench ? "Exploitant de Transport de Personnes Agréé (EVTC)" : "Registered Luxury Passenger Transport Operator (EVTC)"}</h3>
             <p>
-              {isEn
-                ? "SELY operates strictly within the framework of European and French transportation laws under the supervision of the Ministry of Transport, with full professional liability insurance."
-                : "SELY exerce son activité sous le contrôle du Ministère chargé des Transports et de la Préfecture de Police de Paris, en conformité totale avec le Code des transports et les standards de Grande Remise."}
+              {isFrench
+                ? "SELY exerce son activité sous le contrôle du Ministère chargé des Transports et de la Préfecture de Police de Paris, en conformité totale avec le Code des transports et les standards de Grande Remise."
+                : "SELY operates strictly within the framework of European and French transportation laws under the supervision of the Ministry of Transport, with full professional liability insurance."}
             </p>
           </div>
         </div>
@@ -38,7 +38,7 @@ export default function LegalPage() {
           <section className={styles.legalCard}>
             <div className={styles.cardHeader}>
               <Building2 size={20} className={styles.cardIcon} />
-              <h2>{isEn ? "1. Company & Publication" : "1. Éditeur du Site"}</h2>
+              <h2>{isFrench ? "1. Éditeur du Site" : "1. Company & Publication"}</h2>
             </div>
             <div className={styles.cardBody}>
               <p><strong>Dénomination :</strong> SELY PRIVÉ</p>
@@ -54,7 +54,7 @@ export default function LegalPage() {
           <section className={styles.legalCard}>
             <div className={styles.cardHeader}>
               <CheckCircle size={20} className={styles.cardIcon} />
-              <h2>{isEn ? "2. VTC License & Insurance" : "2. Inscription EVTC & Assurances"}</h2>
+              <h2>{isFrench ? "2. Inscription EVTC & Assurances" : "2. VTC License & Insurance"}</h2>
             </div>
             <div className={styles.cardBody}>
               <p><strong>Registre National des Exploitants VTC :</strong> Inscrit au registre officiel des Exploitants de Voitures de Transport avec Chauffeur (EVTC) sous l'autorité du Ministère de la Transition Écologique et de la Cohésion des Territoires.</p>
@@ -67,7 +67,7 @@ export default function LegalPage() {
           <section className={styles.legalCard}>
             <div className={styles.cardHeader}>
               <FileText size={20} className={styles.cardIcon} />
-              <h2>{isEn ? "3. Hosting Provider" : "3. Hébergement du Service"}</h2>
+              <h2>{isFrench ? "3. Hébergement du Service" : "3. Hosting Provider"}</h2>
             </div>
             <div className={styles.cardBody}>
               <p><strong>Hébergeur :</strong> Vercel Inc.</p>
@@ -80,7 +80,7 @@ export default function LegalPage() {
           <section className={styles.legalCard}>
             <div className={styles.cardHeader}>
               <Scale size={20} className={styles.cardIcon} />
-              <h2>{isEn ? "4. Intellectual Property & GDPR" : "4. Propriété & Protection des Données"}</h2>
+              <h2>{isFrench ? "4. Propriété & Protection des Données" : "4. Intellectual Property & GDPR"}</h2>
             </div>
             <div className={styles.cardBody}>
               <p><strong>Propriété intellectuelle :</strong> L'ensemble des contenus, marques, logos, visuels, photographies et architectures du site www.selyprive.com sont la propriété exclusive de SELY PRIVÉ. Toute reproduction intégrale ou partielle sans accord préalable est strictement interdite.</p>

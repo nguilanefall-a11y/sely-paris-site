@@ -3,6 +3,7 @@ import { useCity } from '../hooks/useCity';
 import { Link, useNavigate } from 'react-router-dom';
 import { Users, Briefcase, ArrowRight, ShieldCheck } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import { getVehicleUI } from '../lib/vehicleTranslations';
 import styles from './VehiclesPage.module.css';
 
 const VEHICLES_CATALOG = [
@@ -251,7 +252,9 @@ const VEHICLES_CATALOG = [
 export default function VehiclesPage() {
   const { t, getCityPath, i18n } = useCity();
   const navigate = useNavigate();
-  const isEn = i18n?.language?.startsWith('en');
+  const currentLang = i18n?.language?.split('-')[0] || 'fr';
+  const vUi = React.useMemo(() => getVehicleUI(currentLang), [currentLang]);
+  const isFrench = currentLang === 'fr';
 
   const [activeCategory, setActiveCategory] = useState('all');
   const [minibusFilter, setMinibusFilter] = useState('all'); // 'all' | 'vip' | 'standard'
@@ -275,31 +278,31 @@ export default function VehiclesPage() {
   return (
     <div className={styles.page}>
       <PageHeader
-        title={isEn ? 'The Private Fleet' : 'Notre Flotte d\'Exception'}
-        subtitle={isEn ? 'Excellence, craftsmanship and absolute security' : 'L\'Excellence automobile à votre service'}
+        title={isFrench ? 'Notre Flotte d\'Exception' : (vUi.suite || 'The Private Fleet')}
+        subtitle={isFrench ? 'L\'Excellence automobile à votre service' : 'Excellence, craftsmanship and absolute security'}
         image="/sclass-main-new.jpg"
       />
 
       <section className={styles.introSection}>
         <div className={styles.introContainer}>
           <span className={styles.introBadge}>
-            {isEn ? 'CURATED COLLECTION — PARIS & ÎLE-DE-FRANCE' : 'COLLECTION PRIVÉE — PARIS & ÎLE-DE-FRANCE'}
+            {isFrench ? 'COLLECTION PRIVÉE — PARIS & ÎLE-DE-FRANCE' : 'CURATED COLLECTION — PARIS & ÎLE-DE-FRANCE'}
           </span>
           <p className={styles.introText}>
-            {isEn
-              ? 'Discover our private collection of thirty flagship vehicles, meticulously maintained according to five-star palace hospitality standards.'
-              : 'Découvrez notre flotte d\'une trentaine de véhicules haut de gamme, entretenus selon les standards les plus exigeants de la grande hôtellerie pour vous garantir confort, sécurité et discrétion absolue.'}
+            {isFrench
+              ? 'Découvrez notre flotte d\'une trentaine de véhicules haut de gamme, entretenus selon les standards les plus exigeants de la grande hôtellerie pour vous garantir confort, sécurité et discrétion absolue.'
+              : 'Discover our private collection of thirty flagship vehicles, meticulously maintained according to five-star palace hospitality standards.'}
           </p>
 
           {/* Category Tabs */}
           <div className={styles.filterBar}>
             {[
-              { id: 'all', label: isEn ? 'ALL VEHICLES' : 'TOUTE LA FLOTTE' },
-              { id: 'berlines', label: isEn ? 'BERLINES' : 'BERLINES' },
-              { id: 'prestige', label: isEn ? 'HAUTE COUTURE' : 'HAUTE COUTURE' },
-              { id: 'suv', label: isEn ? 'SUVS PRESTIGE' : 'SUVS PRESTIGE' },
-              { id: 'vans', label: isEn ? 'VANS' : 'VANS' },
-              { id: 'minibus', label: isEn ? 'MINIBUS' : 'MINIBUS' }
+              { id: 'all', label: vUi.cat_all },
+              { id: 'berlines', label: vUi.cat_berlines },
+              { id: 'prestige', label: vUi.cat_prestige },
+              { id: 'suv', label: vUi.cat_suv },
+              { id: 'vans', label: vUi.cat_vans },
+              { id: 'minibus', label: vUi.cat_minibus }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -319,9 +322,9 @@ export default function VehiclesPage() {
           {activeCategory === 'minibus' && (
             <div className={styles.minibusSubFilterBar}>
               {[
-                { id: 'all', label: isEn ? 'All 3 Minibuses' : 'Les 3 Minibus (7, 14, 19)' },
-                { id: 'vip', label: isEn ? '★ VIP Saloons (7 & 14 Seats)' : '★ Salons VIP (7 & 14 Places)' },
-                { id: 'standard', label: isEn ? 'Standard Edition (19 Seats)' : 'Édition Standard (19 Places)' },
+                { id: 'all', label: isFrench ? 'Les 3 Minibus (7, 14, 19)' : 'All 3 Minibuses' },
+                { id: 'vip', label: isFrench ? '★ Salons VIP (7 & 14 Places)' : `★ VIP Saloons (7 & 14 ${vUi.guests})` },
+                { id: 'standard', label: isFrench ? 'Édition Standard (19 Places)' : `Standard Edition (19 ${vUi.guests})` },
               ].map((sub) => (
                 <button
                   key={sub.id}
@@ -341,6 +344,7 @@ export default function VehiclesPage() {
       <section className={styles.fleetSection}>
         <div className={styles.fleetGrid}>
           {filteredVehicles.map((veh, idx) => {
+            const loc = getLocalizedVehicleData(veh, currentLang);
             const currentAngle = activeAngles[veh.id] || 'front';
             const displayImage =
               currentAngle === 'rear' && veh.rearImage
@@ -355,12 +359,12 @@ export default function VehiclesPage() {
                 <div className={styles.cardVisualWrapper}>
                   <img
                     src={displayImage}
-                    alt={isEn ? veh.titleEn : veh.title}
+                    alt={loc.title}
                     className={styles.cardImage}
                     loading={idx < 4 ? 'eager' : 'lazy'}
                   />
                   <div className={styles.cardBadge}>
-                    <span>{isEn ? veh.badgeEn : veh.badge}</span>
+                    <span>{loc.badge}</span>
                   </div>
 
                   {hasMultipleAngles && (
@@ -370,7 +374,7 @@ export default function VehiclesPage() {
                         className={`${styles.angleBtn} ${currentAngle === 'front' ? styles.angleBtnActive : ''}`}
                         onClick={() => setActiveAngles((prev) => ({ ...prev, [veh.id]: 'front' }))}
                       >
-                        {isEn ? 'Front' : 'Devant'}
+                        {vUi.dial_ext}
                       </button>
                       {veh.rearImage && (
                         <button
@@ -378,7 +382,7 @@ export default function VehiclesPage() {
                           className={`${styles.angleBtn} ${currentAngle === 'rear' ? styles.angleBtnActive : ''}`}
                           onClick={() => setActiveAngles((prev) => ({ ...prev, [veh.id]: 'rear' }))}
                         >
-                          {isEn ? 'Rear' : 'Arrière'}
+                          {vUi.dial_rear}
                         </button>
                       )}
                       {veh.interiorImage && (
@@ -387,7 +391,7 @@ export default function VehiclesPage() {
                           className={`${styles.angleBtn} ${currentAngle === 'interior' ? styles.angleBtnActive : ''}`}
                           onClick={() => setActiveAngles((prev) => ({ ...prev, [veh.id]: 'interior' }))}
                         >
-                          {isEn ? 'Cabin' : 'Intérieur'}
+                          {vUi.dial_cabin}
                         </button>
                       )}
                     </div>
@@ -396,19 +400,19 @@ export default function VehiclesPage() {
 
               <div className={styles.cardBody}>
                 <div className={styles.cardTop}>
-                  <span className={styles.cardCategory}>{isEn ? veh.categoryEn : veh.category}</span>
-                  <h2 className={styles.cardTitle}>{isEn ? veh.titleEn : veh.title}</h2>
-                  <p className={styles.cardDesc}>{isEn ? veh.descEn : veh.desc}</p>
+                  <span className={styles.cardCategory}>{loc.category}</span>
+                  <h2 className={styles.cardTitle}>{loc.title}</h2>
+                  <p className={styles.cardDesc}>{loc.desc}</p>
                 </div>
 
                 <div className={styles.specsRow}>
                   <div className={styles.specItem}>
                     <Users size={15} strokeWidth={1.5} className={styles.specIcon} />
-                    <span>{veh.passengers} {isEn ? 'seats' : 'places'}</span>
+                    <span>{veh.passengers} {vUi.guests}</span>
                   </div>
                   <div className={styles.specItem}>
                     <Briefcase size={15} strokeWidth={1.5} className={styles.specIcon} />
-                    <span>{veh.luggage} {isEn ? 'bags' : 'valises'}</span>
+                    <span>{veh.luggage} {vUi.bags}</span>
                   </div>
                   <div className={styles.specItem}>
                     <ShieldCheck size={15} strokeWidth={1.5} className={styles.specIcon} />
@@ -422,7 +426,7 @@ export default function VehiclesPage() {
                     onClick={() => navigate(getCityPath(`/reserver?service=transfer&vehicle=${veh.id}`))}
                     className={styles.reserveBtn}
                   >
-                    <span>{isEn ? 'RESERVE THIS VEHICLE' : 'RÉSERVER CE VÉHICULE'}</span>
+                    <span>{vUi.reserve_cta}</span>
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </button>
                 </div>
@@ -437,19 +441,19 @@ export default function VehiclesPage() {
       <section className={styles.bottomBanner}>
         <div className={styles.bottomContainer}>
           <h3 className={styles.bottomTitle}>
-            {isEn ? 'Need a tailored fleet or specific arrangement?' : 'Besoin d\'un convoi ou d\'une configuration spécifique ?'}
+            {isFrench ? 'Besoin d\'un convoi ou d\'une configuration spécifique ?' : 'Need a tailored fleet or specific arrangement?'}
           </h3>
           <p className={styles.bottomDesc}>
-            {isEn
-              ? 'Our dedicated team coordinates multi-vehicle motorcades, events, and bespoke security transfers.'
-              : 'Notre équipe dédiée organise vos convois multi-véhicules, mises à disposition longue durée et déplacements officiels.'}
+            {isFrench
+              ? 'Notre équipe dédiée organise vos convois multi-véhicules, mises à disposition longue durée et déplacements officiels.'
+              : 'Our dedicated team coordinates multi-vehicle motorcades, events, and bespoke security transfers.'}
           </p>
           <div className={styles.bottomActions}>
             <Link to={getCityPath('/reserver?service=transfer')} className={styles.bottomPrimary}>
-              {isEn ? 'BOOK A TRANSFER' : 'RÉSERVER UN TRANSFERT'}
+              {isFrench ? 'RÉSERVER UN TRANSFERT' : 'BOOK A TRANSFER'}
             </Link>
             <Link to={getCityPath('/demande-specifique')} className={styles.bottomSecondary}>
-              {isEn ? 'BESPOKE INQUIRY' : 'DEMANDE SUR-MESURE'}
+              {isFrench ? 'DEMANDE SUR-MESURE' : 'BESPOKE INQUIRY'}
             </Link>
           </div>
         </div>

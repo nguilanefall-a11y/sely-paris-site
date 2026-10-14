@@ -16,7 +16,7 @@
     "about": "À Propos",
     "contact": "Contact",
     "experience": "L'Expérience",
-    "voyages": "Nos Voyages",
+    "voyages": "Voyages",
     "processus": "Le Processus",
     "excellence": "L'Excellence",
     "testimonials": "Témoignages",
@@ -103,7 +103,15 @@
     "srv3_title": "Chauffeur à la journée",
     "srv3_desc": "Réservez un véhicule avec chauffeur pour la durée de votre choix. Il reste à votre entière disposition aussi longtemps que nécessaire.",
     "srv4_title": "Attentions Particulières",
-    "srv4_desc": "Presse du jour, bouteilles d'eau fraîche, chargeurs universels et service de bagages pour un confort sans compromis."
+    "srv4_desc": "Presse du jour, bouteilles d'eau fraîche, chargeurs universels et service de bagages pour un confort sans compromis.",
+    "eyebrow": "SERVICES DE HAUTE REMISE",
+    "headline_pre": "Un Service de ",
+    "headline_bold": "Grand Standing.",
+    "tag1": "PROTOCOLE AÉROPORTUAIRE",
+    "tag2": "EXECUTIVE & DIPLOMATIE",
+    "tag3": "SUR-MESURE & ÉVÉNEMENTS",
+    "tag4": "STANDARDS DE PALACE",
+    "reserve_btn": "RÉSERVER CE SERVICE"
   },
   "features": {
     "title": "Notre Standard d'Excellence",
@@ -186,7 +194,18 @@
     "desc_p2": "Bilingue, ponctuel et d'une discrétion absolue, votre chauffeur vous accompagne dans tous vos déplacements avec une exigence de chaque instant.",
     "attr1": "Savoir-Être & Bilinguisme",
     "attr2": "Ponctualité Stricte",
-    "attr3": "Confidentialité Absolue"
+    "attr3": "Confidentialité Absolue",
+    "badge": "PROTOCOLE DIPLOMATIQUE & PALACE",
+    "eyebrow": "VOTRE CHAUFFEUR PRIVÉ",
+    "headline": "L'art de la grande remise à Paris.",
+    "pillar1_title": "Savoir-Être & Bilinguisme",
+    "pillar1_desc": "Chauffeurs anglophones, tenue de rigueur impeccable et codes de palace.",
+    "pillar2_title": "Ponctualité Stricte",
+    "pillar2_desc": "Mise en place 15 minutes en avance et suivi télémétrique des vols en direct.",
+    "pillar3_title": "Discrétion Absolue",
+    "pillar3_desc": "Engagement de secret professionnel absolu pour vos réunions et conversations.",
+    "book_cta": "RÉSERVER UN CHAUFFEUR",
+    "whatsapp_cta": "ASSISTANCE WHATSAPP"
   },
   "booking": {
     "badge_contact": "Contact &\nRéservation",
@@ -290,7 +309,11 @@
     "e3_title": "Événements & Séminaires",
     "e3_desc": "Mariages, soirées professionnelles, congrès ou lancements. Une flotte de véhicules élégants pour vos invités.",
     "e4_title": "Service Sur Mesure",
-    "e4_desc": "Une attention particulière pour chaque trajet : chargeurs universels, eau fraîche et chauffeur dédié à votre service."
+    "e4_desc": "Une attention particulière pour chaque trajet : chargeurs universels, eau fraîche et chauffeur dédié à votre service.",
+    "eyebrow": "EXPÉRIENCES & SUR-MESURE",
+    "headline_pre": "Art de Vivre & ",
+    "headline_bold": "Prestige Parisien.",
+    "reserve_btn": "RÉSERVER CETTE EXPÉRIENCE"
   },
   "testimonials": {
     "badge": "AVIS CLIENTS",
@@ -596,7 +619,15 @@
     "step2_desc": "Un chauffeur professionnel vous est attribué. Il prépare le véhicule avec soin et se présente en avance au lieu convenu.",
     "step3_title": "3. Voyagez confortablement",
     "step3_desc": "Accueil personnalisé, prise en charge de vos bagages et trajet serein avec bouteille d'eau et chargeurs à bord.",
-    "cta": "Demander un devis"
+    "cta": "Demander un devis",
+    "eyebrow": "LE PROTOCOLE SELY",
+    "badge_sub": "LOGISTIQUE HAUTE PRÉCISION · PARIS",
+    "cat1": "SÉLECTION",
+    "meta1": "Devis confirmé sous 15 min",
+    "cat2": "PROTOCOLE",
+    "meta2": "Suivi télémétrique des vols",
+    "cat3": "EXPÉRIENCE",
+    "meta3": "Discrétion diplomatique"
   },
   "floating": {
     "whatsapp": "Devis WhatsApp",
@@ -1131,5 +1162,15 @@
     "swap_addresses": "Inverser",
     "multiple_transfers_label": "Trajets multiples",
     "transfers": "transferts"
+  },
+  "common": {
+    "welcome": "Bienvenue"
+  },
+  "voyages": {
+    "upcoming": "À Venir",
+    "past": "Passées",
+    "cancelled": "Annulé",
+    "title": "Mes Voyages",
+    "book_service": "Réserver un service"
   }
 }

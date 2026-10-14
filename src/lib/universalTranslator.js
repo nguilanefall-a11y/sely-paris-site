@@ -8,7 +8,7 @@ import i18n from '../i18n';
 import { ALL_WORLD_LANGUAGES, POPULAR_LANGUAGES, getLanguageMetadata } from './languages';
 
 const RTL_LANGS = ['ar', 'he', 'fa', 'ur', 'ps', 'sd'];
-const NATIVE_I18N_LANGS = ['fr', 'en', 'es', 'ar', 'zh'];
+const NATIVE_I18N_LANGS = ['fr', 'en', 'es', 'ar', 'zh', 'de', 'it', 'pt', 'ru', 'ja'];
 
 let isGoogleScriptLoaded = false;
 let isGoogleScriptLoading = false;
