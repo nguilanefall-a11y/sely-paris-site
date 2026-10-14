@@ -621,7 +621,14 @@ export default function ReservationPage() {
     );
   };
 
-  const setDayPresetHours = (dayId, hours) => {
+  const setDayFlexible = (dayId, isFlexible) => {
+    setScheduleDays((prev) =>
+      prev.map((d) => (d.id === dayId ? { ...d, isFlexible } : d))
+    );
+  };
+
+  const setDayHours = (dayId, rawHours) => {
+    const hours = Math.max(1, Math.min(24, parseInt(rawHours, 10) || 8));
     setScheduleDays((prev) =>
       prev.map((d) => {
         if (d.id !== dayId) return d;
@@ -637,6 +644,8 @@ export default function ReservationPage() {
       })
     );
   };
+
+  const setDayPresetHours = setDayHours;
 
   const updateDayStartTime = (dayId, newStart) => {
     setScheduleDays((prev) =>
@@ -1680,8 +1689,8 @@ export default function ReservationPage() {
                       )}
                     </div>
 
-                    {/* Date and start time row */}
-                    <div className={styles.dayDateTimeRow}>
+                    {/* Date and departure time section */}
+                    <div className={styles.dayDateTimeBlock}>
                       <div className={styles.dayDateCol}>
                         <label className={styles.miniFieldLabel}>{t('tunnel.day_date', 'Date')} {index + 1}</label>
                         <input
@@ -1694,54 +1703,137 @@ export default function ReservationPage() {
                           className={styles.nativeDateClean}
                         />
                       </div>
+
+                      {/* Choice between exact time and flexible / free hours */}
                       <div className={styles.dayTimeCol}>
-                        <div className={styles.timeLabelRow}>
-                          <label className={styles.miniFieldLabel}>{t('tunnel.departure_time', 'Heure de départ')}</label>
+                        <label className={styles.miniFieldLabel}>{t('tunnel.departure_time', 'Horaire de prise en charge')}</label>
+                        <div className={styles.timeModeSegmented}>
                           <button
                             type="button"
-                            onClick={() => toggleDayFlexible(d.id)}
-                            className={`${styles.flexibleToggleBtn} ${d.isFlexible ? styles.flexibleToggleActive : ''}`}
-                            title="Indiquer départ libre si vous souhaitez définir l'horaire plus tard"
+                            onClick={() => setDayFlexible(d.id, false)}
+                            className={`${styles.timeModeBtn} ${!d.isFlexible ? styles.timeModeBtnActive : ''}`}
                           >
-                            {d.isFlexible ? t('tunnel.flexible_active', '✓ Départ libre') : t('tunnel.set_flexible', 'Départ libre ?')}
+                            <Clock size={13} />
+                            <span>{t('tunnel.exact_time', 'Heure précise')}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDayFlexible(d.id, true)}
+                            className={`${styles.timeModeBtn} ${d.isFlexible ? styles.timeModeBtnActive : ''}`}
+                          >
+                            <Sparkles size={13} />
+                            <span>{t('tunnel.flexible_hours', 'Heures libres')}</span>
                           </button>
                         </div>
+
                         {d.isFlexible ? (
-                          <div
-                            className={styles.flexibleTimePlaceholder}
-                            onClick={() => toggleDayFlexible(d.id)}
-                            role="button"
-                            tabIndex={0}
-                          >
-                            <span>{t('tunnel.flexible_notice', 'Horaires libres — à convenir')}</span>
+                          <div className={styles.flexibleActiveBanner}>
+                            <Sparkles size={15} className={styles.flexibleActiveIcon} />
+                            <div>
+                              <strong>{t('tunnel.flexible_title', 'Horaires 100% libres & flexibles')}</strong>
+                              <p>{t('tunnel.flexible_banner_desc', 'Votre chauffeur reste réservé et s’adapte à votre planning. Vous conviendrez de l’heure exacte selon vos besoins.')}</p>
+                            </div>
                           </div>
                         ) : (
-                          <input
-                            type="time"
-                            value={d.startTime || '09:00'}
-                            onChange={(e) => updateDayStartTime(d.id, e.target.value)}
-                            className={styles.nativeTimeClean}
-                          />
+                          <div className={styles.exactTimePickerRow}>
+                            <span className={styles.exactTimeLabel}>{t('tunnel.start_at', 'Départ souhaité à :')}</span>
+                            <input
+                              type="time"
+                              value={d.startTime || '09:00'}
+                              onChange={(e) => updateDayStartTime(d.id, e.target.value)}
+                              className={styles.nativeTimeClean}
+                            />
+                          </div>
                         )}
                       </div>
                     </div>
 
-                    {/* Hours pill selector */}
+                    {/* Hours duration: scrollable dial, slider & full 1h-24h strip */}
                     <div className={styles.dayHoursRow}>
-                      <label className={styles.miniFieldLabel}>Durée de la journée</label>
-                      <div className={styles.durationScrollStrip}>
-                        {[3, 4, 6, 8, 10, 12, 24].map((h) => (
-                          <button
-                            key={h}
-                            type="button"
-                            onClick={() => setDayPresetHours(d.id, h)}
-                            className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
-                          >
-                            <span className={styles.durationPillNumber}>{h}h</span>
-                            {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
-                            {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
-                          </button>
-                        ))}
+                      <div className={styles.dayHoursHeader}>
+                        <label className={styles.miniFieldLabel}>{t('tunnel.hours_wanted', 'Nombre d’heures souhaité')}</label>
+                        <span className={styles.dayHoursHint}>{t('tunnel.hours_range_hint', 'De 1h à 24h au choix')}</span>
+                      </div>
+
+                      {/* Large scrollable dial counter with - and + */}
+                      <div className={styles.hourDialControl}>
+                        <button
+                          type="button"
+                          onClick={() => setDayHours(d.id, Math.max(1, (d.hours || 8) - 1))}
+                          disabled={(d.hours || 8) <= 1}
+                          className={styles.hourDialStepBtn}
+                          aria-label="Diminuer d'une heure"
+                        >
+                          -
+                        </button>
+
+                        <div
+                          className={styles.hourDialValueDisplay}
+                          onWheel={(e) => {
+                            if (e.deltaY < 0) {
+                              setDayHours(d.id, Math.min(24, (d.hours || 8) + 1));
+                            } else if (e.deltaY > 0) {
+                              setDayHours(d.id, Math.max(1, (d.hours || 8) - 1));
+                            }
+                          }}
+                          title="Faites défiler à la molette ou cliquez sur + / - pour ajuster"
+                        >
+                          <span className={styles.hourDialNumber}>{d.hours || 8}</span>
+                          <span className={styles.hourDialUnit}>{(d.hours || 8) > 1 ? 'heures' : 'heure'}</span>
+                          {(d.hours || 8) === 8 && <span className={styles.hourDialTag}>1 jour</span>}
+                          {(d.hours || 8) === 4 && <span className={styles.hourDialTag}>1/2 jour</span>}
+                          {(d.hours || 8) === 24 && <span className={styles.hourDialTag}>24h continue</span>}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setDayHours(d.id, Math.min(24, (d.hours || 8) + 1))}
+                          disabled={(d.hours || 8) >= 24}
+                          className={styles.hourDialStepBtn}
+                          aria-label="Augmenter d'une heure"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      {/* Smooth luxury range slider */}
+                      <div className={styles.hourSliderWrapper}>
+                        <input
+                          type="range"
+                          min="1"
+                          max="24"
+                          step="1"
+                          value={d.hours || 8}
+                          onChange={(e) => setDayHours(d.id, parseInt(e.target.value, 10))}
+                          className={styles.hourLuxuryRange}
+                          aria-label="Sélectionner la durée"
+                        />
+                        <div className={styles.hourSliderScale}>
+                          <span>1h</span>
+                          <span>4h</span>
+                          <span>8h</span>
+                          <span>12h</span>
+                          <span>16h</span>
+                          <span>24h</span>
+                        </div>
+                      </div>
+
+                      {/* Horizontal scrollable track of all 24 numbers */}
+                      <div className={styles.durationScrollWrapper}>
+                        <div className={styles.durationScrollStrip}>
+                          {Array.from({ length: 24 }, (_, i) => i + 1).map((h) => (
+                            <button
+                              key={h}
+                              type="button"
+                              onClick={() => setDayHours(d.id, h)}
+                              className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
+                            >
+                              <span className={styles.durationPillNumber}>{h}h</span>
+                              {h === 8 && <span className={styles.durationPillTag}>1 jour</span>}
+                              {h === 4 && <span className={styles.durationPillTag}>1/2 j</span>}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2147,11 +2239,11 @@ export default function ReservationPage() {
                               <div className={styles.daySubBlock}>
                                 <div className={styles.durationScrollWrapper}>
                                   <div className={styles.durationScrollStrip}>
-                                    {[2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24].map((h) => (
+                                    {Array.from({ length: 24 }, (_, i) => i + 1).map((h) => (
                                       <button
                                         key={h}
                                         type="button"
-                                        onClick={() => setDayPresetHours(d.id, h)}
+                                        onClick={() => setDayHours(d.id, h)}
                                         className={`${styles.durationScrollPill} ${(d.hours || 8) === h ? styles.durationPillActive : ''}`}
                                       >
                                         <span className={styles.durationPillNumber}>{h}h</span>

@@ -1003,6 +1003,13 @@
     "address_to_confirm": "Dirección a confirmar por nuestro equipo",
     "airport_terminal_flight_label": "Terminal de llegada o Número de vuelo",
     "airport_flight_placeholder": "Ej: Terminal 2E, Vuelo AF1234, Salón VIP...",
-    "flight_terminal_title": "Terminal / Vuelo de seguimiento:"
+    "flight_terminal_title": "Terminal / Vuelo de seguimiento:",
+    "exact_time": "Hora fija",
+    "flexible_hours": "Horas libres",
+    "flexible_title": "Horarios 100% libres y flexibles",
+    "flexible_banner_desc": "Su chófer permanece a su disposición y se adapta a su agenda. Acordará la hora exacta según sus necesidades.",
+    "start_at": "Salida deseada a:",
+    "hours_wanted": "Duración deseada",
+    "hours_range_hint": "De 1h a 24h a su elección"
   }
 }
