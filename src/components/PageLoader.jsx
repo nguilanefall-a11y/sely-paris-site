@@ -3,23 +3,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./PageLoader.module.css";
 
 /**
- * PageLoader – luxury full-screen intro overlay based on Aureus architecture.
+ * PageLoader – Luxury full-screen intro overlay
  * Features:
- * - Haute couture draped fabric backdrop
+ * - High-resolution private jet & VIP tarmac sunset backdrop
  * - Monogram "S" with subtle pulse
  * - Brand wordmark "SELY PARIS"
- * - Refined 1px progress indicator ("un petit truc qui charge")
- * - 0.7s smooth upward curtain slide-out
+ * - GPU-accelerated 1px progress line (0 to 100% smoothly)
+ * - Ultra-smooth haute-couture curtain lift transition (0.85s)
+ * - Zero mobile lag, locked scroll during display
  */
 export default function PageLoader() {
   const [isLoading, setIsLoading] = useState(() => {
-    // Only show once per session and never on admin routes
-    if (typeof window !== 'undefined') {
+    // Never show on backoffice / admin routes
+    if (typeof window !== "undefined") {
       const p = window.location.pathname;
-      if (p.startsWith('/admin') || p.startsWith('/sely-office')) {
-        return false;
-      }
-      if (sessionStorage.getItem('sely_loader_seen')) {
+      if (p.startsWith("/admin") || p.startsWith("/sely-office")) {
         return false;
       }
     }
@@ -28,13 +26,22 @@ export default function PageLoader() {
 
   useEffect(() => {
     if (!isLoading) return;
+
+    // Lock page scrolling during preloader to eliminate mobile bounce/jank
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // Guaranteed visible duration: 2.2 seconds
+    // Progress bar animates smoothly from 0% to 100% over 1.8s,
+    // stays full for 400ms, then initiates the silky curtain lift.
     const timer = setTimeout(() => {
       setIsLoading(false);
-      try {
-        sessionStorage.setItem('sely_loader_seen', '1');
-      } catch (e) {}
-    }, 900);
-    return () => clearTimeout(timer);
+    }, 2200);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [isLoading]);
 
   return (
@@ -42,24 +49,30 @@ export default function PageLoader() {
       {isLoading && (
         <motion.div
           className={styles.overlay}
-          onClick={() => {
-            setIsLoading(false);
-            try { sessionStorage.setItem('sely_loader_seen', '1'); } catch (e) {}
-          }}
-          initial={{ y: 0 }}
-          exit={{ y: "-100%", pointerEvents: "none" }}
-          transition={{
-            duration: 0.45,
-            ease: [0.76, 0, 0.24, 1], /* cubic-bezier – smooth luxury curtain slide-up */
+          onClick={() => setIsLoading(false)}
+          initial={{ y: 0, opacity: 1 }}
+          exit={{
+            y: "-100%",
+            transition: {
+              duration: 0.85,
+              ease: [0.76, 0, 0.24, 1],
+            },
           }}
           key="page-loader"
         >
-          {/* Background image: Haute couture draped white fabric */}
+          {/* Background image: Private jet & luxury limousine on tarmac at sunset */}
           <div className={styles.bgImage} />
           <div className={styles.backdropVeil} />
 
           {/* Centered Brand & Loader Content */}
-          <div className={styles.contentContainer}>
+          <motion.div
+            className={styles.contentContainer}
+            exit={{
+              opacity: 0,
+              y: -24,
+              transition: { duration: 0.45, ease: "easeOut" },
+            }}
+          >
             {/* Monogram */}
             <span className={styles.logoMark}>S</span>
 
@@ -68,12 +81,20 @@ export default function PageLoader() {
 
             {/* Delicate 1px progress track */}
             <div className={styles.progressTrack}>
-              <div className={styles.progressFill} />
+              <motion.div
+                className={styles.progressFill}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: 1.8,
+                  ease: [0.22, 1, 0.36, 1], // Smooth progressive deceleration to 100%
+                }}
+              />
             </div>
 
             {/* Subtle Luxury Status Text */}
             <span className={styles.loadingText}>HAUTE COUTURE MOBILITY</span>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

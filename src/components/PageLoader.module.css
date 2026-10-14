@@ -1,5 +1,6 @@
 /* ============================================================
    PageLoader – Luxury Tarmac Sunset Preloader (Jet & Chauffeur)
+   Haute Couture Mobility Aesthetic & High Performance Mobile
    ============================================================ */
 
 /* ---- Keyframes ---- */
@@ -7,7 +8,7 @@
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.85;
+    opacity: 0.88;
     transform: scale(0.98);
   }
   50% {
@@ -16,19 +17,10 @@
   }
 }
 
-@keyframes progressFill {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
 @keyframes fadeInSoft {
   0% {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   100% {
     opacity: 1;
@@ -38,10 +30,10 @@
 
 @keyframes subtleSlowZoom {
   0% {
-    transform: scale(1);
+    transform: scale(1) translate3d(0, 0, 0);
   }
   100% {
-    transform: scale(1.04);
+    transform: scale(1.05) translate3d(0, 0, 0);
   }
 }
 
@@ -50,6 +42,9 @@
 .overlay {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   z-index: 99999;
   background: #08080a;
   display: flex;
@@ -57,7 +52,16 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
   will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Background image: Private jet & luxury limousine on tarmac at sunset */
@@ -66,23 +70,40 @@
   inset: 0;
   background-image: url('/hero-jet-tarmac.jpg');
   background-size: cover;
-  background-position: center 60%;
-  animation: subtleSlowZoom 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  filter: brightness(0.85) contrast(1.08);
+  background-position: center 55%;
+  animation: subtleSlowZoom 3.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  filter: brightness(0.88) contrast(1.05);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-/* Refined cinematic vignette veil to guarantee crisp legibility while showing the jet */
+@media (max-width: 768px) {
+  .bgImage {
+    /* Optimally centers both the jet and the VIP boarding carpet/stairs on mobile portrait */
+    background-position: 45% center;
+  }
+}
+
+/* High-performance cinematic vignette veil – 0 lag on mobile, no heavy backdrop-filter */
 .backdropVeil {
   position: absolute;
   inset: 0;
   background: radial-gradient(
     circle at center,
-    rgba(8, 8, 10, 0.32) 0%,
-    rgba(8, 8, 10, 0.55) 60%,
-    rgba(8, 8, 10, 0.85) 100%
+    rgba(8, 8, 10, 0.28) 0%,
+    rgba(8, 8, 10, 0.55) 55%,
+    rgba(8, 8, 10, 0.88) 100%
+  ),
+  linear-gradient(
+    to bottom,
+    rgba(8, 8, 10, 0.45) 0%,
+    transparent 35%,
+    transparent 65%,
+    rgba(8, 8, 10, 0.6) 100%
   );
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
+  pointer-events: none;
 }
 
 .contentContainer {
@@ -93,6 +114,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  pointer-events: none;
+  padding: 0 20px;
 }
 
 /* Luxury Monogram */
@@ -101,12 +124,13 @@
   font-size: 3.4rem;
   font-weight: 400;
   letter-spacing: 0.35em;
+  padding-left: 0.35em; /* Optical centering compensation for letter-spacing */
   color: #ffffff;
   user-select: none;
   line-height: 1;
   margin-bottom: 16px;
-  animation: pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  animation: pulse 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
 }
 
 /* Brand Wordmark */
@@ -115,35 +139,38 @@
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.48em;
+  padding-left: 0.48em; /* Optical centering compensation */
   text-transform: uppercase;
   color: #ffffff;
   opacity: 0;
-  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards;
   margin-bottom: 24px;
   user-select: none;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.9);
 }
 
 /* Delicate 1px progress track */
 .progressTrack {
-  width: 140px;
+  width: 150px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 0px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  margin-bottom: 18px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 .progressFill {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   height: 100%;
   background: #ffffff;
-  animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  transform-origin: left center;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
+  will-change: transform;
 }
 
 /* Micro luxury caption */
@@ -151,10 +178,11 @@
   font-family: var(--font-sans);
   font-size: 0.62rem;
   font-weight: 400;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
+  padding-left: 0.32em; /* Optical centering compensation */
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.72);
   opacity: 0;
-  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  animation: fadeInSoft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
