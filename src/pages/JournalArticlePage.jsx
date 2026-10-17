@@ -16,6 +16,41 @@ import {
 } from 'lucide-react';
 import styles from './JournalArticlePage.module.css';
 
+function renderFormattedText(text) {
+  if (!text || typeof text !== 'string') return text;
+
+  const regex = /(\[.*?\]\(https?:\/\/[^\s)]+\)|\*\*.*?\*\*)/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, index) => {
+    if (!part) return null;
+    const linkMatch = part.match(/^\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/);
+    if (linkMatch) {
+      const [, anchor, url] = linkMatch;
+      return (
+        <a
+          key={index}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.inlineLink}
+        >
+          {anchor}
+        </a>
+      );
+    }
+    const boldMatch = part.match(/^\*\*(.*?)\*\*$/);
+    if (boldMatch) {
+      return (
+        <strong key={index} className={styles.inlineBold}>
+          {boldMatch[1]}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
+
 export default function JournalArticlePage() {
   const { slug } = useParams();
   const location = useLocation();
@@ -269,10 +304,10 @@ export default function JournalArticlePage() {
                 {section.h3 && <h3 className={styles.sectionH3}>{section.h3}</h3>}
 
                 {/* Single content or array of paragraphs */}
-                {section.content && <p className={styles.paragraph}>{section.content}</p>}
+                {section.content && <p className={styles.paragraph}>{renderFormattedText(section.content)}</p>}
                 {section.paragraphs &&
                   section.paragraphs.map((p, pIdx) => (
-                    <p key={pIdx} className={styles.paragraph}>{p}</p>
+                    <p key={pIdx} className={styles.paragraph}>{renderFormattedText(p)}</p>
                   ))}
 
                 {/* Callout box / Pro-Tip */}
@@ -282,7 +317,7 @@ export default function JournalArticlePage() {
                       <span className={styles.calloutBadge}>{section.callout.badge || 'Conseil SELY'}</span>
                       {section.callout.title && <h4 className={styles.calloutTitle}>{section.callout.title}</h4>}
                     </div>
-                    <p className={styles.calloutText}>{section.callout.text}</p>
+                    <p className={styles.calloutText}>{renderFormattedText(section.callout.text)}</p>
                   </div>
                 )}
 
@@ -291,7 +326,7 @@ export default function JournalArticlePage() {
                     {section.bulletPoints.map((pt, pIdx) => (
                       <li key={pIdx} className={styles.bulletItem}>
                         <CheckCircle2 size={15} className={styles.bulletIcon} />
-                        <span>{pt}</span>
+                        <span>{renderFormattedText(pt)}</span>
                       </li>
                     ))}
                   </ul>
@@ -378,10 +413,10 @@ export default function JournalArticlePage() {
                 {section.h2 && <h2 className={styles.sectionH2}>{section.h2}</h2>}
                 {section.h3 && <h3 className={styles.sectionH3}>{section.h3}</h3>}
 
-                {section.content && <p className={styles.paragraph}>{section.content}</p>}
+                {section.content && <p className={styles.paragraph}>{renderFormattedText(section.content)}</p>}
                 {section.paragraphs &&
                   section.paragraphs.map((p, pIdx) => (
-                    <p key={pIdx} className={styles.paragraph}>{p}</p>
+                    <p key={pIdx} className={styles.paragraph}>{renderFormattedText(p)}</p>
                   ))}
 
                 {section.callout && (
@@ -390,7 +425,7 @@ export default function JournalArticlePage() {
                       <span className={styles.calloutBadge}>{section.callout.badge || 'Conseil SELY'}</span>
                       {section.callout.title && <h4 className={styles.calloutTitle}>{section.callout.title}</h4>}
                     </div>
-                    <p className={styles.calloutText}>{section.callout.text}</p>
+                    <p className={styles.calloutText}>{renderFormattedText(section.callout.text)}</p>
                   </div>
                 )}
 
@@ -399,7 +434,7 @@ export default function JournalArticlePage() {
                     {section.bulletPoints.map((pt, pIdx) => (
                       <li key={pIdx} className={styles.bulletItem}>
                         <CheckCircle2 size={15} className={styles.bulletIcon} />
-                        <span>{pt}</span>
+                        <span>{renderFormattedText(pt)}</span>
                       </li>
                     ))}
                   </ul>

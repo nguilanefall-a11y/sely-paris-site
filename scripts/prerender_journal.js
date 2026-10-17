@@ -74,6 +74,24 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
+function formatParagraphHtml(str) {
+  if (!str) return '';
+  return str
+    .split(/(\[.*?\]\(https?:\/\/[^\s)]+\)|\*\*.*?\*\*)/g)
+    .map((part) => {
+      const linkMatch = part.match(/^\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/);
+      if (linkMatch) {
+        return `<a href="${escapeHtml(linkMatch[2])}" target="_blank" rel="noopener noreferrer">${escapeHtml(linkMatch[1])}</a>`;
+      }
+      const boldMatch = part.match(/^\*\*(.*?)\*\*$/);
+      if (boldMatch) {
+        return `<strong>${escapeHtml(boldMatch[1])}</strong>`;
+      }
+      return escapeHtml(part);
+    })
+    .join('');
+}
+
 function cleanBaseTemplate(template) {
   return template
     .replace(/<title>[\s\S]*?<\/title>/i, '')
@@ -201,24 +219,24 @@ for (const article of JOURNAL_ARTICLES) {
         bodyHtml += `<section class="prerender-section">`;
         if (sec.h2) bodyHtml += `<h2>${escapeHtml(sec.h2)}</h2>`;
         if (sec.h3) bodyHtml += `<h3>${escapeHtml(sec.h3)}</h3>`;
-        if (sec.content) bodyHtml += `<p>${escapeHtml(sec.content)}</p>`;
+        if (sec.content) bodyHtml += `<p>${formatParagraphHtml(sec.content)}</p>`;
         if (sec.paragraphs) {
           for (const p of sec.paragraphs) {
-            bodyHtml += `<p>${escapeHtml(p)}</p>`;
+            bodyHtml += `<p>${formatParagraphHtml(p)}</p>`;
           }
         }
         if (sec.callout) {
           bodyHtml += `
             <div class="prerender-callout">
               <h4>${escapeHtml(sec.callout.title || 'Conseil SELY Privé')}</h4>
-              <p>${escapeHtml(sec.callout.text)}</p>
+              <p>${formatParagraphHtml(sec.callout.text)}</p>
             </div>
           `;
         }
         if (sec.bulletPoints && sec.bulletPoints.length > 0) {
           bodyHtml += `<ul>`;
           for (const bp of sec.bulletPoints) {
-            bodyHtml += `<li>${escapeHtml(bp)}</li>`;
+            bodyHtml += `<li>${formatParagraphHtml(bp)}</li>`;
           }
           bodyHtml += `</ul>`;
         }
@@ -274,24 +292,24 @@ for (const article of JOURNAL_ARTICLES) {
         bodyHtml += `<section class="prerender-section">`;
         if (sec.h2) bodyHtml += `<h2>${escapeHtml(sec.h2)}</h2>`;
         if (sec.h3) bodyHtml += `<h3>${escapeHtml(sec.h3)}</h3>`;
-        if (sec.content) bodyHtml += `<p>${escapeHtml(sec.content)}</p>`;
+        if (sec.content) bodyHtml += `<p>${formatParagraphHtml(sec.content)}</p>`;
         if (sec.paragraphs) {
           for (const p of sec.paragraphs) {
-            bodyHtml += `<p>${escapeHtml(p)}</p>`;
+            bodyHtml += `<p>${formatParagraphHtml(p)}</p>`;
           }
         }
         if (sec.callout) {
           bodyHtml += `
             <div class="prerender-callout">
               <h4>${escapeHtml(sec.callout.title || 'Conseil SELY Privé')}</h4>
-              <p>${escapeHtml(sec.callout.text)}</p>
+              <p>${formatParagraphHtml(sec.callout.text)}</p>
             </div>
           `;
         }
         if (sec.bulletPoints && sec.bulletPoints.length > 0) {
           bodyHtml += `<ul>`;
           for (const bp of sec.bulletPoints) {
-            bodyHtml += `<li>${escapeHtml(bp)}</li>`;
+            bodyHtml += `<li>${formatParagraphHtml(bp)}</li>`;
           }
           bodyHtml += `</ul>`;
         }

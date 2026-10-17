@@ -4,6 +4,7 @@ import { ARTICLES_AEROPORTS } from './articlesAeroports.js';
 import { ARTICLES_VEHICULES_BAGAGES } from './articlesVehiculesBagages.js';
 import { ARTICLES_FASHION_WEEK_EVENTS } from './articlesFashionWeekEvents.js';
 import { ARTICLES_BUSINESS_INTERNATIONAL } from './articlesBusinessInternational.js';
+import { ARTICLES_CONCIERGERIE } from './articlesConciergerie.js';
 
 // Aggregate all modular articles into a single sorted registry
 export const JOURNAL_ARTICLES = [
@@ -13,6 +14,7 @@ export const JOURNAL_ARTICLES = [
   ...ARTICLES_VEHICULES_BAGAGES,
   ...ARTICLES_FASHION_WEEK_EVENTS,
   ...ARTICLES_BUSINESS_INTERNATIONAL,
+  ...ARTICLES_CONCIERGERIE,
 ].sort((a, b) => a.id - b.id);
 
 // Helper to look up an article by any slug across all 4 languages
