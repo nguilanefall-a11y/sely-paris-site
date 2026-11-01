@@ -1,0 +1,914 @@
+/* ── SELY PRIVÉ · CONTACT & CONCIERGERIE PRIVÉE ── */
+/* Quiet Luxury, lignes architecturales pures et conversion Google Ads */
+
+.page {
+  position: relative;
+  background-color: #050507;
+  color: #ededed;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+}
+
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── 1. Hero Section ── */
+.heroSection {
+  position: relative;
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  padding: 8.5rem 2rem 5rem;
+  background-color: #050507;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.heroBackdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  filter: contrast(1.08) brightness(0.55);
+  transform: scale(1.02);
+  transition: transform 10s ease-out;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(5, 5, 7, 0.45) 0%, rgba(5, 5, 7, 0.85) 65%, #050507 100%),
+              linear-gradient(180deg, rgba(5, 5, 7, 0.3) 0%, rgba(5, 5, 7, 0.95) 100%);
+  z-index: 2;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 3;
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Institutional Eyebrow Tag */
+.eyebrowTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c5a059;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.35);
+}
+
+.livePulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+  display: inline-block;
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 1.5rem;
+}
+
+.heroTitleItalic {
+  font-style: italic;
+  font-weight: 300;
+  color: #dfb86e;
+  display: block;
+  margin-top: 0.4rem;
+}
+
+.heroSubtitle {
+  font-size: clamp(0.98rem, 1.5vw, 1.15rem);
+  line-height: 1.75;
+  color: #d4d4d8;
+  max-width: 740px;
+  margin: 0 auto 3rem;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+/* ── Primary Action CTAs in Hero (Google Ads focus) ── */
+.heroActionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 340px));
+  gap: 1.25rem;
+  justify-content: center;
+  margin: 0 auto 2rem;
+}
+
+/* Call Button */
+.heroCallBtn {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.1rem 1.6rem;
+  background: #ffffff;
+  color: #050507;
+  border: 1px solid #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.28s ease;
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.12);
+  text-align: left;
+}
+
+.heroCallBtn:hover {
+  background: #050507;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
+}
+
+.heroCallBtn:hover .ctaIconCircle {
+  background: #ffffff;
+  color: #050507;
+}
+
+.ctaIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #050507;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.28s ease;
+}
+
+/* WhatsApp Button */
+.heroWhatsAppBtn {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.1rem 1.6rem;
+  background: rgba(37, 211, 102, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(37, 211, 102, 0.45);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.28s ease;
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.12);
+  text-align: left;
+}
+
+.heroWhatsAppBtn:hover {
+  background: #25d366;
+  color: #050507;
+  border-color: #25d366;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(37, 211, 102, 0.35);
+}
+
+.heroWhatsAppBtn:hover .ctaIconCircleWhatsApp {
+  background: #050507;
+  color: #25d366;
+}
+
+.ctaIconCircleWhatsApp {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.28s ease;
+}
+
+.ctaTextCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.ctaSubLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-bottom: 0.2rem;
+}
+
+.ctaMainLabel {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.heroTrustIndicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  font-size: 0.76rem;
+  color: #a1a1aa;
+  letter-spacing: 0.06em;
+}
+
+.trustIndicatorItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trustIndicatorCheck {
+  color: #c5a059;
+}
+
+/* ── 2. The Two Core Booking & Quote Channels ── */
+.bookingChannelsSection {
+  padding: 6.5rem 2rem;
+  background: #070709;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sectionHeader {
+  max-width: 820px;
+  margin: 0 auto 4.5rem;
+  text-align: center;
+}
+
+.sectionIndex {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c5a059;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0 0 1.25rem;
+}
+
+.sectionDesc {
+  color: #a1a1aa;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  font-weight: 300;
+  margin: 0;
+}
+
+.bookingCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.bookingCard {
+  background: #0a0a0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem 2.75rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+.bookingCard:hover {
+  border-color: rgba(197, 160, 89, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.bookingCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.bookingCardTag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #c5a059;
+  padding: 0.35rem 0.85rem;
+  background: rgba(197, 160, 89, 0.1);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+}
+
+.bookingCardIcon {
+  color: #dfb86e;
+}
+
+.bookingCard h3 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+.bookingCard p {
+  color: #a1a1aa;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  font-weight: 300;
+  margin: 0 0 2rem;
+  flex: 1;
+}
+
+.bookingCardFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.5rem;
+}
+
+.bookingCardFeatures li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.84rem;
+  color: #d4d4d8;
+  letter-spacing: 0.02em;
+}
+
+.featureBullet {
+  color: #c5a059;
+  font-weight: 300;
+}
+
+.bookingCardBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 1.15rem 2rem;
+  background: #ffffff;
+  color: #050507;
+  border: 1px solid #ffffff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.bookingCardBtnPrimary:hover {
+  background: transparent;
+  color: #ffffff;
+}
+
+.bookingCardBtnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 1.15rem 2rem;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.bookingCardBtnSecondary:hover {
+  background: #ffffff;
+  color: #050507;
+  border-color: #ffffff;
+}
+
+/* ── 3. Direct Contact Directory & Channels ── */
+.directorySection {
+  padding: 6.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.directoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.directoryCard {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.directoryCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.directoryIcon {
+  color: #c5a059;
+}
+
+.directoryCardTag {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #71717a;
+  font-weight: 600;
+}
+
+.directoryCardValue {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: #ffffff;
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.directoryCardDesc {
+  color: #a1a1aa;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  font-weight: 300;
+  margin: 0 0 1.5rem;
+  flex: 1;
+}
+
+.directoryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #dfb86e;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.directoryLink:hover {
+  color: #ffffff;
+  gap: 0.75rem;
+}
+
+/* ── 4. Express Devis & Message Form (Underline Architectural Design) ── */
+.formSection {
+  padding: 7rem 2rem;
+  background: #060608;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.formContainer {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.formHeader h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  letter-spacing: -0.015em;
+}
+
+.formHeader p {
+  color: #a1a1aa;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.expressForm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem 2.5rem;
+}
+
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fieldWrapperFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fieldLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+.minimalInput,
+.minimalSelect,
+.minimalTextarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.minimalSelect {
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.minimalSelect option {
+  background: #111114;
+  color: #ffffff;
+}
+
+.minimalTextarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.minimalInput:focus,
+.minimalSelect:focus,
+.minimalTextarea:focus {
+  border-bottom-color: #dfb86e;
+}
+
+.formActionRow {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.15rem 3.5rem;
+  background: #ffffff;
+  color: #050507;
+  border: 1px solid #ffffff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+  background: transparent;
+  color: #ffffff;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formSecurityNotice {
+  font-size: 0.74rem;
+  color: #71717a;
+  letter-spacing: 0.05em;
+  text-align: center;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Success Message */
+.successMessageCard {
+  text-align: center;
+  padding: 4.5rem 2rem;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  background: rgba(197, 160, 89, 0.02);
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.successMessageCard h3 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 1rem;
+}
+
+.successMessageCard p {
+  color: #a1a1aa;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+}
+
+.successActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.whatsappInstantBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #25d366;
+  color: #050507;
+  border: 1px solid #25d366;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.whatsappInstantBtn:hover {
+  background: transparent;
+  color: #25d366;
+}
+
+.resetBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.resetBtn:hover {
+  background: #ffffff;
+  color: #050507;
+}
+
+/* ── 5. Prestige Guarantees Strip ── */
+.guaranteesSection {
+  padding: 6rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.guaranteesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+}
+
+.guaranteeItem {
+  border-top: 1px solid rgba(197, 160, 89, 0.3);
+  padding-top: 1.5rem;
+}
+
+.guaranteeIndex {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: #c5a059;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.guaranteeItem h4 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.guaranteeItem p {
+  color: #a1a1aa;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  font-weight: 300;
+  margin: 0;
+}
+
+/* ── 6. Mobile Sticky Rapid Action Bar ── */
+.mobileStickyBar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(5, 5, 7, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
+
+.mobileStickyActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.mobileStickyCallBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  color: #050507;
+  padding: 0.85rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.mobileStickyWaBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #25d366;
+  color: #050507;
+  padding: 0.85rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.mobileStickyBookBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.85rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+/* ── Responsive Queries ── */
+@media (max-width: 1024px) {
+  .heroActionsGrid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .bookingCardsGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .directoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .guaranteesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 7rem 1.25rem 4rem;
+    min-height: auto;
+  }
+
+  .bookingChannelsSection,
+  .directorySection,
+  .formSection,
+  .guaranteesSection {
+    padding: 4.5rem 1.25rem;
+  }
+
+  .expressForm {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .directoryGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .guaranteesGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .bookingCard {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .mobileStickyBar {
+    display: block;
+  }
+
+  .page {
+    padding-bottom: 75px;
+  }
+}

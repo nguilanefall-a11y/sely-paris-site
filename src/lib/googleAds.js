@@ -49,3 +49,53 @@ export function trackQuoteConversion(details = {}) {
     console.warn('[Google Ads] Error sending conversion event:', error);
   }
 }
+
+/**
+ * Tracks a direct phone call click (Google Ads / Analytics lead signal)
+ */
+export function trackPhoneCall() {
+  try {
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'phone_call_click', {
+          event_category: 'Contact',
+          event_label: '+33 1 84 80 56 76'
+        });
+      } else {
+        window.dataLayer.push({
+          event: 'phone_call_click',
+          phone_number: '+33 1 84 80 56 76'
+        });
+      }
+      console.log('[Google Ads] Phone call event tracked');
+    }
+  } catch (error) {
+    console.warn('[Google Ads] Error tracking phone call:', error);
+  }
+}
+
+/**
+ * Tracks a WhatsApp engagement click (Google Ads / Analytics lead signal)
+ */
+export function trackWhatsAppClick() {
+  try {
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'whatsapp_click', {
+          event_category: 'Contact',
+          event_label: 'WhatsApp SELY Privé'
+        });
+      } else {
+        window.dataLayer.push({
+          event: 'whatsapp_click',
+          channel: 'WhatsApp'
+        });
+      }
+      console.log('[Google Ads] WhatsApp click event tracked');
+    }
+  } catch (error) {
+    console.warn('[Google Ads] Error tracking WhatsApp click:', error);
+  }
+}

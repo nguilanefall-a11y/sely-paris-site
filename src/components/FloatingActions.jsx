@@ -27,11 +27,12 @@ export default function FloatingActions() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Hide on booking tunnel and specific pages to avoid obstructing the form buttons
+  // Hide on booking tunnel, contact page and specific pages to avoid obstructing buttons
   const isTunnelPage =
     location.pathname.includes('/reserver') ||
     location.pathname.includes('/demande-specifique') ||
-    location.pathname.includes('/reservation-succes');
+    location.pathname.includes('/reservation-succes') ||
+    location.pathname.includes('/contact');
 
   if (isTunnelPage) return null;
   if (isHome && !scrolled) return null;
