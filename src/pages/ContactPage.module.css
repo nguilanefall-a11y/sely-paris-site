@@ -1,33 +1,17 @@
-/* ── SELY PRIVÉ · CONTACT & CONCIERGERIE PRIVÉE ── */
-/* Architecture épurée, lignes raffinées et quiet luxury */
+/* ── SELY PRIVÉ · PAGE CONTACT SIMPLE & ÉPURÉE ── */
+/* Tout tient sur un seul écran, pas de défilement infini, lignes sobres et chics */
 
 .page {
   position: relative;
-  background-color: #050507;
+  background-color: #070709;
   color: #ededed;
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-}
-
-.container {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  position: relative;
-  z-index: 2;
-}
-
-/* ── 1. Hero Section (Place Vendôme & Direct Action) ── */
-.heroSection {
-  position: relative;
-  min-height: 72vh;
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
-  padding: 8.5rem 2rem 4.5rem;
-  background-color: #050507;
+  justify-content: center;
+  padding: 6.5rem 1.5rem 3rem;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
 }
 
 .heroBackdrop {
@@ -42,157 +26,137 @@
   height: 100%;
   object-fit: cover;
   object-position: center 36%;
-  filter: contrast(1.08) brightness(0.48);
+  filter: contrast(1.05) brightness(0.4);
 }
 
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 32%, rgba(5, 5, 7, 0.35) 0%, rgba(5, 5, 7, 0.85) 70%, #050507 100%),
-              linear-gradient(180deg, rgba(5, 5, 7, 0.2) 0%, rgba(5, 5, 7, 0.95) 100%);
+  background: radial-gradient(circle at 50% 40%, rgba(7, 7, 9, 0.5) 0%, rgba(7, 7, 9, 0.88) 75%, #070709 100%),
+              linear-gradient(180deg, rgba(7, 7, 9, 0.3) 0%, rgba(7, 7, 9, 0.95) 100%);
   z-index: 2;
 }
 
-.heroContent {
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
   position: relative;
   z-index: 3;
-  max-width: 920px;
-  margin: 0 auto;
-  text-align: center;
 }
 
-/* Institutional Eyebrow Tag */
-.eyebrowTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #c5a059;
-  margin-bottom: 1.75rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(197, 160, 89, 0.3);
-}
-
-.livePulseDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.85);
-  display: inline-block;
-}
-
-.heroTitle {
-  font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-weight: 400;
-  line-height: 1.14;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  margin: 0 0 1.25rem;
-}
-
-.heroTitleItalic {
-  font-style: italic;
-  font-weight: 300;
-  color: #dfb86e;
-  display: block;
-  margin-top: 0.35rem;
-}
-
-.heroSubtitle {
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-  line-height: 1.8;
-  color: #a1a1aa;
-  max-width: 680px;
-  margin: 0 auto 2.75rem;
-  font-weight: 300;
-  letter-spacing: 0.01em;
-}
-
-/* ── Primary Action CTAs (Call & WhatsApp) ── */
-.heroActionsGrid {
+/* ── Split Layout 2 Colonnes ── */
+.splitLayout {
   display: grid;
-  grid-template-columns: repeat(2, minmax(280px, 320px));
-  gap: 1.25rem;
-  justify-content: center;
-  margin: 0 auto 2rem;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 3rem;
+  align-items: center;
 }
 
-/* Call Button */
-.heroCallBtn {
+/* ── Colonne Gauche : Contact Direct & Gros Numéro ── */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: #a1a1aa;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+/* LE NUMÉRO EN GROS */
+.bigPhoneCard {
   display: flex;
   align-items: center;
-  gap: 1.15rem;
-  padding: 1.1rem 1.6rem;
+  gap: 1.25rem;
   background: #ffffff;
-  color: #050507;
-  border: 1px solid #ffffff;
+  color: #070709;
+  padding: 1.25rem 1.6rem;
   text-decoration: none;
-  border-radius: 0;
-  transition: all 0.28s ease;
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.08);
-  text-align: left;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.heroCallBtn:hover {
-  background: transparent;
-  color: #ffffff;
+.bigPhoneCard:hover {
   transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(255, 255, 255, 0.15);
 }
 
-.heroCallBtn:hover .ctaIconCircle {
-  background: #ffffff;
-  color: #050507;
-}
-
-.ctaIconCircle {
-  width: 42px;
-  height: 42px;
+.phoneIconCircle {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: #050507;
+  background: #070709;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.28s ease;
 }
 
-/* WhatsApp Button */
-.heroWhatsAppBtn {
+.phoneTextCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.phoneLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #52525b;
+  margin-bottom: 0.2rem;
+}
+
+.phoneNumber {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #070709;
+  line-height: 1.1;
+}
+
+/* LE WHATSAPP */
+.whatsAppCard {
   display: flex;
   align-items: center;
-  gap: 1.15rem;
-  padding: 1.1rem 1.6rem;
-  background: rgba(37, 211, 102, 0.1);
-  color: #ffffff;
+  gap: 1.25rem;
+  background: rgba(37, 211, 102, 0.12);
   border: 1px solid rgba(37, 211, 102, 0.4);
+  color: #ffffff;
+  padding: 1.1rem 1.6rem;
   text-decoration: none;
-  border-radius: 0;
-  transition: all 0.28s ease;
-  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.08);
-  text-align: left;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  transition: all 0.2s ease;
 }
 
-.heroWhatsAppBtn:hover {
+.whatsAppCard:hover {
   background: #25d366;
-  color: #050507;
+  color: #070709;
   border-color: #25d366;
   transform: translateY(-2px);
 }
 
-.heroWhatsAppBtn:hover .ctaIconCircleWhatsApp {
-  background: #050507;
-  color: #25d366;
-}
-
-.ctaIconCircleWhatsApp {
-  width: 42px;
-  height: 42px;
+.whatsAppIconCircle {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #25d366;
   color: #ffffff;
@@ -200,346 +164,320 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.28s ease;
+  transition: all 0.2s ease;
 }
 
-.ctaTextCol {
+.whatsAppCard:hover .whatsAppIconCircle {
+  background: #070709;
+  color: #25d366;
+}
+
+.whatsAppTextCol {
   display: flex;
   flex-direction: column;
 }
 
-.ctaSubLabel {
-  font-size: 0.64rem;
+.whatsAppLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-weight: 600;
-  color: #71717a;
+  color: #4ade80;
   margin-bottom: 0.2rem;
 }
 
-.heroCallBtn:hover .ctaSubLabel {
-  color: #a1a1aa;
+.whatsAppCard:hover .whatsAppLabel {
+  color: #070709;
 }
 
-.heroWhatsAppBtn:hover .ctaSubLabel {
-  color: #050507;
-}
-
-.ctaMainLabel {
+.whatsAppNumber {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
-  letter-spacing: 0.02em;
+  font-size: 1.25rem;
   font-weight: 500;
-  line-height: 1.2;
+  letter-spacing: 0.02em;
 }
 
-/* ── 2. The Two Core Booking & Quote Channels (Refined Lines) ── */
-.bookingChannelsSection {
-  padding: 6rem 2rem;
-  background: #060608;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.sectionHeader {
-  max-width: 720px;
-  margin: 0 auto 4rem;
-  text-align: center;
-}
-
-.sectionIndex {
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #c5a059;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.sectionTitle {
-  font-family: var(--font-serif);
-  font-size: clamp(1.85rem, 3vw, 2.6rem);
-  font-weight: 400;
-  color: #ffffff;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-  margin: 0 0 1rem;
-}
-
-.sectionDesc {
-  color: #a1a1aa;
-  font-size: 0.96rem;
-  line-height: 1.7;
-  font-weight: 300;
-  margin: 0;
-}
-
-.optionsGrid {
+/* Les 2 Boutons de Réservation Rapide */
+.bookingButtonsRow {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
 }
 
-.optionColumn {
-  padding: 3.5rem 3rem;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  transition: background-color 0.3s ease;
-}
-
-.optionColumn:first-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.optionColumn:hover {
-  background: rgba(255, 255, 255, 0.015);
-}
-
-.optionNum {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  color: #c5a059;
-  letter-spacing: 0.1em;
-  margin-bottom: 1.25rem;
-  display: block;
-}
-
-.optionColumn h3 {
-  font-family: var(--font-serif);
-  font-size: 1.55rem;
-  font-weight: 400;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-  margin: 0 0 0.85rem;
-}
-
-.optionColumn p {
-  color: #a1a1aa;
-  font-size: 0.92rem;
-  line-height: 1.7;
-  font-weight: 300;
-  margin: 0 0 2rem;
-  flex: 1;
-}
-
-.optionActionLink {
+.bookingBtnPrimary {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1rem;
+  background: transparent;
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-decoration: none;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 0.95rem 1.6rem;
   cursor: pointer;
-  align-self: flex-start;
+  text-decoration: none;
   transition: all 0.25s ease;
+  border-radius: 2px;
 }
 
-.optionActionLink:hover {
+.bookingBtnPrimary:hover {
   background: #ffffff;
-  color: #050507;
+  color: #070709;
   border-color: #ffffff;
 }
 
-.optionActionLinkPrimary {
+.bookingBtnSecondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  color: #050507;
-  background: #ffffff;
-  border: 1px solid #ffffff;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1rem;
+  background: transparent;
+  color: #dfb86e;
+  border: 1px solid rgba(223, 184, 110, 0.35);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-decoration: none;
-  padding: 0.95rem 1.6rem;
   cursor: pointer;
-  align-self: flex-start;
+  text-decoration: none;
   transition: all 0.25s ease;
+  border-radius: 2px;
 }
 
-.optionActionLinkPrimary:hover {
-  background: transparent;
-  color: #ffffff;
+.bookingBtnSecondary:hover {
+  background: #dfb86e;
+  color: #070709;
 }
 
-/* ── 3. Directory Strip: Refined Hairline Directory ── */
-.directorySection {
-  padding: 5rem 2rem;
-  background: #050507;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.directoryGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.5rem;
-}
-
-.directoryItem {
+.contactFooterLine {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.directoryLabel {
-  font-size: 0.64rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.78rem;
   color: #71717a;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.85rem;
 }
 
-.directoryValue {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  color: #ffffff;
-  letter-spacing: 0.01em;
+.contactFooterLink {
+  color: #a1a1aa;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-a.directoryValue:hover {
-  color: #dfb86e;
+.contactFooterLink:hover {
+  color: #ffffff;
 }
 
-.directoryDesc {
+/* ── Colonne Droite : Formulaire Rapide ── */
+.rightCol {
+  background: rgba(14, 14, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.25rem 2.25rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 4px;
+}
+
+.formTitle {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 0.35rem;
+}
+
+.formSubtitle {
   color: #a1a1aa;
-  font-size: 0.82rem;
-  line-height: 1.6;
+  font-size: 0.86rem;
   font-weight: 300;
-  margin: 0;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
 }
 
-/* ── 4. Mobile Sticky Rapid Action Bar ── */
-.mobileStickyBar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 99;
-  background: rgba(5, 5, 7, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
-}
-
-.mobileStickyActions {
+.quickForm {
   display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  width: 100%;
+  flex-direction: column;
+  gap: 1.1rem;
 }
 
-.mobileStickyCallBtn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  background: #ffffff;
-  color: #050507;
-  padding: 0.85rem 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 }
 
-.mobileStickyWaBtn {
-  flex: 1;
+.field {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  background: #25d366;
-  color: #050507;
-  padding: 0.85rem 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.mobileStickyBookBtn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #71717a;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.92rem;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.select {
+  cursor: pointer;
+}
+
+.select option {
+  background: #111114;
+  color: #ffffff;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 65px;
+  line-height: 1.5;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: #dfb86e;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.95rem;
+  background: #ffffff;
+  color: #070709;
+  border: 1px solid #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 0.35rem;
+  border-radius: 2px;
+}
+
+.submitBtn:hover {
   background: transparent;
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.85rem 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Success Card inside Form */
+.successCard {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.successCard h4 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 1rem 0 0.5rem;
+}
+
+.successCard p {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+}
+
+.successWaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #25d366;
+  color: #070709;
+  padding: 0.8rem 1.4rem;
   text-decoration: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  margin-bottom: 1rem;
 }
 
-/* ── Responsive Queries ── */
-@media (max-width: 900px) {
-  .optionsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .optionColumn:first-child {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .optionColumn {
-    padding: 2.75rem 1.75rem;
-  }
-
-  .directoryGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
+.resetBtn {
+  background: transparent;
+  border: none;
+  color: #71717a;
+  font-size: 0.74rem;
+  text-decoration: underline;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
 }
 
-@media (max-width: 640px) {
-  .heroSection {
-    padding: 7rem 1.25rem 3.5rem;
-    min-height: auto;
-  }
-
-  .heroActionsGrid {
-    grid-template-columns: 1fr;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .bookingChannelsSection,
-  .directorySection {
-    padding: 4rem 1.25rem;
-  }
-
-  .directoryGrid {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-  }
-
-  .mobileStickyBar {
-    display: block;
-  }
-
+/* ── Responsive ── */
+@media (max-width: 960px) {
   .page {
-    padding-bottom: 75px;
+    min-height: auto;
+    padding: 6.5rem 1.25rem 3rem;
+  }
+
+  .splitLayout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .rightCol {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .page {
+    padding: 5.5rem 1rem 2.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .bookingButtonsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .bigPhoneCard,
+  .whatsAppCard {
+    padding: 1rem 1.25rem;
+  }
+
+  .phoneNumber {
+    font-size: 1.45rem;
   }
 }

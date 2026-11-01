@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -6,260 +6,291 @@ import {
   MessageSquare,
   ArrowRight,
   Compass,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Mail,
+  Send,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { useCity } from '../hooks/useCity';
-import { trackPhoneCall, trackWhatsAppClick } from '../lib/googleAds';
+import { trackPhoneCall, trackWhatsAppClick, trackQuoteConversion } from '../lib/googleAds';
 import styles from './ContactPage.module.css';
 
 export default function ContactPage() {
-  const { t, getCityPath } = useCity();
+  const { t, getCityPath, currentCity } = useCity();
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    serviceType: 'Transfert aéroport (CDG / Orly)',
+    notes: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const whatsappMessage = encodeURIComponent(
     `Bonjour SELY Privé,\n\nJe souhaite réserver un chauffeur privé ou obtenir un devis immédiat à Paris.`
   );
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const payload = {
+        access_key: '62ebf81d-e490-449e-b2d4-bb3583ca86e0',
+        subject: `Demande Contact Rapide [${currentCity || 'Paris'}] - ${formData.name}`,
+        from_name: formData.name || 'Client Contact',
+        Nom: formData.name,
+        Telephone: formData.phone,
+        Prestation: formData.serviceType,
+        Details: formData.notes || '—',
+        Source: 'Page Contact SELY Privé'
+      };
+
+      await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      trackQuoteConversion({ ref: `CONTACT-${Date.now()}` });
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const followupWhatsApp = encodeURIComponent(
+    `Bonjour SELY Privé,\n\nJe viens de faire une demande sur votre site :\n- Nom : ${formData.name}\n- Prestation : ${formData.serviceType}\n- Tél : ${formData.phone}\n- Détails : ${formData.notes || '—'}`
+  );
+
   return (
     <div className={styles.page}>
-      {/* ── 1. Hero Section (Place Vendôme & Actions Immédiates) ── */}
-      <section className={styles.heroSection}>
-        <div className={styles.heroBackdrop}>
-          <img
-            src="/paris_hero_vendome.jpg"
-            alt="SELY Privé Chauffeur de prestige Place Vendôme Paris"
-          />
-        </div>
-        <div className={styles.heroOverlay} />
+      {/* Photo de fond Place Vendôme */}
+      <div className={styles.heroBackdrop}>
+        <img
+          src="/paris_hero_vendome.jpg"
+          alt="Chauffeur privé Place Vendôme Paris"
+        />
+      </div>
+      <div className={styles.heroOverlay} />
 
-        <div className={styles.heroContent}>
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className={styles.eyebrowTag}
-          >
-            <span className={styles.livePulseDot} />
-            <span>{t('contact.eyebrow', 'CONCIERGERIE PRIVÉE · PARIS 24H/24 & 7J/7')}</span>
-          </motion.div>
+      <div className={styles.container}>
+        <div className={styles.splitLayout}>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className={styles.heroTitle}
-          >
-            {t('contact.hero_title_pre', 'Contact & Réservation')}
-            <span className={styles.heroTitleItalic}>
-              {t('contact.hero_title_gold', 'L’excellence du chauffeur privé à Paris')}
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className={styles.heroSubtitle}
-          >
-            {t(
-              'contact.hero_subtitle',
-              'Pour vos transferts aéroports, vos trajets parisiens ou une mise à disposition sur-mesure, notre conciergerie est à votre écoute continue. Prise en charge immédiate 24h/24 et 7j/7.'
-            )}
-          </motion.p>
-
-          {/* ── Les Deux Boutons d'Action Principaux (Google Ads) ── */}
+          {/* ── Colonne Gauche : Appel & WhatsApp Direct ── */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className={styles.heroActionsGrid}
+            transition={{ duration: 0.5 }}
+            className={styles.leftCol}
           >
-            {/* Bouton Appel Direct */}
+            <h1 className={styles.pageTitle}>Contact & Réservation</h1>
+            <p className={styles.pageSubtitle}>
+              Chauffeur privé de prestige à Paris · Service disponible 24h/24 et 7j/7
+            </p>
+
+            {/* LE NUMÉRO EN GROS */}
             <a
               href="tel:+33184805676"
               onClick={trackPhoneCall}
-              className={styles.heroCallBtn}
-              id="contact-hero-call-btn"
-              title="Appeler SELY Privé"
+              className={styles.bigPhoneCard}
+              id="contact-big-phone-btn"
+              title="Appeler directement le 01 84 80 56 76"
             >
-              <div className={styles.ctaIconCircle}>
-                <Phone size={19} />
+              <div className={styles.phoneIconCircle}>
+                <Phone size={24} />
               </div>
-              <div className={styles.ctaTextCol}>
-                <span className={styles.ctaSubLabel}>{t('contact.call_sub', 'Appel Direct · 24h/24 & 7j/7')}</span>
-                <span className={styles.ctaMainLabel}>+33 1 84 80 56 76</span>
+              <div className={styles.phoneTextCol}>
+                <span className={styles.phoneLabel}>Appel Direct · 24h/24 & 7j/7</span>
+                <span className={styles.phoneNumber}>01 84 80 56 76</span>
               </div>
             </a>
 
-            {/* Bouton WhatsApp Conciergerie */}
+            {/* LE WHATSAPP */}
             <a
               href={`https://wa.me/33605826497?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={trackWhatsAppClick}
-              className={styles.heroWhatsAppBtn}
-              id="contact-hero-whatsapp-btn"
-              title="Discuter sur WhatsApp avec la conciergerie"
+              className={styles.whatsAppCard}
+              id="contact-whatsapp-btn"
+              title="Écrire sur WhatsApp au 06 05 82 64 97"
             >
-              <div className={styles.ctaIconCircleWhatsApp}>
-                <MessageSquare size={19} />
+              <div className={styles.whatsAppIconCircle}>
+                <MessageSquare size={22} />
               </div>
-              <div className={styles.ctaTextCol}>
-                <span className={styles.ctaSubLabel}>{t('contact.wa_sub', 'WhatsApp Conciergerie · 24/7')}</span>
-                <span className={styles.ctaMainLabel}>+33 6 05 82 64 97</span>
+              <div className={styles.whatsAppTextCol}>
+                <span className={styles.whatsAppLabel}>WhatsApp Conciergerie · Réponse Immédiate</span>
+                <span className={styles.whatsAppNumber}>06 05 82 64 97</span>
               </div>
             </a>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* ── 2. Les Deux Canaux de Réservation (Lignes Épurées) ── */}
-      <section className={styles.bookingChannelsSection}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionIndex}>{t('contact.sec1_idx', '01 / Vos Déplacements')}</span>
-            <h2 className={styles.sectionTitle}>
-              {t('contact.sec1_title', 'Deux Façons de Commander Votre Service')}
-            </h2>
-            <p className={styles.sectionDesc}>
-              {t(
-                'contact.sec1_desc',
-                'Calculez votre tarif fixe en ligne en toute autonomie ou transmettez votre itinéraire pour une étude personnalisée.'
-              )}
-            </p>
-          </div>
-
-          <div className={styles.optionsGrid}>
-            {/* Colonne 1: Réserver un Chauffeur */}
-            <div className={styles.optionColumn}>
-              <span className={styles.optionNum}>01 / Transfert & Trajet Direct</span>
-              <h3>{t('contact.c1_title', 'Réserver un Chauffeur')}</h3>
-              <p>
-                {t(
-                  'contact.c1_desc',
-                  'Transfert aéroports (Paris-CDG, Orly, Le Bourget), gares parisiennes et déplacements immédiats. Tarif fixe garanti dès la commande, suivi de vol et accueil nominatif avec pancarte inclus.'
-                )}
-              </p>
+            {/* Les Deux Boutons : Réserver en Ligne / Devis Spécifique */}
+            <div className={styles.bookingButtonsRow}>
               <button
                 type="button"
                 onClick={() => navigate(getCityPath('/reserver'))}
-                className={styles.optionActionLinkPrimary}
-                id="contact-btn-reserver-chauffeur"
+                className={styles.bookingBtnPrimary}
+                id="contact-btn-reserver"
               >
-                <span>{t('contact.c1_cta', 'Réserver un chauffeur en ligne')}</span>
-                <ArrowRight size={14} />
+                <Compass size={15} />
+                <span>Réserver un chauffeur</span>
               </button>
-            </div>
 
-            {/* Colonne 2: Demande Spécifique de Devis */}
-            <div className={styles.optionColumn}>
-              <span className={styles.optionNum}>02 / Mise à Disposition & Événements</span>
-              <h3>{t('contact.c2_title', 'Demande Spécifique de Devis')}</h3>
-              <p>
-                {t(
-                  'contact.c2_desc',
-                  'Chauffeur dédié pour quelques heures ou plusieurs journées, Fashion Week, délégations diplomatiques, cortèges multi-véhicules ou missions urgentes en moins de 3 heures. Devis précis transmis sous 15 minutes.'
-                )}
-              </p>
               <button
                 type="button"
                 onClick={() => navigate(getCityPath('/demande-specifique'))}
-                className={styles.optionActionLink}
-                id="contact-btn-demande-specifique"
+                className={styles.bookingBtnSecondary}
+                id="contact-btn-specifique"
               >
-                <span>{t('contact.c2_cta', 'Faire une demande spécifique')}</span>
-                <ArrowRight size={14} />
+                <SlidersHorizontal size={15} />
+                <span>Demande spécifique</span>
               </button>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── 3. Annuaire & Coordonnées (Lignes Fines & Épurées) ── */}
-      <section className={styles.directorySection}>
-        <div className={styles.container}>
-          <div className={styles.directoryGrid}>
-            <div className={styles.directoryItem}>
-              <span className={styles.directoryLabel}>{t('contact.ch1_tag', 'TÉLÉPHONE DIRECT')}</span>
-              <a href="tel:+33184805676" onClick={trackPhoneCall} className={styles.directoryValue}>
-                +33 1 84 80 56 76
-              </a>
-              <p className={styles.directoryDesc}>
-                {t('contact.ch1_desc', 'Permanence 24h/24 et 7j/7 pour passagers et concierges.')}
-              </p>
+            {/* Footer discret */}
+            <div className={styles.contactFooterLine}>
+              <span>
+                Email :{' '}
+                <a href="mailto:direction@sely.pro" className={styles.contactFooterLink}>
+                  direction@sely.pro
+                </a>
+              </span>
+              <span>·</span>
+              <span>Paris & Aéroports CDG, Orly, Le Bourget</span>
             </div>
+          </motion.div>
 
-            <div className={styles.directoryItem}>
-              <span className={styles.directoryLabel}>{t('contact.ch2_tag', 'WHATSAPP CONCIERGERIE')}</span>
-              <a
-                href={`https://wa.me/33605826497?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={trackWhatsAppClick}
-                className={styles.directoryValue}
-              >
-                +33 6 05 82 64 97
-              </a>
-              <p className={styles.directoryDesc}>
-                {t('contact.ch2_desc', 'Échange en temps réel, détails de vol et suivi chauffeur.')}
-              </p>
-            </div>
-
-            <div className={styles.directoryItem}>
-              <span className={styles.directoryLabel}>{t('contact.ch3_tag', 'EMAIL OFFICIEL')}</span>
-              <a href="mailto:direction@sely.pro" className={styles.directoryValue}>
-                direction@sely.pro
-              </a>
-              <p className={styles.directoryDesc}>
-                {t('contact.ch3_desc', 'Comptes corporate, facturation et devis sur-mesure.')}
-              </p>
-            </div>
-
-            <div className={styles.directoryItem}>
-              <span className={styles.directoryLabel}>{t('contact.ch4_tag', 'ZONES COUVERTES')}</span>
-              <span className={styles.directoryValue}>Paris & Aéroports</span>
-              <p className={styles.directoryDesc}>
-                {t('contact.ch4_desc', 'Paris 8e (Triangle d’Or), Roissy-CDG, Orly, Le Bourget.')}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. Barre Mobile d'Action Rapide ── */}
-      <div className={styles.mobileStickyBar}>
-        <div className={styles.mobileStickyActions}>
-          <a
-            href="tel:+33184805676"
-            onClick={trackPhoneCall}
-            className={styles.mobileStickyCallBtn}
-            id="mobile-sticky-call-btn"
+          {/* ── Colonne Droite : Demande Rapide ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className={styles.rightCol}
           >
-            <Phone size={14} />
-            <span>01 84 80 56 76</span>
-          </a>
+            {submitted ? (
+              <div className={styles.successCard}>
+                <CheckCircle2 size={44} color="#4ade80" />
+                <h4>Demande bien reçue</h4>
+                <p>
+                  Notre équipe prend contact avec vous sous 15 minutes.
+                </p>
+                <a
+                  href={`https://wa.me/33605826497?text=${followupWhatsApp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.successWaBtn}
+                >
+                  <MessageSquare size={15} />
+                  <span>Confirmer sur WhatsApp</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className={styles.resetBtn}
+                >
+                  Nouvelle demande
+                </button>
+              </div>
+            ) : (
+              <div>
+                <h3 className={styles.formTitle}>Demande rapide de devis</h3>
+                <p className={styles.formSubtitle}>
+                  Renseignez vos coordonnées, nous vous répondons immédiatement.
+                </p>
 
-          <a
-            href={`https://wa.me/33605826497?text=${whatsappMessage}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={trackWhatsAppClick}
-            className={styles.mobileStickyWaBtn}
-            id="mobile-sticky-wa-btn"
-          >
-            <MessageSquare size={14} />
-            <span>WhatsApp</span>
-          </a>
+                <form onSubmit={handleSubmit} className={styles.quickForm}>
+                  <div className={styles.formRow}>
+                    <div className={styles.field}>
+                      <label>Votre nom *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="M. / Mme..."
+                        className={styles.input}
+                      />
+                    </div>
 
-          <button
-            type="button"
-            onClick={() => navigate(getCityPath('/reserver'))}
-            className={styles.mobileStickyBookBtn}
-            id="mobile-sticky-book-btn"
-          >
-            <Compass size={14} />
-            <span>Réserver</span>
-          </button>
+                    <div className={styles.field}>
+                      <label>Téléphone *</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="06 00 00 00 00"
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.field}>
+                    <label>Prestation souhaitée *</label>
+                    <select
+                      name="serviceType"
+                      value={formData.serviceType}
+                      onChange={handleInputChange}
+                      className={styles.select}
+                    >
+                      <option value="Transfert Roissy-CDG">Transfert Paris ↔ Roissy-CDG</option>
+                      <option value="Transfert Orly">Transfert Paris ↔ Orly</option>
+                      <option value="Aviation d’affaires Le Bourget">Aviation d’affaires Le Bourget</option>
+                      <option value="Transfert Gare TGV">Transfert Gare Parisienne</option>
+                      <option value="Mise à disposition à la journée">Mise à disposition (à l'heure / journée)</option>
+                      <option value="Urgence moins de 3 heures">Prise en charge urgente (&lt; 3 heures)</option>
+                      <option value="Autre demande sur-mesure">Autre demande sur-mesure</option>
+                    </select>
+                  </div>
+
+                  <div className={styles.field}>
+                    <label>Détails du trajet / Date / Vol</label>
+                    <textarea
+                      rows={2}
+                      name="notes"
+                      value={formData.notes}
+                      onChange={handleInputChange}
+                      placeholder="Numéro de vol, date/heure, adresses ou exigences particulières..."
+                      className={styles.textarea}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className={styles.submitBtn}
+                    id="contact-submit-btn"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        <span>Envoi en cours...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={15} />
+                        <span>Envoyer ma demande</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+            )}
+          </motion.div>
+
         </div>
       </div>
     </div>
