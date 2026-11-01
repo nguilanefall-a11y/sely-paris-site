@@ -37,7 +37,7 @@ export default function FloatingActions() {
   if (isTunnelPage) return null;
   if (isHome && !scrolled) return null;
 
-  const whatsappLink = t('contact.whatsapp_link', 'https://wa.me/33605827497');
+  const whatsappLink = t('contact.whatsapp_link', 'https://wa.me/33605826497');
   const phoneLink = t('footer.phone_link', t('contact.phone_link', 'tel:+33184805676'));
   const phoneDisplay = t('footer.phone_display', '+33 1 84 80 56 76');
 

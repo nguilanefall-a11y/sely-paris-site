@@ -90,7 +90,7 @@ export default function BottomAppNav({ activeTab = 'home', onTabChange }) {
 
               <div className={styles.modalActions}>
                 <a
-                  href="https://wa.me/33184805676?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
+                  href="https://wa.me/33605826497?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.whatsappBtn}

@@ -815,7 +815,7 @@ export default function ReservationSuccessPage() {
         {/* Action Buttons */}
         <div className={styles.actionsGroup}>
           <a
-            href={`https://wa.me/33184805676?text=${whatsappMessage}`}
+            href={`https://wa.me/33605826497?text=${whatsappMessage}`}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.whatsappActionBtn}
