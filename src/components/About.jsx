@@ -87,7 +87,7 @@ export default function About() {
     return () => ctx.revert();
   }, []);
 
-  const whatsappUrl = 'https://wa.me/33605826497?text=Bonjour%20SELY,%20je%20souhaite%20r%C3%A9server%20un%20chauffeur%20priv%C3%A9.';
+  const whatsappUrl = 'https://wa.me/33605827497?text=Bonjour%20SELY,%20je%20souhaite%20r%C3%A9server%20un%20chauffeur%20priv%C3%A9.';
 
   return (
     <section id="about" className={styles.section} ref={sectionRef}>

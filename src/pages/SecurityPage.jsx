@@ -259,7 +259,7 @@ export default function SecurityPage() {
             </a>
 
             <a
-              href="https://wa.me/33605826497?text=Bonjour%20SELY%20Priv%C3%A9%2C%20je%20souhaite%20un%20renseignement%20confidentiel%20concernant%20un%20dispositif%20de%20s%C3%A9curit%C3%A9%20priv%C3%A9e."
+              href="https://wa.me/33605827497?text=Bonjour%20SELY%20Priv%C3%A9%2C%20je%20souhaite%20un%20renseignement%20confidentiel%20concernant%20un%20dispositif%20de%20s%C3%A9curit%C3%A9%20priv%C3%A9e."
               target="_blank"
               rel="noopener noreferrer"
               className={styles.whatsappLink}

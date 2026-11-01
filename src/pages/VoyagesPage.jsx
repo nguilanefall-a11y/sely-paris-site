@@ -1670,7 +1670,7 @@ export default function VoyagesPage({ defaultView = 'trips', hideBottomNav = fal
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <a
-                  href="https://wa.me/33605826497?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
+                  href="https://wa.me/33605827497?text=Bonjour%20SELY%20Privé,%20je%20souhaite%20un%20renseignement%20sur%20un%20service."
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

@@ -2201,7 +2201,7 @@ export default function ReservationPage() {
 
                 <div className={styles.urgentActions}>
                   <a
-                    href="https://wa.me/33605826497?text=Bonjour%20SELY%20Privé,%20j'ai%20une%20demande%20spécifique%20urgente."
+                    href="https://wa.me/33605827497?text=Bonjour%20SELY%20Privé,%20j'ai%20une%20demande%20spécifique%20urgente."
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.urgentWaBtn}

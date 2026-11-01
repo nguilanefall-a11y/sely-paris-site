@@ -118,20 +118,20 @@ export default function ContactPage() {
 
             {/* LE WHATSAPP */}
             <a
-              href={`https://wa.me/33605826497?text=${whatsappMessage}`}
+              href={`https://wa.me/33605827497?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={trackWhatsAppClick}
               className={styles.whatsAppCard}
               id="contact-whatsapp-btn"
-              title="Écrire sur WhatsApp au 06 05 82 64 97"
+              title="Écrire sur WhatsApp au 06 05 82 74 97"
             >
               <div className={styles.whatsAppIconCircle}>
                 <MessageSquare size={22} />
               </div>
               <div className={styles.whatsAppTextCol}>
                 <span className={styles.whatsAppLabel}>WhatsApp Conciergerie · Réponse Immédiate</span>
-                <span className={styles.whatsAppNumber}>06 05 82 64 97</span>
+                <span className={styles.whatsAppNumber}>06 05 82 74 97</span>
               </div>
             </a>
 
@@ -186,7 +186,7 @@ export default function ContactPage() {
                   Notre équipe prend contact avec vous sous 15 minutes.
                 </p>
                 <a
-                  href={`https://wa.me/33605826497?text=${followupWhatsApp}`}
+                  href={`https://wa.me/33605827497?text=${followupWhatsApp}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.successWaBtn}
