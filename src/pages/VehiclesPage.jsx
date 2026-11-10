@@ -3,7 +3,7 @@ import { useCity } from '../hooks/useCity';
 import { Link, useNavigate } from 'react-router-dom';
 import { Users, Briefcase, ArrowRight, ShieldCheck } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
-import { getVehicleUI } from '../lib/vehicleTranslations';
+import { getVehicleUI, getLocalizedVehicleData } from '../lib/vehicleTranslations';
 import styles from './VehiclesPage.module.css';
 
 const VEHICLES_CATALOG = [
